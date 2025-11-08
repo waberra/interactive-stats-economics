@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <!-- Labor Market Statistics Question Bank -->
+  <!-- Focus: Employment, Unemployment, Labor Force Participation -->
+  
+  <!-- Question 1: Unemployment Rate Calculation -->
+  <question type="numerical">
+    <n><text>Labor Market - Unemployment Rate Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>📊 Labor Market Statistics - Unemployment Rate</h3>
+        <p><strong>Calculate the unemployment rate for Econland during an economic recession.</strong></p>
+        
+        <div style="background: #fff3cd; padding: 15px; border-left: 4px solid #f39c12; margin: 15px 0;">
+          <h4>Given Labor Market Data:</h4>
+          <ul>
+            <li><strong>Labor Force:</strong> 12,500 thousand</li>
+            <li><strong>Employed:</strong> 10,875 thousand</li>
+            <li><strong>Unemployed:</strong> 1,625 thousand</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Unemployment Rate = (Unemployed ÷ Labor Force) × 100%</p>
+        <p><strong>Instructions:</strong> Give your answer as a percentage to 1 decimal place.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Apply unemployment rate formula:</strong> Rate = (Unemployed ÷ Labor Force) × 100%</li>
+          <li><strong>Substitute values:</strong> Rate = (1,625 ÷ 12,500) × 100%</li>
+          <li><strong>Calculate ratio:</strong> Rate = 0.13 × 100%</li>
+          <li><strong>Final answer:</strong> Unemployment Rate = 13.0%</li>
+        </ol>
+        
+        <div style="background: #f8d7da; padding: 10px; border-left: 4px solid #e74c3c;">
+          <strong>📉 Economic Analysis:</strong> An unemployment rate of 13.0% indicates severe economic recession with significant job losses. This high rate suggests widespread economic distress and need for policy intervention.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>13.0</text>
+      <tolerance>0.1</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 2: Employment Rate Calculation -->
+  <question type="numerical">
+    <n><text>Labor Market - Employment Rate Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>📈 Labor Market Statistics - Employment Rate</h3>
+        <p><strong>Calculate the employment rate for Statistopia during normal economic conditions.</strong></p>
+        
+        <div style="background: #e8f5e8; padding: 15px; border-left: 4px solid #4caf50; margin: 15px 0;">
+          <h4>Given Labor Market Data:</h4>
+          <ul>
+            <li><strong>Labor Force:</strong> 8,250 thousand</li>
+            <li><strong>Employed:</strong> 7,755 thousand</li>
+            <li><strong>Unemployed:</strong> 495 thousand</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Employment Rate = (Employed ÷ Labor Force) × 100%</p>
+        <p><strong>Instructions:</strong> Give your answer as a percentage to 1 decimal place.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Apply employment rate formula:</strong> Rate = (Employed ÷ Labor Force) × 100%</li>
+          <li><strong>Substitute values:</strong> Rate = (7,755 ÷ 8,250) × 100%</li>
+          <li><strong>Calculate ratio:</strong> Rate = 0.94 × 100%</li>
+          <li><strong>Final answer:</strong> Employment Rate = 94.0%</li>
+        </ol>
+        
+        <div style="background: #e8f5e8; padding: 10px; border-left: 4px solid #4caf50;">
+          <strong>📊 Economic Analysis:</strong> An employment rate of 94.0% indicates healthy labor market conditions with most people in the labor force successfully employed. This corresponds to a 6.0% unemployment rate, which is near normal levels.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>94.0</text>
+      <tolerance>0.1</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 3: Labor Force Participation Rate -->
+  <question type="numerical">
+    <n><text>Labor Market - Participation Rate Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>👥 Labor Market Statistics - Participation Rate</h3>
+        <p><strong>Calculate the labor force participation rate for Dataville during an economic boom.</strong></p>
+        
+        <div style="background: #e3f2fd; padding: 15px; border-left: 4px solid #2196f3; margin: 15px 0;">
+          <h4>Given Population Data:</h4>
+          <ul>
+            <li><strong>Working Age Population:</strong> 15,200 thousand</li>
+            <li><strong>Labor Force:</strong> 10,564 thousand</li>
+            <li><strong>Not in Labor Force:</strong> 4,636 thousand</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Participation Rate = (Labor Force ÷ Working Age Population) × 100%</p>
+        <p><strong>Instructions:</strong> Give your answer as a percentage to 1 decimal place.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Verify data consistency:</strong> Working Age Pop = Labor Force + Not in Labor Force = 10,564 + 4,636 = 15,200 ✓</li>
+          <li><strong>Apply participation rate formula:</strong> Rate = (Labor Force ÷ Working Age Population) × 100%</li>
+          <li><strong>Substitute values:</strong> Rate = (10,564 ÷ 15,200) × 100%</li>
+          <li><strong>Calculate ratio:</strong> Rate = 0.695 × 100% = 69.5%</li>
+        </ol>
+        
+        <div style="background: #fff3cd; padding: 10px; border-left: 4px solid #ff9800;">
+          <strong>📈 Economic Analysis:</strong> A participation rate of 69.5% during an economic boom indicates strong labor market engagement, with high employment opportunities encouraging people to actively participate in the workforce.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>69.5</text>
+      <tolerance>0.1</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 4: Not in Labor Force Calculation -->
+  <question type="numerical">
+    <n><text>Labor Market - Not in Labor Force Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>📊 Labor Market Statistics - Not in Labor Force</h3>
+        <p><strong>Calculate how many people are not in the labor force in Numberburg during normal economic conditions.</strong></p>
+        
+        <div style="background: #f0f8ff; padding: 15px; border-left: 4px solid #667eea; margin: 15px 0;">
+          <h4>Given Population Data:</h4>
+          <ul>
+            <li><strong>Working Age Population:</strong> 22,800 thousand</li>
+            <li><strong>Labor Force:</strong> 14,592 thousand</li>
+            <li><strong>Labor Force Participation Rate:</strong> 64.0%</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Not in Labor Force = Working Age Population - Labor Force</p>
+        <p><strong>Instructions:</strong> Give your answer in thousands of people.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Verify participation rate:</strong> (14,592 ÷ 22,800) × 100% = 64.0% ✓</li>
+          <li><strong>Apply formula:</strong> Not in Labor Force = Working Age Population - Labor Force</li>
+          <li><strong>Substitute values:</strong> Not in Labor Force = 22,800 - 14,592</li>
+          <li><strong>Calculate result:</strong> Not in Labor Force = 8,208 thousand</li>
+        </ol>
+        
+        <div style="background: #e8f4f8; padding: 10px; border-left: 4px solid #3498db;">
+          <strong>👨‍🎓 Economic Analysis:</strong> 8,208 thousand people not in the labor force includes students, retirees, homemakers, disabled individuals, and discouraged workers who have stopped looking for employment.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>8208</text>
+      <tolerance>5</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 5: Labor Force Size Calculation -->
+  <question type="numerical">
+    <n><text>Labor Market - Labor Force Size Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>👥 Labor Market Statistics - Labor Force Size</h3>
+        <p><strong>Calculate the total labor force for Graphton during an economic recession.</strong></p>
+        
+        <div style="background: #ffebee; padding: 15px; border-left: 4px solid #e74c3c; margin: 15px 0;">
+          <h4>Given Employment Data:</h4>
+          <ul>
+            <li><strong>Employed:</strong> 9,180 thousand</li>
+            <li><strong>Unemployed:</strong> 1,530 thousand</li>
+            <li><strong>Unemployment Rate:</strong> 14.3%</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Labor Force = Employed + Unemployed</p>
+        <p><strong>Instructions:</strong> Give your answer in thousands of people.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Apply labor force formula:</strong> Labor Force = Employed + Unemployed</li>
+          <li><strong>Substitute values:</strong> Labor Force = 9,180 + 1,530</li>
+          <li><strong>Calculate total:</strong> Labor Force = 10,710 thousand</li>
+          <li><strong>Verify unemployment rate:</strong> (1,530 ÷ 10,710) × 100% = 14.3% ✓</li>
+        </ol>
+        
+        <div style="background: #ffebee; padding: 10px; border-left: 4px solid #e74c3c;">
+          <strong>📉 Economic Analysis:</strong> During this recession, the labor force of 10.71 million includes both employed workers (9.18 million) and those actively seeking employment (1.53 million), representing the total active workforce.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>10710</text>
+      <tolerance>5</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 6: Comprehensive Labor Market Analysis (Cloze) -->
+  <question type="cloze">
+    <n><text>Labor Market - Comprehensive Analysis</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>🎯 Labor Market Statistics - Complete Analysis</h3>
+        <p><strong>Complete comprehensive labor market analysis for Analysis Town during normal economic conditions.</strong></p>
+        
+        <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #6c757d; margin: 15px 0;">
+          <h4>Given Economic Data:</h4>
+          <ul>
+            <li><strong>Total Population:</strong> 45,000 thousand</li>
+            <li><strong>Working Age Population:</strong> 32,400 thousand</li>
+            <li><strong>Employed:</strong> 19,440 thousand</li>
+            <li><strong>Unemployed:</strong> 1,080 thousand</li>
+          </ul>
+        </div>
+        
+        <p><strong>Calculate the following labor market indicators:</strong></p>
+        
+        <p><strong>Part A:</strong> Labor Force = {1:NUMERICAL:=20520:10} thousand</p>
+        
+        <p><strong>Part B:</strong> Unemployment Rate = {1:NUMERICAL:=5.3:0.1}%</p>
+        
+        <p><strong>Part C:</strong> Employment Rate = {1:NUMERICAL:=94.7:0.1}%</p>
+        
+        <p><strong>Part D:</strong> Labor Force Participation Rate = {1:NUMERICAL:=63.3:0.1}%</p>
+        
+        <p><strong>Part E:</strong> Not in Labor Force = {1:NUMERICAL:=11880:10} thousand</p>
+        
+        <p><strong>Part F:</strong> Working Age as % of Total Population = {1:NUMERICAL:=72.0:0.1}%</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Complete Solution:</h4>
+        
+        <h5>Part A: Labor Force Calculation</h5>
+        <p><strong>Formula:</strong> Labor Force = Employed + Unemployed</p>
+        <p><strong>Calculation:</strong> Labor Force = 19,440 + 1,080 = <strong>20,520 thousand</strong></p>
+        
+        <h5>Part B: Unemployment Rate</h5>
+        <p><strong>Formula:</strong> Rate = (Unemployed ÷ Labor Force) × 100%</p>
+        <p><strong>Calculation:</strong> Rate = (1,080 ÷ 20,520) × 100% = <strong>5.3%</strong></p>
+        
+        <h5>Part C: Employment Rate</h5>
+        <p><strong>Formula:</strong> Rate = (Employed ÷ Labor Force) × 100%</p>
+        <p><strong>Calculation:</strong> Rate = (19,440 ÷ 20,520) × 100% = <strong>94.7%</strong></p>
+        
+        <h5>Part D: Labor Force Participation Rate</h5>
+        <p><strong>Formula:</strong> Rate = (Labor Force ÷ Working Age Pop.) × 100%</p>
+        <p><strong>Calculation:</strong> Rate = (20,520 ÷ 32,400) × 100% = <strong>63.3%</strong></p>
+        
+        <h5>Part E: Not in Labor Force</h5>
+        <p><strong>Formula:</strong> Not in LF = Working Age Pop. - Labor Force</p>
+        <p><strong>Calculation:</strong> Not in LF = 32,400 - 20,520 = <strong>11,880 thousand</strong></p>
+        
+        <h5>Part F: Working Age Share</h5>
+        <p><strong>Formula:</strong> Share = (Working Age Pop. ÷ Total Pop.) × 100%</p>
+        <p><strong>Calculation:</strong> Share = (32,400 ÷ 45,000) × 100% = <strong>72.0%</strong></p>
+        
+        <div style="background: #e8f5e8; padding: 10px; border-left: 4px solid #4caf50; margin-top: 15px;">
+          <strong>📊 Economic Summary:</strong> Analysis Town shows healthy labor market conditions during normal economic times with moderate unemployment (5.3%), strong employment rate (94.7%), and good participation (63.3%). The working-age population represents 72% of total population, indicating a demographic structure capable of supporting economic growth.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>6</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+  </question>
+
+</quiz>

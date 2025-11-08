@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inflation Rate & CPI Calculator - Interactive Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px 0;
+            }
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .scenario-indicator {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-high_inflation {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .scenario-normal_inflation {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+        
+        .scenario-low_inflation {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+        
+        .scenario-deflation {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+        }
+        
+        .question-text {
+            background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+            padding: 25px;
+            border-left: 5px solid;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .question-comprehensive {
+            border-left-color: #e74c3c;
+        }
+        
+        .question-single {
+            border-left-color: #3498db;
+        }
+        
+        .question-text h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .cpi-data-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #dee2e6;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+        
+        .cpi-data-box .cpi-header {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .cpi-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        
+        .cpi-value {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        .cpi-value .date {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .cpi-value .value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .base-year-info {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+            font-weight: bold;
+            color: #856404;
+            text-align: center;
+        }
+        
+        .econ-highlight {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            color: #155724;
+        }
+        
+        .answer-section {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            padding: 25px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            margin: 20px 0;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .input-group {
+                flex-direction: row;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+        
+        .input-group label {
+            display: inline-block;
+            width: 100%;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        @media (min-width: 768px) {
+            .input-group label {
+                width: 350px;
+                min-width: 350px;
+            }
+        }
+        
+        .input-group input {
+            width: 120px;
+            max-width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 767px) {
+            .input-group input {
+                width: 140px;
+            }
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .input-correct {
+            border-color: #27ae60 !important;
+            background-color: #d4edda !important;
+        }
+        
+        .input-incorrect {
+            border-color: #e74c3c !important;
+            background-color: #f8d7da !important;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 8px 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d, #6c7b7d);
+        }
+        
+        .btn-generate {
+            background: linear-gradient(135deg, #27ae60, #229954);
+        }
+        
+        .btn-generate:hover {
+            background: linear-gradient(135deg, #229954, #1e8449);
+        }
+        
+        .feedback {
+            padding: 18px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            border-left: 5px solid;
+        }
+        
+        .feedback.correct {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border-left-color: #27ae60;
+        }
+        
+        .feedback.partial {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+            border-left-color: #f39c12;
+        }
+        
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border-left-color: #e74c3c;
+        }
+        
+        .solution {
+            background: linear-gradient(135deg, #eaf2f8, #d6eaf8);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 12px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .solution h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.3em;
+        }
+        
+        .solution-step {
+            background-color: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #d6eaf8;
+        }
+        
+        .solution-step h5 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        
+        .formula {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .result {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #d6eaf8, #aed6f1);
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .question-counter {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .question-types {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .type-selector {
+            background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+            border: 2px solid #95a5a6;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        
+        .type-selector.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border-color: #c0392b;
+        }
+        
+        .type-selector:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .comprehensive-answers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .comprehensive-answers {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .comprehensive-answers {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .interpretation-box {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 2px solid #17a2b8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #0c5460;
+        }
+
+        .economic-insight {
+            background: linear-gradient(135deg, #e8f5e8, #d4f1d4);
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <h1>📈 Inflation Rate & CPI Calculator</h1>
+    
+    <div class="container">
+        <div class="navigation">
+            <div class="question-counter" id="question-counter">Question 1 of ∞</div>
+            
+            <div class="question-types">
+                <div class="type-selector active" id="comprehensive-selector" onclick="selectQuestionType('comprehensive')">
+                    📊 Comprehensive Analysis
+                </div>
+                <div class="type-selector" id="period_inflation-selector" onclick="selectQuestionType('period_inflation')">
+                    📈 Period Inflation
+                </div>
+                <div class="type-selector" id="annualized_inflation-selector" onclick="selectQuestionType('annualized_inflation')">
+                    📅 Annualized Rate
+                </div>
+                <div class="type-selector" id="real_value-selector" onclick="selectQuestionType('real_value')">
+                    💰 Real Value
+                </div>
+                <div class="type-selector" id="cpi_change-selector" onclick="selectQuestionType('cpi_change')">
+                    📊 CPI Change
+                </div>
+                <div class="type-selector" id="random-selector" onclick="selectQuestionType('random')">
+                    🎲 Random Mix
+                </div>
+            </div>
+            
+            <button class="btn btn-generate" onclick="generateNewQuestion()">Generate New Scenario</button>
+        </div>
+        
+        <div id="question-container"></div>
+        
+        <div class="answer-section">
+            <div id="answer-inputs"></div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="checkAnswers()">✓ Check Answers</button>
+                <button class="btn btn-secondary" onclick="showSolution()">💡 Show Solution</button>
+                <button class="btn btn-secondary" onclick="clearAnswers()">🗑️ Clear</button>
+            </div>
+        </div>
+
+        <div id="feedback" class="feedback hidden"></div>
+        
+        <div id="solution" class="solution hidden"></div>
+    </div>
+
+    <script>
+        // Include the InflationCPISimulator class (simplified version)
+        class InflationCPISimulator {
+            constructor() {
+                this.scenarios = {
+                    high_inflation: {
+                        context: 'period of high inflation',
+                        description: 'economic expansion with rising prices',
+                        monthlyCPIChangeRange: [0.3, 1.2],
+                        baseCPIRange: [240, 280],
+                        volatility: 'high',
+                        periodsRange: [3, 12]
+                    },
+                    normal_inflation: {
+                        context: 'period of stable economic growth',
+                        description: 'moderate inflation targeting',
+                        monthlyCPIChangeRange: [0.1, 0.4],
+                        baseCPIRange: [250, 270],
+                        volatility: 'moderate',
+                        periodsRange: [6, 24]
+                    },
+                    low_inflation: {
+                        context: 'period of economic stability',
+                        description: 'low inflation environment',
+                        monthlyCPIChangeRange: [0.0, 0.2],
+                        baseCPIRange: [245, 265],
+                        volatility: 'low',
+                        periodsRange: [12, 36]
+                    },
+                    deflation: {
+                        context: 'period of economic contraction',
+                        description: 'deflationary pressures',
+                        monthlyCPIChangeRange: [-0.5, 0.1],
+                        baseCPIRange: [230, 250],
+                        volatility: 'high',
+                        periodsRange: [6, 18]
+                    }
+                };
+
+                this.cpiCategories = {
+                    overall: { name: 'All Items', symbol: 'CPI-U' },
+                    food: { name: 'Food and Beverages', symbol: 'CPI-F' },
+                    housing: { name: 'Housing', symbol: 'CPI-H' },
+                    energy: { name: 'Energy', symbol: 'CPI-E' },
+                    transportation: { name: 'Transportation', symbol: 'CPI-T' },
+                    core: { name: 'Core CPI (excluding food and energy)', symbol: 'Core CPI' }
+                };
+
+                this.regions = {
+                    national: 'United States',
+                    northeast: 'Northeast Region',
+                    south: 'South Region',
+                    midwest: 'Midwest Region',
+                    west: 'West Region',
+                    urban: 'Urban Areas',
+                    metro: 'Metropolitan Areas'
+                };
+
+                this.baseYears = {
+                    '1982-84': 100.0,
+                    '2000': 100.0,
+                    '2010': 100.0
+                };
+
+                this.currentQuestion = null;
+                this.currentSolution = null;
+                this.questionCount = 1;
+                this.questionType = 'comprehensive';
+            }
+
+            randomBetween(min, max, decimals = 1) {
+                const factor = Math.pow(10, decimals);
+                return Math.round((Math.random() * (max - min) + min) * factor) / factor;
+            }
+
+            getVolatilityFactor(volatility) {
+                switch (volatility) {
+                    case 'high': return 0.3;
+                    case 'moderate': return 0.15;
+                    case 'low': return 0.05;
+                    default: return 0.15;
+                }
+            }
+
+            formatDate(month, year) {
+                const months = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                return `${months[month - 1]} ${year}`;
+            }
+
+            getPeriodType(periods) {
+                if (periods <= 3) return 'quarterly';
+                if (periods <= 6) return 'semi-annual';
+                if (periods <= 12) return 'annual';
+                if (periods <= 24) return 'two-year';
+                return 'multi-year';
+            }
+
+            generateInflationData(scenario = 'normal_inflation') {
+                const scenarioData = this.scenarios[scenario];
+                
+                const categoryKeys = Object.keys(this.cpiCategories);
+                const categoryKey = categoryKeys[Math.floor(Math.random() * categoryKeys.length)];
+                const category = this.cpiCategories[categoryKey];
+                
+                const regionKeys = Object.keys(this.regions);
+                const regionKey = regionKeys[Math.floor(Math.random() * regionKeys.length)];
+                const region = this.regions[regionKey];
+                
+                const baseYearKeys = Object.keys(this.baseYears);
+                const baseYear = baseYearKeys[Math.floor(Math.random() * baseYearKeys.length)];
+                
+                const periods = Math.floor(Math.random() * 
+                    (scenarioData.periodsRange[1] - scenarioData.periodsRange[0] + 1)) + 
+                    scenarioData.periodsRange[0];
+                
+                const initialCPI = this.randomBetween(
+                    scenarioData.baseCPIRange[0],
+                    scenarioData.baseCPIRange[1]
+                );
+                
+                // Generate CPI series
+                const cpiData = [initialCPI];
+                let currentCPI = initialCPI;
+                
+                for (let i = 1; i <= periods; i++) {
+                    const baseChange = this.randomBetween(
+                        scenarioData.monthlyCPIChangeRange[0],
+                        scenarioData.monthlyCPIChangeRange[1],
+                        3
+                    );
+                    
+                    const volatilityFactor = this.getVolatilityFactor(scenarioData.volatility);
+                    const volatilityAdjustment = (Math.random() - 0.5) * 2 * volatilityFactor;
+                    
+                    const monthlyChange = baseChange + volatilityAdjustment;
+                    currentCPI = Math.round(currentCPI * (1 + monthlyChange / 100) * 10) / 10;
+                    cpiData.push(currentCPI);
+                }
+                
+                const finalCPI = currentCPI;
+                
+                // Calculate inflation measures
+                const periodInflationRate = Math.round(((finalCPI - initialCPI) / initialCPI) * 10000) / 100;
+                
+                const years = periods / 12;
+                const annualizedRate = years > 0 ? 
+                    Math.round((Math.pow(finalCPI / initialCPI, 1 / years) - 1) * 10000) / 100 : 0;
+                
+                const monthlyAvgInflation = periods > 0 ? 
+                    Math.round((periodInflationRate / periods) * 1000) / 1000 : 0;
+                
+                // Generate dates
+                const startYear = Math.floor(Math.random() * 9) + 2015;
+                const startMonth = Math.floor(Math.random() * 12) + 1;
+                const endYear = startYear + Math.floor((startMonth + periods - 1) / 12);
+                const endMonth = ((startMonth + periods - 1) % 12) + 1;
+                
+                const startDate = this.formatDate(startMonth, startYear);
+                const endDate = this.formatDate(endMonth, endYear);
+                
+                const nominalWage = Math.floor(Math.random() * 30000) + 45000;
+                const realWage = Math.round(nominalWage * (initialCPI / finalCPI));
+                
+                return {
+                    scenario, context: scenarioData.context, description: scenarioData.description,
+                    category, region, baseYear, periods, periodType: this.getPeriodType(periods),
+                    startDate, endDate, initialCPI, finalCPI, cpiData,
+                    periodInflationRate, annualizedInflationRate: annualizedRate, monthlyAvgInflation,
+                    yearsElapsed: Math.round(years * 10) / 10, nominalWage, realWage
+                };
+            }
+
+            generateQuestion() {
+                const scenarios = Object.keys(this.scenarios);
+                const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+                const data = this.generateInflationData(scenario);
+                
+                if (this.questionType === 'comprehensive') {
+                    return { ...data, questionType: 'comprehensive' };
+                } else if (this.questionType === 'random') {
+                    const questionTypes = ['period_inflation', 'annualized_inflation', 'monthly_avg', 'real_value', 'cpi_change'];
+                    const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+                    return this.generateSingleRate(data, questionType);
+                } else {
+                    return this.generateSingleRate(data, this.questionType);
+                }
+            }
+
+            generateSingleRate(data, questionType) {
+                const questions = {
+                    period_inflation: { 
+                        question: 'What is the inflation rate for the entire period?', 
+                        answer: data.periodInflationRate, unit: '%',
+                        formula: '((Final CPI - Initial CPI) / Initial CPI) × 100'
+                    },
+                    annualized_inflation: { 
+                        question: 'What is the annualized inflation rate?', 
+                        answer: data.annualizedInflationRate, unit: '%',
+                        formula: '((Final CPI / Initial CPI)^(1/years) - 1) × 100'
+                    },
+                    monthly_avg: { 
+                        question: 'What is the average monthly inflation rate?', 
+                        answer: data.monthlyAvgInflation, unit: '%',
+                        formula: 'Total period inflation ÷ Number of months'
+                    },
+                    real_value: { 
+                        question: `What is the real value (in ${data.startDate} dollars) of a $${data.nominalWage.toLocaleString()} salary at the end of this period?`, 
+                        answer: data.realWage, unit: '$',
+                        formula: 'Nominal value × (Initial CPI / Final CPI)'
+                    },
+                    cpi_change: { 
+                        question: 'By how many CPI points did the index increase?', 
+                        answer: Math.round((data.finalCPI - data.initialCPI) * 10) / 10, unit: 'points',
+                        formula: 'Final CPI - Initial CPI'
+                    }
+                };
+
+                return {
+                    ...data, questionType, questionText: questions[questionType].question,
+                    correctAnswer: questions[questionType].answer, answerUnit: questions[questionType].unit,
+                    formulaExplanation: questions[questionType].formula
+                };
+            }
+
+            displayQuestion(data) {
+                let scenarioClass = `scenario-${data.scenario}`;
+                let scenarioText = data.scenario.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                
+                const contextIntro = `During a ${data.context} (${data.description}), `;
+                const locationContext = `the ${data.category.name} Consumer Price Index for ${data.region}`;
+                const timeContext = `changed from ${data.startDate} to ${data.endDate} as follows:`;
+                
+                if (data.questionType === 'comprehensive') {
+                    document.getElementById('question-container').innerHTML = `
+                        <div class="scenario-indicator ${scenarioClass}">${scenarioText}</div>
+                        <div class="question-text question-comprehensive">
+                            <h3>📊 Comprehensive Inflation Analysis</h3>
+                            <p>${contextIntro}<span class="econ-highlight">${locationContext}</span> ${timeContext}</p>
+                            
+                            <div class="cpi-data-box">
+                                <div class="cpi-header">Consumer Price Index Data</div>
+                                <div class="cpi-values">
+                                    <div class="cpi-value">
+                                        <div class="date">${data.startDate}</div>
+                                        <div class="value">${data.initialCPI}</div>
+                                    </div>
+                                    <div class="cpi-value">
+                                        <div class="date">${data.endDate}</div>
+                                        <div class="value">${data.finalCPI}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="base-year-info">
+                                📊 Base: ${data.baseYear} = 100
+                            </div>
+                            
+                            <p><strong>Calculate the following (give answers to appropriate decimal places):</strong></p>
+                        </div>
+                    `;
+                    
+                    document.getElementById('answer-inputs').innerHTML = `
+                        <div class="comprehensive-answers">
+                            <div class="input-group">
+                                <label>1. Period inflation rate:</label>
+                                <input type="number" id="period-inflation-input" step="0.01" placeholder="0.00">
+                                <span style="font-weight: bold;">%</span>
+                            </div>
+                            <div class="input-group">
+                                <label>2. Annualized inflation rate:</label>
+                                <input type="number" id="annualized-inflation-input" step="0.01" placeholder="0.00">
+                                <span style="font-weight: bold;">%</span>
+                            </div>
+                            <div class="input-group">
+                                <label>3. Average monthly inflation rate:</label>
+                                <input type="number" id="monthly-avg-input" step="0.001" placeholder="0.000">
+                                <span style="font-weight: bold;">%</span>
+                            </div>
+                            <div class="input-group">
+                                <label>4. CPI point increase:</label>
+                                <input type="number" id="cpi-change-input" step="0.1" placeholder="0.0">
+                                <span style="font-weight: bold;">points</span>
+                            </div>
+                            <div class="input-group">
+                                <label>5. Real value of $${data.nominalWage.toLocaleString()} (in ${data.startDate} dollars):</label>
+                                <input type="number" id="real-value-input" step="100" placeholder="0">
+                                <span style="font-weight: bold;">$</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    const questionEmojis = {
+                        period_inflation: '📈',
+                        annualized_inflation: '📅',
+                        monthly_avg: '📊',
+                        real_value: '💰',
+                        cpi_change: '📊'
+                    };
+                    
+                    document.getElementById('question-container').innerHTML = `
+                        <div class="scenario-indicator ${scenarioClass}">${scenarioText}</div>
+                        <div class="question-text question-single">
+                            <h3>${questionEmojis[data.questionType]} ${data.questionText}</h3>
+                            <p>${contextIntro}<span class="econ-highlight">${locationContext}</span> ${timeContext}</p>
+                            
+                            <div class="cpi-data-box">
+                                <div class="cpi-header">Consumer Price Index Data</div>
+                                <div class="cpi-values">
+                                    <div class="cpi-value">
+                                        <div class="date">${data.startDate}</div>
+                                        <div class="value">${data.initialCPI}</div>
+                                    </div>
+                                    <div class="cpi-value">
+                                        <div class="date">${data.endDate}</div>
+                                        <div class="value">${data.finalCPI}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="base-year-info">
+                                📊 Base: ${data.baseYear} = 100
+                            </div>
+                            
+                            <p><strong>${data.questionText}</strong> (Give your answer to appropriate decimal places)</p>
+                        </div>
+                    `;
+                    
+                    document.getElementById('answer-inputs').innerHTML = `
+                        <div class="input-group">
+                            <label>Your answer:</label>
+                            <input type="number" id="single-input" step="0.01" placeholder="0.00">
+                            <span style="font-weight: bold;">${data.answerUnit}</span>
+                        </div>
+                    `;
+                }
+            }
+
+            showSolution(data) {
+                let solutionHTML = '';
+                
+                if (data.questionType === 'comprehensive') {
+                    const cpiChange = Math.round((data.finalCPI - data.initialCPI) * 10) / 10;
+                    
+                    solutionHTML = `
+                        <h4>💡 Complete Solution</h4>
+                        
+                        <div class="solution-step">
+                            <h5>Step 1: Period Inflation Rate</h5>
+                            <div class="formula">((Final CPI - Initial CPI) / Initial CPI) × 100</div><br>
+                            <div class="formula">((${data.finalCPI} - ${data.initialCPI}) / ${data.initialCPI}) × 100</div><br>
+                            <div class="result">${data.periodInflationRate}%</div>
+                        </div>
+                        
+                        <div class="solution-step">
+                            <h5>Step 2: Annualized Inflation Rate</h5>
+                            <div class="formula">((Final CPI / Initial CPI)^(1/years) - 1) × 100</div><br>
+                            <div class="formula">Years: ${data.yearsElapsed}</div><br>
+                            <div class="formula">((${data.finalCPI} / ${data.initialCPI})^(1/${data.yearsElapsed}) - 1) × 100</div><br>
+                            <div class="result">${data.annualizedInflationRate}%</div>
+                        </div>
+                        
+                        <div class="solution-step">
+                            <h5>Step 3: Average Monthly Inflation</h5>
+                            <div class="formula">Period inflation ÷ Number of months</div><br>
+                            <div class="formula">${data.periodInflationRate}% ÷ ${data.periods} months</div><br>
+                            <div class="result">${data.monthlyAvgInflation}%</div>
+                        </div>
+                        
+                        <div class="solution-step">
+                            <h5>Step 4: CPI Point Increase</h5>
+                            <div class="formula">Final CPI - Initial CPI</div><br>
+                            <div class="formula">${data.finalCPI} - ${data.initialCPI}</div><br>
+                            <div class="result">${cpiChange} points</div>
+                        </div>
+                        
+                        <div class="solution-step">
+                            <h5>Step 5: Real Value Calculation</h5>
+                            <div class="formula">Nominal value × (Initial CPI / Final CPI)</div><br>
+                            <div class="formula">$${data.nominalWage.toLocaleString()} × (${data.initialCPI} / ${data.finalCPI})</div><br>
+                            <div class="result">$${data.realWage.toLocaleString()}</div>
+                        </div>
+                        
+                        <div class="economic-insight">
+                            <strong>📊 Economic Interpretation:</strong><br>
+                            ${this.getEconomicInterpretation(data)}
+                        </div>
+                    `;
+                } else {
+                    solutionHTML = `
+                        <h4>💡 Solution</h4>
+                        <div class="solution-step">
+                            <div class="formula">${this.getSingleSolutionText(data)}</div>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('solution').innerHTML = solutionHTML;
+                document.getElementById('solution').classList.remove('hidden');
+            }
+
+            getEconomicInterpretation(data) {
+                if (data.periodInflationRate > 0) {
+                    return `Prices increased by ${data.periodInflationRate}% over this period. ` +
+                           `A $${data.nominalWage.toLocaleString()} salary has the purchasing power of ` +
+                           `$${data.realWage.toLocaleString()} in ${data.startDate} dollars.`;
+                } else {
+                    return `Prices decreased by ${Math.abs(data.periodInflationRate)}% (deflation). ` +
+                           `This increases purchasing power.`;
+                }
+            }
+
+            getSingleSolutionText(data) {
+                switch (data.questionType) {
+                    case 'period_inflation':
+                        return `${data.formulaExplanation}<br>= ((${data.finalCPI} - ${data.initialCPI}) / ${data.initialCPI}) × 100<br>= ${data.periodInflationRate}%`;
+                    case 'annualized_inflation':
+                        return `${data.formulaExplanation}<br>Years: ${data.yearsElapsed}<br>= ((${data.finalCPI} / ${data.initialCPI})^(1/${data.yearsElapsed}) - 1) × 100<br>= ${data.annualizedInflationRate}%`;
+                    case 'monthly_avg':
+                        return `${data.formulaExplanation}<br>= ${data.periodInflationRate}% ÷ ${data.periods} months<br>= ${data.monthlyAvgInflation}%`;
+                    case 'real_value':
+                        return `${data.formulaExplanation}<br>= $${data.nominalWage.toLocaleString()} × (${data.initialCPI} / ${data.finalCPI})<br>= $${data.realWage.toLocaleString()}`;
+                    case 'cpi_change':
+                        const change = Math.round((data.finalCPI - data.initialCPI) * 10) / 10;
+                        return `${data.formulaExplanation}<br>= ${data.finalCPI} - ${data.initialCPI}<br>= ${change} points`;
+                    default:
+                        return 'Solution provided in step-by-step analysis.';
+                }
+            }
+        }
+
+        // Initialize simulator
+        const simulator = new InflationCPISimulator();
+
+        function selectQuestionType(type) {
+            simulator.questionType = type;
+            
+            // Update selector appearance
+            document.querySelectorAll('.type-selector').forEach(el => el.classList.remove('active'));
+            document.getElementById(type + '-selector').classList.add('active');
+            
+            generateNewQuestion();
+        }
+
+        function generateNewQuestion() {
+            simulator.currentQuestion = simulator.generateQuestion();
+            simulator.displayQuestion(simulator.currentQuestion);
+            
+            // Clear previous answers and feedback
+            clearAnswers();
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('solution').classList.add('hidden');
+            
+            // Update question counter
+            document.getElementById('question-counter').textContent = `Question ${simulator.questionCount} of ∞`;
+            simulator.questionCount++;
+        }
+
+        function checkAnswers() {
+            if (!simulator.currentQuestion) {
+                alert('Please generate a question first!');
+                return;
+            }
+
+            const feedback = document.getElementById('feedback');
+            
+            if (simulator.currentQuestion.questionType === 'comprehensive') {
+                const answers = {
+                    period_inflation: parseFloat(document.getElementById('period-inflation-input').value),
+                    annualized_inflation: parseFloat(document.getElementById('annualized-inflation-input').value),
+                    monthly_avg: parseFloat(document.getElementById('monthly-avg-input').value),
+                    cpi_change: parseFloat(document.getElementById('cpi-change-input').value),
+                    real_value: parseFloat(document.getElementById('real-value-input').value)
+                };
+                
+                if (Object.values(answers).some(isNaN)) {
+                    feedback.className = 'feedback incorrect';
+                    feedback.innerHTML = '⚠️ Please enter valid numbers for all fields.';
+                    feedback.classList.remove('hidden');
+                    return;
+                }
+                
+                const tolerance = { percentage: 0.05, points: 0.1, dollar: 100 };
+                const cpiChange = Math.round((simulator.currentQuestion.finalCPI - simulator.currentQuestion.initialCPI) * 10) / 10;
+                
+                const results = {
+                    period_inflation: Math.abs(answers.period_inflation - simulator.currentQuestion.periodInflationRate) <= tolerance.percentage,
+                    annualized_inflation: Math.abs(answers.annualized_inflation - simulator.currentQuestion.annualizedInflationRate) <= tolerance.percentage,
+                    monthly_avg: Math.abs(answers.monthly_avg - simulator.currentQuestion.monthlyAvgInflation) <= tolerance.percentage,
+                    cpi_change: Math.abs(answers.cpi_change - cpiChange) <= tolerance.points,
+                    real_value: Math.abs(answers.real_value - simulator.currentQuestion.realWage) <= tolerance.dollar
+                };
+                
+                // Update input styling
+                Object.keys(results).forEach(key => {
+                    const inputId = key.replace('_', '-') + '-input';
+                    document.getElementById(inputId).className = results[key] ? 'input-correct' : 'input-incorrect';
+                });
+                
+                feedback.classList.remove('hidden');
+                
+                const correctCount = Object.values(results).filter(x => x).length;
+                
+                if (correctCount === 5) {
+                    feedback.className = 'feedback correct';
+                    feedback.innerHTML = '🎉 Perfect! All inflation calculations are correct!<br>You have mastered CPI analysis and inflation economics.';
+                } else if (correctCount >= 3) {
+                    feedback.className = 'feedback partial';
+                    feedback.innerHTML = `✅ ${correctCount} out of 5 correct!<br>Check the highlighted fields and review the calculation steps.`;
+                } else {
+                    feedback.className = 'feedback incorrect';
+                    feedback.innerHTML = '❌ Most answers need adjustment.<br>💡 Review the inflation calculation formulas and try again.';
+                }
+            } else {
+                const singleInput = parseFloat(document.getElementById('single-input').value);
+                
+                if (isNaN(singleInput)) {
+                    feedback.className = 'feedback incorrect';
+                    feedback.innerHTML = '⚠️ Please enter a valid number.';
+                    feedback.classList.remove('hidden');
+                    return;
+                }
+                
+                const tolerance = simulator.currentQuestion.answerUnit === '$' ? 100 : 
+                                 simulator.currentQuestion.answerUnit === 'points' ? 0.1 : 0.05;
+                const isCorrect = Math.abs(singleInput - simulator.currentQuestion.correctAnswer) <= tolerance;
+                
+                // Update input styling
+                document.getElementById('single-input').className = isCorrect ? 'input-correct' : 'input-incorrect';
+                
+                feedback.classList.remove('hidden');
+                
+                if (isCorrect) {
+                    feedback.className = 'feedback correct';
+                    feedback.innerHTML = '🎉 Excellent! Your calculation is correct!';
+                } else {
+                    feedback.className = 'feedback incorrect';
+                    feedback.innerHTML = '❌ Not quite right.<br>💡 Check your inflation formula and calculation.';
+                }
+            }
+        }
+
+        function showSolution() {
+            if (!simulator.currentQuestion) {
+                alert('Please generate a question first!');
+                return;
+            }
+            
+            simulator.showSolution(simulator.currentQuestion);
+        }
+
+        function clearAnswers() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.value = '';
+                input.className = '';
+            });
+        }
+
+        // Generate first question on page load
+        window.onload = function() {
+            generateNewQuestion();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="calculated">
+    <n><text>Normal Distribution CI 1</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>A random sample of 98 observations was taken from a population with known standard deviation σ = 5.77.</p>
+      <p>The sample mean is 46.07.</p>
+      <p>Calculate a 90% confidence interval for the population mean.</p>
+      <p>Lower limit (3 decimal places): ___</p>
+      <p>Upper limit (3 decimal places): ___</p>
+    ]]></text></questiontext>
+    <answer fraction="50">
+      <text>45.111</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+    <answer fraction="50">
+      <text>47.029</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+  </question>
+  <question type="calculated">
+    <n><text>Normal Distribution CI 2</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>In a random sample of 236 individuals, 186 had a particular characteristic.</p>
+      <p>This gives a sample proportion of 0.788.</p>
+      <p>Calculate a 90% confidence interval for the population proportion.</p>
+      <p>Lower limit (3 decimal places): ___</p>
+      <p>Upper limit (3 decimal places): ___</p>
+    ]]></text></questiontext>
+    <answer fraction="50">
+      <text>0.744</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+    <answer fraction="50">
+      <text>0.832</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+  </question>
+  <question type="calculated">
+    <n><text>Normal Distribution CI 3</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>A random sample of 45 observations was taken from a population with known standard deviation σ = 6.13.</p>
+      <p>The sample mean is 48.8.</p>
+      <p>Calculate a 95% confidence interval for the population mean.</p>
+      <p>Lower limit (3 decimal places): ___</p>
+      <p>Upper limit (3 decimal places): ___</p>
+    ]]></text></questiontext>
+    <answer fraction="50">
+      <text>47.009</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+    <answer fraction="50">
+      <text>50.591</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+  </question>
+  <question type="calculated">
+    <n><text>Normal Distribution CI 4</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>In a random sample of 389 individuals, 279 had a particular characteristic.</p>
+      <p>This gives a sample proportion of 0.717.</p>
+      <p>Calculate a 95% confidence interval for the population proportion.</p>
+      <p>Lower limit (3 decimal places): ___</p>
+      <p>Upper limit (3 decimal places): ___</p>
+    ]]></text></questiontext>
+    <answer fraction="50">
+      <text>0.672</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+    <answer fraction="50">
+      <text>0.762</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+  </question>
+</quiz>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Statistics & Economics Simulations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .simulation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .simulation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid;
+        }
+        
+        .simulation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+        
+        .stats-card {
+            border-left-color: #3498db;
+        }
+        
+        .economics-card {
+            border-left-color: #e74c3c;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .card-icon {
+            font-size: 2.5em;
+        }
+        
+        .card-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .card-subtitle {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .card-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .card-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .card-features li {
+            padding: 5px 0;
+            color: #666;
+        }
+        
+        .card-features li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .btn-demo {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .btn-demo:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            transform: translateY(-2px);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.2em;
+            margin: 60px 0 40px 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .features-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .quick-start {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .quick-start h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .quick-start ol {
+            color: #555;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        
+        .quick-start li {
+            margin-bottom: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            opacity: 0.8;
+        }
+        
+        .github-link {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .github-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .simulation-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Interactive Statistics & Economics Simulations</h1>
+        <p>Professional-grade educational tools for university courses</p>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">📈 Statistics Simulations</h2>
+        
+        <div class="simulation-grid">
+            <div class="simulation-card stats-card">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <div>
+                        <div class="card-title">Standard Normal Distribution</div>
+                        <div class="card-subtitle">Probability Calculations & Z-Scores</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Master probability calculations with the standard normal distribution. Practice P(Z < z), P(Z > z), and P(a < Z < b) with real-world applications.
+                </div>
+                <ul class="card-features">
+                    <li>Basic z-score calculations</li>
+                    <li>Real-world applications</li>
+                    <li>Comprehensive analysis</li>
+                    <li>Step-by-step solutions</li>
+                </ul>
+                <a href="simulations/standard-normal-demo.html" class="btn-demo">📊 Try Standard Normal Demo</a>
+            </div>
+
+            <div class="simulation-card stats-card">
+                <div class="card-header">
+                    <div class="card-icon">📈</div>
+                    <div>
+                        <div class="card-title">Confidence Intervals</div>
+                        <div class="card-subtitle">Statistical Inference & Sample Size</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Build confidence intervals and determine sample sizes for research. Covers normal distribution, t-distribution, and proportions.
+                </div>
+                <ul class="card-features">
+                    <li>Normal & t-distribution intervals</li>
+                    <li>Population proportions</li>
+                    <li>Sample size determination</li>
+                    <li>Margin of error analysis</li>
+                </ul>
+                <a href="confidence-intervals-demo.html" class="btn-demo">📈 Try Confidence Intervals</a>
+            </div>
+
+            <div class="simulation-card stats-card">
+                <div class="card-header">
+                    <div class="card-icon">🔬</div>
+                    <div>
+                        <div class="card-title">Sample Size Calculator</div>
+                        <div class="card-subtitle">Research Planning & Power Analysis</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Plan your research with professional sample size calculations. Determine adequate sample sizes for different study types.
+                </div>
+                <ul class="card-features">
+                    <li>Mean estimation studies</li>
+                    <li>Proportion estimation</li>
+                    <li>Comparative studies</li>
+                    <li>Power and effect size</li>
+                </ul>
+                <a href="sample-size-demo.html" class="btn-demo">🔬 Try Sample Size Calculator</a>
+            </div>
+        </div>
+
+        <h2 class="section-title">🇨🇦 Economics Simulations</h2>
+        
+        <div class="simulation-grid">
+            <div class="simulation-card economics-card">
+                <div class="card-header">
+                    <div class="card-icon">💰</div>
+                    <div>
+                        <div class="card-title">GDP Income Approach</div>
+                        <div class="card-subtitle">Canadian National Accounting</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Master GDP calculation using Statistics Canada methodology: GDP = CE + GOS + GMI + (T - S). Practice with all Canadian provinces.
+                </div>
+                <ul class="card-features">
+                    <li>Official Statistics Canada method</li>
+                    <li>All provinces & territories</li>
+                    <li>Economic scenario analysis</li>
+                    <li>Income distribution studies</li>
+                </ul>
+                <a href="gdp-income-demo.html" class="btn-demo">💰 Try GDP Income Demo</a>
+            </div>
+
+            <div class="simulation-card economics-card">
+                <div class="card-header">
+                    <div class="card-icon">👥</div>
+                    <div>
+                        <div class="card-title">Labor Market Analysis</div>
+                        <div class="card-subtitle">Employment & Unemployment Statistics</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Analyze Canadian labor market data with official Statistics Canada methodology. Calculate employment rates and economic indicators.
+                </div>
+                <ul class="card-features">
+                    <li>Employment rate calculations</li>
+                    <li>Unemployment analysis</li>
+                    <li>Labor force participation</li>
+                    <li>Regional comparisons</li>
+                </ul>
+                <a href="labor-market-demo.html" class="btn-demo">👥 Try Labor Market Demo</a>
+            </div>
+
+            <div class="simulation-card economics-card">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <div>
+                        <div class="card-title">Inflation & CPI</div>
+                        <div class="card-subtitle">Price Index Calculations</div>
+                    </div>
+                </div>
+                <div class="card-description">
+                    Calculate Consumer Price Index and inflation rates using Canadian basket methodology. Understand price change analysis.
+                </div>
+                <ul class="card-features">
+                    <li>CPI calculation methods</li>
+                    <li>Inflation rate analysis</li>
+                    <li>Market basket approach</li>
+                    <li>Regional price variations</li>
+                </ul>
+                <a href="inflation-demo.html" class="btn-demo">📊 Try Inflation Demo</a>
+            </div>
+        </div>
+
+        <div class="features-section">
+            <h3 style="text-align: center; font-size: 2em; margin-bottom: 20px;">Why These Simulations Work</h3>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Active Learning</div>
+                    <div>Students learn by doing, not just reading. Interactive practice builds understanding.</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Immediate Feedback</div>
+                    <div>Instant validation builds confidence and corrects misconceptions immediately.</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <div class="feature-title">Real-World Context</div>
+                    <div>Authentic scenarios connect theory to professional practice.</div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">Mobile Ready</div>
+                    <div>Study anywhere, anytime. Works on all devices without installation.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-start">
+            <h3>🚀 Quick Start Guide</h3>
+            
+            <h4 style="color: #3498db; margin: 20px 0 10px 0;">For Students:</h4>
+            <ol>
+                <li>Click any simulation button above</li>
+                <li>No login required - works immediately in your browser</li>
+                <li>Generate unlimited practice problems</li>
+                <li>Check solutions and learn from step-by-step explanations</li>
+            </ol>
+            
+            <h4 style="color: #e74c3c; margin: 20px 0 10px 0;">For Instructors:</h4>
+            <ol>
+                <li>Share simulation links directly with students</li>
+                <li>Download Moodle XML files for automatic question import</li>
+                <li>Use in classroom demonstrations or homework assignments</li>
+                <li>Zero setup or maintenance required</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Interactive Statistics & Economics Simulations</p>
+        <p>Free for educational use • MIT License</p>
+        <a href="https://github.com/waberra/stats-econ-simulations" class="github-link">
+            ⭐ View on GitHub
+        </a>
+    </div>
+
+    <script>
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation for cards
+            const cards = document.querySelectorAll('.simulation-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

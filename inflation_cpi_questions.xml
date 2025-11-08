@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <question type="cloze">
+    <n><text>Inflation Analysis 1 - Comprehensive</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>During a period of economic contraction (deflationary pressures), the Transportation Consumer Price Index for South Region changed from July 2015 to November 2016 as follows:</p><p>July 2015: 242.5</p><p>November 2016: 235.4</p><p>(Base: 2010 = 100)</p><p></p><p>Calculate the following (give answers to appropriate decimal places):</p><p>1. Period inflation rate: ___%</p><p>2. Annualized inflation rate: ___%</p><p>3. Average monthly inflation rate: ___%</p><p>4. CPI point increase: ___ points</p><p>5. Real value of $64575 at end of period (in July 2015 dollars): $___</p>
+    ]]></text></questiontext>
+    <answer><text>1. {1:NUMERICAL:=-2.93:0.01} 2. {1:NUMERICAL:=-2.2:0.01} 3. {1:NUMERICAL:=-0.183:0.01} 4. {1:NUMERICAL:=-7.1:0.1} 5. {1:NUMERICAL:=66523:100}</text></answer>
+  </question>
+  <question type="numerical">
+    <n><text>Inflation Analysis 2 - Annualized Inflation</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>During a period of stable economic growth (moderate inflation targeting), the All Items Consumer Price Index for South Region changed from December 2020 to July 2021 as follows:</p><p>December 2020: 269.1</p><p>July 2021: 273.6</p><p>(Base: 2000 = 100)</p><p></p><p>What is the annualized inflation rate? (Give your answer to appropriate decimal places)</p>
+    ]]></text></questiontext>
+    <answer fraction="100">
+      <text>2.88</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+    <generalfeedback format="html"><text><![CDATA[
+      <p>Solution:</p><p>((Final CPI / Initial CPI)^(1/years) - 1) × 100</p><p>Years: 0.6</p><p>= ((273.6 / 269.1)^(1/0.6) - 1) × 100</p><p>= 2.88%</p>
+    ]]></text></generalfeedback>
+  </question>
+  <question type="numerical">
+    <n><text>Inflation Analysis 3 - Monthly Avg</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>During a period of high inflation (economic expansion with rising prices), the All Items Consumer Price Index for West Region changed from November 2023 to October 2024 as follows:</p><p>November 2023: 272.4</p><p>October 2024: 294.9</p><p>(Base: 2010 = 100)</p><p></p><p>What is the average monthly inflation rate? (Give your answer to appropriate decimal places)</p>
+    ]]></text></questiontext>
+    <answer fraction="100">
+      <text>0.751</text>
+      <tolerance>0.01</tolerance>
+    </answer>
+    <generalfeedback format="html"><text><![CDATA[
+      <p>Solution:</p><p>Total period inflation ÷ Number of months</p><p>= 8.26% ÷ 11 months</p><p>= 0.751%</p>
+    ]]></text></generalfeedback>
+  </question>
+  <question type="numerical">
+    <n><text>Inflation Analysis 4 - Real Value</text></n>
+    <questiontext format="html"><text><![CDATA[
+      <p>During a period of stable economic growth (moderate inflation targeting), the All Items Consumer Price Index for Northeast Region changed from January 2021 to November 2021 as follows:</p><p>January 2021: 253</p><p>November 2021: 258.2</p><p>(Base: 1982-84 = 100)</p><p></p><p>What is the real value (in January 2021 dollars) of a $60998 salary at the end of this period? (Give your answer to appropriate decimal places)</p>
+    ]]></text></questiontext>
+    <answer fraction="100">
+      <text>59770</text>
+      <tolerance>50</tolerance>
+    </answer>
+    <generalfeedback format="html"><text><![CDATA[
+      <p>Solution:</p><p>Nominal value × (Initial CPI / Final CPI)</p><p>= $60998 × (253 / 258.2)</p><p>= $59770</p>
+    ]]></text></generalfeedback>
+  </question>
+</quiz>
