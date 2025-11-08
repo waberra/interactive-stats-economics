@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+  <!-- GDP Expenditure & Economic Growth Question Bank -->
+  <!-- Focus: Nominal GDP, Real GDP, Economic Growth, Per Capita Income, Productivity -->
+  
+  <!-- Question 1: Nominal GDP Calculation -->
+  <question type="numerical">
+    <n><text>GDP Expenditure - Nominal GDP Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>💰 GDP Expenditure Approach - Nominal GDP</h3>
+        <p><strong>Calculate the nominal GDP using the expenditure approach for the United States in 2023.</strong></p>
+        
+        <div style="background: #f0f8ff; padding: 15px; border-left: 4px solid #667eea; margin: 15px 0;">
+          <h4>Given Expenditure Components:</h4>
+          <ul>
+            <li><strong>Consumption (C):</strong> $14,250.0 billion</li>
+            <li><strong>Investment (I):</strong> $3,890.0 billion</li>
+            <li><strong>Government Spending (G):</strong> $4,120.0 billion</li>
+            <li><strong>Exports (X):</strong> $2,450.0 billion</li>
+            <li><strong>Imports (M):</strong> $3,210.0 billion</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> GDP = C + I + G + (X - M)</p>
+        <p><strong>Instructions:</strong> Give your answer in USD billions to 1 decimal place.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Calculate net exports:</strong> (X - M) = 2,450.0 - 3,210.0 = -760.0 billion USD</li>
+          <li><strong>Apply expenditure formula:</strong> GDP = C + I + G + (X - M)</li>
+          <li><strong>Substitute values:</strong> GDP = 14,250.0 + 3,890.0 + 4,120.0 + (-760.0)</li>
+          <li><strong>Calculate total:</strong> GDP = 21,500.0 billion USD</li>
+        </ol>
+        
+        <div style="background: #e8f4f8; padding: 10px; border-left: 4px solid #3498db;">
+          <strong>📊 Economic Analysis:</strong> The negative net exports (-760.0 billion) indicate the U.S. has a trade deficit, importing more goods and services than it exports, which is typical for a large consumer economy.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>21500.0</text>
+      <tolerance>0.5</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 2: Real GDP Calculation -->
+  <question type="numerical">
+    <n><text>GDP Analysis - Real GDP Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>📊 Economic Analysis - Real GDP</h3>
+        <p><strong>Calculate the real GDP for Germany in 2023 using the GDP deflator.</strong></p>
+        
+        <div style="background: #fff3cd; padding: 15px; border-left: 4px solid #f39c12; margin: 15px 0;">
+          <h4>Given Economic Data:</h4>
+          <ul>
+            <li><strong>Nominal GDP:</strong> $4,850.0 billion</li>
+            <li><strong>GDP Deflator:</strong> 108.5 (base year = 100)</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Real GDP = Nominal GDP ÷ (GDP Deflator ÷ 100)</p>
+        <p><strong>Instructions:</strong> Give your answer in USD billions to 1 decimal place.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Convert deflator to decimal:</strong> GDP Deflator = 108.5 ÷ 100 = 1.085</li>
+          <li><strong>Apply real GDP formula:</strong> Real GDP = Nominal GDP ÷ Deflator</li>
+          <li><strong>Substitute values:</strong> Real GDP = 4,850.0 ÷ 1.085</li>
+          <li><strong>Calculate result:</strong> Real GDP = 4,470.0 billion USD</li>
+        </ol>
+        
+        <div style="background: #e8f5e8; padding: 10px; border-left: 4px solid #4caf50;">
+          <strong>📈 Economic Analysis:</strong> Real GDP of $4,470.0 billion represents Germany's output adjusted for inflation, showing the actual economic growth after removing price level changes.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>4470.0</text>
+      <tolerance>1.0</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 3: Economic Growth Rate -->
+  <question type="numerical">
+    <n><text>Economic Growth - Growth Rate Calculation</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>📈 Economic Growth Analysis - Growth Rate</h3>
+        <p><strong>Calculate the economic growth rate for Japan between 2022 and 2023.</strong></p>
+        
+        <div style="background: #e8f5e8; padding: 15px; border-left: 4px solid #4caf50; margin: 15px 0;">
+          <h4>Given Real GDP Data:</h4>
+          <ul>
+            <li><strong>Real GDP 2023:</strong> $4,230.0 billion</li>
+            <li><strong>Real GDP 2022:</strong> $4,100.0 billion</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Growth Rate = ((GDP₂ - GDP₁) ÷ GDP₁) × 100%</p>
+        <p><strong>Instructions:</strong> Give your answer as a percentage to 1 decimal place.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Calculate change in GDP:</strong> Change = 4,230.0 - 4,100.0 = 130.0 billion</li>
+          <li><strong>Apply growth rate formula:</strong> Rate = (Change ÷ Initial GDP) × 100%</li>
+          <li><strong>Substitute values:</strong> Rate = (130.0 ÷ 4,100.0) × 100%</li>
+          <li><strong>Calculate percentage:</strong> Rate = 0.0317 × 100% = 3.2%</li>
+        </ol>
+        
+        <div style="background: #fff3cd; padding: 10px; border-left: 4px solid #ff9800;">
+          <strong>📊 Economic Analysis:</strong> A growth rate of 3.2% indicates strong economic expansion for Japan, above the typical developed economy average of 2-3% annual growth.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>3.2</text>
+      <tolerance>0.1</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 4: GDP Per Capita -->
+  <question type="numerical">
+    <n><text>Economic Indicators - GDP Per Capita</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>💸 Economic Indicators - GDP Per Capita</h3>
+        <p><strong>Calculate the nominal GDP per capita for the United Kingdom in 2023.</strong></p>
+        
+        <div style="background: #f0f8ff; padding: 15px; border-left: 4px solid #667eea; margin: 15px 0;">
+          <h4>Given Economic Data:</h4>
+          <ul>
+            <li><strong>Nominal GDP:</strong> $3,180.0 billion</li>
+            <li><strong>Population:</strong> 67.5 million</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> GDP per Capita = (GDP × 1000) ÷ Population</p>
+        <p><strong>Note:</strong> Multiply GDP by 1000 to convert billions to millions for per capita calculation</p>
+        <p><strong>Instructions:</strong> Give your answer in USD to the nearest dollar.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Convert GDP to millions:</strong> GDP = 3,180.0 × 1000 = 3,180,000 million USD</li>
+          <li><strong>Apply per capita formula:</strong> Per Capita = Total GDP ÷ Population</li>
+          <li><strong>Substitute values:</strong> Per Capita = 3,180,000 ÷ 67.5</li>
+          <li><strong>Calculate result:</strong> Per Capita = 47,111 USD</li>
+        </ol>
+        
+        <div style="background: #e3f2fd; padding: 10px; border-left: 4px solid #2196f3;">
+          <strong>💰 Economic Analysis:</strong> GDP per capita of $47,111 indicates high living standards in the UK, placing it among developed nations with strong per capita income levels.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>47111</text>
+      <tolerance>50</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>1</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 5: Labor Productivity -->
+  <question type="numerical">
+    <n><text>Productivity Analysis - Labor Productivity</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>⚡ Productivity Analysis - Labor Productivity</h3>
+        <p><strong>Calculate the labor productivity (real GDP per hour worked) for Canada in 2023.</strong></p>
+        
+        <div style="background: #fff3cd; padding: 15px; border-left: 4px solid #f39c12; margin: 15px 0;">
+          <h4>Given Productivity Data:</h4>
+          <ul>
+            <li><strong>Real GDP:</strong> $2,850.0 billion</li>
+            <li><strong>Total Hours Worked:</strong> 42.5 billion hours</li>
+          </ul>
+        </div>
+        
+        <p><strong>Formula:</strong> Productivity = (Real GDP × 1000) ÷ Total Hours Worked</p>
+        <p><strong>Note:</strong> Multiply Real GDP by 1000 to convert billions to millions for per hour calculation</p>
+        <p><strong>Instructions:</strong> Give your answer in USD per hour to 2 decimal places.</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Solution Steps:</h4>
+        <ol>
+          <li><strong>Convert Real GDP to millions:</strong> GDP = 2,850.0 × 1000 = 2,850,000 million USD</li>
+          <li><strong>Apply productivity formula:</strong> Productivity = Real GDP ÷ Total Hours</li>
+          <li><strong>Substitute values:</strong> Productivity = 2,850,000 ÷ 42,500</li>
+          <li><strong>Calculate result:</strong> Productivity = 67.06 USD per hour</li>
+        </ol>
+        
+        <div style="background: #e8f5e8; padding: 10px; border-left: 4px solid #4caf50;">
+          <strong>⚡ Economic Analysis:</strong> Labor productivity of $67.06 per hour indicates high efficiency in Canada's economy, reflecting advanced technology, skilled workforce, and efficient production processes.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>1</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+    <answer fraction="100" format="1">
+      <text>67.06</text>
+      <tolerance>0.05</tolerance>
+      <tolerancetype>1</tolerancetype>
+      <correctanswerformat>1</correctanswerformat>
+      <correctanswerlength>2</correctanswerlength>
+    </answer>
+  </question>
+
+  <!-- Question 6: Comprehensive Analysis (Cloze) -->
+  <question type="cloze">
+    <n><text>GDP Complete Analysis - All Economic Indicators</text></n>
+    <questiontext format="html">
+      <text><![CDATA[
+        <h3>🎯 Complete Economic Analysis - All Indicators</h3>
+        <p><strong>Complete comprehensive economic analysis for Canada during normal economic conditions in 2023.</strong></p>
+        
+        <div style="background: #f8f9fa; padding: 15px; border-left: 4px solid #6c757d; margin: 15px 0;">
+          <h4>Given Economic Data:</h4>
+          <ul>
+            <li><strong>Consumption (C):</strong> $1,245.0 billion</li>
+            <li><strong>Investment (I):</strong> $385.0 billion</li>
+            <li><strong>Government Spending (G):</strong> $420.0 billion</li>
+            <li><strong>Exports (X):</strong> $650.0 billion</li>
+            <li><strong>Imports (M):</strong> $680.0 billion</li>
+            <li><strong>GDP Deflator:</strong> 102.5 (base year = 100)</li>
+            <li><strong>Population:</strong> 39.0 million</li>
+            <li><strong>Total Hours Worked:</strong> 35.0 billion hours</li>
+            <li><strong>Real GDP 2022:</strong> $1,950.0 billion</li>
+          </ul>
+        </div>
+        
+        <p><strong>Calculate the following economic indicators:</strong></p>
+        
+        <p><strong>Part A:</strong> Nominal GDP = {1:NUMERICAL:=2020.0:0.5} billion USD</p>
+        
+        <p><strong>Part B:</strong> Real GDP = {1:NUMERICAL:=1970.7:1.0} billion USD</p>
+        
+        <p><strong>Part C:</strong> Economic Growth Rate = {1:NUMERICAL:=1.1:0.1}%</p>
+        
+        <p><strong>Part D:</strong> GDP per Capita = {1:NUMERICAL:=51795:100} USD</p>
+        
+        <p><strong>Part E:</strong> Labor Productivity = {1:NUMERICAL:=56.31:0.05} USD per hour</p>
+        
+        <p><strong>Part F:</strong> Net Exports = {1:NUMERICAL:=-30.0:0.5} billion USD</p>
+      ]]>
+    </text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text><![CDATA[
+        <h4>💡 Complete Solution:</h4>
+        
+        <h5>Part A: Nominal GDP Calculation</h5>
+        <p><strong>Formula:</strong> GDP = C + I + G + (X - M)</p>
+        <p><strong>Step 1:</strong> Net exports = 650.0 - 680.0 = -30.0 billion</p>
+        <p><strong>Step 2:</strong> GDP = 1,245.0 + 385.0 + 420.0 + (-30.0) = <strong>2,020.0 billion USD</strong></p>
+        
+        <h5>Part B: Real GDP</h5>
+        <p><strong>Formula:</strong> Real GDP = Nominal GDP ÷ (GDP Deflator ÷ 100)</p>
+        <p><strong>Calculation:</strong> Real GDP = 2,020.0 ÷ (102.5 ÷ 100) = <strong>1,970.7 billion USD</strong></p>
+        
+        <h5>Part C: Economic Growth Rate</h5>
+        <p><strong>Formula:</strong> Growth = ((Real GDP₂ - Real GDP₁) ÷ Real GDP₁) × 100%</p>
+        <p><strong>Calculation:</strong> Growth = ((1,970.7 - 1,950.0) ÷ 1,950.0) × 100% = <strong>1.1%</strong></p>
+        
+        <h5>Part D: GDP Per Capita</h5>
+        <p><strong>Formula:</strong> Per Capita = (GDP × 1000) ÷ Population</p>
+        <p><strong>Calculation:</strong> Per Capita = (2,020.0 × 1000) ÷ 39.0 = <strong>51,795 USD</strong></p>
+        
+        <h5>Part E: Labor Productivity</h5>
+        <p><strong>Formula:</strong> Productivity = (Real GDP × 1000) ÷ Total Hours</p>
+        <p><strong>Calculation:</strong> Productivity = (1,970.7 × 1000) ÷ 35,000 = <strong>56.31 USD per hour</strong></p>
+        
+        <h5>Part F: Net Exports</h5>
+        <p><strong>Formula:</strong> Net Exports = Exports - Imports</p>
+        <p><strong>Calculation:</strong> Net Exports = 650.0 - 680.0 = <strong>-30.0 billion USD</strong></p>
+        
+        <div style="background: #e8f4f8; padding: 10px; border-left: 4px solid #3498db; margin-top: 15px;">
+          <strong>🇨🇦 Economic Summary:</strong> Canada shows moderate economic growth (1.1%) with strong GDP per capita ($51,795) and high labor productivity ($56.31/hour). The trade deficit (-$30.0 billion) reflects strong domestic demand exceeding exports, typical of developed economies with robust consumer markets.
+        </div>
+      ]]>
+    </text>
+    </generalfeedback>
+    <defaultgrade>6</defaultgrade>
+    <penalty>0.1</penalty>
+    <hidden>0</hidden>
+  </question>
+
+</quiz>
