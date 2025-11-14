@@ -1,1 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tail Test Identification Practice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #1a252f, #2c3e50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .tail-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .tail-box {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid;
+        }
+        
+        .left-tail {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .right-tail {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-color: #2196f3;
+            color: #1565c0;
+        }
+        
+        .two-tail {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-color: #ff9800;
+            color: #ef6c00;
+        }
+        
+        .tail-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .tail-symbol {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+        
+        .question-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .hypothesis-display {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .h0-display {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-color: #ff9800;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #ef6c00;
+        }
+        
+        .h1-display {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-color: #2196f3;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #1565c0;
+        }
+        
+        .choice-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .choice-btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .left-choice {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+        }
+        
+        .right-choice {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+        }
+        
+        .two-choice {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+        
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .answer-btn {
+            background: linear-gradient(135deg, #6f42c1, #563d7c);
+        }
+        
+        .explain-btn {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .correct-feedback {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .incorrect-feedback {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+            display: none;
+        }
+        
+        .score-display {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #2196f3;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 25px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .visual-indicator {
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .curve-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Tail Test Identification Practice</h1>
+        <p style="text-align: center; font-size: 1.2em; color: #6c757d; margin-bottom: 30px;">
+            Learn to identify Left-Tail, Right-Tail, and Two-Tail Hypothesis Tests
+        </p>
+        
+        <div class="concept-box">
+            <h3 style="text-align: center; color: #2c3e50;">📚 Types of Hypothesis Tests:</h3>
+            <div class="tail-types">
+                <div class="tail-box left-tail">
+                    <div class="tail-title">Left-Tail Test</div>
+                    <div class="tail-symbol">◀️</div>
+                    <div><strong>H₁: μ < value</strong></div>
+                    <div style="margin-top: 8px; font-size: 0.9em;">
+                        "Less than"<br>"Below"<br>"Decreased"
+                    </div>
+                </div>
+                
+                <div class="tail-box right-tail">
+                    <div class="tail-title">Right-Tail Test</div>
+                    <div class="tail-symbol">▶️</div>
+                    <div><strong>H₁: μ > value</strong></div>
+                    <div style="margin-top: 8px; font-size: 0.9em;">
+                        "Greater than"<br>"Above"<br>"Increased"
+                    </div>
+                </div>
+                
+                <div class="tail-box two-tail">
+                    <div class="tail-title">Two-Tail Test</div>
+                    <div class="tail-symbol">↔️</div>
+                    <div><strong>H₁: μ ≠ value</strong></div>
+                    <div style="margin-top: 8px; font-size: 0.9em;">
+                        "Not equal"<br>"Different from"<br>"Changed"
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="score-display">
+            <div style="font-size: 1.2em; font-weight: bold; color: #2c3e50;">
+                Score: <span id="score">0</span> / <span id="total">0</span> 
+                (<span id="percentage">0</span>%)
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div style="margin-top: 10px;">
+                Question <span id="currentQuestion">1</span> of <span id="totalQuestions">20</span>
+            </div>
+        </div>
+        
+        <div class="question-section">
+            <h3 style="text-align: center; color: #9c27b0;">📝 Identify the Test Type:</h3>
+            
+            <div class="hypothesis-display">
+                <div class="h0-display" id="h0Display">
+                    Click "New Question" to start!
+                </div>
+                <div class="h1-display" id="h1Display">
+                    Alternative hypothesis will appear here
+                </div>
+            </div>
+            
+            <div class="visual-indicator">
+                <div id="contextInfo" style="font-style: italic; color: #6c757d; margin: 10px 0;">
+                    Economic context will appear here
+                </div>
+            </div>
+            
+            <div class="choice-buttons">
+                <button class="choice-btn left-choice" onclick="selectAnswer('left')">
+                    ◀️ Left-Tail Test<br><small>H₁: μ < value</small>
+                </button>
+                <button class="choice-btn right-choice" onclick="selectAnswer('right')">
+                    ▶️ Right-Tail Test<br><small>H₁: μ > value</small>
+                </button>
+                <button class="choice-btn two-choice" onclick="selectAnswer('two')">
+                    ↔️ Two-Tail Test<br><small>H₁: μ ≠ value</small>
+                </button>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="button" onclick="generateNewQuestion()">🎲 New Question</button>
+                <button class="button answer-btn" onclick="showAnswer()">📖 Show Answer</button>
+                <button class="button explain-btn" onclick="showExplanation()">💡 Explain Why</button>
+            </div>
+            
+            <div class="feedback" id="feedback">
+                <!-- Feedback will be displayed here -->
+            </div>
+            
+            <div class="explanation" id="explanation">
+                <!-- Explanation will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = null;
+        let score = 0;
+        let totalAttempts = 0;
+        let currentQuestionNumber = 1;
+        let maxQuestions = 20;
+
+        const questions = [
+            // Left-tail tests (μ < value)
+            {
+                h0: "H₀: Canadian inflation rate = 2.0%",
+                h1: "H₁: Canadian inflation rate < 2.0%",
+                type: "left",
+                context: "Bank of Canada testing if inflation is below their target",
+                explanation: "The alternative hypothesis states inflation is LESS THAN 2.0%, which indicates a left-tail test. We're testing if the rate has fallen below the target.",
+                subject: "Monetary Policy"
+            },
+            {
+                h0: "H₀: Average Canadian household income = $75,000",
+                h1: "H₁: Average Canadian household income < $75,000", 
+                type: "left",
+                context: "Statistics Canada examining if incomes have declined",
+                explanation: "The alternative hypothesis tests if income is LESS THAN $75,000, making this a left-tail test. We're looking for evidence of a decrease.",
+                subject: "Income Analysis"
+            },
+            {
+                h0: "H₀: Unemployment rate in Ontario = 6.0%",
+                h1: "H₁: Unemployment rate in Ontario < 6.0%",
+                type: "left", 
+                context: "Testing if new job programs reduced unemployment below the benchmark",
+                explanation: "Since H₁ states unemployment is LESS THAN 6.0%, this is a left-tail test. We're testing for improvement (reduction) in unemployment.",
+                subject: "Labor Economics"
+            },
+            
+            // Right-tail tests (μ > value)
+            {
+                h0: "H₀: GDP growth rate = 2.5%",
+                h1: "H₁: GDP growth rate > 2.5%",
+                type: "right",
+                context: "Testing if economic stimulus boosted growth above projections",
+                explanation: "The alternative hypothesis states GDP growth is GREATER THAN 2.5%, which indicates a right-tail test. We're testing for above-average performance.",
+                subject: "Economic Growth"
+            },
+            {
+                h0: "H₀: Average housing price in Vancouver = $800,000",
+                h1: "H₁: Average housing price in Vancouver > $800,000",
+                type: "right",
+                context: "Real estate analysis testing if prices exceeded the benchmark",
+                explanation: "H₁ claims housing prices are GREATER THAN $800,000, making this a right-tail test. We're testing if prices have increased beyond the reference point.",
+                subject: "Housing Economics"
+            },
+            {
+                h0: "H₀: Consumer confidence index = 100",
+                h1: "H₁: Consumer confidence index > 100",
+                type: "right",
+                context: "Testing if positive economic news boosted consumer confidence",
+                explanation: "Since the alternative hypothesis states confidence is GREATER THAN 100, this is a right-tail test. We're looking for evidence of improvement.",
+                subject: "Consumer Economics"
+            },
+            
+            // Two-tail tests (μ ≠ value)
+            {
+                h0: "H₀: Average Canadian salary = $60,000",
+                h1: "H₁: Average Canadian salary ≠ $60,000",
+                type: "two",
+                context: "Testing if actual salaries differ from the reported national average",
+                explanation: "The ≠ symbol indicates the salary could be either higher OR lower than $60,000, making this a two-tail test. We're testing for any difference.",
+                subject: "Labor Statistics"
+            },
+            {
+                h0: "H₀: Federal tax revenue = $350 billion",
+                h1: "H₁: Federal tax revenue ≠ $350 billion",
+                type: "two",
+                context: "Auditing if actual tax collection differs from budget projections",
+                explanation: "H₁ states revenue is NOT EQUAL to $350 billion (could be higher or lower), indicating a two-tail test. We're checking for any deviation.",
+                subject: "Public Finance"
+            },
+            {
+                h0: "H₀: Canadian dollar exchange rate = $0.75 USD",
+                h1: "H₁: Canadian dollar exchange rate ≠ $0.75 USD",
+                type: "two",
+                context: "Testing if the exchange rate has changed from the historical average",
+                explanation: "The alternative hypothesis tests if the rate is DIFFERENT FROM $0.75 (either higher or lower), making this a two-tail test.",
+                subject: "International Finance"
+            },
+            
+            // More sophisticated examples
+            {
+                h0: "H₀: Business investment growth = 3.0%",
+                h1: "H₁: Business investment growth < 3.0%",
+                type: "left",
+                context: "Testing if economic uncertainty reduced business investment below expectations",
+                explanation: "H₁ claims investment growth is LESS THAN 3.0%, indicating a left-tail test. We're testing if uncertainty caused underperformance.",
+                subject: "Investment Economics"
+            },
+            {
+                h0: "H₀: Alberta oil production = 4.0 million barrels/day", 
+                h1: "H₁: Alberta oil production > 4.0 million barrels/day",
+                type: "right",
+                context: "Testing if new extraction technology increased production above baseline",
+                explanation: "The alternative hypothesis states production is GREATER THAN 4.0 million barrels/day, making this a right-tail test.",
+                subject: "Resource Economics"
+            },
+            {
+                h0: "H₀: Bank of Canada interest rate = 2.5%",
+                h1: "H₁: Bank of Canada interest rate ≠ 2.5%",
+                type: "two", 
+                context: "Testing if the current rate differs from the neutral policy rate",
+                explanation: "H₁ tests if the rate is NOT EQUAL to 2.5% (could be higher or lower), indicating a two-tail test.",
+                subject: "Monetary Policy"
+            },
+            {
+                h0: "H₀: Average student debt in Canada = $35,000",
+                h1: "H₁: Average student debt in Canada > $35,000",
+                type: "right",
+                context: "Testing if rising tuition costs increased debt above the previous average",
+                explanation: "Since H₁ claims debt is GREATER THAN $35,000, this is a right-tail test testing for an increase.",
+                subject: "Education Economics"
+            },
+            {
+                h0: "H₀: Manufacturing employment = 1.5 million jobs",
+                h1: "H₁: Manufacturing employment < 1.5 million jobs",
+                type: "left",
+                context: "Testing if automation reduced manufacturing employment below historical levels",
+                explanation: "The alternative hypothesis states employment is LESS THAN 1.5 million, making this a left-tail test for decline.",
+                subject: "Labor Economics"
+            },
+            {
+                h0: "H₀: Provincial government debt-to-GDP ratio = 40%",
+                h1: "H₁: Provincial government debt-to-GDP ratio ≠ 40%",
+                type: "two",
+                context: "Auditing if actual debt levels differ from budgeted targets",
+                explanation: "H₁ tests if the ratio is NOT EQUAL to 40% (could be higher or lower), indicating a two-tail test.",
+                subject: "Public Finance"
+            },
+            {
+                h0: "H₀: Export growth to Asia = 8.0%",
+                h1: "H₁: Export growth to Asia > 8.0%", 
+                type: "right",
+                context: "Testing if new trade agreements boosted exports above projections",
+                explanation: "The alternative hypothesis claims growth is GREATER THAN 8.0%, making this a right-tail test for improvement.",
+                subject: "International Trade"
+            },
+            {
+                h0: "H₀: Minimum wage impact on employment = 0%",
+                h1: "H₁: Minimum wage impact on employment ≠ 0%",
+                type: "two",
+                context: "Testing if minimum wage increases had any effect on employment levels",
+                explanation: "H₁ tests if the impact is NOT EQUAL to 0% (could be positive or negative), indicating a two-tail test.",
+                subject: "Labor Policy"
+            },
+            {
+                h0: "H₀: Federal budget deficit = $25 billion",
+                h1: "H₁: Federal budget deficit < $25 billion",
+                type: "left",
+                context: "Testing if fiscal restraint reduced the deficit below projections",
+                explanation: "Since H₁ claims the deficit is LESS THAN $25 billion, this is a left-tail test for improvement (reduction).",
+                subject: "Fiscal Policy"
+            },
+            {
+                h0: "H₀: Technology sector GDP contribution = 12%",
+                h1: "H₁: Technology sector GDP contribution > 12%",
+                type: "right", 
+                context: "Testing if tech growth increased the sector's share of GDP beyond historical levels",
+                explanation: "The alternative hypothesis states contribution is GREATER THAN 12%, making this a right-tail test for growth.",
+                subject: "Sectoral Analysis"
+            },
+            {
+                h0: "H₀: Regional income equality index = 0.85",
+                h1: "H₁: Regional income equality index ≠ 0.85",
+                type: "two",
+                context: "Testing if policy changes affected income equality across Canadian regions",
+                explanation: "H₁ tests if the index is NOT EQUAL to 0.85 (could be higher or lower equality), indicating a two-tail test.",
+                subject: "Regional Economics"
+            },
+            {
+                h0: "H₀: Foreign direct investment = $50 billion",
+                h1: "H₁: Foreign direct investment < $50 billion",
+                type: "left",
+                context: "Testing if global uncertainty reduced FDI below historical averages",
+                explanation: "Since H₁ claims FDI is LESS THAN $50 billion, this is a left-tail test for decline.",
+                subject: "International Investment"
+            }
+        ];
+
+        function generateNewQuestion() {
+            // Select a random question
+            currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+            
+            // Update display
+            document.getElementById('h0Display').textContent = currentQuestion.h0;
+            document.getElementById('h1Display').textContent = currentQuestion.h1;
+            document.getElementById('contextInfo').textContent = currentQuestion.context;
+            
+            // Clear previous feedback and explanation
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('explanation').style.display = 'none';
+            
+            // Update question counter
+            document.getElementById('currentQuestion').textContent = currentQuestionNumber;
+            document.getElementById('totalQuestions').textContent = maxQuestions;
+        }
+
+        function selectAnswer(choice) {
+            if (!currentQuestion) {
+                alert('Please generate a question first!');
+                return;
+            }
+            
+            totalAttempts++;
+            const isCorrect = choice === currentQuestion.type;
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Update score display
+            updateScoreDisplay();
+            
+            // Show feedback
+            showFeedback(isCorrect, choice);
+            
+            // Move to next question
+            if (currentQuestionNumber < maxQuestions) {
+                currentQuestionNumber++;
+            } else {
+                // Reset for continued practice
+                currentQuestionNumber = 1;
+            }
+        }
+
+        function showFeedback(isCorrect, userChoice) {
+            const feedbackDiv = document.getElementById('feedback');
+            const correctType = currentQuestion.type;
+            const correctTypeDisplay = getTestTypeDisplay(correctType);
+            const userChoiceDisplay = getTestTypeDisplay(userChoice);
+            
+            if (isCorrect) {
+                feedbackDiv.className = 'feedback correct-feedback';
+                feedbackDiv.innerHTML = `
+                    ✅ <strong>Correct!</strong><br>
+                    You correctly identified this as a <strong>${correctTypeDisplay}</strong>.<br>
+                    <em>Subject: ${currentQuestion.subject}</em>
+                `;
+            } else {
+                feedbackDiv.className = 'feedback incorrect-feedback';
+                feedbackDiv.innerHTML = `
+                    ❌ <strong>Incorrect.</strong><br>
+                    You selected: <strong>${userChoiceDisplay}</strong><br>
+                    Correct answer: <strong>${correctTypeDisplay}</strong><br>
+                    <em>Subject: ${currentQuestion.subject}</em>
+                `;
+            }
+            
+            feedbackDiv.style.display = 'block';
+        }
+
+        function getTestTypeDisplay(type) {
+            switch(type) {
+                case 'left': return '◀️ Left-Tail Test';
+                case 'right': return '▶️ Right-Tail Test';
+                case 'two': return '↔️ Two-Tail Test';
+                default: return 'Unknown';
+            }
+        }
+
+        function showAnswer() {
+            if (!currentQuestion) {
+                alert('Please generate a question first!');
+                return;
+            }
+            
+            const correctType = currentQuestion.type;
+            const correctTypeDisplay = getTestTypeDisplay(correctType);
+            
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.className = 'feedback correct-feedback';
+            feedbackDiv.innerHTML = `
+                📖 <strong>Correct Answer:</strong><br>
+                This is a <strong>${correctTypeDisplay}</strong><br>
+                <em>Subject: ${currentQuestion.subject}</em>
+            `;
+            feedbackDiv.style.display = 'block';
+        }
+
+        function showExplanation() {
+            if (!currentQuestion) {
+                alert('Please generate a question first!');
+                return;
+            }
+            
+            const explanationDiv = document.getElementById('explanation');
+            const correctType = currentQuestion.type;
+            const correctTypeDisplay = getTestTypeDisplay(correctType);
+            
+            let keyWords = '';
+            switch(correctType) {
+                case 'left':
+                    keyWords = '"less than (<)", "below", "decreased", "reduced"';
+                    break;
+                case 'right':
+                    keyWords = '"greater than (>)", "above", "increased", "exceeded"';
+                    break;
+                case 'two':
+                    keyWords = '"not equal (≠)", "different from", "changed", "differs"';
+                    break;
+            }
+            
+            explanationDiv.innerHTML = `
+                <h4>💡 Why this is a ${correctTypeDisplay}:</h4>
+                <p><strong>H₀:</strong> ${currentQuestion.h0}</p>
+                <p><strong>H₁:</strong> ${currentQuestion.h1}</p>
+                <p><strong>Context:</strong> ${currentQuestion.context}</p>
+                <p><strong>Explanation:</strong> ${currentQuestion.explanation}</p>
+                <p><strong>Key Learning:</strong> Look for words like ${keyWords} to identify ${correctType}-tail tests.</p>
+            `;
+            explanationDiv.style.display = 'block';
+        }
+
+        function updateScoreDisplay() {
+            const percentage = totalAttempts > 0 ? Math.round((score / totalAttempts) * 100) : 0;
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = totalAttempts;
+            document.getElementById('percentage').textContent = percentage;
+            
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = percentage + '%';
+        }
+
+        // Initialize with first question
+        window.onload = function() {
+            generateNewQuestion();
+        };
+    </script>
+</body>
+</html>
 
