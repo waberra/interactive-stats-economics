@@ -1,1 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Identification Practice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #1a252f, #2c3e50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .concept-box {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .hypothesis-definition {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .null-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ff9800;
+        }
+        
+        .alternative-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #2196f3;
+        }
+        
+        .hypothesis-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .question-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .statement-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #dee2e6;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .choice-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .choice-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .null-choice {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+        
+        .alternative-choice {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+        }
+        
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .answer-btn {
+            background: linear-gradient(135deg, #6f42c1, #563d7c);
+        }
+        
+        .explain-btn {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .correct-feedback {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .incorrect-feedback {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+            display: none;
+        }
+        
+        .score-display {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #2196f3;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            border-radius: 25px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            height: 100%;
+            border-radius: 25px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Hypothesis Identification Practice</h1>
+        <p style="text-align: center; font-size: 1.2em; color: #6c757d; margin-bottom: 30px;">
+            Learn to identify Null (H₀) vs Alternative (H₁) Hypotheses
+        </p>
+        
+        <div class="concept-box">
+            <h3 style="text-align: center; color: #2c3e50;">📚 Key Concepts:</h3>
+            <div class="hypothesis-definition">
+                <div class="null-box">
+                    <div class="hypothesis-title" style="color: #f57c00;">🔄 Null Hypothesis (H₀)</div>
+                    <ul>
+                        <li><strong>States "no effect"</strong> or "no difference"</li>
+                        <li><strong>Status quo</strong> assumption</li>
+                        <li><strong>Contains "="</strong> (equal, no change)</li>
+                        <li><strong>What we test against</strong></li>
+                        <li><strong>Examples:</strong> "equal to", "no difference", "same as before"</li>
+                    </ul>
+                </div>
+                
+                <div class="alternative-box">
+                    <div class="hypothesis-title" style="color: #1976d2;">⚡ Alternative Hypothesis (H₁)</div>
+                    <ul>
+                        <li><strong>States there IS an effect</strong> or difference</li>
+                        <li><strong>Claims a change</strong> from status quo</li>
+                        <li><strong>Contains ≠, >, or <</strong></li>
+                        <li><strong>What we want to prove</strong></li>
+                        <li><strong>Examples:</strong> "different from", "greater than", "has changed"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="score-display">
+            <div style="font-size: 1.2em; font-weight: bold; color: #2c3e50;">
+                Score: <span id="score">0</span> / <span id="total">0</span> 
+                (<span id="percentage">0</span>%)
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div style="margin-top: 10px;">
+                Question <span id="currentQuestion">1</span> of <span id="totalQuestions">20</span>
+            </div>
+        </div>
+        
+        <div class="question-section">
+            <h3 style="text-align: center; color: #9c27b0;">📝 Identify the Hypothesis:</h3>
+            
+            <div class="statement-box" id="statementDisplay">
+                Click "New Question" to start practicing!
+            </div>
+            
+            <div class="choice-buttons">
+                <button class="choice-btn null-choice" onclick="selectAnswer('null')">
+                    🔄 Null Hypothesis (H₀)
+                </button>
+                <button class="choice-btn alternative-choice" onclick="selectAnswer('alternative')">
+                    ⚡ Alternative Hypothesis (H₁)
+                </button>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="button" onclick="generateNewQuestion()">🎲 New Question</button>
+                <button class="button answer-btn" onclick="showAnswer()">📖 Show Answer</button>
+                <button class="button explain-btn" onclick="showExplanation()">💡 Explain Why</button>
+            </div>
+            
+            <div class="feedback" id="feedback">
+                <!-- Feedback will be displayed here -->
+            </div>
+            
+            <div class="explanation" id="explanation">
+                <!-- Explanation will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStatement = null;
+        let score = 0;
+        let totalAttempts = 0;
+        let currentQuestionNumber = 1;
+        let maxQuestions = 20;
+
+        const statements = [
+            // Economic Growth
+            {
+                text: "The Canadian economy's GDP growth rate equals 2.5% this year.",
+                type: "null",
+                explanation: "This states a specific equality (equals 2.5%) with no claim of change or difference. It's testing whether the growth rate IS 2.5%, making it a null hypothesis.",
+                subject: "Economic Growth"
+            },
+            {
+                text: "The new economic policy will increase GDP growth above historical average.",
+                type: "alternative", 
+                explanation: "This claims the policy WILL INCREASE growth above a baseline, suggesting a positive effect. It's proposing a change from the status quo.",
+                subject: "Economic Policy"
+            },
+            
+            // Unemployment
+            {
+                text: "Unemployment rate in Ontario is different from the national average.",
+                type: "alternative",
+                explanation: "The word 'different from' indicates we're testing for a difference, not equality. This suggests Ontario ≠ national average.",
+                subject: "Labor Economics"
+            },
+            {
+                text: "The unemployment rate has not changed from last quarter.",
+                type: "null",
+                explanation: "'Has not changed' indicates no difference from the previous period. This maintains the status quo assumption of no effect.",
+                subject: "Labor Economics"
+            },
+            
+            // Consumer Behavior
+            {
+                text: "Average household income equals $75,000.",
+                type: "null",
+                explanation: "This states a specific equality ($75,000) without claiming any change or difference. It's testing whether income IS this amount.",
+                subject: "Income Statistics"
+            },
+            {
+                text: "The new tax policy will reduce average household spending.",
+                type: "alternative",
+                explanation: "Claims the policy WILL REDUCE spending, suggesting a negative effect compared to current levels. This proposes a change.",
+                subject: "Fiscal Policy"
+            },
+            
+            // Inflation
+            {
+                text: "Inflation rate is greater than the Bank of Canada's 2% target.",
+                type: "alternative",
+                explanation: "'Greater than' (>) indicates we're testing whether inflation exceeds the target, not whether it equals the target.",
+                subject: "Monetary Policy"
+            },
+            {
+                text: "Current inflation equals the Bank of Canada's 2% target rate.",
+                type: "null",
+                explanation: "'Equals' indicates we're testing whether inflation IS at the target rate, representing the desired status quo.",
+                subject: "Monetary Policy"
+            },
+            
+            // Trade
+            {
+                text: "Canada's trade balance with the US shows no surplus or deficit.",
+                type: "null",
+                explanation: "'No surplus or deficit' means the trade balance equals zero, representing a neutral status quo position.",
+                subject: "International Trade"
+            },
+            {
+                text: "NAFTA renegotiation has improved Canada's trade balance.",
+                type: "alternative",
+                explanation: "'Has improved' claims a positive change from previous trade balance levels due to policy change.",
+                subject: "International Trade"
+            },
+            
+            // Investment
+            {
+                text: "Foreign direct investment in Canada is less than $50 billion annually.",
+                type: "alternative",
+                explanation: "'Less than' (<) tests whether investment is below a threshold, not equal to it.",
+                subject: "Investment Economics"
+            },
+            {
+                text: "Business investment spending equals last year's level.",
+                type: "null",
+                explanation: "'Equals last year's level' indicates no change from the previous period, maintaining the status quo.",
+                subject: "Investment Economics"
+            },
+            
+            // Regional Economics
+            {
+                text: "Alberta's economic performance differs from British Columbia's.",
+                type: "alternative",
+                explanation: "'Differs from' indicates we're testing for a difference between provinces, not equality.",
+                subject: "Regional Economics"
+            },
+            {
+                text: "Economic growth is the same across all Canadian provinces.",
+                type: "null",
+                explanation: "'Same across all' indicates equal growth rates, representing uniform performance (no regional differences).",
+                subject: "Regional Economics"
+            },
+            
+            // Education Economics
+            {
+                text: "University graduates earn more than college graduates on average.",
+                type: "alternative",
+                explanation: "'Earn more than' (>) claims university graduates have higher earnings, testing for a difference in income levels.",
+                subject: "Education Economics"
+            },
+            {
+                text: "The gender pay gap in Canada equals zero.",
+                type: "null",
+                explanation: "'Equals zero' states no pay gap exists, representing equal pay between genders (status quo of equality).",
+                subject: "Labor Economics"
+            },
+            
+            // Market Analysis
+            {
+                text: "Housing prices have increased beyond normal market growth.",
+                type: "alternative",
+                explanation: "'Increased beyond normal' claims prices have risen above typical levels, suggesting an abnormal effect.",
+                subject: "Housing Economics"
+            },
+            {
+                text: "Stock market returns equal the historical average of 7% annually.",
+                type: "null",
+                explanation: "'Equal the historical average' indicates returns are at the expected typical level, no deviation from norm.",
+                subject: "Financial Economics"
+            },
+            
+            // Policy Analysis
+            {
+                text: "The minimum wage increase had no effect on employment levels.",
+                type: "null",
+                explanation: "'Had no effect' explicitly states there was no impact, maintaining the status quo assumption of no policy effect.",
+                subject: "Labor Policy"
+            },
+            {
+                text: "Carbon taxation will decrease industrial production.",
+                type: "alternative",
+                explanation: "'Will decrease' claims the tax policy will have a negative effect on production levels, proposing a change.",
+                subject: "Environmental Policy"
+            }
+        ];
+
+        function generateNewQuestion() {
+            // Select a random statement
+            currentStatement = statements[Math.floor(Math.random() * statements.length)];
+            
+            // Update display
+            document.getElementById('statementDisplay').textContent = currentStatement.text;
+            
+            // Clear previous feedback and explanation
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('explanation').style.display = 'none';
+            
+            // Update question counter
+            document.getElementById('currentQuestion').textContent = currentQuestionNumber;
+            document.getElementById('totalQuestions').textContent = maxQuestions;
+        }
+
+        function selectAnswer(choice) {
+            if (!currentStatement) {
+                alert('Please generate a question first!');
+                return;
+            }
+            
+            totalAttempts++;
+            const isCorrect = choice === currentStatement.type;
+            
+            if (isCorrect) {
+                score++;
+            }
+            
+            // Update score display
+            updateScoreDisplay();
+            
+            // Show feedback
+            showFeedback(isCorrect, choice);
+            
+            // Move to next question
+            if (currentQuestionNumber < maxQuestions) {
+                currentQuestionNumber++;
+            } else {
+                // Reset for continued practice
+                currentQuestionNumber = 1;
+            }
+        }
+
+        function showFeedback(isCorrect, userChoice) {
+            const feedbackDiv = document.getElementById('feedback');
+            const correctType = currentStatement.type;
+            const correctTypeDisplay = correctType === 'null' ? 'Null Hypothesis (H₀)' : 'Alternative Hypothesis (H₁)';
+            const userChoiceDisplay = userChoice === 'null' ? 'Null Hypothesis (H₀)' : 'Alternative Hypothesis (H₁)';
+            
+            if (isCorrect) {
+                feedbackDiv.className = 'feedback correct-feedback';
+                feedbackDiv.innerHTML = `
+                    ✅ <strong>Correct!</strong><br>
+                    You correctly identified this as a <strong>${correctTypeDisplay}</strong>.<br>
+                    <em>Subject: ${currentStatement.subject}</em>
+                `;
+            } else {
+                feedbackDiv.className = 'feedback incorrect-feedback';
+                feedbackDiv.innerHTML = `
+                    ❌ <strong>Incorrect.</strong><br>
+                    You selected: <strong>${userChoiceDisplay}</strong><br>
+                    Correct answer: <strong>${correctTypeDisplay}</strong><br>
+                    <em>Subject: ${currentStatement.subject}</em>
+                `;
+            }
+            
+            feedbackDiv.style.display = 'block';
+        }
+
+        function showAnswer() {
+            if (!currentStatement) {
+                alert('Please generate a question first!');
+                return;
+            }
+            
+            const correctType = currentStatement.type;
+            const correctTypeDisplay = correctType === 'null' ? '🔄 Null Hypothesis (H₀)' : '⚡ Alternative Hypothesis (H₁)';
+            
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.className = 'feedback correct-feedback';
+            feedbackDiv.innerHTML = `
+                📖 <strong>Correct Answer:</strong><br>
+                This statement is a <strong>${correctTypeDisplay}</strong><br>
+                <em>Subject: ${currentStatement.subject}</em>
+            `;
+            feedbackDiv.style.display = 'block';
+        }
+
+        function showExplanation() {
+            if (!currentStatement) {
+                alert('Please generate a question first!');
+                return;
+            }
+            
+            const explanationDiv = document.getElementById('explanation');
+            const correctType = currentStatement.type;
+            const correctTypeDisplay = correctType === 'null' ? 'Null Hypothesis (H₀)' : 'Alternative Hypothesis (H₁)';
+            
+            explanationDiv.innerHTML = `
+                <h4>💡 Why this is a ${correctTypeDisplay}:</h4>
+                <p><strong>Statement:</strong> "${currentStatement.text}"</p>
+                <p><strong>Explanation:</strong> ${currentStatement.explanation}</p>
+                <p><strong>Key Learning:</strong> Look for words like ${correctType === 'null' ? '"equals", "no change", "same as"' : '"different", "greater than", "will increase/decrease"'} to identify ${correctType === 'null' ? 'null' : 'alternative'} hypotheses.</p>
+            `;
+            explanationDiv.style.display = 'block';
+        }
+
+        function updateScoreDisplay() {
+            const percentage = totalAttempts > 0 ? Math.round((score / totalAttempts) * 100) : 0;
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = totalAttempts;
+            document.getElementById('percentage').textContent = percentage;
+            
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = percentage + '%';
+        }
+
+        // Initialize with first question
+        window.onload = function() {
+            generateNewQuestion();
+        };
+    </script>
+</body>
+</html>
 
