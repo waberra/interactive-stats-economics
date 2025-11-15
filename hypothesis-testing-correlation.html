@@ -910,45 +910,185 @@
             
             if (stepType === 'r-squared') {
                 tutorialDiv.innerHTML = `
-                    <h4>📚 Coefficient of Determination:</h4>
+                    <h4>📚 How to Calculate Coefficient of Determination (r²):</h4>
                     <div class="tutorial-step">
+                        <strong>Step 1:</strong> Square the correlation coefficient<br>
                         <strong>Formula:</strong> r² = r × r<br>
+                        <strong>Calculation:</strong><br>
                         r² = ${testData.correlation.toFixed(3)} × ${testData.correlation.toFixed(3)}<br>
-                        r² = ${correctAnswers.rSquared.toFixed(4)}<br>
-                        <strong>Interpretation:</strong> ${(correctAnswers.rSquared * 100).toFixed(1)}% of variance explained
+                        r² = ${correctAnswers.rSquared.toFixed(4)}<br><br>
+                        <strong>Interpretation:</strong><br>
+                        • r² = ${(correctAnswers.rSquared * 100).toFixed(1)}% of variance in Y is explained by X<br>
+                        • ${(100 - correctAnswers.rSquared * 100).toFixed(1)}% is unexplained (residual variance)<br>
+                        • Higher r² means stronger linear relationship
+                    </div>
+                `;
+            } else if (stepType === 'standard-error') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Calculate Standard Error for Correlation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Step 1:</strong> Calculate 1 - r²<br>
+                        1 - r² = 1 - ${correctAnswers.rSquared.toFixed(4)} = ${(1 - correctAnswers.rSquared).toFixed(4)}<br><br>
+                        <strong>Step 2:</strong> Take the square root<br>
+                        <strong>Formula:</strong> SE = √(1 - r²)<br>
+                        SE = √${(1 - correctAnswers.rSquared).toFixed(4)}<br>
+                        SE = ${correctAnswers.standardError.toFixed(4)}<br><br>
+                        <strong>Purpose:</strong> This measures the "unexplained" portion for the t-test calculation
                     </div>
                 `;
             } else if (stepType === 'test-statistic') {
                 tutorialDiv.innerHTML = `
-                    <h4>📚 Test Statistic for Correlation:</h4>
+                    <h4>📚 How to Calculate Test Statistic for Correlation:</h4>
                     <div class="tutorial-step">
+                        <strong>Step 1:</strong> Calculate √(n-2)<br>
+                        √(n-2) = √(${testData.sampleSize}-2) = √${correctAnswers.df} = ${Math.sqrt(correctAnswers.df).toFixed(3)}<br><br>
+                        <strong>Step 2:</strong> Calculate r × √(n-2)<br>
+                        r × √(n-2) = ${testData.correlation.toFixed(3)} × ${Math.sqrt(correctAnswers.df).toFixed(3)} = ${(testData.correlation * Math.sqrt(correctAnswers.df)).toFixed(3)}<br><br>
+                        <strong>Step 3:</strong> Divide by standard error<br>
                         <strong>Formula:</strong> t = r × √(n-2) / √(1-r²)<br>
-                        t = ${testData.correlation.toFixed(3)} × √(${testData.sampleSize}-2) / √(1-${correctAnswers.rSquared.toFixed(4)})<br>
-                        t = ${testData.correlation.toFixed(3)} × √${correctAnswers.df} / ${correctAnswers.standardError.toFixed(4)}<br>
-                        t = ${correctAnswers.testStatistic.toFixed(3)}
+                        t = ${(testData.correlation * Math.sqrt(correctAnswers.df)).toFixed(3)} / ${correctAnswers.standardError.toFixed(4)}<br>
+                        t = ${correctAnswers.testStatistic.toFixed(3)}<br><br>
+                        <strong>Note:</strong> This follows t-distribution with df = n-2 = ${correctAnswers.df}
+                    </div>
+                `;
+            } else if (stepType === 'critical-value') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Find Critical Value for Correlation Test:</h4>
+                    <div class="tutorial-step">
+                        <strong>Step 1:</strong> Identify test parameters<br>
+                        • Significance level α = ${testData.alpha}<br>
+                        • Degrees of freedom = n-2 = ${testData.sampleSize}-2 = ${correctAnswers.df}<br>
+                        • Test type: ${testData.testType}<br><br>
+                        <strong>Step 2:</strong> Look up t-critical value<br>
+                        • Use t-table with df = ${correctAnswers.df}<br>
+                        • For α = ${testData.alpha} ${testData.testType === 'two-tail' ? '(two-tail)' : '(one-tail)'}<br>
+                        • t-critical = ${correctAnswers.criticalValue.toFixed(3)}<br><br>
+                        <strong>Decision Rule:</strong><br>
+                        ${testData.testType === 'two-tail' ? 'If |t| > ' + correctAnswers.criticalValue.toFixed(3) + ' → Reject H₀' : 
+                          testData.testType === 'right-tail' ? 'If t > ' + correctAnswers.criticalValue.toFixed(3) + ' → Reject H₀' :
+                          'If t < -' + correctAnswers.criticalValue.toFixed(3) + ' → Reject H₀'}
+                    </div>
+                `;
+            } else if (stepType === 'fisher-z') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Calculate Fisher's z-Transformation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Step 1:</strong> Calculate (1+r) and (1-r)<br>
+                        1+r = 1+${testData.correlation.toFixed(3)} = ${(1 + testData.correlation).toFixed(3)}<br>
+                        1-r = 1-${testData.correlation.toFixed(3)} = ${(1 - testData.correlation).toFixed(3)}<br><br>
+                        <strong>Step 2:</strong> Calculate (1+r)/(1-r)<br>
+                        (1+r)/(1-r) = ${(1 + testData.correlation).toFixed(3)} / ${(1 - testData.correlation).toFixed(3)} = ${((1 + testData.correlation)/(1 - testData.correlation)).toFixed(3)}<br><br>
+                        <strong>Step 3:</strong> Take natural logarithm and multiply by 0.5<br>
+                        <strong>Formula:</strong> z = 0.5 × ln[(1+r)/(1-r)]<br>
+                        z = 0.5 × ln(${((1 + testData.correlation)/(1 - testData.correlation)).toFixed(3)})<br>
+                        z = 0.5 × ${Math.log((1 + testData.correlation)/(1 - testData.correlation)).toFixed(3)}<br>
+                        z = ${correctAnswers.fisherZ.toFixed(3)}<br><br>
+                        <strong>Purpose:</strong> This transformation makes the sampling distribution approximately normal
+                    </div>
+                `;
+            } else if (stepType === 'margin-error') {
+                const zSE = 1 / Math.sqrt(testData.sampleSize - 3);
+                const zCritical = 1.96;
+                const marginError = zCritical * zSE;
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Calculate Margin of Error for Correlation CI:</h4>
+                    <div class="tutorial-step">
+                        <strong>Step 1:</strong> Calculate standard error in z-scale<br>
+                        SE(z) = 1/√(n-3) = 1/√(${testData.sampleSize}-3) = 1/√${testData.sampleSize-3}<br>
+                        SE(z) = ${zSE.toFixed(4)}<br><br>
+                        <strong>Step 2:</strong> Multiply by z-critical (1.96 for 95% CI)<br>
+                        <strong>Formula:</strong> Margin of Error = z-critical × SE(z)<br>
+                        Margin of Error = 1.96 × ${zSE.toFixed(4)}<br>
+                        Margin of Error = ${marginError.toFixed(4)}<br><br>
+                        <strong>Note:</strong> This is in Fisher's z-scale, not correlation scale
                     </div>
                 `;
             } else if (stepType === 'confidence-interval') {
+                const zSE = 1 / Math.sqrt(testData.sampleSize - 3);
+                const zCritical = 1.96;
+                const marginError = zCritical * zSE;
+                const zLower = correctAnswers.fisherZ - marginError;
+                const zUpper = correctAnswers.fisherZ + marginError;
+                
                 tutorialDiv.innerHTML = `
-                    <h4>📚 Confidence Interval for Correlation:</h4>
+                    <h4>📚 How to Calculate Confidence Interval for Correlation:</h4>
                     <div class="tutorial-step">
-                        <strong>Method:</strong> Fisher's z-transformation<br>
-                        z = 0.5 × ln[(1+r)/(1-r)] = ${correctAnswers.fisherZ.toFixed(3)}<br>
-                        SE(z) = 1/√(n-3) = 1/√${testData.sampleSize-3}<br>
-                        <strong>95% CI in z-scale:</strong> z ± 1.96 × SE(z)<br>
-                        <strong>Transform back to r-scale:</strong><br>
-                        Lower: ${correctAnswers.lowerBound.toFixed(3)}<br>
-                        Upper: ${correctAnswers.upperBound.toFixed(3)}
+                        <strong>Step 1:</strong> Calculate CI bounds in z-scale<br>
+                        Lower z = ${correctAnswers.fisherZ.toFixed(3)} - ${marginError.toFixed(4)} = ${zLower.toFixed(3)}<br>
+                        Upper z = ${correctAnswers.fisherZ.toFixed(3)} + ${marginError.toFixed(4)} = ${zUpper.toFixed(3)}<br><br>
+                        <strong>Step 2:</strong> Transform back to correlation scale<br>
+                        <strong>Formula:</strong> r = (e^(2z) - 1) / (e^(2z) + 1)<br><br>
+                        Lower bound:<br>
+                        r_lower = (e^(2×${zLower.toFixed(3)}) - 1) / (e^(2×${zLower.toFixed(3)}) + 1)<br>
+                        r_lower = (e^${(2*zLower).toFixed(3)} - 1) / (e^${(2*zLower).toFixed(3)} + 1) = ${correctAnswers.lowerBound.toFixed(3)}<br><br>
+                        Upper bound:<br>
+                        r_upper = (e^(2×${zUpper.toFixed(3)}) - 1) / (e^(2×${zUpper.toFixed(3)}) + 1)<br>
+                        r_upper = (e^${(2*zUpper).toFixed(3)} - 1) / (e^${(2*zUpper).toFixed(3)} + 1) = ${correctAnswers.upperBound.toFixed(3)}<br><br>
+                        <strong>95% CI:</strong> (${correctAnswers.lowerBound.toFixed(3)}, ${correctAnswers.upperBound.toFixed(3)})
+                    </div>
+                `;
+            } else if (stepType === 'ci-interpretation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Interpret Confidence Interval for Correlation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Our 95% CI:</strong> (${correctAnswers.lowerBound.toFixed(3)}, ${correctAnswers.upperBound.toFixed(3)})<br><br>
+                        <strong>Decision Rule for Correlation:</strong><br>
+                        • If 0 is INSIDE the CI → No significant correlation (Fail to Reject H₀)<br>
+                        • If 0 is OUTSIDE the CI → Significant correlation (Reject H₀)<br><br>
+                        <strong>Check:</strong> Is 0 between ${correctAnswers.lowerBound.toFixed(3)} and ${correctAnswers.upperBound.toFixed(3)}?<br>
+                        ${correctAnswers.ciContainsZero === 'yes' ? 
+                          '• YES: 0 is inside the interval → No significant correlation' :
+                          '• NO: 0 is outside the interval → Significant correlation exists'}<br><br>
+                        <strong>Interpretation:</strong> We are 95% confident the true population correlation is between ${correctAnswers.lowerBound.toFixed(3)} and ${correctAnswers.upperBound.toFixed(3)}
+                    </div>
+                `;
+            } else if (stepType === 'p-value') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Find P-value for Correlation Test:</h4>
+                    <div class="tutorial-step">
+                        <strong>Given:</strong><br>
+                        • Test statistic: t = ${correctAnswers.testStatistic.toFixed(3)}<br>
+                        • Degrees of freedom: df = ${correctAnswers.df}<br>
+                        • Test type: ${testData.testType}<br><br>
+                        <strong>Step 1:</strong> Find probability from t-distribution<br>
+                        Using t-table or calculator with df = ${correctAnswers.df}<br>
+                        P(|t| > ${Math.abs(correctAnswers.testStatistic).toFixed(3)}) ≈ ${correctAnswers.pValue.toFixed(3)}<br><br>
+                        <strong>Step 2:</strong> Compare to α = ${testData.alpha}<br>
+                        ${correctAnswers.pValue.toFixed(3)} ${correctAnswers.pValue <= testData.alpha ? '≤' : '>'} ${testData.alpha}<br><br>
+                        <strong>Decision:</strong> ${correctAnswers.pValue <= testData.alpha ? 'Reject H₀' : 'Fail to Reject H₀'}<br>
+                        <strong>Meaning:</strong> ${correctAnswers.pValue.toFixed(3) === '0.001' ? 'Less than 0.1%' : (correctAnswers.pValue * 100).toFixed(1) + '%'} chance of seeing this correlation (or stronger) if no true relationship exists
+                    </div>
+                `;
+            } else if (stepType === 'ci-decision') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Using Confidence Interval for Decision Making:</h4>
+                    <div class="tutorial-step">
+                        <strong>Rule for Correlation Testing:</strong><br>
+                        • H₀: ρ = 0 (no correlation)<br>
+                        • If 0 is in the CI → The hypothesized value (0) is plausible → Fail to Reject H₀<br>
+                        • If 0 is outside CI → The hypothesized value (0) is not plausible → Reject H₀<br><br>
+                        <strong>Our CI:</strong> (${correctAnswers.lowerBound.toFixed(3)}, ${correctAnswers.upperBound.toFixed(3)})<br>
+                        <strong>Question:</strong> Is 0 between ${correctAnswers.lowerBound.toFixed(3)} and ${correctAnswers.upperBound.toFixed(3)}?<br>
+                        <strong>Answer:</strong> ${correctAnswers.ciContainsZero === 'yes' ? 'YES' : 'NO'}<br><br>
+                        <strong>Decision:</strong> ${correctAnswers.ciContainsZero === 'yes' ? 'Fail to Reject H₀' : 'Reject H₀'}<br>
+                        <strong>Conclusion:</strong> ${correctAnswers.ciContainsZero === 'yes' ? 'No significant correlation detected' : 'Significant correlation exists'}
                     </div>
                 `;
             } else if (stepType === 'final-decision') {
                 tutorialDiv.innerHTML = `
                     <h4>📚 Final Decision - Three Methods Must Agree:</h4>
                     <div class="tutorial-step">
-                        <strong>Method 1:</strong> |t| = ${Math.abs(correctAnswers.testStatistic).toFixed(3)} vs ${correctAnswers.criticalValue.toFixed(3)} → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br>
-                        <strong>Method 2:</strong> p = ${correctAnswers.pValue.toFixed(3)} vs 0.05 → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br>
-                        <strong>Method 3:</strong> 0 is ${correctAnswers.ciContainsZero === 'yes' ? 'inside' : 'outside'} CI → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
-                        <strong>Economic Interpretation:</strong> ${correctAnswers.decision === 'reject' ? 'Significant correlation exists between variables' : 'No significant linear relationship detected'}
+                        <strong>Method 1 (Test Statistic):</strong><br>
+                        |t| = ${Math.abs(correctAnswers.testStatistic).toFixed(3)} ${Math.abs(correctAnswers.testStatistic) > correctAnswers.criticalValue ? '>' : '≤'} ${correctAnswers.criticalValue.toFixed(3)} → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                        <strong>Method 2 (P-value):</strong><br>
+                        p = ${correctAnswers.pValue.toFixed(3)} ${correctAnswers.pValue <= testData.alpha ? '≤' : '>'} α = ${testData.alpha} → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                        <strong>Method 3 (Confidence Interval):</strong><br>
+                        0 is ${correctAnswers.ciContainsZero === 'yes' ? 'inside' : 'outside'} CI (${correctAnswers.lowerBound.toFixed(3)}, ${correctAnswers.upperBound.toFixed(3)}) → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                        <strong>✅ All three methods agree!</strong><br><br>
+                        <strong>Economic Interpretation:</strong><br>
+                        ${correctAnswers.decision === 'reject' ? 
+                          `There IS a significant linear relationship between ${testData.xVariable.name.toLowerCase()} and ${testData.yVariable.name.toLowerCase()}. The correlation of r = ${testData.correlation.toFixed(3)} is statistically significant.` :
+                          `There is NO significant linear relationship between ${testData.xVariable.name.toLowerCase()} and ${testData.yVariable.name.toLowerCase()}. The observed correlation of r = ${testData.correlation.toFixed(3)} could be due to random chance.`}
                     </div>
                 `;
             }
