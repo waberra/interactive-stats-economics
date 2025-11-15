@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidence Intervals for Proportions - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .proportion-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .proportion-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .proportion-examples {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .example-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .example-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .example-text {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 0.9em;
+            border-left: 4px solid #28a745;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            margin: 6px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .survey-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .survey-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stat-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .stat-value {
+            font-size: 1.3em;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .step-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .step-number {
+            background: #9c27b0;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 120px 70px 70px 90px;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9em;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .small-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .interval-result {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .final-interval {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 3px solid #2196f3;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .interpretation-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .interpretation-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .formula-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            margin: 15px 0;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .conditions-check {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Confidence Intervals for Proportions</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Estimate Population Proportions with Confidence</h2>
+            <p><strong>Policy Polling</strong> • <strong>Percentage Estimation</strong> • <strong>Canadian Economic Applications</strong></p>
+        </div>
+        
+        <div class="proportion-intro">
+            <h3>📈 Why Confidence Intervals for Proportions?</h3>
+            
+            <div class="proportion-concept">
+                <div class="concept-title">📊 From Sample Percentages to Population Estimates</div>
+                
+                <div class="concept-explanation">
+                    <strong>🎯 The Goal:</strong> Use sample data to estimate unknown population proportions (percentages) with uncertainty. When pollsters say "42% support this policy ± 3%," they're using confidence intervals for proportions!
+                </div>
+                
+                <div style="background: #fff; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin: 15px 0; text-align: center;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🔑 Proportion Interval Formula:</div>
+                    <div style="font-size: 1.1em;">p̂ ± z × √(p̂(1-p̂)/n)</div>
+                    <div style="font-style: italic; margin-top: 5px;">Sample proportion ± Margin of Error</div>
+                </div>
+                
+                <div class="proportion-examples">
+                    <div class="example-card">
+                        <div class="example-title">🗳️ Policy Support</div>
+                        <div class="example-text">
+                            "What % of Canadians support carbon tax?"<br>
+                            Sample: 420/1000 support it
+                        </div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-title">💼 Employment Status</div>
+                        <div class="example-text">
+                            "What % are unemployed?"<br>
+                            Sample: 65/800 unemployed
+                        </div>
+                    </div>
+                    
+                    <div class="example-card">
+                        <div class="example-title">🏠 Home Ownership</div>
+                        <div class="example-text">
+                            "What % own homes?"<br>
+                            Sample: 340/500 own homes
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="formula-box">
+                    p̂ = x/n (sample proportion)
+                    <div style="font-size: 0.8em; margin-top: 5px;">where x = successes, n = sample size</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Canadian Economic Proportion Problem:
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('carbon-tax-support')">🌱 Carbon Tax Support</button>
+                <button class="scenario-btn" onclick="chooseScenario('unemployment-rate')">💼 Unemployment Rate</button>
+                <button class="scenario-btn" onclick="chooseScenario('home-ownership')">🏠 Home Ownership</button>
+            </div>
+            <div>
+                <button class="scenario-btn" onclick="chooseScenario('healthcare-satisfaction')">🏥 Healthcare Satisfaction</button>
+                <button class="scenario-btn" onclick="chooseScenario('business-growth')">📈 Business Growth</button>
+                <button class="scenario-btn" onclick="chooseScenario('education-funding')">🎓 Education Funding Support</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Step 1: Survey Data & Economic Context</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="survey-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">📊 Survey Results:</div>
+                    <div class="survey-stats">
+                        <div class="stat-box">
+                            <div class="stat-label">Sample Size (n)</div>
+                            <div class="stat-value" id="sampleSize"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Successes (x)</div>
+                            <div class="stat-value" id="successes"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Sample Proportion (p̂)</div>
+                            <div class="stat-value" id="sampleProportion"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Confidence Level</div>
+                            <div class="stat-value">95%</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin-top: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🎯 Goal:</div>
+                        <div id="goalDescription" style="font-size: 1.1em;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>🧮 Step 2: Calculate Proportion Confidence Interval</h3>
+                
+                <div class="conditions-check">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #856404;">✅ Checking Conditions:</div>
+                    <div id="conditionsText">np̂ ≥ 5 and n(1-p̂) ≥ 5 for normal approximation</div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 1</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Sample Proportion</div>
+                    <div class="step-instructions">
+                        <strong>Formula:</strong> p̂ = x/n (successes divided by sample size)
+                    </div>
+                    
+                    <div class="input-row">
+                        <label id="proportionLabel">p̂ = x/n:</label>
+                        <input type="number" id="proportionInput" step="0.0001" placeholder="0.xxxx" min="0" max="1">
+                        <button class="small-button check-btn" onclick="checkProportion()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('proportion')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('proportion-calc')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="proportion-answer"></div>
+                    <div class="tutorial-box" id="proportion-calc-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 2</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Find Critical Z-value</div>
+                    <div class="step-instructions">
+                        <strong>For 95% confidence:</strong> Find Z₀.₀₂₅ (cuts off 2.5% in each tail)
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Z-critical:</label>
+                        <input type="number" id="zInput" step="0.001" placeholder="Z-value">
+                        <button class="small-button check-btn" onclick="checkZ()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('z')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('z-critical')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="z-answer"></div>
+                    <div class="tutorial-box" id="z-critical-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 3</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Standard Error</div>
+                    <div class="step-instructions">
+                        <strong>Formula:</strong> SE = √(p̂(1-p̂)/n)
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Standard Error (SE):</label>
+                        <input type="number" id="seInput" step="0.0001" placeholder="SE">
+                        <button class="small-button check-btn" onclick="checkSE()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('se')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('standard-error')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="se-answer"></div>
+                    <div class="tutorial-box" id="standard-error-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 4</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Margin of Error</div>
+                    <div class="step-instructions">
+                        <strong>Formula:</strong> E = Z × SE
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Margin of Error (E):</label>
+                        <input type="number" id="meInput" step="0.0001" placeholder="MOE">
+                        <button class="small-button check-btn" onclick="checkME()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('me')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('margin-error')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="me-answer"></div>
+                    <div class="tutorial-box" id="margin-error-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 5</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Construct Confidence Interval</div>
+                    <div class="step-instructions">
+                        <strong>Formula:</strong> (p̂ - E, p̂ + E)
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-row">
+                            <label>Lower Bound:</label>
+                            <input type="number" id="lowerInput" step="0.0001" placeholder="Lower" min="0" max="1">
+                            <button class="small-button check-btn" onclick="checkLower()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('lower')">Answer</button>
+                        </div>
+                        
+                        <div class="input-row">
+                            <label>Upper Bound:</label>
+                            <input type="number" id="upperInput" step="0.0001" placeholder="Upper" min="0" max="1">
+                            <button class="small-button check-btn" onclick="checkUpper()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('upper')">Answer</button>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-display" id="lower-answer"></div>
+                    <div class="answer-display" id="upper-answer"></div>
+                </div>
+            </div>
+            
+            <div class="interval-result">
+                <h3>📈 Step 3: Your Proportion Confidence Interval</h3>
+                <div class="final-interval" id="finalInterval">
+                    Complete all calculations to see your confidence interval
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-style: italic;">
+                    We are <strong>95% confident</strong> that the true population proportion falls within this range
+                </div>
+            </div>
+            
+            <div class="interpretation-section">
+                <h3>💼 Step 4: Policy & Economic Interpretation</h3>
+                <div class="interpretation-text">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">📈 What This Means:</div>
+                    <div id="economicInterpretation"></div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New Proportion Interval Problem</button>
+            <button class="button" onclick="checkAllSteps()">✅ Check All Calculations</button>
+            <button class="button" onclick="showProportionSummary()">📖 Proportion CI Method</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'carbon-tax-support': {
+                name: 'Carbon Tax Support Polling',
+                description: 'Environment Canada conducting a national poll on carbon tax support. Need to estimate the true proportion of Canadians who support carbon pricing.',
+                question: 'What proportion of Canadians support the carbon tax?',
+                successDefinition: 'Citizens who support carbon tax',
+                n: 1200,
+                x: 456,
+                goal: 'Estimate the true proportion of Canadian carbon tax support with 95% confidence'
+            },
+            'unemployment-rate': {
+                name: 'Regional Unemployment Rate Survey',
+                description: 'Statistics Canada surveying employment status in Atlantic provinces. Need to estimate true unemployment proportion.',
+                question: 'What is the unemployment rate in Atlantic Canada?',
+                successDefinition: 'Individuals who are unemployed',
+                n: 800,
+                x: 72,
+                goal: 'Estimate the true unemployment rate for Atlantic Canada with 95% confidence'
+            },
+            'home-ownership': {
+                name: 'Home Ownership Rate Analysis',
+                description: 'CMHC studying home ownership patterns among millennials. Need to estimate true home ownership proportion.',
+                question: 'What proportion of millennials own homes?',
+                successDefinition: 'Millennials who own their homes',
+                n: 1500,
+                x: 495,
+                goal: 'Estimate the true home ownership rate among Canadian millennials with 95% confidence'
+            },
+            'healthcare-satisfaction': {
+                name: 'Healthcare System Satisfaction',
+                description: 'Health Canada polling public satisfaction with healthcare services. Need to estimate true satisfaction proportion.',
+                question: 'What proportion are satisfied with healthcare?',
+                successDefinition: 'Citizens satisfied with healthcare',
+                n: 950,
+                x: 722,
+                goal: 'Estimate the true healthcare satisfaction rate among Canadians with 95% confidence'
+            },
+            'business-growth': {
+                name: 'Small Business Growth Expectations',
+                description: 'Innovation Canada surveying small businesses about growth expectations. Need to estimate proportion expecting growth.',
+                question: 'What proportion expect business growth?',
+                successDefinition: 'Businesses expecting growth',
+                n: 600,
+                x: 378,
+                goal: 'Estimate the true proportion of small businesses expecting growth with 95% confidence'
+            },
+            'education-funding': {
+                name: 'Education Funding Support Survey',
+                description: 'Education Canada polling public support for increased education funding. Need to estimate true support proportion.',
+                question: 'What proportion support increased education funding?',
+                successDefinition: 'Citizens supporting increased funding',
+                n: 1100,
+                x: 803,
+                goal: 'Estimate the true proportion supporting education funding increases with 95% confidence'
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                question: scenarioData.question,
+                successDefinition: scenarioData.successDefinition,
+                n: scenarioData.n,
+                x: scenarioData.x,
+                goal: scenarioData.goal
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { n, x } = problemData;
+            
+            // Calculate sample proportion
+            const phat = x / n;
+            
+            // Z-critical for 95% confidence
+            const z = 1.96;
+            
+            // Standard error
+            const se = Math.sqrt((phat * (1 - phat)) / n);
+            
+            // Margin of error
+            const me = z * se;
+            
+            // Confidence interval bounds
+            const lower = Math.max(0, phat - me); // Can't be negative
+            const upper = Math.min(1, phat + me); // Can't exceed 1
+            
+            correctAnswers = {
+                phat: phat,
+                z: z,
+                se: se,
+                me: me,
+                lower: lower,
+                upper: upper
+            };
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            document.getElementById('sampleSize').textContent = problemData.n;
+            document.getElementById('successes').textContent = problemData.x;
+            document.getElementById('sampleProportion').textContent = `${(correctAnswers.phat * 100).toFixed(2)}%`;
+            document.getElementById('goalDescription').textContent = problemData.goal;
+            
+            // Update proportion calculation label
+            document.getElementById('proportionLabel').textContent = 
+                `p̂ = ${problemData.x}/${problemData.n}:`;
+            
+            // Check conditions
+            const np = problemData.n * correctAnswers.phat;
+            const nq = problemData.n * (1 - correctAnswers.phat);
+            document.getElementById('conditionsText').innerHTML = 
+                `np̂ = ${problemData.n} × ${correctAnswers.phat.toFixed(4)} = ${np.toFixed(1)} ≥ 5 ✅<br>` +
+                `n(1-p̂) = ${problemData.n} × ${(1-correctAnswers.phat).toFixed(4)} = ${nq.toFixed(1)} ≥ 5 ✅<br>` +
+                `<strong>Normal approximation is valid!</strong>`;
+                
+            updateEconomicInterpretation();
+        }
+
+        function updateEconomicInterpretation() {
+            if (correctAnswers.lower !== undefined && correctAnswers.upper !== undefined) {
+                const lowerPercent = (correctAnswers.lower * 100).toFixed(2);
+                const upperPercent = (correctAnswers.upper * 100).toFixed(2);
+                const phatPercent = (correctAnswers.phat * 100).toFixed(2);
+                const mePercent = (correctAnswers.me * 100).toFixed(2);
+                
+                document.getElementById('economicInterpretation').innerHTML = `
+                    <strong>${problemData.scenario} Results:</strong><br>
+                    Sample found ${phatPercent}% ${problemData.successDefinition.toLowerCase()}.<br>
+                    We are 95% confident that the true population proportion is between ${lowerPercent}% and ${upperPercent}%.<br><br>
+                    <strong>Policy Implications:</strong> This range helps policymakers understand public opinion uncertainty. 
+                    The margin of error (±${mePercent}%) shows the precision of our estimate. Decision-makers should 
+                    consider this uncertainty when planning policies or resource allocation.<br><br>
+                    <strong>Sample Size Impact:</strong> Larger samples reduce the margin of error, providing more precise estimates for policy decisions.
+                `;
+                
+                document.getElementById('finalInterval').innerHTML = `
+                    ${lowerPercent}% ≤ p ≤ ${upperPercent}%<br>
+                    <div style="font-size: 0.8em; margin-top: 5px;">95% Confidence Interval for Population Proportion</div>
+                `;
+            }
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = 0.001) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            
+            if (isCorrect && (inputId === 'upperInput' || inputId === 'lowerInput')) {
+                updateEconomicInterpretation();
+            }
+            
+            return isCorrect;
+        }
+
+        function checkProportion() {
+            return checkAnswer('proportionInput', correctAnswers.phat, 0.001);
+        }
+
+        function checkZ() {
+            return checkAnswer('zInput', correctAnswers.z, 0.01);
+        }
+
+        function checkSE() {
+            return checkAnswer('seInput', correctAnswers.se, 0.0001);
+        }
+
+        function checkME() {
+            return checkAnswer('meInput', correctAnswers.me, 0.0001);
+        }
+
+        function checkLower() {
+            return checkAnswer('lowerInput', correctAnswers.lower, 0.001);
+        }
+
+        function checkUpper() {
+            return checkAnswer('upperInput', correctAnswers.upper, 0.001);
+        }
+
+        function showAnswer(answerType) {
+            const answerDiv = document.getElementById(answerType + '-answer');
+            
+            switch(answerType) {
+                case 'proportion':
+                    answerDiv.innerHTML = `✅ p̂ = ${correctAnswers.phat.toFixed(4)} = ${(correctAnswers.phat * 100).toFixed(2)}%`;
+                    break;
+                case 'z':
+                    answerDiv.innerHTML = `✅ Z-critical = ${correctAnswers.z}`;
+                    break;
+                case 'se':
+                    answerDiv.innerHTML = `✅ SE = ${correctAnswers.se.toFixed(4)}`;
+                    break;
+                case 'me':
+                    answerDiv.innerHTML = `✅ Margin of Error = ${correctAnswers.me.toFixed(4)} = ${(correctAnswers.me * 100).toFixed(2)}%`;
+                    break;
+                case 'lower':
+                    answerDiv.innerHTML = `✅ Lower Bound = ${correctAnswers.lower.toFixed(4)} = ${(correctAnswers.lower * 100).toFixed(2)}%`;
+                    break;
+                case 'upper':
+                    answerDiv.innerHTML = `✅ Upper Bound = ${correctAnswers.upper.toFixed(4)} = ${(correctAnswers.upper * 100).toFixed(2)}%`;
+                    break;
+            }
+            
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'proportion-calc') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Sample Proportion Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> p̂ = x/n<br>
+                        p̂ = ${problemData.x}/${problemData.n}<br>
+                        p̂ = ${correctAnswers.phat.toFixed(4)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>As percentage:</strong> ${correctAnswers.phat.toFixed(4)} × 100 = ${(correctAnswers.phat * 100).toFixed(2)}%<br>
+                        <strong>Interpretation:</strong> ${(correctAnswers.phat * 100).toFixed(2)}% of our sample ${problemData.successDefinition.toLowerCase()}
+                    </div>
+                `;
+                
+            } else if (stepType === 'z-critical') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Z-Critical Value for Proportions:</h4>
+                    <div class="tutorial-step">
+                        <strong>For 95% confidence:</strong><br>
+                        α = 0.05, so α/2 = 0.025<br>
+                        Need Z₀.₀₂₅ = 1.96
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>From normal table:</strong><br>
+                        P(Z ≤ 1.96) = 0.975<br>
+                        This leaves 2.5% in each tail
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Why Z-distribution?</strong><br>
+                        For large samples, sample proportions follow normal distribution
+                    </div>
+                `;
+                
+            } else if (stepType === 'standard-error') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Standard Error for Proportions:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> SE = √(p̂(1-p̂)/n)<br>
+                        SE = √(${correctAnswers.phat.toFixed(4)} × ${(1-correctAnswers.phat).toFixed(4)} / ${problemData.n})<br>
+                        SE = √(${(correctAnswers.phat * (1-correctAnswers.phat)).toFixed(6)} / ${problemData.n})<br>
+                        SE = √${(correctAnswers.phat * (1-correctAnswers.phat) / problemData.n).toFixed(6)}<br>
+                        SE = ${correctAnswers.se.toFixed(4)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Standard Error measures:</strong><br>
+                        How much sample proportions vary from sample to sample<br>
+                        Smaller SE = more precise proportion estimate
+                    </div>
+                `;
+                
+            } else if (stepType === 'margin-error') {
+                tutorialDiv.innerHTML = `
+                    <h4>📏 Margin of Error for Proportions:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> E = Z × SE<br>
+                        E = ${correctAnswers.z} × ${correctAnswers.se.toFixed(4)}<br>
+                        E = ${correctAnswers.me.toFixed(4)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>As percentage:</strong> ${correctAnswers.me.toFixed(4)} × 100 = ±${(correctAnswers.me * 100).toFixed(2)}%<br>
+                        <strong>Interpretation:</strong> Our proportion estimate is accurate within ±${(correctAnswers.me * 100).toFixed(2)}%
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllSteps() {
+            const results = [
+                checkProportion(),
+                checkZ(),
+                checkSE(),
+                checkME(),
+                checkLower(),
+                checkUpper()
+            ];
+            const correct = results.filter(r => r).length;
+            
+            alert(`You got ${correct}/6 steps correct!\n\n${correct === 6 ? '🎉 Perfect proportion confidence interval construction!' : 'Use the Steps buttons to see detailed solutions.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                // Generate new random data for same scenario type
+                const scenarioData = scenarios[currentScenario];
+                const baseN = scenarioData.n;
+                const baseX = scenarioData.x;
+                
+                // Vary the sample size and successes slightly
+                const newN = baseN + Math.floor((Math.random() - 0.5) * 200);
+                const baseProp = baseX / baseN;
+                const newX = Math.round(newN * baseProp + (Math.random() - 0.5) * 50);
+                
+                problemData.n = Math.max(100, newN);
+                problemData.x = Math.max(10, Math.min(newX, problemData.n - 10));
+                
+                calculateCorrectAnswers();
+                updateDisplay();
+                clearAllInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['proportionInput', 'zInput', 'seInput', 'meInput', 'lowerInput', 'upperInput'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id.replace('Input', '') + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            // Hide all tutorial boxes
+            ['proportion-calc-tutorial', 'z-critical-tutorial', 'standard-error-tutorial', 'margin-error-tutorial'].forEach(id => {
+                const div = document.getElementById(id);
+                if (div) div.style.display = 'none';
+            });
+            
+            // Reset final interval
+            document.getElementById('finalInterval').textContent = 'Complete all calculations to see your confidence interval';
+        }
+
+        function showProportionSummary() {
+            alert(`📊 Proportion Confidence Interval Method:\n\n` +
+                `CONDITIONS (Check First):\n` +
+                `• np̂ ≥ 5 and n(1-p̂) ≥ 5\n` +
+                `• Random sampling\n` +
+                `• Independence of observations\n\n` +
+                `CALCULATION STEPS:\n` +
+                `1. Calculate p̂ = x/n\n` +
+                `2. Find Z-critical = 1.96 (for 95%)\n` +
+                `3. Calculate SE = √(p̂(1-p̂)/n)\n` +
+                `4. Calculate ME = Z × SE\n` +
+                `5. Interval: p̂ ± ME\n\n` +
+                `INTERPRETATION:\n` +
+                `"We are 95% confident that the true population\n` +
+                `proportion is between [lower%] and [upper%]"\n\n` +
+                `🇨🇦 ECONOMIC APPLICATIONS:\n` +
+                `• Policy polling and support\n` +
+                `• Unemployment rate estimation\n` +
+                `• Market share analysis\n` +
+                `• Public satisfaction surveys\n` +
+                `• Economic indicator proportions`);
+        }
+    </script>
+</body>
+</html>
