@@ -5,232 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Statistics & Economics Simulations</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
             color: #333;
+            min-height: 100vh;
+            line-height: 1.6;
         }
         
         .header {
             text-align: center;
-            padding: 40px 20px;
-            color: white;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
         
         .header h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 300;
         }
         
         .header p {
+            color: #7f8c8d;
             font-size: 1.2em;
-            opacity: 0.9;
+            margin-bottom: 10px;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .canada-flag {
+            font-size: 2em;
+            margin: 0 10px;
         }
         
-        .simulation-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-        
-        .simulation-card {
+        .section {
             background: white;
-            border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid;
+            margin: 25px 0;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
         }
         
-        .simulation-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
-        }
-        
-        .stats-card {
-            border-left-color: #3498db;
-        }
-        
-        .economics-card {
-            border-left-color: #e74c3c;
-        }
-        
-        .card-header {
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
         }
         
-        .card-icon {
-            font-size: 2.5em;
+        .section-icon {
+            font-size: 1.2em;
+            margin-right: 15px;
         }
         
-        .card-title {
-            font-size: 1.4em;
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .tool-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #dee2e6;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+        
+        .tool-title {
+            font-size: 1.3em;
             font-weight: bold;
             color: #2c3e50;
+            margin-bottom: 10px;
         }
         
-        .card-subtitle {
-            font-size: 0.9em;
-            color: #7f8c8d;
-            margin-top: 5px;
-        }
-        
-        .card-description {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
-        
-        .card-features {
-            list-style: none;
-            margin-bottom: 25px;
-        }
-        
-        .card-features li {
-            padding: 5px 0;
+        .tool-description {
             color: #666;
+            margin-bottom: 15px;
+            font-size: 0.95em;
         }
         
-        .card-features li:before {
-            content: "✓";
-            color: #27ae60;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .btn-demo {
+        .tool-link {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: #3498db;
             color: white;
             padding: 12px 25px;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 25px;
             font-weight: bold;
             transition: all 0.3s ease;
-            text-align: center;
-            width: 100%;
+            font-size: 0.9em;
         }
         
-        .btn-demo:hover {
-            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        .tool-link:hover {
+            background: #2980b9;
             transform: translateY(-2px);
         }
         
-        .section-title {
+        .new-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        
+        .foundation-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border-left: 5px solid #27ae60;
+        }
+        
+        .hypothesis-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            border-left: 5px solid #f39c12;
+        }
+        
+        .advanced-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            border-left: 5px solid #9b59b6;
+        }
+        
+        .learning-path {
+            background: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
             text-align: center;
-            font-size: 2.2em;
-            margin: 60px 0 40px 0;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
         
-        .features-section {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin: 40px 0;
-            color: white;
+        .path-arrow {
+            font-size: 2em;
+            color: #3498db;
+            margin: 10px;
         }
         
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+        .instructor-info {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
             margin-top: 30px;
         }
         
-        .feature-item {
-            text-align: center;
-        }
-        
-        .feature-icon {
-            font-size: 3em;
+        .instructor-info h3 {
             margin-bottom: 15px;
+            font-size: 1.4em;
         }
         
-        .feature-title {
-            font-size: 1.2em;
+        .course-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .course-item {
+            margin: 5px;
             font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .quick-start {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 40px 0;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        
-        .quick-start h3 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-        
-        .quick-start ol {
-            color: #555;
-            line-height: 1.8;
-            padding-left: 20px;
-        }
-        
-        .quick-start li {
-            margin-bottom: 10px;
-        }
-        
-        .footer {
-            text-align: center;
-            color: white;
-            padding: 40px 20px;
-            opacity: 0.8;
-        }
-        
-        .github-link {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .github-link:hover {
-            background: rgba(255,255,255,0.3);
         }
         
         @media (max-width: 768px) {
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+            
             .header h1 {
                 font-size: 2em;
             }
             
-            .simulation-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .section-title {
-                font-size: 1.8em;
+            .course-info {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -238,212 +204,213 @@
 <body>
     <div class="header">
         <h1>📊 Interactive Statistics & Economics Simulations</h1>
-        <p>Professional-grade educational tools for university courses</p>
+        <p><span class="canada-flag">🇨🇦</span> <strong>Dawson College</strong> <span class="canada-flag">🇨🇦</span></p>
+        <p><strong>Statistics, Economics & Political Economy</strong></p>
+        <p style="font-size: 1em; color: #95a5a6;">Comprehensive statistical tools for Canadian economic analysis</p>
+    </div>
+    
+    <div class="learning-path">
+        <h3 style="color: #2c3e50; margin-bottom: 15px;">📈 Recommended Learning Progression</h3>
+        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+            <span style="font-weight: bold; color: #27ae60;">Foundation Skills</span>
+            <span class="path-arrow">→</span>
+            <span style="font-weight: bold; color: #f39c12;">Hypothesis Testing</span>
+            <span class="path-arrow">→</span>
+            <span style="font-weight: bold; color: #9b59b6;">Advanced Applications</span>
+        </div>
     </div>
 
-    <div class="container">
-        <h2 class="section-title">📈 Statistics Simulations</h2>
+    <div class="section foundation-section">
+        <h2><span class="section-icon">🔧</span>Foundation Skills (Start Here!)</h2>
+        <p style="color: #27ae60; font-weight: bold; margin-bottom: 20px;">
+            Master these essential skills before moving to hypothesis testing. Build confidence with table reading, 
+            normal distributions, confidence intervals, and sample size planning.
+        </p>
         
-        <div class="simulation-grid">
-            <div class="simulation-card stats-card">
-                <div class="card-header">
-                    <div class="card-icon">📊</div>
-                    <div>
-                        <div class="card-title">Standard Normal Distribution</div>
-                        <div class="card-subtitle">Probability Calculations & Z-Scores</div>
-                    </div>
+        <div class="tool-grid">
+            <div class="tool-card">
+                <div class="new-badge">NEW</div>
+                <div class="tool-title">📊 Table Reading & Inverse Lookup</div>
+                <div class="tool-description">
+                    Master normal and t-table reading with one-tail and two-tail scenarios. 
+                    Essential foundation for all statistical inference.
                 </div>
-                <div class="card-description">
-                    Master probability calculations with the standard normal distribution. Practice P(Z < z), P(Z > z), and P(a < Z < b) with real-world applications.
-                </div>
-                <ul class="card-features">
-                    <li>Basic z-score calculations</li>
-                    <li>Real-world applications</li>
-                    <li>Comprehensive analysis</li>
-                    <li>Step-by-step solutions</li>
-                </ul>
-                <a href="simulations/standard-normal-demo.html" class="btn-demo">📊 Try Standard Normal Demo</a>
+                <a href="table-reading-inverse-lookup.html" class="tool-link">🚀 Start Learning</a>
             </div>
 
-            <div class="simulation-card stats-card">
-                <div class="card-header">
-                    <div class="card-icon">📈</div>
-                    <div>
-                        <div class="card-title">Confidence Intervals</div>
-                        <div class="card-subtitle">Statistical Inference & Sample Size</div>
-                    </div>
+            <div class="tool-card">
+                <div class="new-badge">NEW</div>
+                <div class="tool-title">🔔 Normal Distribution Applications</div>
+                <div class="tool-description">
+                    Solve real Canadian economic problems using normal distributions. 
+                    From housing prices to GDP analysis.
                 </div>
-                <div class="card-description">
-                    Build confidence intervals and determine sample sizes for research. Covers normal distribution, t-distribution, and proportions.
-                </div>
-                <ul class="card-features">
-                    <li>Normal & t-distribution intervals</li>
-                    <li>Population proportions</li>
-                    <li>Sample size determination</li>
-                    <li>Margin of error analysis</li>
-                </ul>
-                <a href="confidence-intervals-demo.html" class="btn-demo">📈 Try Confidence Intervals</a>
+                <a href="normal-distribution-applications.html" class="tool-link">📈 Explore Problems</a>
             </div>
 
-            <div class="simulation-card stats-card">
-                <div class="card-header">
-                    <div class="card-icon">🔬</div>
-                    <div>
-                        <div class="card-title">Sample Size Calculator</div>
-                        <div class="card-subtitle">Research Planning & Power Analysis</div>
-                    </div>
+            <div class="tool-card">
+                <div class="tool-title">📊 Confidence Intervals for Means</div>
+                <div class="tool-description">
+                    Estimate population means with confidence. Learn Z and T intervals 
+                    with Canadian economic examples.
                 </div>
-                <div class="card-description">
-                    Plan your research with professional sample size calculations. Determine adequate sample sizes for different study types.
+                <a href="confidence-intervals-means.html" class="tool-link">🎯 Build Intervals</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-title">📈 Confidence Intervals for Proportions</div>
+                <div class="tool-description">
+                    Master proportion estimation for polling and policy analysis. 
+                    Essential for understanding public opinion surveys.
                 </div>
-                <ul class="card-features">
-                    <li>Mean estimation studies</li>
-                    <li>Proportion estimation</li>
-                    <li>Comparative studies</li>
-                    <li>Power and effect size</li>
-                </ul>
-                <a href="sample-size-demo.html" class="btn-demo">🔬 Try Sample Size Calculator</a>
+                <a href="confidence-intervals-proportions.html" class="tool-link">🗳️ Estimate Proportions</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="new-badge">NEW</div>
+                <div class="tool-title">📋 Sample Size for Means</div>
+                <div class="tool-description">
+                    Plan your data collection strategy. Determine optimal sample sizes 
+                    for precise and cost-effective economic studies.
+                </div>
+                <a href="sample-size-means.html" class="tool-link">📊 Plan Studies</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="new-badge">NEW</div>
+                <div class="tool-title">🗳️ Sample Size for Proportions</div>
+                <div class="tool-description">
+                    Plan accurate polling and percentage studies. Master the fundamentals 
+                    of survey design and cost management.
+                </div>
+                <a href="sample-size-proportions.html" class="tool-link">📋 Design Surveys</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-title">📊 Sample Size Simulation</div>
+                <div class="tool-description">
+                    Interactive sample size calculator and simulator. Explore the relationships 
+                    between sample size, precision, and confidence levels.
+                </div>
+                <a href="sample_size_simulation.html" class="tool-link">🔬 Simulate Sampling</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-title">🎯 Tail Test Identification</div>
+                <div class="tool-description">
+                    Learn to identify when to use one-tail vs two-tail tests. 
+                    Critical skill for proper hypothesis test selection.
+                </div>
+                <a href="tail-test-identification.html" class="tool-link">🎯 Identify Tail Types</a>
             </div>
         </div>
+    </div>
 
-        <h2 class="section-title">🇨🇦 Economics Simulations</h2>
+    <div class="section hypothesis-section">
+        <h2><span class="section-icon">🧪</span>Hypothesis Testing (Core Skills)</h2>
+        <p style="color: #f39c12; font-weight: bold; margin-bottom: 20px;">
+            Apply your foundation knowledge to formal hypothesis testing. Learn decision-making 
+            frameworks and test various economic hypotheses.
+        </p>
         
-        <div class="simulation-grid">
-            <div class="simulation-card economics-card">
-                <div class="card-header">
-                    <div class="card-icon">💰</div>
-                    <div>
-                        <div class="card-title">GDP Income Approach</div>
-                        <div class="card-subtitle">Canadian National Accounting</div>
-                    </div>
+        <div class="tool-grid">
+            <div class="tool-card">
+                <div class="tool-title">🎯 Hypothesis Identification Practice</div>
+                <div class="tool-description">
+                    Learn to identify null and alternative hypotheses from economic scenarios. 
+                    Master the first step in hypothesis testing.
                 </div>
-                <div class="card-description">
-                    Master GDP calculation using Statistics Canada methodology: GDP = CE + GOS + GMI + (T - S). Practice with all Canadian provinces.
-                </div>
-                <ul class="card-features">
-                    <li>Official Statistics Canada method</li>
-                    <li>All provinces & territories</li>
-                    <li>Economic scenario analysis</li>
-                    <li>Income distribution studies</li>
-                </ul>
-                <a href="gdp-income-demo.html" class="btn-demo">💰 Try GDP Income Demo</a>
+                <a href="Hypothesis Identification Practice.html" class="tool-link">🔍 Identify Hypotheses</a>
             </div>
 
-            <div class="simulation-card economics-card">
-                <div class="card-header">
-                    <div class="card-icon">👥</div>
-                    <div>
-                        <div class="card-title">Labor Market Analysis</div>
-                        <div class="card-subtitle">Employment & Unemployment Statistics</div>
-                    </div>
+            <div class="tool-card">
+                <div class="tool-title">⚖️ Hypothesis Testing Decision Fundamentals</div>
+                <div class="tool-description">
+                    Understand Type I and Type II errors, significance levels, and 
+                    decision-making frameworks in economic contexts.
                 </div>
-                <div class="card-description">
-                    Analyze Canadian labor market data with official Statistics Canada methodology. Calculate employment rates and economic indicators.
-                </div>
-                <ul class="card-features">
-                    <li>Employment rate calculations</li>
-                    <li>Unemployment analysis</li>
-                    <li>Labor force participation</li>
-                    <li>Regional comparisons</li>
-                </ul>
-                <a href="labor-market-demo.html" class="btn-demo">👥 Try Labor Market Demo</a>
+                <a href="hypothesis-testing-decision-fundamentals.html" class="tool-link">⚖️ Make Decisions</a>
             </div>
 
-            <div class="simulation-card economics-card">
-                <div class="card-header">
-                    <div class="card-icon">📊</div>
-                    <div>
-                        <div class="card-title">Inflation & CPI</div>
-                        <div class="card-subtitle">Price Index Calculations</div>
-                    </div>
+            <div class="tool-card">
+                <div class="tool-title">📊 Hypothesis Testing for Proportions</div>
+                <div class="tool-description">
+                    Test claims about population proportions. Apply to policy support, 
+                    election polling, and economic indicators.
                 </div>
-                <div class="card-description">
-                    Calculate Consumer Price Index and inflation rates using Canadian basket methodology. Understand price change analysis.
-                </div>
-                <ul class="card-features">
-                    <li>CPI calculation methods</li>
-                    <li>Inflation rate analysis</li>
-                    <li>Market basket approach</li>
-                    <li>Regional price variations</li>
-                </ul>
-                <a href="inflation-demo.html" class="btn-demo">📊 Try Inflation Demo</a>
+                <a href="hypothesis-testing-proportions.html" class="tool-link">📊 Test Proportions</a>
             </div>
-        </div>
 
-        <div class="features-section">
-            <h3 style="text-align: center; font-size: 2em; margin-bottom: 20px;">Why These Simulations Work</h3>
-            
-            <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon">🎯</div>
-                    <div class="feature-title">Active Learning</div>
-                    <div>Students learn by doing, not just reading. Interactive practice builds understanding.</div>
+            <div class="tool-card">
+                <div class="tool-title">🎯 Complete Hypothesis Testing Practice</div>
+                <div class="tool-description">
+                    Comprehensive hypothesis testing scenarios combining all concepts. 
+                    From setup to conclusion with economic interpretation.
                 </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">⚡</div>
-                    <div class="feature-title">Immediate Feedback</div>
-                    <div>Instant validation builds confidence and corrects misconceptions immediately.</div>
-                </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">🌍</div>
-                    <div class="feature-title">Real-World Context</div>
-                    <div>Authentic scenarios connect theory to professional practice.</div>
-                </div>
-                
-                <div class="feature-item">
-                    <div class="feature-icon">📱</div>
-                    <div class="feature-title">Mobile Ready</div>
-                    <div>Study anywhere, anytime. Works on all devices without installation.</div>
-                </div>
+                <a href="hypothesis-testing-final.html" class="tool-link">🎯 Master Testing</a>
             </div>
-        </div>
 
-        <div class="quick-start">
-            <h3>🚀 Quick Start Guide</h3>
-            
-            <h4 style="color: #3498db; margin: 20px 0 10px 0;">For Students:</h4>
-            <ol>
-                <li>Click any simulation button above</li>
-                <li>No login required - works immediately in your browser</li>
-                <li>Generate unlimited practice problems</li>
-                <li>Check solutions and learn from step-by-step explanations</li>
-            </ol>
-            
-            <h4 style="color: #e74c3c; margin: 20px 0 10px 0;">For Instructors:</h4>
-            <ol>
-                <li>Share simulation links directly with students</li>
-                <li>Download Moodle XML files for automatic question import</li>
-                <li>Use in classroom demonstrations or homework assignments</li>
-                <li>Zero setup or maintenance required</li>
-            </ol>
+            <div class="tool-card">
+                <div class="tool-title">📈 Hypothesis Testing for Regression</div>
+                <div class="tool-description">
+                    Test significance of regression relationships. Analyze economic models, 
+                    coefficients, and relationship strength in Canadian contexts.
+                </div>
+                <a href="hypothesis-testing-regression.html" class="tool-link">📈 Test Regression Models</a>
+            </div>
         </div>
     </div>
 
-    <div class="footer">
-        <p>&copy; 2024 Interactive Statistics & Economics Simulations</p>
-        <p>Free for educational use • MIT License</p>
-        <a href="https://github.com/waberra/stats-econ-simulations" class="github-link">
-            ⭐ View on GitHub
-        </a>
+    <div class="section advanced-section">
+        <h2><span class="section-icon">🚀</span>Advanced Applications</h2>
+        <p style="color: #9b59b6; font-weight: bold; margin-bottom: 20px;">
+            Apply statistical methods to complex economic problems. Advanced hypothesis testing 
+            and relationship analysis techniques.
+        </p>
+        
+        <div class="tool-grid">
+            <div class="tool-card">
+                <div class="tool-title">✅ Chi-Square Goodness of Fit</div>
+                <div class="tool-description">
+                    Test if data follows expected distributions. Apply to economic models, 
+                    market behavior, and policy effectiveness analysis.
+                </div>
+                <a href="chi-square-goodness-of-fit.html" class="tool-link">✅ Test Distributions</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-title">📊 Chi-Square Hypothesis Testing</div>
+                <div class="tool-description">
+                    Advanced chi-square applications for independence testing and 
+                    categorical data analysis in economic research.
+                </div>
+                <a href="hypothesis-testing-chi-square.html" class="tool-link">📊 Advanced Chi-Square</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-title">📈 Correlation Hypothesis Testing</div>
+                <div class="tool-description">
+                    Test relationships between economic variables. Analyze correlations 
+                    between economic indicators and policy outcomes.
+                </div>
+                <a href="hypothesis-testing-correlation.html" class="tool-link">📈 Test Relationships</a>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // Add some interactive effects
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add fade-in animation for cards
-            const cards = document.querySelectorAll('.simulation-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 200);
-            });
-        });
-    </script>
+    <div class="instructor-info">
+        <h3>👨‍🏫 Course Information</h3>
+        <p>Interactive statistical simulations designed for Canadian economic analysis</p>
+        <div class="course-info">
+            <div class="course-item">📚 Statistics & Economics</div>
+            <div class="course-item">🏛️ Political Economy</div>
+            <div class="course-item">🇨🇦 Canadian Context</div>
+            <div class="course-item">💻 Interactive Learning</div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9em;">
+            Each simulation includes step-by-step calculations, economic interpretations, 
+            and real Canadian policy applications. Start with Foundation Skills and progress systematically.
+        </p>
+    </div>
 </body>
 </html>
