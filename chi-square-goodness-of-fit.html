@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi-Square Goodness of Fit Testing - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .goodness-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .test-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 18px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .hypothesis-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .hypothesis-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .hypothesis-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+            font-size: 1.1em;
+        }
+        
+        .data-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .data-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            overflow-x: auto;
+        }
+        
+        .data-table h4 {
+            background: #007bff;
+            color: white;
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        
+        .fit-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        
+        .fit-table th {
+            background: #f8f9fa;
+            color: #333;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .fit-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .observed-cell {
+            background: #e8f5e8;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        
+        .expected-cell {
+            background: #fff8e1;
+            font-weight: bold;
+            color: #f57c00;
+        }
+        
+        .proportion-cell {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #e7f3ff, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #2196f3;
+        }
+        
+        .chi-square-breakdown {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .breakdown-cell {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        
+        .breakdown-category {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .breakdown-calc {
+            font-family: monospace;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+        }
+        
+        .breakdown-result {
+            color: #007bff;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 120px 70px 70px 90px;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9em;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .input-row select {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .small-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .decision-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ff9800;
+        }
+        
+        .formula-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            margin: 15px 0;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .economic-impact {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .policy-implications {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📈 Chi-Square Goodness of Fit Testing</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Canadian Economic Distribution Testing</h2>
+            <p><strong>Test Observed vs Expected Distributions</strong> • <strong>Economic Forecasting</strong> • <strong>Policy Evaluation</strong></p>
+        </div>
+        
+        <div class="goodness-intro">
+            <h3>🎯 What is Goodness of Fit Testing?</h3>
+            
+            <div class="test-concept">
+                <div class="concept-title">📊 Core Question: Does Reality Match Expectations?</div>
+                
+                <div class="concept-explanation">
+                    <strong>🔬 The Test:</strong> Compare observed data with theoretical or expected distributions<br>
+                    <strong>📈 Economic Use:</strong> Test if actual economic patterns match forecasts, models, or policy targets<br>
+                    <strong>⚖️ Decision:</strong> Determine if deviations are statistically significant or just random variation
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; text-align: center;">
+                        <strong>✅ If distributions match:</strong><br>
+                        Models/forecasts are accurate<br>
+                        Current policies are working
+                    </div>
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px; text-align: center;">
+                        <strong>❌ If distributions differ:</strong><br>
+                        Models need adjustment<br>
+                        Policies may need revision
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Canadian Economic Goodness of Fit Scenario:
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('regional-gdp')">📈 Regional GDP Distribution</button>
+                <button class="scenario-btn" onclick="chooseScenario('employment-education')">🎓 Employment by Education</button>
+                <button class="scenario-btn" onclick="chooseScenario('housing-market')">🏠 Housing Market Distribution</button>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('retail-sales')">🛒 Retail Sales Categories</button>
+                <button class="scenario-btn" onclick="chooseScenario('tax-revenue')">💰 Tax Revenue Sources</button>
+                <button class="scenario-btn" onclick="chooseScenario('banking-assets')">🏦 Banking Sector Assets</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="hypothesis-section">
+                <h3>📋 Step 1: Economic Hypothesis Formulation</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="hypothesis-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">🎯 Goodness of Fit Hypotheses:</div>
+                    <div class="hypothesis-box">
+                        <div id="h0Display" style="margin: 8px 0; color: #dc3545; font-weight: bold;"></div>
+                        <div id="h1Display" style="margin: 8px 0; color: #007bff; font-weight: bold;"></div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>🧮 Test Statistic:</strong> χ² = Σ[(Observed - Expected)²/Expected]<br>
+                        <strong>📐 Degrees of Freedom:</strong> df = <span id="degreesOfFreedom">Number of categories - 1</span><br>
+                        <strong>📊 Sample Size:</strong> n = <span id="totalSample"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-section">
+                <h3>📊 Step 2: Observed vs Expected Distribution</h3>
+                <div class="step-instructions">
+                    <strong>Compare:</strong> What actually happened vs what was expected based on the economic model/forecast
+                </div>
+                
+                <div class="data-comparison">
+                    <div class="data-table">
+                        <h4>📈 Observed Data (Reality)</h4>
+                        <table class="fit-table" id="observedTable">
+                            <!-- Will be populated dynamically -->
+                        </table>
+                    </div>
+                    
+                    <div class="data-table">
+                        <h4>🎯 Expected Data (Model/Forecast)</h4>
+                        <table class="fit-table" id="expectedTable">
+                            <!-- Will be populated dynamically -->
+                        </table>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin-top: 20px;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">📊 Distribution Summary:</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;">
+                        <div>
+                            <div style="font-weight: bold;">Sample Size</div>
+                            <div style="font-size: 1.2em; color: #007bff;" id="sampleSizeDisplay"></div>
+                        </div>
+                        <div>
+                            <div style="font-weight: bold;">Categories</div>
+                            <div style="font-size: 1.2em; color: #007bff;" id="categoriesDisplay"></div>
+                        </div>
+                        <div>
+                            <div style="font-weight: bold;">Significance Level</div>
+                            <div style="font-size: 1.2em; color: #007bff;">α = 0.05</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>🧮 Step 3: Chi-Square Calculation Breakdown</h3>
+                <div class="step-instructions">
+                    <strong>Calculate χ² contribution from each category:</strong> (Observed - Expected)²/Expected
+                </div>
+                
+                <div class="formula-box">
+                    χ² = Σ[(O - E)²/E] = Σ[(Observed - Expected)²/Expected]
+                </div>
+                
+                <div class="chi-square-breakdown">
+                    <h4 style="color: #2196f3; margin-top: 0;">📊 Step-by-Step Chi-Square Components:</h4>
+                    <div class="breakdown-grid" id="chiSquareBreakdown">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <label for="chiSquareCalc">Total Chi-Square Statistic:</label>
+                    <input type="number" id="chiSquareCalc" step="0.001" placeholder="Sum all components">
+                    <button class="small-button check-btn" onclick="checkChiSquare()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('chiSquareCalc')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('chi-square-calc')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="chiSquareCalc-answer"></div>
+                <div class="tutorial-box" id="chi-square-calc-tutorial"></div>
+                
+                <div class="input-row">
+                    <label for="degreesOfFreedomCalc">Degrees of Freedom:</label>
+                    <input type="number" id="degreesOfFreedomCalc" step="1" placeholder="Categories - 1">
+                    <button class="small-button check-btn" onclick="checkDegreesOfFreedom()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('degreesOfFreedomCalc')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('degrees-freedom')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="degreesOfFreedomCalc-answer"></div>
+                <div class="tutorial-box" id="degrees-freedom-tutorial"></div>
+            </div>
+            
+            <div class="decision-section">
+                <h3>⚖️ Step 4: Statistical Decision Making</h3>
+                <div class="step-instructions">
+                    <strong>Compare your chi-square statistic to the critical value:</strong> Does the observed distribution significantly differ from expected?
+                </div>
+                
+                <div class="input-row">
+                    <label for="chiCritical">χ²-Critical Value:</label>
+                    <input type="number" id="chiCritical" step="0.001" placeholder="From χ²-table">
+                    <button class="small-button check-btn" onclick="checkChiCritical()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('chiCritical')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('chi-critical')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="chiCritical-answer"></div>
+                <div class="tutorial-box" id="chi-critical-tutorial"></div>
+                
+                <div class="input-row">
+                    <label for="pValue">P-value (approximate):</label>
+                    <input type="number" id="pValue" step="0.001" placeholder="Probability">
+                    <button class="small-button check-btn" onclick="checkPValue()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('pValue')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('p-value')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="pValue-answer"></div>
+                <div class="tutorial-box" id="p-value-tutorial"></div>
+                
+                <div class="input-row">
+                    <label>Statistical Decision:</label>
+                    <select id="decision">
+                        <option value="">Choose...</option>
+                        <option value="reject">Reject H₀ (Distribution differs from expected)</option>
+                        <option value="fail">Fail to Reject H₀ (Distribution matches expected)</option>
+                    </select>
+                    <button class="small-button check-btn" onclick="checkDecision()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('decision')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('final-decision')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="decision-answer"></div>
+                <div class="tutorial-box" id="final-decision-tutorial"></div>
+            </div>
+            
+            <div class="economic-impact">
+                <h3>💼 Step 5: Economic Interpretation & Policy Implications</h3>
+                
+                <div class="policy-implications">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">📈 Economic Meaning:</div>
+                    <div id="economicMeaning">Complete the statistical analysis to see economic interpretation.</div>
+                </div>
+                
+                <div class="input-row" style="margin-top: 20px;">
+                    <label>Policy Action Needed:</label>
+                    <select id="policyAction">
+                        <option value="">Choose...</option>
+                        <option value="adjust">Adjust forecasts/models/policies</option>
+                        <option value="maintain">Maintain current approach</option>
+                    </select>
+                    <button class="small-button check-btn" onclick="checkPolicyAction()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('policyAction')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('policy-implications')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="policyAction-answer"></div>
+                <div class="tutorial-box" id="policy-implications-tutorial"></div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 Generate New Distribution</button>
+            <button class="button" onclick="checkAllAnswers()">✅ Check All Calculations</button>
+            <button class="button" onclick="showCompleteAnalysis()">📖 Complete Analysis</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let testData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'regional-gdp': {
+                name: 'Regional GDP Distribution Analysis',
+                description: 'Department of Finance testing whether actual regional GDP contributions match the federal economic transfer formula projections.',
+                variable: 'Regional GDP Contribution',
+                categories: ['Ontario', 'Quebec', 'Western Provinces', 'Atlantic Canada', 'Territories'],
+                expected: [0.41, 0.22, 0.28, 0.08, 0.01],
+                h0: 'Regional GDP distribution follows the federal transfer formula model',
+                h1: 'Regional GDP distribution differs from the federal transfer formula model',
+                context: 'federal fiscal policy',
+                meaning: {
+                    reject: 'GDP distribution differs significantly from transfer formula - federal equalization payments may need adjustment',
+                    fail: 'GDP distribution matches transfer formula - current equalization system is accurately calibrated'
+                },
+                policyAction: {
+                    reject: 'adjust',
+                    fail: 'maintain'
+                }
+            },
+            'employment-education': {
+                name: 'Employment Distribution by Education Level',
+                description: 'Statistics Canada testing whether current employment distribution across education levels matches workforce development projections.',
+                variable: 'Employment by Education',
+                categories: ['High School', 'College/Trade', 'Bachelor\'s Degree', 'Graduate Degree', 'No Diploma'],
+                expected: [0.32, 0.28, 0.25, 0.12, 0.03],
+                h0: 'Employment distribution follows projected education-based workforce model',
+                h1: 'Employment distribution differs from projected education-based workforce model',
+                context: 'education and training policy',
+                meaning: {
+                    reject: 'Employment patterns differ from projections - education/training programs need reallocation',
+                    fail: 'Employment patterns match projections - current education policies are effective'
+                },
+                policyAction: {
+                    reject: 'adjust',
+                    fail: 'maintain'
+                }
+            },
+            'housing-market': {
+                name: 'Housing Market Price Distribution',
+                description: 'CMHC testing whether regional housing price distributions match the national housing affordability framework.',
+                variable: 'Housing Price Categories',
+                categories: ['Under $300K', '$300K-$500K', '$500K-$800K', '$800K-$1.2M', 'Over $1.2M'],
+                expected: [0.25, 0.35, 0.25, 0.10, 0.05],
+                h0: 'Housing price distribution follows the national affordability framework',
+                h1: 'Housing price distribution differs from the national affordability framework',
+                context: 'housing affordability policy',
+                meaning: {
+                    reject: 'Housing market differs from affordability targets - intervention policies needed',
+                    fail: 'Housing market aligns with affordability framework - current policies are working'
+                },
+                policyAction: {
+                    reject: 'adjust',
+                    fail: 'maintain'
+                }
+            },
+            'retail-sales': {
+                name: 'Retail Sales Distribution by Category',
+                description: 'Statistics Canada testing whether seasonal retail spending patterns match the consumer expenditure forecasting model.',
+                variable: 'Retail Spending Category',
+                categories: ['Food & Beverages', 'Clothing', 'Electronics', 'Home & Garden', 'Services'],
+                expected: [0.35, 0.15, 0.18, 0.22, 0.10],
+                h0: 'Retail spending distribution follows the consumer expenditure forecast model',
+                h1: 'Retail spending distribution differs from the consumer expenditure forecast model',
+                context: 'consumer spending and retail policy',
+                meaning: {
+                    reject: 'Consumer spending patterns differ from forecasts - retail sector policies may need revision',
+                    fail: 'Consumer spending matches forecasts - retail sector policies are well-targeted'
+                },
+                policyAction: {
+                    reject: 'adjust',
+                    fail: 'maintain'
+                }
+            },
+            'tax-revenue': {
+                name: 'Government Tax Revenue Sources Distribution',
+                description: 'Canada Revenue Agency testing whether actual tax revenue composition matches the federal budget projections.',
+                variable: 'Tax Revenue Source',
+                categories: ['Income Tax', 'Corporate Tax', 'GST/HST', 'Other Taxes', 'Non-Tax Revenue'],
+                expected: [0.48, 0.15, 0.22, 0.10, 0.05],
+                h0: 'Tax revenue distribution follows the federal budget projection model',
+                h1: 'Tax revenue distribution differs from the federal budget projection model',
+                context: 'fiscal planning and tax policy',
+                meaning: {
+                    reject: 'Revenue composition differs from budget - tax policies or economic assumptions need review',
+                    fail: 'Revenue composition matches budget - fiscal planning is accurate and on track'
+                },
+                policyAction: {
+                    reject: 'adjust',
+                    fail: 'maintain'
+                }
+            },
+            'banking-assets': {
+                name: 'Banking Sector Asset Distribution',
+                description: 'OSFI testing whether Canadian bank asset portfolios match regulatory guidelines for systemic risk management.',
+                variable: 'Bank Asset Category',
+                categories: ['Residential Mortgages', 'Commercial Loans', 'Government Securities', 'Corporate Bonds', 'Other Assets'],
+                expected: [0.45, 0.25, 0.15, 0.10, 0.05],
+                h0: 'Bank asset distribution follows regulatory risk management guidelines',
+                h1: 'Bank asset distribution differs from regulatory risk management guidelines',
+                context: 'financial sector regulation',
+                meaning: {
+                    reject: 'Bank portfolios differ from guidelines - regulatory oversight or guidelines may need adjustment',
+                    fail: 'Bank portfolios align with guidelines - current financial regulations are effective'
+                },
+                policyAction: {
+                    reject: 'adjust',
+                    fail: 'maintain'
+                }
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateTestData(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateTestData(scenario) {
+            const scenarioData = scenarios[scenario];
+            
+            // Generate realistic goodness of fit data
+            const categories = scenarioData.categories;
+            const expectedProps = scenarioData.expected;
+            const numCategories = categories.length;
+            
+            let totalSample = 1200 + Math.floor(Math.random() * 600); // 1200-1800 sample
+            let observedFreq = [];
+            
+            // Generate observed frequencies with some deviation from expected
+            for (let i = 0; i < numCategories; i++) {
+                let expectedFreq = totalSample * expectedProps[i];
+                let deviation = (Math.random() - 0.5) * expectedFreq * 0.5; // ±25% variation
+                observedFreq[i] = Math.max(15, Math.round(expectedFreq + deviation));
+            }
+            
+            // Adjust to match target sample size
+            let currentTotal = observedFreq.reduce((a, b) => a + b, 0);
+            let adjustment = totalSample / currentTotal;
+            for (let i = 0; i < numCategories; i++) {
+                observedFreq[i] = Math.max(15, Math.round(observedFreq[i] * adjustment));
+            }
+            
+            // Recalculate actual total
+            totalSample = observedFreq.reduce((a, b) => a + b, 0);
+            
+            // Calculate expected frequencies
+            let expectedFreq = [];
+            for (let i = 0; i < numCategories; i++) {
+                expectedFreq[i] = totalSample * expectedProps[i];
+            }
+            
+            testData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                variable: scenarioData.variable,
+                h0: scenarioData.h0,
+                h1: scenarioData.h1,
+                context: scenarioData.context,
+                meaning: scenarioData.meaning,
+                policyAction: scenarioData.policyAction,
+                categories: categories,
+                observedFreq: observedFreq,
+                expectedFreq: expectedFreq,
+                expectedProps: expectedProps,
+                numCategories: numCategories,
+                totalSample: totalSample,
+                alpha: 0.05
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { observedFreq, expectedFreq, numCategories } = testData;
+            
+            // Calculate chi-square statistic and components
+            let chiSquare = 0;
+            let chiSquareComponents = [];
+            
+            for (let i = 0; i < numCategories; i++) {
+                let o = observedFreq[i];
+                let e = expectedFreq[i];
+                let component = Math.pow(o - e, 2) / e;
+                chiSquare += component;
+                chiSquareComponents[i] = {
+                    observed: o,
+                    expected: e,
+                    difference: o - e,
+                    squared: Math.pow(o - e, 2),
+                    component: component
+                };
+            }
+            
+            // Degrees of freedom for goodness of fit
+            const df = numCategories - 1;
+            
+            // Chi-square critical value (approximate for α = 0.05)
+            let chiCritical;
+            if (df === 1) chiCritical = 3.841;
+            else if (df === 2) chiCritical = 5.991;
+            else if (df === 3) chiCritical = 7.815;
+            else if (df === 4) chiCritical = 9.488;
+            else if (df === 5) chiCritical = 11.071;
+            else if (df === 6) chiCritical = 12.592;
+            else chiCritical = 3.841 + df * 2; // Rough approximation for larger df
+            
+            // P-value approximation
+            let pValue;
+            if (chiSquare > chiCritical * 2) pValue = 0.001;
+            else if (chiSquare > chiCritical * 1.5) pValue = 0.01;
+            else if (chiSquare > chiCritical) pValue = 0.05;
+            else if (chiSquare > chiCritical * 0.7) pValue = 0.10;
+            else pValue = 0.20;
+            
+            // Decision
+            const decision = chiSquare > chiCritical ? 'reject' : 'fail';
+            const policyAction = testData.policyAction[decision];
+            
+            correctAnswers = {
+                chiSquare: chiSquare,
+                chiSquareComponents: chiSquareComponents,
+                degreesOfFreedom: df,
+                chiCritical: chiCritical,
+                pValue: pValue,
+                decision: decision,
+                policyAction: policyAction
+            };
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${testData.scenario}</strong><br>${testData.description}`;
+            
+            document.getElementById('h0Display').innerHTML = `<strong>H₀:</strong> ${testData.h0}`;
+            document.getElementById('h1Display').innerHTML = `<strong>H₁:</strong> ${testData.h1}`;
+            document.getElementById('degreesOfFreedom').textContent = `${testData.numCategories} - 1 = ${correctAnswers.degreesOfFreedom}`;
+            document.getElementById('totalSample').textContent = testData.totalSample;
+            
+            document.getElementById('sampleSizeDisplay').textContent = testData.totalSample;
+            document.getElementById('categoriesDisplay').textContent = testData.numCategories;
+            
+            updateDataTables();
+            updateChiSquareBreakdown();
+        }
+
+        function updateDataTables() {
+            const observedTable = document.getElementById('observedTable');
+            const expectedTable = document.getElementById('expectedTable');
+            const { categories, observedFreq, expectedFreq, expectedProps, totalSample } = testData;
+            
+            // Observed frequencies table
+            let observedHTML = `
+                <thead>
+                    <tr>
+                        <th>${testData.variable}</th>
+                        <th>Observed</th>
+                        <th>Proportion</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            for (let i = 0; i < categories.length; i++) {
+                const observedProp = (observedFreq[i] / totalSample).toFixed(3);
+                observedHTML += `
+                    <tr>
+                        <td><strong>${categories[i]}</strong></td>
+                        <td class="observed-cell">${observedFreq[i]}</td>
+                        <td class="proportion-cell">${observedProp}</td>
+                    </tr>
+                `;
+            }
+            
+            observedHTML += `
+                    <tr style="font-weight: bold; border-top: 2px solid #333;">
+                        <td>Total</td>
+                        <td>${totalSample}</td>
+                        <td>1.000</td>
+                    </tr>
+                </tbody>
+            `;
+            
+            // Expected frequencies table
+            let expectedHTML = `
+                <thead>
+                    <tr>
+                        <th>${testData.variable}</th>
+                        <th>Expected</th>
+                        <th>Proportion</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+            
+            for (let i = 0; i < categories.length; i++) {
+                expectedHTML += `
+                    <tr>
+                        <td><strong>${categories[i]}</strong></td>
+                        <td class="expected-cell">${expectedFreq[i].toFixed(1)}</td>
+                        <td class="proportion-cell">${expectedProps[i].toFixed(3)}</td>
+                    </tr>
+                `;
+            }
+            
+            expectedHTML += `
+                    <tr style="font-weight: bold; border-top: 2px solid #333;">
+                        <td>Total</td>
+                        <td>${totalSample.toFixed(1)}</td>
+                        <td>1.000</td>
+                    </tr>
+                </tbody>
+            `;
+            
+            observedTable.innerHTML = observedHTML;
+            expectedTable.innerHTML = expectedHTML;
+        }
+
+        function updateChiSquareBreakdown() {
+            const container = document.getElementById('chiSquareBreakdown');
+            const { categories } = testData;
+            const { chiSquareComponents } = correctAnswers;
+            
+            let breakdownHTML = '';
+            
+            for (let i = 0; i < categories.length; i++) {
+                const comp = chiSquareComponents[i];
+                breakdownHTML += `
+                    <div class="breakdown-cell">
+                        <div class="breakdown-category">${categories[i]}</div>
+                        <div class="breakdown-calc">O = ${comp.observed}</div>
+                        <div class="breakdown-calc">E = ${comp.expected.toFixed(1)}</div>
+                        <div class="breakdown-calc">(O-E) = ${comp.difference.toFixed(1)}</div>
+                        <div class="breakdown-calc">(O-E)² = ${comp.squared.toFixed(1)}</div>
+                        <div class="breakdown-calc">(O-E)²/E = ${comp.component.toFixed(3)}</div>
+                        <div class="breakdown-result">${comp.component.toFixed(3)}</div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = breakdownHTML;
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = 0.1) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            return isCorrect;
+        }
+
+        function checkChiSquare() {
+            return checkAnswer('chiSquareCalc', correctAnswers.chiSquare, 0.5);
+        }
+
+        function checkDegreesOfFreedom() {
+            return checkAnswer('degreesOfFreedomCalc', correctAnswers.degreesOfFreedom, 0);
+        }
+
+        function checkChiCritical() {
+            return checkAnswer('chiCritical', correctAnswers.chiCritical, 0.1);
+        }
+
+        function checkPValue() {
+            return checkAnswer('pValue', correctAnswers.pValue, 0.02);
+        }
+
+        function checkDecision() {
+            const select = document.getElementById('decision');
+            const userAnswer = select.value;
+            const isCorrect = userAnswer === correctAnswers.decision;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+            
+            if (isCorrect) {
+                updateEconomicMeaning();
+            }
+            
+            return isCorrect;
+        }
+
+        function checkPolicyAction() {
+            const select = document.getElementById('policyAction');
+            const userAnswer = select.value;
+            const isCorrect = userAnswer === correctAnswers.policyAction;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+            return isCorrect;
+        }
+
+        function updateEconomicMeaning() {
+            const meaning = correctAnswers.decision === 'reject' ? testData.meaning.reject : testData.meaning.fail;
+            document.getElementById('economicMeaning').innerHTML = meaning;
+        }
+
+        function showAnswer(inputId) {
+            const answerDiv = document.getElementById(inputId + '-answer');
+            
+            switch(inputId) {
+                case 'chiSquareCalc':
+                    answerDiv.innerHTML = `✅ χ² = ${correctAnswers.chiSquare.toFixed(3)}`;
+                    break;
+                case 'degreesOfFreedomCalc':
+                    answerDiv.innerHTML = `✅ df = ${correctAnswers.degreesOfFreedom}`;
+                    break;
+                case 'chiCritical':
+                    answerDiv.innerHTML = `✅ χ²-critical = ${correctAnswers.chiCritical.toFixed(3)}`;
+                    break;
+                case 'pValue':
+                    answerDiv.innerHTML = `✅ P-value ≈ ${correctAnswers.pValue.toFixed(3)}`;
+                    break;
+                case 'decision':
+                    const decisionText = correctAnswers.decision === 'reject' ? 'Reject H₀ (Distribution differs)' : 'Fail to Reject H₀ (Distribution matches)';
+                    answerDiv.innerHTML = `✅ ${decisionText}`;
+                    break;
+                case 'policyAction':
+                    const actionText = correctAnswers.policyAction === 'adjust' ? 'Adjust forecasts/models/policies' : 'Maintain current approach';
+                    answerDiv.innerHTML = `✅ ${actionText}`;
+                    break;
+            }
+            
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'chi-square-calc') {
+                let calcSteps = '';
+                for (let i = 0; i < testData.numCategories; i++) {
+                    const comp = correctAnswers.chiSquareComponents[i];
+                    calcSteps += `${testData.categories[i]}: (${comp.observed}-${comp.expected.toFixed(1)})²/${comp.expected.toFixed(1)} = ${comp.component.toFixed(3)}<br>`;
+                }
+                
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Step-by-Step Chi-Square Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> χ² = Σ[(O-E)²/E]<br><br>
+                        <strong>Calculate for each category:</strong><br>
+                        ${calcSteps}<br>
+                        <strong>Sum all components:</strong><br>
+                        χ² = ${correctAnswers.chiSquare.toFixed(3)}<br><br>
+                        <strong>Interpretation:</strong> Measures how much observed distribution deviates from expected distribution.
+                    </div>
+                `;
+            } else if (stepType === 'degrees-freedom') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Degrees of Freedom for Goodness of Fit:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> df = number of categories - 1<br><br>
+                        <strong>Our Test:</strong><br>
+                        Variable: ${testData.variable}<br>
+                        Categories: ${testData.numCategories}<br><br>
+                        <strong>Calculation:</strong><br>
+                        df = ${testData.numCategories} - 1 = ${correctAnswers.degreesOfFreedom}<br><br>
+                        <strong>Why subtract 1?</strong> After fixing total sample size, only ${correctAnswers.degreesOfFreedom} category frequencies are independent.
+                    </div>
+                `;
+            } else if (stepType === 'chi-critical') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Finding Chi-Square Critical Value:</h4>
+                    <div class="tutorial-step">
+                        <strong>Parameters:</strong><br>
+                        α = ${testData.alpha}<br>
+                        df = ${correctAnswers.degreesOfFreedom}<br><br>
+                        <strong>From χ²-table:</strong><br>
+                        χ²₀.₀₅(${correctAnswers.degreesOfFreedom}) = ${correctAnswers.chiCritical.toFixed(3)}<br><br>
+                        <strong>Decision Rule:</strong><br>
+                        If χ² > ${correctAnswers.chiCritical.toFixed(3)} → Distribution differs significantly<br>
+                        If χ² ≤ ${correctAnswers.chiCritical.toFixed(3)} → Distribution matches expected<br><br>
+                        <strong>Note:</strong> Goodness of fit tests are always right-tailed.
+                    </div>
+                `;
+            } else if (stepType === 'final-decision') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Final Statistical Decision:</h4>
+                    <div class="tutorial-step">
+                        <strong>Critical Value Method:</strong><br>
+                        χ² = ${correctAnswers.chiSquare.toFixed(3)} ${correctAnswers.chiSquare > correctAnswers.chiCritical ? '>' : '≤'} χ²-critical = ${correctAnswers.chiCritical.toFixed(3)}<br>
+                        Decision: ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                        <strong>P-value Method:</strong><br>
+                        p = ${correctAnswers.pValue.toFixed(3)} ${correctAnswers.pValue <= testData.alpha ? '≤' : '>'} α = ${testData.alpha}<br>
+                        Decision: ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                        <strong>Both methods agree!</strong><br><br>
+                        <strong>Conclusion:</strong> ${correctAnswers.decision === 'reject' ? 
+                          'The observed distribution differs significantly from the expected model.' :
+                          'The observed distribution is consistent with the expected model.'}
+                    </div>
+                `;
+            } else if (stepType === 'policy-implications') {
+                const meaning = correctAnswers.decision === 'reject' ? testData.meaning.reject : testData.meaning.fail;
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Economic & Policy Implications:</h4>
+                    <div class="tutorial-step">
+                        <strong>Statistical Result:</strong><br>
+                        ${correctAnswers.decision === 'reject' ? 'Distribution significantly differs from expected' : 'Distribution matches expected pattern'}<br><br>
+                        <strong>Economic Interpretation:</strong><br>
+                        ${meaning}<br><br>
+                        <strong>Policy Action for ${testData.context}:</strong><br>
+                        ${correctAnswers.policyAction === 'adjust' ? 
+                          'Models, forecasts, or policies need revision based on observed reality.' : 
+                          'Current models and policies are working well - maintain approach.'}<br><br>
+                        <strong>Evidence Strength:</strong><br>
+                        χ² = ${correctAnswers.chiSquare.toFixed(3)}, p ≈ ${correctAnswers.pValue.toFixed(3)}
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllAnswers() {
+            const results = [
+                checkChiSquare(),
+                checkDegreesOfFreedom(),
+                checkChiCritical(),
+                checkPValue(),
+                checkDecision(),
+                checkPolicyAction()
+            ];
+            
+            const correct = results.filter(r => r).length;
+            const total = results.length;
+            
+            alert(`You got ${correct}/${total} calculations correct!\n\n${correct === total ? 'Perfect goodness of fit analysis! 🎉' : 'Review the incorrect calculations using the Steps buttons.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateTestData(currentScenario);
+                clearAllInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['chiSquareCalc', 'degreesOfFreedomCalc', 'chiCritical', 'pValue'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            const selects = ['decision', 'policyAction'];
+            selects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.value = '';
+                    select.style.backgroundColor = '';
+                    select.style.borderColor = '';
+                }
+            });
+            
+            document.getElementById('economicMeaning').textContent = 'Complete the statistical analysis to see economic interpretation.';
+        }
+
+        function showCompleteAnalysis() {
+            if (!currentScenario) {
+                alert('Please select a scenario first.');
+                return;
+            }
+            
+            const meaning = correctAnswers.decision === 'reject' ? testData.meaning.reject : testData.meaning.fail;
+            const actionText = correctAnswers.policyAction === 'adjust' ? 'Adjust policies/forecasts' : 'Maintain current approach';
+            
+            alert(`Complete Goodness of Fit Analysis:\n\nScenario: ${testData.scenario}\n\nHypotheses:\nH₀: ${testData.h0}\nH₁: ${testData.h1}\n\nTest Statistics:\n• χ² = ${correctAnswers.chiSquare.toFixed(3)}\n• df = ${correctAnswers.degreesOfFreedom}\n• χ²-critical = ${correctAnswers.chiCritical.toFixed(3)}\n• p-value ≈ ${correctAnswers.pValue.toFixed(3)}\n\nDecision: ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}\n\nEconomic Interpretation:\n${meaning}\n\nPolicy Action: ${actionText}\n\nContext: ${testData.context}`);
+        }
+    </script>
+</body>
+</html>
