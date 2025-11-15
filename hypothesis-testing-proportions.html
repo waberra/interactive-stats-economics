@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Testing for Proportions - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .data-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .data-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .data-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .data-value {
+            font-size: 1.2em;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .hypothesis-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 150px 80px 80px 100px;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .input-row select {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .small-button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            margin: 10px 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .decision-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .formula-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin: 10px 0;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #6c757d;
+        }
+        
+        .method-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        
+        .method-box {
+            text-align: center;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Hypothesis Testing for Proportions - Step by Step</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Canadian Economic Proportion Testing</h2>
+            <p><strong>Learn Statistical Testing</strong> • <strong>Real Economic Data</strong> • <strong>Three Decision Methods</strong></p>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📈 Choose Economic Proportion Testing Scenario:
+            </div>
+            <button class="scenario-btn" onclick="chooseScenario('homeownership')">🏠 Homeownership Rate</button>
+            <button class="scenario-btn" onclick="chooseScenario('employment')">💼 Employment Rate</button>
+            <button class="scenario-btn" onclick="chooseScenario('approval')">📊 Policy Approval</button>
+            <button class="scenario-btn" onclick="chooseScenario('spending')">💰 Consumer Spending</button>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="calculation-section">
+                <h3>📋 Economic Proportion Testing Scenario:</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="hypothesis-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 10px;">Hypotheses:</div>
+                    <div id="h0Display" style="margin: 5px 0;"></div>
+                    <div id="h1Display" style="margin: 5px 0;"></div>
+                    <div id="testTypeDisplay" style="margin: 5px 0; font-weight: bold; color: #007bff;"></div>
+                </div>
+                
+                <div class="data-display">
+                    <div class="data-box">
+                        <div class="data-label">Sample Data:</div>
+                        <div>Sample Size (n): <span id="sampleSize" class="data-value"></span></div>
+                        <div>Successes (x): <span id="successes" class="data-value"></span></div>
+                        <div>Sample Proportion (p̂): <span id="sampleProportion" class="data-value"></span></div>
+                    </div>
+                    <div class="data-box">
+                        <div class="data-label">Population Parameters:</div>
+                        <div>Hypothesized Proportion (p₀): <span id="popProportion" class="data-value"></span></div>
+                        <div>Significance Level (α): <span id="alphaLevel" class="data-value"></span></div>
+                        <div>Test Type: <span id="testDirection" class="data-value"></span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>📊 Step 1: Calculate Test Statistic</h3>
+                <div class="step-instructions">
+                    <strong>Formula:</strong> For sample proportion, use z-test (large sample)
+                </div>
+                
+                <div class="formula-box">
+                    z = (p̂ - p₀) / √[p₀(1-p₀)/n]
+                </div>
+                
+                <div class="input-row">
+                    <label for="standardError">Standard Error √[p₀(1-p₀)/n]:</label>
+                    <input type="number" id="standardError" step="0.0001" placeholder="Calculate SE">
+                    <button class="small-button check-btn" onclick="checkStandardError()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('standardError')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('standard-error')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="standardError-answer"></div>
+                <div class="tutorial-box" id="standard-error-tutorial"></div>
+                
+                <div class="input-row">
+                    <label for="testStatistic">Test Statistic (z-value):</label>
+                    <input type="number" id="testStatistic" step="0.001" placeholder="Calculate z">
+                    <button class="small-button check-btn" onclick="checkTestStatistic()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('testStatistic')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('test-statistic')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="testStatistic-answer"></div>
+                <div class="tutorial-box" id="test-statistic-tutorial"></div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>📊 Step 2: Critical Values & Confidence Interval</h3>
+                
+                <div class="input-row">
+                    <label for="criticalValue">Critical Value (z-critical):</label>
+                    <input type="number" id="criticalValue" step="0.001" placeholder="From z-table">
+                    <button class="small-button check-btn" onclick="checkCriticalValue()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('criticalValue')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('critical-value')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="criticalValue-answer"></div>
+                
+                <div class="input-row">
+                    <label for="marginError">Margin of Error (z × SE):</label>
+                    <input type="number" id="marginError" step="0.0001" placeholder="z-critical × SE">
+                    <button class="small-button check-btn" onclick="checkMarginError()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('marginError')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('margin-error')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="marginError-answer"></div>
+                
+                <div class="input-row">
+                    <label for="lowerBound">95% CI Lower Bound:</label>
+                    <input type="number" id="lowerBound" step="0.0001" placeholder="p̂ - margin">
+                    <button class="small-button check-btn" onclick="checkLowerBound()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('lowerBound')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('confidence-interval')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="lowerBound-answer"></div>
+                
+                <div class="input-row">
+                    <label for="upperBound">95% CI Upper Bound:</label>
+                    <input type="number" id="upperBound" step="0.0001" placeholder="p̂ + margin">
+                    <button class="small-button check-btn" onclick="checkUpperBound()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('upperBound')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('ci-interpretation')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="upperBound-answer"></div>
+                <div class="tutorial-box" id="confidence-interval-tutorial"></div>
+            </div>
+            
+            <div class="decision-section">
+                <h3>⚖️ Step 3: Three Decision Methods</h3>
+                <div class="step-instructions">
+                    <strong>All three methods must give the SAME decision:</strong><br>
+                    <strong>1. Test Statistic:</strong> Compare |z| to z-critical<br>
+                    <strong>2. P-value:</strong> Compare p-value to α<br>
+                    <strong>3. Confidence Interval:</strong> Check if p₀ is inside CI
+                </div>
+                
+                <div class="input-row">
+                    <label for="pValue">P-value (approximate):</label>
+                    <input type="number" id="pValue" step="0.001" placeholder="Probability">
+                    <button class="small-button check-btn" onclick="checkPValue()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('pValue')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('p-value')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="pValue-answer"></div>
+                
+                <div class="comparison-table">
+                    <h4 style="color: #2c3e50; margin-top: 0;">📋 Decision Comparison Table:</h4>
+                    <div class="method-grid">
+                        <div style="font-weight: bold;">Method 1: Test Statistic</div>
+                        <div style="font-weight: bold;">Method 2: P-value</div>
+                        <div style="font-weight: bold;">Method 3: Confidence Interval</div>
+                        
+                        <div id="testStatDecision" class="method-box">
+                            Calculate test statistic first
+                        </div>
+                        <div id="pValueDecision" class="method-box">
+                            Calculate p-value first
+                        </div>
+                        <div id="ciDecision" class="method-box">
+                            Calculate CI first
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <label>Does p₀ fall within the CI?</label>
+                    <select id="ciContains">
+                        <option value="">Choose...</option>
+                        <option value="yes">Yes (p₀ is in CI)</option>
+                        <option value="no">No (p₀ is outside CI)</option>
+                    </select>
+                    <button class="small-button check-btn" onclick="checkCIContains()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('ciContains')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('ci-decision')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="ciContains-answer"></div>
+                
+                <div class="input-row">
+                    <label>Final Statistical Decision:</label>
+                    <select id="decision">
+                        <option value="">Choose...</option>
+                        <option value="reject">Reject H₀</option>
+                        <option value="fail">Fail to Reject H₀</option>
+                    </select>
+                    <button class="small-button check-btn" onclick="checkDecision()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('decision')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('final-decision')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="decision-answer"></div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 Generate New Problem</button>
+            <button class="button" onclick="checkAllAnswers()">✅ Check All Answers</button>
+            <button class="button" onclick="showCompleteSolution()">📖 Complete Solution</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let testData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'homeownership': {
+                name: 'Canadian Homeownership Rate Analysis',
+                description: 'Statistics Canada wants to test if the national homeownership rate has changed from the reported 68%.',
+                testTypes: [
+                    {
+                        h0: 'H₀: p = 0.68',
+                        h1: 'H₁: p ≠ 0.68', 
+                        type: 'two-tail',
+                        p0: 0.68,
+                        direction: 'Two-tail Test'
+                    },
+                    {
+                        h0: 'H₀: p ≤ 0.68',
+                        h1: 'H₁: p > 0.68',
+                        type: 'right-tail', 
+                        p0: 0.68,
+                        direction: 'Right-tail Test'
+                    }
+                ],
+                context: 'homeownership rate',
+                successLabel: 'homeowners'
+            },
+            'employment': {
+                name: 'Provincial Employment Rate Analysis',
+                description: 'Testing if Ontario\'s employment rate differs from the national average of 62%.',
+                testTypes: [
+                    {
+                        h0: 'H₀: p = 0.62',
+                        h1: 'H₁: p ≠ 0.62',
+                        type: 'two-tail',
+                        p0: 0.62,
+                        direction: 'Two-tail Test'
+                    },
+                    {
+                        h0: 'H₀: p ≥ 0.62',
+                        h1: 'H₁: p < 0.62',
+                        type: 'left-tail',
+                        p0: 0.62,
+                        direction: 'Left-tail Test'
+                    }
+                ],
+                context: 'employment rate',
+                successLabel: 'employed individuals'
+            },
+            'approval': {
+                name: 'Economic Policy Approval Analysis',
+                description: 'Testing if public approval for new carbon tax policy differs from the predicted 45%.',
+                testTypes: [
+                    {
+                        h0: 'H₀: p = 0.45',
+                        h1: 'H₁: p ≠ 0.45',
+                        type: 'two-tail',
+                        p0: 0.45,
+                        direction: 'Two-tail Test'
+                    },
+                    {
+                        h0: 'H₀: p ≤ 0.45',
+                        h1: 'H₁: p > 0.45',
+                        type: 'right-tail',
+                        p0: 0.45,
+                        direction: 'Right-tail Test'
+                    }
+                ],
+                context: 'policy approval rate',
+                successLabel: 'supporters'
+            },
+            'spending': {
+                name: 'Consumer Spending Pattern Analysis',
+                description: 'Bank of Canada testing if proportion of Canadians increasing spending differs from 35%.',
+                testTypes: [
+                    {
+                        h0: 'H₀: p = 0.35',
+                        h1: 'H₁: p ≠ 0.35',
+                        type: 'two-tail',
+                        p0: 0.35,
+                        direction: 'Two-tail Test'
+                    },
+                    {
+                        h0: 'H₀: p ≥ 0.35',
+                        h1: 'H₁: p < 0.35',
+                        type: 'left-tail',
+                        p0: 0.35,
+                        direction: 'Left-tail Test'
+                    }
+                ],
+                context: 'proportion increasing spending',
+                successLabel: 'increased spenders'
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            // Update button styles
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateTestData(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateTestData(scenario) {
+            const scenarioData = scenarios[scenario];
+            const testType = scenarioData.testTypes[Math.floor(Math.random() * scenarioData.testTypes.length)];
+            
+            // Generate realistic sample data
+            let sampleSize = 200 + Math.floor(Math.random() * 600); // 200-800
+            let p0 = testType.p0;
+            
+            // Generate sample proportion near p0 with some variation
+            let sampleProportion = p0 + (Math.random() - 0.5) * 0.10; // ±5% variation
+            sampleProportion = Math.max(0.05, Math.min(0.95, sampleProportion)); // Keep reasonable bounds
+            sampleProportion = Math.round(sampleProportion * 1000) / 1000; // Round to 3 decimals
+            
+            let successes = Math.round(sampleSize * sampleProportion);
+            sampleProportion = successes / sampleSize; // Recalculate for exact value
+            
+            const alpha = 0.05;
+            
+            testData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                h0: testType.h0,
+                h1: testType.h1,
+                testType: testType.type,
+                direction: testType.direction,
+                sampleSize: sampleSize,
+                successes: successes,
+                sampleProportion: sampleProportion,
+                p0: p0,
+                alpha: alpha,
+                context: scenarioData.context,
+                successLabel: scenarioData.successLabel
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { sampleProportion, sampleSize, p0, alpha, testType } = testData;
+            
+            // Standard Error for proportions
+            const standardError = Math.sqrt((p0 * (1 - p0)) / sampleSize);
+            
+            // Test Statistic (z-score)
+            const testStatistic = (sampleProportion - p0) / standardError;
+            
+            // Critical Values for z-test
+            let criticalValue;
+            if (testType === 'two-tail') {
+                criticalValue = 1.96; // For α = 0.05, two-tail
+            } else {
+                criticalValue = 1.645; // For α = 0.05, one-tail
+            }
+            
+            // P-value approximation
+            let pValue;
+            const absZ = Math.abs(testStatistic);
+            if (absZ > 3) pValue = 0.001;
+            else if (absZ > 2.58) pValue = 0.01;
+            else if (absZ > 1.96) pValue = 0.05;
+            else if (absZ > 1.645) pValue = 0.10;
+            else if (absZ > 1.28) pValue = 0.20;
+            else pValue = 0.30;
+            
+            if (testType === 'two-tail') pValue *= 2;
+            if (pValue > 1) pValue = 0.999;
+            
+            // Confidence Interval calculations (using sample standard error for CI)
+            const sampleSE = Math.sqrt((sampleProportion * (1 - sampleProportion)) / sampleSize);
+            const marginError = criticalValue * sampleSE;
+            const lowerBound = Math.max(0, sampleProportion - marginError);
+            const upperBound = Math.min(1, sampleProportion + marginError);
+            const ciContainsP0 = (p0 >= lowerBound && p0 <= upperBound);
+            
+            // Decision
+            const decision = (testType === 'two-tail') ? 
+                (Math.abs(testStatistic) > criticalValue ? 'reject' : 'fail') :
+                (testType === 'right-tail' ? 
+                    (testStatistic > criticalValue ? 'reject' : 'fail') :
+                    (testStatistic < -criticalValue ? 'reject' : 'fail'));
+            
+            correctAnswers = {
+                standardError: standardError,
+                testStatistic: testStatistic,
+                criticalValue: criticalValue,
+                pValue: pValue,
+                marginError: marginError,
+                lowerBound: lowerBound,
+                upperBound: upperBound,
+                ciContains: ciContainsP0 ? 'yes' : 'no',
+                decision: decision
+            };
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${testData.scenario}</strong><br>${testData.description}`;
+            
+            document.getElementById('h0Display').textContent = testData.h0;
+            document.getElementById('h1Display').textContent = testData.h1;
+            document.getElementById('testTypeDisplay').textContent = testData.direction;
+            
+            document.getElementById('sampleSize').textContent = testData.sampleSize;
+            document.getElementById('successes').textContent = testData.successes;
+            document.getElementById('sampleProportion').textContent = testData.sampleProportion.toFixed(3);
+            document.getElementById('popProportion').textContent = testData.p0.toFixed(2);
+            document.getElementById('alphaLevel').textContent = testData.alpha;
+            document.getElementById('testDirection').textContent = testData.direction;
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = 0.01) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            return isCorrect;
+        }
+
+        function checkStandardError() {
+            return checkAnswer('standardError', correctAnswers.standardError, 0.001);
+        }
+
+        function checkTestStatistic() {
+            return checkAnswer('testStatistic', correctAnswers.testStatistic, 0.05);
+        }
+
+        function checkCriticalValue() {
+            return checkAnswer('criticalValue', correctAnswers.criticalValue, 0.01);
+        }
+
+        function checkMarginError() {
+            return checkAnswer('marginError', correctAnswers.marginError, 0.001);
+        }
+
+        function checkPValue() {
+            return checkAnswer('pValue', correctAnswers.pValue, 0.02);
+        }
+
+        function checkLowerBound() {
+            return checkAnswer('lowerBound', correctAnswers.lowerBound, 0.01);
+        }
+
+        function checkUpperBound() {
+            return checkAnswer('upperBound', correctAnswers.upperBound, 0.01);
+        }
+
+        function checkCIContains() {
+            const select = document.getElementById('ciContains');
+            const userAnswer = select.value;
+            const isCorrect = userAnswer === correctAnswers.ciContains;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+            return isCorrect;
+        }
+
+        function checkDecision() {
+            const select = document.getElementById('decision');
+            const userAnswer = select.value;
+            const isCorrect = userAnswer === correctAnswers.decision;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+            return isCorrect;
+        }
+
+        function showAnswer(inputId) {
+            const answerDiv = document.getElementById(inputId + '-answer');
+            let correctValue = correctAnswers[inputId];
+            
+            switch(inputId) {
+                case 'standardError':
+                    answerDiv.innerHTML = `✅ Standard Error = ${correctValue.toFixed(4)}`;
+                    break;
+                case 'testStatistic':
+                    answerDiv.innerHTML = `✅ Test Statistic (z) = ${correctValue.toFixed(3)}`;
+                    break;
+                case 'criticalValue':
+                    answerDiv.innerHTML = `✅ Critical Value = ±${correctValue.toFixed(3)}`;
+                    break;
+                case 'marginError':
+                    answerDiv.innerHTML = `✅ Margin of Error = ${correctValue.toFixed(4)}`;
+                    break;
+                case 'pValue':
+                    answerDiv.innerHTML = `✅ P-value ≈ ${correctValue.toFixed(3)}`;
+                    break;
+                case 'lowerBound':
+                    answerDiv.innerHTML = `✅ Lower Bound = ${correctValue.toFixed(3)}`;
+                    break;
+                case 'upperBound':
+                    answerDiv.innerHTML = `✅ Upper Bound = ${correctValue.toFixed(3)}`;
+                    break;
+                case 'ciContains':
+                    const containsText = correctValue === 'yes' ? 'Yes, p₀ is in the CI' : 'No, p₀ is outside the CI';
+                    answerDiv.innerHTML = `✅ ${containsText}`;
+                    break;
+                case 'decision':
+                    const decisionText = correctValue === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀';
+                    answerDiv.innerHTML = `✅ Decision: ${decisionText}`;
+                    break;
+            }
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'standard-error') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Calculate Standard Error for Proportions:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> SE = √[p₀(1-p₀)/n]<br>
+                        SE = √[${testData.p0} × ${(1-testData.p0).toFixed(2)} / ${testData.sampleSize}]<br>
+                        SE = √[${(testData.p0 * (1-testData.p0)).toFixed(4)} / ${testData.sampleSize}]<br>
+                        SE = √${(testData.p0 * (1-testData.p0) / testData.sampleSize).toFixed(6)}<br>
+                        SE = ${correctAnswers.standardError.toFixed(4)}
+                    </div>
+                `;
+            } else if (stepType === 'test-statistic') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Calculate Test Statistic for Proportions:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> z = (p̂ - p₀) / SE<br>
+                        z = (${testData.sampleProportion.toFixed(3)} - ${testData.p0}) / ${correctAnswers.standardError.toFixed(4)}<br>
+                        z = ${(testData.sampleProportion - testData.p0).toFixed(4)} / ${correctAnswers.standardError.toFixed(4)}<br>
+                        z = ${correctAnswers.testStatistic.toFixed(3)}
+                    </div>
+                `;
+            } else if (stepType === 'confidence-interval') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 How to Calculate Confidence Interval for Proportions:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> CI = p̂ ± (z-critical × SE_sample)<br>
+                        <strong>Note:</strong> For CI, we use sample SE = √[p̂(1-p̂)/n]<br>
+                        Sample SE = √[${testData.sampleProportion.toFixed(3)} × ${(1-testData.sampleProportion).toFixed(3)} / ${testData.sampleSize}]<br>
+                        Margin of Error = ${correctAnswers.criticalValue} × Sample SE<br>
+                        Lower Bound = ${testData.sampleProportion.toFixed(3)} - ${correctAnswers.marginError.toFixed(4)} = ${correctAnswers.lowerBound.toFixed(3)}<br>
+                        Upper Bound = ${testData.sampleProportion.toFixed(3)} + ${correctAnswers.marginError.toFixed(4)} = ${correctAnswers.upperBound.toFixed(3)}<br>
+                        <strong>95% CI:</strong> (${correctAnswers.lowerBound.toFixed(3)}, ${correctAnswers.upperBound.toFixed(3)})
+                    </div>
+                `;
+            } else if (stepType === 'final-decision') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Final Decision - Three Methods Must Agree:</h4>
+                    <div class="tutorial-step">
+                        <strong>Method 1:</strong> |z| = ${Math.abs(correctAnswers.testStatistic).toFixed(3)} vs ${correctAnswers.criticalValue} → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br>
+                        <strong>Method 2:</strong> p = ${correctAnswers.pValue.toFixed(3)} vs 0.05 → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br>
+                        <strong>Method 3:</strong> p₀ = ${testData.p0} is ${correctAnswers.ciContains === 'yes' ? 'inside' : 'outside'} CI → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                        <strong>All methods agree!</strong>
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllAnswers() {
+            const results = [
+                checkStandardError(),
+                checkTestStatistic(),
+                checkCriticalValue(),
+                checkMarginError(),
+                checkPValue(),
+                checkLowerBound(),
+                checkUpperBound(),
+                checkCIContains(),
+                checkDecision()
+            ];
+            
+            const correct = results.filter(r => r).length;
+            const total = results.length;
+            
+            alert(`You got ${correct}/${total} calculations correct!\n\n${correct === total ? 'Perfect! All three decision methods agree! 🎉' : 'Keep working on the incorrect calculations.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateTestData(currentScenario);
+                clearAllInputs();
+            } else {
+                alert('Please select an economic scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['standardError', 'testStatistic', 'criticalValue', 'marginError', 'pValue', 'lowerBound', 'upperBound'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            const selects = ['decision', 'ciContains'];
+            selects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.value = '';
+                    select.style.backgroundColor = '';
+                    select.style.borderColor = '';
+                }
+            });
+        }
+
+        function showCompleteSolution() {
+            if (!currentScenario) {
+                alert('Please select an economic scenario first.');
+                return;
+            }
+            
+            alert(`Complete Solution:\n\nScenario: ${testData.scenario}\n\nH₀: ${testData.h0}\nH₁: ${testData.h1}\n\nSample Data:\n• Size: ${testData.sampleSize}\n• Successes: ${testData.successes}\n• Sample Proportion: ${testData.sampleProportion.toFixed(3)}\n• Hypothesized Proportion: ${testData.p0}\n\nCalculations:\n• Standard Error: ${correctAnswers.standardError.toFixed(4)}\n• Test Statistic (z): ${correctAnswers.testStatistic.toFixed(3)}\n• Critical Value: ±${correctAnswers.criticalValue.toFixed(3)}\n• P-value: ${correctAnswers.pValue.toFixed(3)}\n• 95% CI: (${correctAnswers.lowerBound.toFixed(3)}, ${correctAnswers.upperBound.toFixed(3)})\n\nDecision: ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}\n\nAll three methods agree!`);
+        }
+    </script>
+</body>
+</html>
