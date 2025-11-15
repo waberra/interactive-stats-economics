@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Size Determination for Means - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .sample-size-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .planning-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .factors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .factor-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .factor-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .factor-text {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 0.9em;
+            border-left: 4px solid #28a745;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            margin: 6px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .planning-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .requirement-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .requirement-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .requirement-value {
+            font-size: 1.3em;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .step-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .step-number {
+            background: #9c27b0;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 120px 70px 70px 90px;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9em;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .small-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .sample-size-result {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .final-sample-size {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 3px solid #2196f3;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .cost-analysis {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .cost-breakdown {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .formula-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            margin: 15px 0;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .precision-comparison {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Sample Size Determination for Means</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Plan Your Data Collection Strategy</h2>
+            <p><strong>Study Planning</strong> • <strong>Precision Control</strong> • <strong>Cost Management</strong></p>
+        </div>
+        
+        <div class="sample-size-intro">
+            <h3>🎯 Why Determine Sample Size in Advance?</h3>
+            
+            <div class="planning-concept">
+                <div class="concept-title">📈 Plan for Success Before You Collect Data!</div>
+                
+                <div class="concept-explanation">
+                    <strong>🎯 The Question:</strong> "How many observations do we need?" This is the FIRST question in any economic study. Too few = unreliable results. Too many = wasted resources. Get it right = precise, cost-effective analysis.
+                </div>
+                
+                <div style="background: #fff; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin: 15px 0; text-align: center;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🔑 Sample Size Formula for Means:</div>
+                    <div style="font-size: 1.1em;">n = (z × σ / E)²</div>
+                    <div style="font-style: italic; margin-top: 5px;">where E = desired margin of error</div>
+                </div>
+                
+                <div class="factors-grid">
+                    <div class="factor-card">
+                        <div class="factor-title">🎯 Precision (E)</div>
+                        <div class="factor-text">
+                            Smaller margin of error<br>
+                            = Need larger sample<br>
+                            "Within ±$1000 vs ±$5000"
+                        </div>
+                    </div>
+                    
+                    <div class="factor-card">
+                        <div class="factor-title">📊 Confidence (z)</div>
+                        <div class="factor-text">
+                            Higher confidence<br>
+                            = Need larger sample<br>
+                            "90% vs 95% vs 99%"
+                        </div>
+                    </div>
+                    
+                    <div class="factor-card">
+                        <div class="factor-title">📈 Variability (σ)</div>
+                        <div class="factor-text">
+                            More variable population<br>
+                            = Need larger sample<br>
+                            "Uniform vs diverse data"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Canadian Economic Sample Size Planning Scenario:
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('housing-survey')">🏠 Housing Price Survey</button>
+                <button class="scenario-btn" onclick="chooseScenario('wage-study')">💰 Wage Analysis Study</button>
+                <button class="scenario-btn" onclick="chooseScenario('gdp-estimation')">📈 GDP Growth Estimation</button>
+            </div>
+            <div>
+                <button class="scenario-btn" onclick="chooseScenario('business-revenue')">🏢 Business Revenue Study</button>
+                <button class="scenario-btn" onclick="chooseScenario('healthcare-costs')">🏥 Healthcare Cost Analysis</button>
+                <button class="scenario-btn" onclick="chooseScenario('education-spending')">🎓 Education Spending Survey</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Step 1: Study Planning Requirements</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="planning-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">📊 Study Requirements:</div>
+                    <div class="requirements-grid">
+                        <div class="requirement-box">
+                            <div class="requirement-label">Desired Margin of Error (E)</div>
+                            <div class="requirement-value" id="marginError"></div>
+                        </div>
+                        <div class="requirement-box">
+                            <div class="requirement-label">Confidence Level</div>
+                            <div class="requirement-value" id="confidenceLevel">95%</div>
+                        </div>
+                        <div class="requirement-box">
+                            <div class="requirement-label">Population Std Dev (σ)</div>
+                            <div class="requirement-value" id="populationStd"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin-top: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🎯 Study Goal:</div>
+                        <div id="studyGoal" style="font-size: 1.1em;"></div>
+                    </div>
+                </div>
+                
+                <div class="precision-comparison">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #856404;">💡 Precision Impact Comparison:</div>
+                    <div id="precisionComparison">Understanding how margin of error affects sample size requirements</div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>🧮 Step 2: Calculate Required Sample Size</h3>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 1</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Find Critical Z-value</div>
+                    <div class="step-instructions">
+                        <strong>For 95% confidence:</strong> Find Z₀.₀₂₅ (2.5% in each tail)
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Z-critical value:</label>
+                        <input type="number" id="zInput" step="0.001" placeholder="Z-value">
+                        <button class="small-button check-btn" onclick="checkZ()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('z')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('z-critical')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="z-answer"></div>
+                    <div class="tutorial-box" id="z-critical-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 2</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Apply Sample Size Formula</div>
+                    <div class="step-instructions">
+                        <strong>Formula:</strong> n = (z × σ / E)²
+                    </div>
+                    
+                    <div class="formula-box" id="formulaDisplay">
+                        n = (Z × σ / E)²
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Calculate n (exact):</label>
+                        <input type="number" id="exactInput" step="0.1" placeholder="Exact n">
+                        <button class="small-button check-btn" onclick="checkExact()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('exact')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('exact-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="exact-answer"></div>
+                    <div class="tutorial-box" id="exact-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 3</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Round to Practical Sample Size</div>
+                    <div class="step-instructions">
+                        <strong>Rule:</strong> Always round UP to ensure you meet the precision requirement
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Final sample size (n):</label>
+                        <input type="number" id="finalInput" step="1" placeholder="Rounded n" min="1">
+                        <button class="small-button check-btn" onclick="checkFinal()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('final')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('rounding-logic')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="final-answer"></div>
+                    <div class="tutorial-box" id="rounding-logic-tutorial"></div>
+                </div>
+            </div>
+            
+            <div class="sample-size-result">
+                <h3>📈 Step 3: Your Sample Size Recommendation</h3>
+                <div class="final-sample-size" id="finalSampleSize">
+                    Complete calculations to see sample size recommendation
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-style: italic;">
+                    This sample size ensures <strong>95% confidence</strong> with your desired precision
+                </div>
+            </div>
+            
+            <div class="cost-analysis">
+                <h3>💼 Step 4: Cost & Feasibility Analysis</h3>
+                <div class="cost-breakdown">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">📈 Study Planning Implications:</div>
+                    <div id="costAnalysis"></div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New Sample Size Problem</button>
+            <button class="button" onclick="checkAllSteps()">✅ Check All Calculations</button>
+            <button class="button" onclick="showSampleSizeSummary()">📖 Sample Size Planning Guide</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'housing-survey': {
+                name: 'National Housing Price Survey Planning',
+                description: 'CMHC planning a comprehensive housing price study. Need to determine sample size for reliable national estimates.',
+                variable: 'Average House Price',
+                unit: 'CAD',
+                marginError: 5000,
+                populationStd: 85000,
+                costPerUnit: 120,
+                goal: 'Estimate national average housing price within ±$5,000 with 95% confidence'
+            },
+            'wage-study': {
+                name: 'Provincial Wage Analysis Planning',
+                description: 'Employment Canada designing a wage study for policy development. Need adequate sample for precise estimates.',
+                variable: 'Annual Wage',
+                unit: 'CAD',
+                marginError: 1500,
+                populationStd: 15000,
+                costPerUnit: 85,
+                goal: 'Estimate provincial average wage within ±$1,500 with 95% confidence'
+            },
+            'gdp-estimation': {
+                name: 'Regional GDP Growth Study Planning',
+                description: 'Statistics Canada planning quarterly GDP analysis. Need sufficient data for economic forecasting.',
+                variable: 'GDP Growth Rate',
+                unit: '%',
+                marginError: 0.2,
+                populationStd: 1.2,
+                costPerUnit: 200,
+                goal: 'Estimate regional GDP growth rate within ±0.2% with 95% confidence'
+            },
+            'business-revenue': {
+                name: 'Small Business Revenue Survey Planning',
+                description: 'Innovation Canada studying small business performance. Planning data collection for policy support.',
+                variable: 'Monthly Revenue',
+                unit: 'CAD',
+                marginError: 2000,
+                populationStd: 12000,
+                costPerUnit: 95,
+                goal: 'Estimate small business monthly revenue within ±$2,000 with 95% confidence'
+            },
+            'healthcare-costs': {
+                name: 'Healthcare Cost Analysis Planning',
+                description: 'Health Canada planning cost analysis for budget allocation. Need precise estimates for policy decisions.',
+                variable: 'Annual Healthcare Cost per Person',
+                unit: 'CAD',
+                marginError: 150,
+                populationStd: 800,
+                costPerUnit: 75,
+                goal: 'Estimate per-person healthcare costs within ±$150 with 95% confidence'
+            },
+            'education-spending': {
+                name: 'Education Spending Survey Planning',
+                description: 'Education Canada designing spending analysis. Planning sample size for provincial education policy.',
+                variable: 'Annual Education Spending per Student',
+                unit: 'CAD',
+                marginError: 300,
+                populationStd: 2200,
+                costPerUnit: 60,
+                goal: 'Estimate per-student education spending within ±$300 with 95% confidence'
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                variable: scenarioData.variable,
+                unit: scenarioData.unit,
+                E: scenarioData.marginError,
+                sigma: scenarioData.populationStd,
+                costPerUnit: scenarioData.costPerUnit,
+                goal: scenarioData.goal,
+                confidence: 0.95,
+                z: 1.96
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { z, sigma, E } = problemData;
+            
+            // Calculate exact sample size
+            const exactN = Math.pow((z * sigma) / E, 2);
+            
+            // Round up for practical sample size
+            const finalN = Math.ceil(exactN);
+            
+            correctAnswers = {
+                z: z,
+                exactN: exactN,
+                finalN: finalN
+            };
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            document.getElementById('marginError').textContent = formatValue(problemData.E, problemData.unit);
+            document.getElementById('populationStd').textContent = formatValue(problemData.sigma, problemData.unit);
+            document.getElementById('studyGoal').textContent = problemData.goal;
+            
+            // Update formula display
+            document.getElementById('formulaDisplay').innerHTML = 
+                `n = (${problemData.z} × ${problemData.sigma} / ${problemData.E})²`;
+            
+            updatePrecisionComparison();
+            updateCostAnalysis();
+        }
+
+        function formatValue(value, unit) {
+            if (unit === 'CAD') {
+                return `$${value.toLocaleString()}`;
+            } else if (unit === '%') {
+                return `${value}%`;
+            }
+            return `${value} ${unit}`;
+        }
+
+        function updatePrecisionComparison() {
+            const { sigma, z } = problemData;
+            
+            // Calculate sample sizes for different margins of error
+            const currentE = problemData.E;
+            const looserE = currentE * 2;
+            const tighterE = currentE * 0.5;
+            
+            const currentN = Math.ceil(Math.pow((z * sigma) / currentE, 2));
+            const looserN = Math.ceil(Math.pow((z * sigma) / looserE, 2));
+            const tighterN = Math.ceil(Math.pow((z * sigma) / tighterE, 2));
+            
+            document.getElementById('precisionComparison').innerHTML = `
+                <strong>Precision vs Sample Size Trade-off:</strong><br>
+                • Loose precision (±${formatValue(looserE, problemData.unit)}): n = ${looserN.toLocaleString()}<br>
+                • Current precision (±${formatValue(currentE, problemData.unit)}): n = ${currentN.toLocaleString()}<br>
+                • Tight precision (±${formatValue(tighterE, problemData.unit)}): n = ${tighterN.toLocaleString()}<br>
+                <em>Halving the margin of error requires 4× the sample size!</em>
+            `;
+        }
+
+        function updateCostAnalysis() {
+            if (correctAnswers.finalN !== undefined) {
+                const totalCost = correctAnswers.finalN * problemData.costPerUnit;
+                const timeEstimate = Math.ceil(correctAnswers.finalN / 50); // Assume 50 surveys per day
+                
+                document.getElementById('costAnalysis').innerHTML = `
+                    <strong>${problemData.scenario} Resource Requirements:</strong><br>
+                    Sample Size: ${correctAnswers.finalN.toLocaleString()} observations<br>
+                    Estimated Cost: $${totalCost.toLocaleString()} (at $${problemData.costPerUnit}/unit)<br>
+                    Estimated Time: ${timeEstimate} working days<br><br>
+                    <strong>Budget Planning:</strong> This sample size provides the required precision while managing costs. 
+                    Smaller samples would be cheaper but less reliable. Larger samples provide extra precision but at higher cost.<br><br>
+                    <strong>Alternative Scenarios:</strong> Consider if slightly larger margin of error (less precision) 
+                    could significantly reduce costs while still meeting policy needs.
+                `;
+                
+                document.getElementById('finalSampleSize').innerHTML = `
+                    Required Sample Size: ${correctAnswers.finalN.toLocaleString()} observations<br>
+                    <div style="font-size: 0.8em; margin-top: 5px;">Precision: ±${formatValue(problemData.E, problemData.unit)} with 95% confidence</div>
+                `;
+            }
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = null) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            // Set tolerance based on value type
+            if (!tolerance) {
+                if (inputId === 'zInput') tolerance = 0.01;
+                else if (inputId === 'exactInput') tolerance = 1;
+                else tolerance = 0;
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            
+            if (isCorrect && inputId === 'finalInput') {
+                updateCostAnalysis();
+            }
+            
+            return isCorrect;
+        }
+
+        function checkZ() {
+            return checkAnswer('zInput', correctAnswers.z, 0.01);
+        }
+
+        function checkExact() {
+            return checkAnswer('exactInput', correctAnswers.exactN, 1);
+        }
+
+        function checkFinal() {
+            return checkAnswer('finalInput', correctAnswers.finalN, 0);
+        }
+
+        function showAnswer(answerType) {
+            const answerDiv = document.getElementById(answerType + '-answer');
+            
+            switch(answerType) {
+                case 'z':
+                    answerDiv.innerHTML = `✅ Z-critical = ${correctAnswers.z}`;
+                    break;
+                case 'exact':
+                    answerDiv.innerHTML = `✅ Exact n = ${correctAnswers.exactN.toFixed(1)}`;
+                    break;
+                case 'final':
+                    answerDiv.innerHTML = `✅ Final n = ${correctAnswers.finalN.toLocaleString()}`;
+                    break;
+            }
+            
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'z-critical') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Z-Critical for Sample Size Planning:</h4>
+                    <div class="tutorial-step">
+                        <strong>For 95% confidence:</strong><br>
+                        α = 0.05, so α/2 = 0.025<br>
+                        Z₀.₀₂₅ = 1.96
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Other common confidence levels:</strong><br>
+                        90% confidence: Z = 1.645<br>
+                        99% confidence: Z = 2.576<br>
+                        Higher confidence → Larger Z → Larger sample needed
+                    </div>
+                `;
+                
+            } else if (stepType === 'exact-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>🧮 Sample Size Formula Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> n = (Z × σ / E)²<br>
+                        n = (${problemData.z} × ${problemData.sigma} / ${problemData.E})²<br>
+                        n = (${(problemData.z * problemData.sigma).toFixed(1)} / ${problemData.E})²<br>
+                        n = (${(problemData.z * problemData.sigma / problemData.E).toFixed(3)})²<br>
+                        n = ${correctAnswers.exactN.toFixed(1)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Formula Components:</strong><br>
+                        Z = confidence level (higher → larger n)<br>
+                        σ = population variability (higher → larger n)<br>
+                        E = desired precision (smaller → larger n)
+                    </div>
+                `;
+                
+            } else if (stepType === 'rounding-logic') {
+                tutorialDiv.innerHTML = `
+                    <h4>📏 Why Round UP for Sample Size:</h4>
+                    <div class="tutorial-step">
+                        <strong>Exact calculation:</strong> n = ${correctAnswers.exactN.toFixed(1)}<br>
+                        <strong>Rounded UP:</strong> n = ${correctAnswers.finalN}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Why round up?</strong><br>
+                        Rounding down would give slightly LESS precision than required<br>
+                        Rounding up ensures you MEET or EXCEED precision target<br>
+                        The extra cost of a few additional observations is minimal
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Practical considerations:</strong><br>
+                        Always plan for some non-response or unusable data<br>
+                        Consider adding 10-20% buffer to final sample size
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllSteps() {
+            const results = [checkZ(), checkExact(), checkFinal()];
+            const correct = results.filter(r => r).length;
+            
+            alert(`You got ${correct}/3 steps correct!\n\n${correct === 3 ? '🎉 Perfect sample size planning!' : 'Use the Steps buttons to see detailed solutions.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                // Generate variation in requirements
+                const scenarioData = scenarios[currentScenario];
+                
+                // Vary margin of error (±25%)
+                const baseE = scenarioData.marginError;
+                problemData.E = baseE * (0.75 + Math.random() * 0.5);
+                
+                // Vary population std dev slightly (±15%)
+                const baseSigma = scenarioData.populationStd;
+                problemData.sigma = baseSigma * (0.85 + Math.random() * 0.3);
+                
+                calculateCorrectAnswers();
+                updateDisplay();
+                clearAllInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['zInput', 'exactInput', 'finalInput'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id.replace('Input', '') + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            // Hide all tutorial boxes
+            ['z-critical-tutorial', 'exact-calculation-tutorial', 'rounding-logic-tutorial'].forEach(id => {
+                const div = document.getElementById(id);
+                if (div) div.style.display = 'none';
+            });
+            
+            // Reset final display
+            document.getElementById('finalSampleSize').textContent = 'Complete calculations to see sample size recommendation';
+        }
+
+        function showSampleSizeSummary() {
+            alert(`📊 Sample Size Planning for Means:\n\n` +
+                `PLANNING FORMULA:\n` +
+                `n = (Z × σ / E)²\n` +
+                `where:\n` +
+                `• Z = confidence level critical value\n` +
+                `• σ = population standard deviation\n` +
+                `• E = desired margin of error\n\n` +
+                `KEY FACTORS:\n` +
+                `• Higher confidence → Larger sample\n` +
+                `• Smaller margin of error → Larger sample\n` +
+                `• More variable population → Larger sample\n\n` +
+                `PRACTICAL STEPS:\n` +
+                `1. Define precision requirements (E)\n` +
+                `2. Choose confidence level (Z)\n` +
+                `3. Estimate population variability (σ)\n` +
+                `4. Calculate and round UP\n` +
+                `5. Add buffer for non-response\n\n` +
+                `🇨🇦 ECONOMIC APPLICATIONS:\n` +
+                `• Policy survey planning\n` +
+                `• Market research design\n` +
+                `• Budget allocation studies\n` +
+                `• Performance measurement\n` +
+                `• Cost-benefit analysis`);
+        }
+    </script>
+</body>
+</html>
