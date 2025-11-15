@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Table Reading & Inverse Lookup - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .fundamentals-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .table-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .lookup-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .lookup-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .lookup-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        
+        .lookup-example {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            border-left: 4px solid #28a745;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 18px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .table-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+            overflow-x: auto;
+        }
+        
+        .mini-table {
+            margin: 15px auto;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            max-width: 500px;
+        }
+        
+        .mini-table th, .mini-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        
+        .mini-table th {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .highlight-cell {
+            background: #fff3cd !important;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .practice-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .input-grid {
+            display: grid;
+            grid-template-columns: 2fr 150px 80px 80px 90px;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .input-grid label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-grid input {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .small-button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .economic-context {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .context-explanation {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Statistical Table Reading & Inverse Lookup</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Master Normal & T-Tables for Canadian Economics</h2>
+            <p><strong>Foundation Skills</strong> • <strong>Table Reading</strong> • <strong>Inverse Lookup</strong> • <strong>Economic Applications</strong></p>
+        </div>
+        
+        <div class="fundamentals-intro">
+            <h3>🎯 Why Master Statistical Tables?</h3>
+            
+            <div class="table-concept">
+                <div class="concept-title">📚 The Foundation of All Statistical Analysis</div>
+                
+                <div class="concept-explanation">
+                    <strong>🔍 Statistical tables are your toolkit:</strong> Whether you're analyzing Bank of Canada interest rates, measuring unemployment probabilities, or evaluating housing market trends, you need to convert between probabilities and standardized scores.
+                </div>
+                
+                <div class="lookup-types">
+                    <div class="lookup-card">
+                        <div class="lookup-title">📈 Forward Lookup</div>
+                        <div class="lookup-example">
+                            Score → Probability<br>
+                            Z = 1.96 → P = 0.9750<br>
+                            "What % is below this score?"
+                        </div>
+                    </div>
+                    
+                    <div class="lookup-card">
+                        <div class="lookup-title">📊 Inverse Lookup</div>
+                        <div class="lookup-example">
+                            Probability → Score<br>
+                            P = 0.9750 → Z = 1.96<br>
+                            "What score captures this %?"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Your Table Reading Practice:
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <div style="font-weight: bold; margin-bottom: 8px; color: #007bff;">🔔 Normal Distribution Tables:</div>
+                <button class="scenario-btn" onclick="chooseScenario('normal-forward-two')">📈 Forward - Two Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('normal-forward-left')">📉 Forward - Left Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('normal-forward-right')">📊 Forward - Right Tail</button>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <button class="scenario-btn" onclick="chooseScenario('normal-inverse-two')">🔄 Inverse - Two Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('normal-inverse-left')">⬅️ Inverse - Left Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('normal-inverse-right')">➡️ Inverse - Right Tail</button>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <div style="font-weight: bold; margin-bottom: 8px; color: #007bff;">📈 T-Distribution Tables:</div>
+                <button class="scenario-btn" onclick="chooseScenario('t-forward-two')">📈 Forward - Two Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('t-forward-left')">📉 Forward - Left Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('t-forward-right')">📊 Forward - Right Tail</button>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('t-inverse-two')">🔄 Inverse - Two Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('t-inverse-left')">⬅️ Inverse - Left Tail</button>
+                <button class="scenario-btn" onclick="chooseScenario('t-inverse-right')">➡️ Inverse - Right Tail</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Step 1: Understanding Your Table Reading Challenge</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="table-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">📊 Table Section (Simplified):</div>
+                    <table class="mini-table" id="tableDisplay">
+                        <!-- Will be populated dynamically -->
+                    </table>
+                    <div style="text-align: center; margin-top: 10px; font-style: italic; color: #666;">
+                        <span id="tableNote"></span>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin-top: 20px;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🎯 Your Task:</div>
+                    <div id="taskDescription" style="font-size: 1.1em;"></div>
+                </div>
+            </div>
+            
+            <div class="practice-section">
+                <h3>🧮 Step 2: Practice Table Reading</h3>
+                <div class="step-instructions">
+                    <strong>Use the table above to find your answer:</strong> Follow the row and column to find the intersection value.
+                </div>
+                
+                <div class="input-grid">
+                    <label id="questionLabel">Find the probability:</label>
+                    <input type="number" id="answerInput" step="0.0001" placeholder="Your answer">
+                    <button class="small-button check-btn" onclick="checkAnswer()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer()">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps()">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="answerDisplay"></div>
+                <div class="tutorial-box" id="stepsDisplay"></div>
+            </div>
+            
+            <div class="economic-context">
+                <h3>💼 Step 3: Economic Application</h3>
+                <div class="context-explanation">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">🇨🇦 Real-World Canadian Economic Context:</div>
+                    <div id="economicApplication"></div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New Table Reading Problem</button>
+            <button class="button" onclick="showTableGuide()">📖 Complete Table Reading Guide</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswer = 0;
+
+        const scenarios = {
+            'normal-forward-two': {
+                name: 'Normal Distribution - Forward Lookup (Two-Tail)',
+                description: 'Bank of Canada analyzing interest rate volatility. Need to find probability in BOTH extreme tails (very high OR very low rates) for risk assessment.',
+                tableType: 'normal',
+                lookupType: 'forward',
+                tailType: 'two',
+                economicContext: {
+                    scenario: 'Interest Rate Risk Assessment',
+                    explanation: 'Two-tail tests detect extreme values in EITHER direction. Used when deviations above OR below normal are both concerning (e.g., inflation too high OR too low).',
+                    whenToUse: 'Use two-tail when: Testing if something is different (not specifically higher/lower), confidence intervals, detecting any significant change.'
+                }
+            },
+            'normal-forward-left': {
+                name: 'Normal Distribution - Forward Lookup (Left Tail)',
+                description: 'Employment Canada studying unemployment reduction programs. Need probability of unemployment falling BELOW a target level.',
+                tableType: 'normal',
+                lookupType: 'forward',
+                tailType: 'left',
+                economicContext: {
+                    scenario: 'Program Success Measurement',
+                    explanation: 'Left-tail tests focus on LOWER values. Used when we care about outcomes being below a threshold (unemployment reduction, cost savings).',
+                    whenToUse: 'Use left-tail when: Testing if something decreased, measuring improvement, checking if values are below a standard.'
+                }
+            },
+            'normal-forward-right': {
+                name: 'Normal Distribution - Forward Lookup (Right Tail)',
+                description: 'Finance Canada monitoring inflation. Need probability of inflation EXCEEDING policy targets for intervention planning.',
+                tableType: 'normal',
+                lookupType: 'forward',
+                tailType: 'right',
+                economicContext: {
+                    scenario: 'Policy Intervention Triggers',
+                    explanation: 'Right-tail tests focus on HIGHER values. Used when we care about outcomes exceeding thresholds (inflation targets, budget overruns).',
+                    whenToUse: 'Use right-tail when: Testing if something increased, measuring deterioration, checking if values exceed a limit.'
+                }
+            },
+            'normal-inverse-two': {
+                name: 'Normal Distribution - Inverse Lookup (Two-Tail)',
+                description: 'Statistics Canada setting confidence interval bounds. Need Z-scores that capture 95% of distribution in the MIDDLE.',
+                tableType: 'normal',
+                lookupType: 'inverse',
+                tailType: 'two',
+                economicContext: {
+                    scenario: 'Confidence Interval Construction',
+                    explanation: 'Two-tail inverse finds Z-scores for confidence intervals. Need values that leave equal probability in both tails (2.5% each for 95% CI).',
+                    whenToUse: 'Use two-tail inverse for: Confidence intervals, tolerance limits, symmetric rejection regions.'
+                }
+            },
+            'normal-inverse-left': {
+                name: 'Normal Distribution - Inverse Lookup (Left Tail)',
+                description: 'Quality Control for manufacturing. Find the Z-score where 5% of products fall below minimum standards.',
+                tableType: 'normal',
+                lookupType: 'inverse',
+                tailType: 'left',
+                economicContext: {
+                    scenario: 'Quality Control Standards',
+                    explanation: 'Left-tail inverse finds Z-scores for lower thresholds. Used to set minimum standards where only a specific percentage should fall below.',
+                    whenToUse: 'Use left-tail inverse for: Setting minimum thresholds, lower control limits, performance standards.'
+                }
+            },
+            'normal-inverse-right': {
+                name: 'Normal Distribution - Inverse Lookup (Right Tail)',
+                description: 'Revenue Canada tax auditing. Find the income Z-score where top 1% of earners trigger automatic audits.',
+                tableType: 'normal',
+                lookupType: 'inverse',
+                tailType: 'right',
+                economicContext: {
+                    scenario: 'High-Value Threshold Setting',
+                    explanation: 'Right-tail inverse finds Z-scores for upper thresholds. Used to identify top percentiles or set maximum limits.',
+                    whenToUse: 'Use right-tail inverse for: Setting maximum thresholds, upper control limits, identifying outliers.'
+                }
+            },
+            't-forward-two': {
+                name: 'T-Distribution - Forward Lookup (Two-Tail)',
+                description: 'Small business survey (n=15) testing if average revenue differs significantly from national average in EITHER direction.',
+                tableType: 't',
+                lookupType: 'forward',
+                tailType: 'two',
+                economicContext: {
+                    scenario: 'Small Sample Difference Testing',
+                    explanation: 'Two-tail t-tests with small samples detect differences in either direction. Common in hypothesis testing with limited data.',
+                    whenToUse: 'Use two-tail t when: Small samples (n<30), testing for any difference, σ unknown.'
+                }
+            },
+            't-forward-left': {
+                name: 'T-Distribution - Forward Lookup (Left Tail)',
+                description: 'Regional economic study (n=12) testing if local wages are BELOW provincial average.',
+                tableType: 't',
+                lookupType: 'forward',
+                tailType: 'left',
+                economicContext: {
+                    scenario: 'Regional Performance Assessment',
+                    explanation: 'Left-tail t-tests with small samples detect if values are significantly LOWER than a standard.',
+                    whenToUse: 'Use left-tail t when: Small samples, testing for decrease/reduction, one-direction concern.'
+                }
+            },
+            't-forward-right': {
+                name: 'T-Distribution - Forward Lookup (Right Tail)',
+                description: 'Startup performance study (n=20) testing if new company revenues EXCEED industry benchmarks.',
+                tableType: 't',
+                lookupType: 'forward',
+                tailType: 'right',
+                economicContext: {
+                    scenario: 'Performance Improvement Testing',
+                    explanation: 'Right-tail t-tests with small samples detect if values are significantly HIGHER than a standard.',
+                    whenToUse: 'Use right-tail t when: Small samples, testing for increase/improvement, exceeding targets.'
+                }
+            },
+            't-inverse-two': {
+                name: 'T-Distribution - Inverse Lookup (Two-Tail)',
+                description: 'Confidence interval construction for small business profit study (n=18) with unknown population variance.',
+                tableType: 't',
+                lookupType: 'inverse',
+                tailType: 'two',
+                economicContext: {
+                    scenario: 'Small Sample Confidence Intervals',
+                    explanation: 'Two-tail t-inverse for confidence intervals with small samples and unknown σ. More conservative than Z-intervals.',
+                    whenToUse: 'Use two-tail t-inverse for: CI with small samples, σ unknown, accounting for extra uncertainty.'
+                }
+            },
+            't-inverse-left': {
+                name: 'T-Distribution - Inverse Lookup (Left Tail)',
+                description: 'Setting performance thresholds for small department (n=10) where bottom 10% need improvement plans.',
+                tableType: 't',
+                lookupType: 'inverse',
+                tailType: 'left',
+                economicContext: {
+                    scenario: 'Performance Management Thresholds',
+                    explanation: 'Left-tail t-inverse for setting lower bounds with small samples. More conservative than normal distribution.',
+                    whenToUse: 'Use left-tail t-inverse for: Lower thresholds with small samples, conservative estimates.'
+                }
+            },
+            't-inverse-right': {
+                name: 'T-Distribution - Inverse Lookup (Right Tail)',
+                description: 'Small team bonus qualification (n=25): Find score where top 5% qualify for performance bonuses.',
+                tableType: 't',
+                lookupType: 'inverse',
+                tailType: 'right',
+                economicContext: {
+                    scenario: 'Elite Performance Recognition',
+                    explanation: 'Right-tail t-inverse for setting upper thresholds with small samples. Accounts for sampling uncertainty.',
+                    whenToUse: 'Use right-tail t-inverse for: Upper thresholds with small samples, conservative high-performance standards.'
+                }
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearInputs();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                tableType: scenarioData.tableType,
+                lookupType: scenarioData.lookupType,
+                tailType: scenarioData.tailType,
+                economicContext: scenarioData.economicContext
+            };
+            
+            if (scenarioData.tableType === 'normal') {
+                generateNormalProblem();
+            } else {
+                generateTProblem();
+            }
+            
+            updateDisplay();
+        }
+
+        function generateNormalProblem() {
+            const tailType = problemData.tailType;
+            
+            if (problemData.lookupType === 'forward') {
+                // Z-score to probability
+                let zScore;
+                
+                if (tailType === 'two') {
+                    // Two-tail: use absolute values, calculate both tails
+                    const zScores = [1.28, 1.645, 1.96, 2.33, 2.58];
+                    zScore = zScores[Math.floor(Math.random() * zScores.length)];
+                    
+                    // For two-tail, calculate probability outside ±z (both tails)
+                    const oneTailProb = calculateNormalProbability(zScore);
+                    correctAnswer = 2 * (1 - oneTailProb); // Both tails combined
+                    
+                    problemData.zScore = zScore;
+                    problemData.question = `Find P(|Z| > ${zScore}) (both tails)`;
+                    problemData.task = `Find probability that Z falls outside ±${zScore} (in either tail)`;
+                    
+                } else if (tailType === 'left') {
+                    // Left tail: use negative Z-scores
+                    const zScores = [-2.58, -2.33, -1.96, -1.645, -1.28, -0.84, -0.52];
+                    zScore = zScores[Math.floor(Math.random() * zScores.length)];
+                    
+                    correctAnswer = calculateNormalProbability(zScore);
+                    
+                    problemData.zScore = zScore;
+                    problemData.question = `Find P(Z ≤ ${zScore}) (left tail)`;
+                    problemData.task = `Find probability in the left tail below ${zScore}`;
+                    
+                } else { // right tail
+                    // Right tail: use positive Z-scores
+                    const zScores = [0.52, 0.84, 1.28, 1.645, 1.96, 2.33, 2.58];
+                    zScore = zScores[Math.floor(Math.random() * zScores.length)];
+                    
+                    correctAnswer = 1 - calculateNormalProbability(zScore);
+                    
+                    problemData.zScore = zScore;
+                    problemData.question = `Find P(Z > ${zScore}) (right tail)`;
+                    problemData.task = `Find probability in the right tail above ${zScore}`;
+                }
+                
+            } else {
+                // Probability to Z-score
+                if (tailType === 'two') {
+                    // Two-tail inverse: confidence levels
+                    const confidenceLevels = [0.90, 0.95, 0.98, 0.99];
+                    const confidence = confidenceLevels[Math.floor(Math.random() * confidenceLevels.length)];
+                    const alpha = 1 - confidence;
+                    const tailProb = 1 - (alpha / 2); // e.g., 0.975 for 95% confidence
+                    
+                    problemData.probability = confidence;
+                    problemData.tailProbability = tailProb;
+                    correctAnswer = calculateInverseNormal(tailProb);
+                    
+                    problemData.question = `Find Z for ${(confidence*100)}% confidence interval`;
+                    problemData.task = `Find Z-score where ${(confidence*100)}% falls between -Z and +Z`;
+                    
+                } else if (tailType === 'left') {
+                    // Left tail inverse
+                    const probabilities = [0.01, 0.05, 0.10, 0.20, 0.25];
+                    const probability = probabilities[Math.floor(Math.random() * probabilities.length)];
+                    
+                    problemData.probability = probability;
+                    correctAnswer = calculateInverseNormal(probability);
+                    
+                    problemData.question = `Find Z where P(Z ≤ z) = ${probability}`;
+                    problemData.task = `Find Z-score where ${(probability*100)}% falls to the left`;
+                    
+                } else { // right tail
+                    // Right tail inverse
+                    const probabilities = [0.01, 0.05, 0.10, 0.20, 0.25];
+                    const rightTailProb = probabilities[Math.floor(Math.random() * probabilities.length)];
+                    const leftTailProb = 1 - rightTailProb;
+                    
+                    problemData.probability = rightTailProb;
+                    problemData.leftProbability = leftTailProb;
+                    correctAnswer = calculateInverseNormal(leftTailProb);
+                    
+                    problemData.question = `Find Z where P(Z > z) = ${rightTailProb}`;
+                    problemData.task = `Find Z-score where ${(rightTailProb*100)}% falls to the right`;
+                }
+            }
+        }
+
+        function generateTProblem() {
+            const degreesOfFreedom = [5, 10, 15, 20, 25, 30][Math.floor(Math.random() * 6)];
+            problemData.df = degreesOfFreedom;
+            const tailType = problemData.tailType;
+            
+            if (problemData.lookupType === 'forward') {
+                // t-score to probability
+                let tScore;
+                
+                if (tailType === 'two') {
+                    // Two-tail: use positive t-scores, calculate both tails
+                    const tScores = [1.476, 1.812, 2.228, 2.571];
+                    tScore = tScores[Math.floor(Math.random() * tScores.length)];
+                    
+                    // For two-tail, calculate probability outside ±t
+                    const oneTailProb = calculateTProbability(tScore, degreesOfFreedom);
+                    correctAnswer = 2 * (1 - oneTailProb);
+                    
+                    problemData.tScore = tScore;
+                    problemData.question = `Find P(|t| > ${tScore}) with df = ${degreesOfFreedom} (both tails)`;
+                    problemData.task = `Find probability that t falls outside ±${tScore} with ${degreesOfFreedom} degrees of freedom`;
+                    
+                } else if (tailType === 'left') {
+                    // Left tail: use negative t-scores
+                    const tScores = [-2.571, -2.228, -1.812, -1.476];
+                    tScore = tScores[Math.floor(Math.random() * tScores.length)];
+                    
+                    correctAnswer = calculateTProbability(tScore, degreesOfFreedom);
+                    
+                    problemData.tScore = tScore;
+                    problemData.question = `Find P(t ≤ ${tScore}) with df = ${degreesOfFreedom} (left tail)`;
+                    problemData.task = `Find probability in left tail below ${tScore} with ${degreesOfFreedom} degrees of freedom`;
+                    
+                } else { // right tail
+                    // Right tail: use positive t-scores
+                    const tScores = [1.476, 1.812, 2.228, 2.571];
+                    tScore = tScores[Math.floor(Math.random() * tScores.length)];
+                    
+                    correctAnswer = 1 - calculateTProbability(tScore, degreesOfFreedom);
+                    
+                    problemData.tScore = tScore;
+                    problemData.question = `Find P(t > ${tScore}) with df = ${degreesOfFreedom} (right tail)`;
+                    problemData.task = `Find probability in right tail above ${tScore} with ${degreesOfFreedom} degrees of freedom`;
+                }
+                
+            } else {
+                // Probability to t-score
+                if (tailType === 'two') {
+                    // Two-tail inverse: confidence levels
+                    const confidenceLevels = [0.90, 0.95, 0.98, 0.99];
+                    const confidence = confidenceLevels[Math.floor(Math.random() * confidenceLevels.length)];
+                    const alpha = 1 - confidence;
+                    const tailProb = 1 - (alpha / 2);
+                    
+                    problemData.probability = confidence;
+                    problemData.tailProbability = tailProb;
+                    correctAnswer = calculateInverseT(tailProb, degreesOfFreedom);
+                    
+                    problemData.question = `Find t for ${(confidence*100)}% confidence interval with df = ${degreesOfFreedom}`;
+                    problemData.task = `Find t-score where ${(confidence*100)}% falls between -t and +t with ${degreesOfFreedom} degrees of freedom`;
+                    
+                } else if (tailType === 'left') {
+                    // Left tail inverse
+                    const probabilities = [0.01, 0.025, 0.05, 0.10];
+                    const probability = probabilities[Math.floor(Math.random() * probabilities.length)];
+                    
+                    problemData.probability = probability;
+                    correctAnswer = calculateInverseT(probability, degreesOfFreedom);
+                    
+                    problemData.question = `Find t where P(t ≤ t*) = ${probability} with df = ${degreesOfFreedom}`;
+                    problemData.task = `Find t-score where ${(probability*100)}% falls to the left with ${degreesOfFreedom} degrees of freedom`;
+                    
+                } else { // right tail
+                    // Right tail inverse
+                    const probabilities = [0.01, 0.025, 0.05, 0.10];
+                    const rightTailProb = probabilities[Math.floor(Math.random() * probabilities.length)];
+                    const leftTailProb = 1 - rightTailProb;
+                    
+                    problemData.probability = rightTailProb;
+                    problemData.leftProbability = leftTailProb;
+                    correctAnswer = calculateInverseT(leftTailProb, degreesOfFreedom);
+                    
+                    problemData.question = `Find t where P(t > t*) = ${rightTailProb} with df = ${degreesOfFreedom}`;
+                    problemData.task = `Find t-score where ${(rightTailProb*100)}% falls to the right with ${degreesOfFreedom} degrees of freedom`;
+                }
+            }
+        }
+
+        function calculateNormalProbability(z) {
+            // Simplified normal CDF approximation
+            if (z <= -2.58) return 0.005;
+            if (z <= -2.33) return 0.01;
+            if (z <= -1.96) return 0.025;
+            if (z <= -1.645) return 0.05;
+            if (z <= -1.28) return 0.10;
+            if (z <= -0.84) return 0.20;
+            if (z <= -0.52) return 0.30;
+            if (z <= 0) return 0.50;
+            if (z <= 0.52) return 0.70;
+            if (z <= 0.84) return 0.80;
+            if (z <= 1.28) return 0.90;
+            if (z <= 1.645) return 0.95;
+            if (z <= 1.96) return 0.975;
+            if (z <= 2.33) return 0.99;
+            if (z <= 2.58) return 0.995;
+            return 0.999;
+        }
+
+        function calculateInverseNormal(p) {
+            // Simplified inverse normal lookup
+            if (p <= 0.005) return -2.58;
+            if (p <= 0.01) return -2.33;
+            if (p <= 0.025) return -1.96;
+            if (p <= 0.05) return -1.645;
+            if (p <= 0.10) return -1.28;
+            if (p <= 0.20) return -0.84;
+            if (p <= 0.30) return -0.52;
+            if (p <= 0.50) return 0;
+            if (p <= 0.70) return 0.52;
+            if (p <= 0.80) return 0.84;
+            if (p <= 0.90) return 1.28;
+            if (p <= 0.95) return 1.645;
+            if (p <= 0.975) return 1.96;
+            if (p <= 0.99) return 2.33;
+            if (p <= 0.995) return 2.58;
+            return 2.58;
+        }
+
+        function calculateTProbability(t, df) {
+            // Simplified t-distribution probabilities
+            // This is a rough approximation - in practice, use statistical tables
+            if (t <= -2.571) return 0.01;
+            if (t <= -2.228) return 0.025;
+            if (t <= -1.812) return 0.05;
+            if (t <= -1.476) return 0.10;
+            if (t <= 0) return 0.50;
+            if (t <= 1.476) return 0.90;
+            if (t <= 1.812) return 0.95;
+            if (t <= 2.228) return 0.975;
+            if (t <= 2.571) return 0.99;
+            return 0.995;
+        }
+
+        function calculateInverseT(p, df) {
+            // Simplified inverse t lookup
+            if (p <= 0.01) return -2.571;
+            if (p <= 0.025) return -2.228;
+            if (p <= 0.05) return -1.812;
+            if (p <= 0.10) return -1.476;
+            if (p <= 0.50) return 0;
+            if (p <= 0.90) return 1.476;
+            if (p <= 0.95) return 1.812;
+            if (p <= 0.975) return 2.228;
+            if (p <= 0.99) return 2.571;
+            return 2.571;
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            document.getElementById('taskDescription').textContent = problemData.task;
+            document.getElementById('questionLabel').textContent = problemData.question;
+            
+            // Generate mini table display
+            generateTableDisplay();
+            
+            // Update economic application with tail type explanation
+            updateEconomicApplication();
+        }
+
+        function generateTableDisplay() {
+            const tableElement = document.getElementById('tableDisplay');
+            const tableNote = document.getElementById('tableNote');
+            
+            if (problemData.tableType === 'normal') {
+                if (problemData.lookupType === 'forward') {
+                    // Show normal table section
+                    tableElement.innerHTML = `
+                        <thead>
+                            <tr><th>Z</th><th>0.00</th><th>0.01</th><th>0.02</th><th>0.03</th><th>0.04</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th>1.6</th><td class="${problemData.zScore === 1.645 ? 'highlight-cell' : ''}">0.9500</td><td>0.9505</td><td>0.9510</td><td>0.9515</td><td class="${problemData.zScore === 1.645 ? 'highlight-cell' : ''}">0.9500</td></tr>
+                            <tr><th>1.9</th><td>0.9713</td><td>0.9719</td><td>0.9726</td><td>0.9732</td><td>0.9738</td></tr>
+                            <tr><th>2.0</th><td class="${problemData.zScore === 1.96 ? 'highlight-cell' : ''}">0.9750</td><td>0.9756</td><td>0.9761</td><td>0.9767</td><td>0.9772</td></tr>
+                        </tbody>
+                    `;
+                    tableNote.textContent = "Find your Z-score in the left column and decimal in the top row";
+                } else {
+                    // Show inverse lookup format
+                    tableElement.innerHTML = `
+                        <thead>
+                            <tr><th>Probability</th><th>Z-score</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="${problemData.probability === 0.90 ? 'highlight-cell' : ''}">0.9000</td><td>1.28</td></tr>
+                            <tr><td class="${problemData.probability === 0.95 ? 'highlight-cell' : ''}">0.9500</td><td>1.645</td></tr>
+                            <tr><td class="${problemData.probability === 0.975 ? 'highlight-cell' : ''}">0.9750</td><td>1.96</td></tr>
+                        </tbody>
+                    `;
+                    tableNote.textContent = "Find your probability and read the corresponding Z-score";
+                }
+            } else {
+                // T-table
+                if (problemData.lookupType === 'forward') {
+                    tableElement.innerHTML = `
+                        <thead>
+                            <tr><th>df</th><th>t = 1.476</th><th>t = 1.812</th><th>t = 2.228</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th class="${problemData.df === 15 ? 'highlight-cell' : ''}">15</th><td>0.90</td><td>0.95</td><td>0.975</td></tr>
+                            <tr><th class="${problemData.df === 20 ? 'highlight-cell' : ''}">20</th><td>0.90</td><td>0.95</td><td>0.975</td></tr>
+                            <tr><th class="${problemData.df === 25 ? 'highlight-cell' : ''}">25</th><td>0.90</td><td>0.95</td><td>0.975</td></tr>
+                        </tbody>
+                    `;
+                    tableNote.textContent = "Find your degrees of freedom (df) and t-score to read probability";
+                } else {
+                    tableElement.innerHTML = `
+                        <thead>
+                            <tr><th>df</th><th>P=0.90</th><th>P=0.95</th><th>P=0.975</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><th class="${problemData.df === 15 ? 'highlight-cell' : ''}">15</th><td>1.476</td><td>1.812</td><td>2.228</td></tr>
+                            <tr><th class="${problemData.df === 20 ? 'highlight-cell' : ''}">20</th><td>1.456</td><td>1.790</td><td>2.201</td></tr>
+                            <tr><th class="${problemData.df === 25 ? 'highlight-cell' : ''}">25</th><td>1.445</td><td>1.776</td><td>2.179</td></tr>
+                        </tbody>
+                    `;
+                    tableNote.textContent = "Find your df and probability to read the t-score";
+                }
+            }
+        }
+
+        function updateEconomicApplication() {
+            const context = problemData.economicContext;
+            const tailType = problemData.tailType;
+            
+            let tailExplanation = '';
+            if (tailType === 'two') {
+                tailExplanation = `<strong>Two-Tail Analysis:</strong> Testing for differences in EITHER direction. Used when deviations above OR below normal are both important.`;
+            } else if (tailType === 'left') {
+                tailExplanation = `<strong>Left-Tail Analysis:</strong> Focusing on LOWER values. Used when we care about outcomes falling below a threshold or standard.`;
+            } else {
+                tailExplanation = `<strong>Right-Tail Analysis:</strong> Focusing on HIGHER values. Used when we care about outcomes exceeding limits or targets.`;
+            }
+            
+            document.getElementById('economicApplication').innerHTML = `
+                <strong>${context.scenario}:</strong><br>
+                ${context.explanation}<br><br>
+                ${tailExplanation}<br><br>
+                <strong>When to Use This Approach:</strong><br>
+                ${context.whenToUse}<br><br>
+                <strong>Your Result:</strong> ${problemData.question} = <span style="color: #007bff; font-weight: bold;">${correctAnswer.toFixed(4)}</span>
+            `;
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseFloat(document.getElementById('answerInput').value);
+            const input = document.getElementById('answerInput');
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            const tolerance = 0.01;
+            const isCorrect = Math.abs(userAnswer - correctAnswer) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            
+            return isCorrect;
+        }
+
+        function showAnswer() {
+            const answerDiv = document.getElementById('answerDisplay');
+            answerDiv.innerHTML = `✅ Correct Answer: ${correctAnswer.toFixed(4)}`;
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps() {
+            const stepsDiv = document.getElementById('stepsDisplay');
+            
+            let stepsHTML = '<h4>📚 Step-by-Step Table Reading:</h4>';
+            
+            if (problemData.tableType === 'normal') {
+                if (problemData.lookupType === 'forward') {
+                    stepsHTML += `
+                        <div class="tutorial-step">
+                            <strong>Step 1:</strong> Locate Z = ${problemData.zScore} in the table<br>
+                            Look for ${problemData.zScore} in the left column (Z values)
+                        </div>
+                        <div class="tutorial-step">
+                            <strong>Step 2:</strong> Read across to find the probability<br>
+                            The intersection gives P(Z ≤ ${problemData.zScore}) = ${correctAnswer.toFixed(4)}
+                        </div>
+                        <div class="tutorial-step">
+                            <strong>Economic Interpretation:</strong><br>
+                            ${(correctAnswer * 100).toFixed(1)}% of observations fall below this standardized score
+                        </div>
+                    `;
+                } else {
+                    stepsHTML += `
+                        <div class="tutorial-step">
+                            <strong>Step 1:</strong> Locate probability ${problemData.probability} in the table<br>
+                            Find ${problemData.probability} in the probability column
+                        </div>
+                        <div class="tutorial-step">
+                            <strong>Step 2:</strong> Read the corresponding Z-score<br>
+                            The Z-score is ${correctAnswer.toFixed(3)}
+                        </div>
+                        <div class="tutorial-step">
+                            <strong>Economic Interpretation:</strong><br>
+                            ${(problemData.probability * 100).toFixed(0)}% of observations fall below Z = ${correctAnswer.toFixed(3)}
+                        </div>
+                    `;
+                }
+            } else {
+                // T-table steps
+                stepsHTML += `
+                    <div class="tutorial-step">
+                        <strong>Step 1:</strong> Find df = ${problemData.df} in the degrees of freedom column
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Step 2:</strong> ${problemData.lookupType === 'forward' ? 
+                            `Find t = ${problemData.tScore} to read probability ${correctAnswer.toFixed(3)}` :
+                            `Find probability ${problemData.probability} to read t = ${correctAnswer.toFixed(3)}`}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Why T-table?</strong> Small sample size requires t-distribution instead of normal
+                    </div>
+                `;
+            }
+            
+            stepsDiv.innerHTML = stepsHTML;
+            stepsDiv.style.display = stepsDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateProblem(currentScenario);
+                clearInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearInputs() {
+            const input = document.getElementById('answerInput');
+            input.value = '';
+            input.className = '';
+            
+            document.getElementById('answerDisplay').style.display = 'none';
+            document.getElementById('stepsDisplay').style.display = 'none';
+        }
+
+        function showTableGuide() {
+            alert(`📊 Complete Table Reading Guide:\n\n` +
+                `NORMAL TABLES:\n` +
+                `• Forward: Z-score → Probability\n` +
+                `• Inverse: Probability → Z-score\n` +
+                `• Used with large samples (n ≥ 30)\n\n` +
+                `T-TABLES:\n` +
+                `• Forward: t-score → Probability\n` +
+                `• Inverse: Probability → t-score\n` +
+                `• Used with small samples (n < 30)\n` +
+                `• Requires degrees of freedom (df = n-1)\n\n` +
+                `ONE-TAIL vs TWO-TAIL DECISIONS:\n\n` +
+                `TWO-TAIL (both directions):\n` +
+                `• Testing for ANY difference\n` +
+                `• Confidence intervals\n` +
+                `• "Different from" questions\n` +
+                `• Risk assessment (either extreme)\n\n` +
+                `LEFT-TAIL (lower values):\n` +
+                `• Testing for decreases/reductions\n` +
+                `• Below threshold analysis\n` +
+                `• Performance improvement\n` +
+                `• Cost savings verification\n\n` +
+                `RIGHT-TAIL (higher values):\n` +
+                `• Testing for increases/deterioration\n` +
+                `• Exceeding limits analysis\n` +
+                `• Risk threshold detection\n` +
+                `• Performance decline monitoring\n\n` +
+                `🇨🇦 ECONOMIC APPLICATIONS:\n` +
+                `• Policy threshold setting\n` +
+                `• Performance benchmarking\n` +
+                `• Risk assessment\n` +
+                `• Confidence interval construction\n` +
+                `• Quality control limits`);
+        }
+    </script>
+</body>
+</html>
