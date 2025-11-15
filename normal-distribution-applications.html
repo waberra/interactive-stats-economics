@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normal Distribution Applications - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .normal-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .distribution-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .problem-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .problem-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .problem-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .problem-example {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-size: 0.9em;
+            border-left: 4px solid #28a745;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            margin: 6px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .distribution-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .parameter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .parameter-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .parameter-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .parameter-value {
+            font-size: 1.3em;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .solution-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .step-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .step-number {
+            background: #9c27b0;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 120px 70px 70px 90px;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9em;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .small-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .economic-interpretation {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .interpretation-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .z-formula {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            margin: 15px 0;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Normal Distribution Applications</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Canadian Economic Normal Distribution Problems</h2>
+            <p><strong>Real-World Applications</strong> • <strong>Problem Solving</strong> • <strong>Economic Analysis</strong></p>
+        </div>
+        
+        <div class="normal-intro">
+            <h3>📈 Why Normal Distribution in Economics?</h3>
+            
+            <div class="distribution-concept">
+                <div class="concept-title">🌟 The Bell Curve Rules Canadian Economics!</div>
+                
+                <div class="concept-explanation">
+                    <strong>🎯 Many economic variables follow normal distributions:</strong> GDP growth rates, housing prices, inflation rates, unemployment levels, wage distributions, and stock returns all tend to cluster around averages with predictable patterns.
+                </div>
+                
+                <div class="problem-types">
+                    <div class="problem-card">
+                        <div class="problem-title">📊 "Less Than" Problems</div>
+                        <div class="problem-example">
+                            P(X < value)<br>
+                            "What % of provinces have GDP growth below 2%?"
+                        </div>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="problem-title">📈 "Between" Problems</div>
+                        <div class="problem-example">
+                            P(a < X < b)<br>
+                            "What % of houses cost between $400K-$600K?"
+                        </div>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <div class="problem-title">🎯 "Find Value" Problems</div>
+                        <div class="problem-example">
+                            Find X for given %<br>
+                            "What income puts you in top 10%?"
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="z-formula">
+                    Z = (X - μ) / σ
+                    <div style="font-size: 0.8em; margin-top: 5px;">Transform ANY normal distribution to standard normal!</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Canadian Economic Normal Distribution Problem:
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('housing-prices')">🏠 Housing Prices</button>
+                <button class="scenario-btn" onclick="chooseScenario('gdp-growth')">📈 GDP Growth Rates</button>
+                <button class="scenario-btn" onclick="chooseScenario('wages')">💰 Wage Distribution</button>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('inflation')">📊 Inflation Rates</button>
+                <button class="scenario-btn" onclick="chooseScenario('unemployment')">💼 Unemployment Levels</button>
+                <button class="scenario-btn" onclick="chooseScenario('stock-returns')">📈 TSX Stock Returns</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Step 1: Economic Problem Setup</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="distribution-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">📊 Distribution Parameters:</div>
+                    <div class="parameter-grid">
+                        <div class="parameter-box">
+                            <div class="parameter-label">Mean (μ)</div>
+                            <div class="parameter-value" id="meanValue"></div>
+                        </div>
+                        <div class="parameter-box">
+                            <div class="parameter-label">Standard Deviation (σ)</div>
+                            <div class="parameter-value" id="stdValue"></div>
+                        </div>
+                        <div class="parameter-box">
+                            <div class="parameter-label">Distribution</div>
+                            <div class="parameter-value">Normal</div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin-top: 15px; text-align: center;">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🎯 Question:</div>
+                        <div id="questionText" style="font-size: 1.2em; color: #2c3e50;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="solution-section">
+                <h3>🧮 Step 2: Solve Using Normal Distribution</h3>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 1</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Standardize to Z-score</div>
+                    <div class="step-instructions">
+                        <strong>Convert the raw value to a Z-score:</strong> Use Z = (X - μ) / σ
+                    </div>
+                    
+                    <div class="input-row">
+                        <label id="zScoreLabel">Calculate Z-score:</label>
+                        <input type="number" id="zScoreInput" step="0.01" placeholder="Z-value">
+                        <button class="small-button check-btn" onclick="checkZScore()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('zScore')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('z-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="zScore-answer"></div>
+                    <div class="tutorial-box" id="z-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 2</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Find Probability Using Normal Table</div>
+                    <div class="step-instructions">
+                        <strong>Use your Z-score with the normal table:</strong> Apply table reading skills from previous tool
+                    </div>
+                    
+                    <div class="input-row">
+                        <label id="probabilityLabel">Find probability:</label>
+                        <input type="number" id="probabilityInput" step="0.0001" placeholder="Probability">
+                        <button class="small-button check-btn" onclick="checkProbability()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('probability')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('table-lookup')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="probability-answer"></div>
+                    <div class="tutorial-box" id="table-lookup-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 3</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Convert to Percentage</div>
+                    <div class="step-instructions">
+                        <strong>Express as percentage:</strong> Multiply probability by 100 for final answer
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Final percentage:</label>
+                        <input type="number" id="percentageInput" step="0.1" placeholder="%" min="0" max="100">
+                        <button class="small-button check-btn" onclick="checkPercentage()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('percentage')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('percentage-conversion')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="percentage-answer"></div>
+                    <div class="tutorial-box" id="percentage-conversion-tutorial"></div>
+                </div>
+            </div>
+            
+            <div class="economic-interpretation">
+                <h3>💼 Step 3: Economic Interpretation</h3>
+                <div class="interpretation-text">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">📈 Economic Meaning:</div>
+                    <div id="economicMeaning"></div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New Normal Distribution Problem</button>
+            <button class="button" onclick="checkAllSteps()">✅ Check All Calculations</button>
+            <button class="button" onclick="showMethodSummary()">📖 Method Summary</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'housing-prices': {
+                name: 'Canadian Housing Prices Distribution',
+                description: 'CMHC analyzing national housing price patterns. Housing prices follow a normal distribution across Canadian markets.',
+                variable: 'House Price',
+                unit: 'CAD',
+                mean: 520000,
+                std: 85000,
+                contexts: [
+                    { type: 'less', value: 450000, question: 'What percentage of Canadian houses cost less than $450,000?' },
+                    { type: 'greater', value: 600000, question: 'What percentage of Canadian houses cost more than $600,000?' },
+                    { type: 'between', value1: 400000, value2: 600000, question: 'What percentage of houses cost between $400,000 and $600,000?' }
+                ]
+            },
+            'gdp-growth': {
+                name: 'Provincial GDP Growth Rates',
+                description: 'Statistics Canada studying quarterly GDP growth patterns across Canadian provinces and territories.',
+                variable: 'GDP Growth Rate',
+                unit: '%',
+                mean: 2.3,
+                std: 0.8,
+                contexts: [
+                    { type: 'less', value: 1.5, question: 'What percentage of provinces have GDP growth below 1.5%?' },
+                    { type: 'greater', value: 3.0, question: 'What percentage of provinces exceed 3.0% GDP growth?' },
+                    { type: 'between', value1: 2.0, value2: 3.0, question: 'What percentage of provinces have GDP growth between 2.0% and 3.0%?' }
+                ]
+            },
+            'wages': {
+                name: 'Canadian Wage Distribution',
+                description: 'Employment and Social Development Canada analyzing national wage patterns for full-time workers.',
+                variable: 'Annual Wage',
+                unit: 'CAD',
+                mean: 55000,
+                std: 12000,
+                contexts: [
+                    { type: 'less', value: 40000, question: 'What percentage of Canadian workers earn less than $40,000 annually?' },
+                    { type: 'greater', value: 70000, question: 'What percentage of workers earn more than $70,000 annually?' },
+                    { type: 'between', value1: 50000, value2: 65000, question: 'What percentage earn between $50,000 and $65,000?' }
+                ]
+            },
+            'inflation': {
+                name: 'Canadian Inflation Rate Distribution',
+                description: 'Bank of Canada analyzing monthly inflation rate patterns across different economic sectors.',
+                variable: 'Inflation Rate',
+                unit: '%',
+                mean: 2.1,
+                std: 0.6,
+                contexts: [
+                    { type: 'less', value: 1.5, question: 'What percentage of months have inflation below 1.5%?' },
+                    { type: 'greater', value: 3.0, question: 'What percentage of months exceed 3.0% inflation?' },
+                    { type: 'between', value1: 1.8, value2: 2.5, question: 'What percentage have inflation between 1.8% and 2.5%?' }
+                ]
+            },
+            'unemployment': {
+                name: 'Regional Unemployment Rates',
+                description: 'Statistics Canada examining unemployment rate distributions across Canadian census metropolitan areas.',
+                variable: 'Unemployment Rate',
+                unit: '%',
+                mean: 6.2,
+                std: 1.4,
+                contexts: [
+                    { type: 'less', value: 5.0, question: 'What percentage of regions have unemployment below 5.0%?' },
+                    { type: 'greater', value: 8.0, question: 'What percentage of regions exceed 8.0% unemployment?' },
+                    { type: 'between', value1: 5.5, value2: 7.0, question: 'What percentage have unemployment between 5.5% and 7.0%?' }
+                ]
+            },
+            'stock-returns': {
+                name: 'TSX Stock Returns Distribution',
+                description: 'Toronto Stock Exchange analyzing monthly return patterns for Canadian equity investments.',
+                variable: 'Monthly Return',
+                unit: '%',
+                mean: 0.8,
+                std: 3.2,
+                contexts: [
+                    { type: 'less', value: -2.0, question: 'What percentage of months have returns below -2.0%?' },
+                    { type: 'greater', value: 4.0, question: 'What percentage of months exceed 4.0% returns?' },
+                    { type: 'between', value1: -1.0, value2: 3.0, question: 'What percentage have returns between -1.0% and 3.0%?' }
+                ]
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            
+            // Randomly select a context type
+            const context = scenarioData.contexts[Math.floor(Math.random() * scenarioData.contexts.length)];
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                variable: scenarioData.variable,
+                unit: scenarioData.unit,
+                mean: scenarioData.mean,
+                std: scenarioData.std,
+                context: context
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { mean, std, context } = problemData;
+            
+            if (context.type === 'less') {
+                // P(X < value)
+                const zScore = (context.value - mean) / std;
+                const probability = normalCDF(zScore);
+                const percentage = probability * 100;
+                
+                correctAnswers = {
+                    zScore: zScore,
+                    probability: probability,
+                    percentage: percentage
+                };
+                
+            } else if (context.type === 'greater') {
+                // P(X > value) = 1 - P(X ≤ value)
+                const zScore = (context.value - mean) / std;
+                const probability = 1 - normalCDF(zScore);
+                const percentage = probability * 100;
+                
+                correctAnswers = {
+                    zScore: zScore,
+                    probability: probability,
+                    percentage: percentage
+                };
+                
+            } else { // between
+                // P(value1 < X < value2) = P(X < value2) - P(X < value1)
+                const z1 = (context.value1 - mean) / std;
+                const z2 = (context.value2 - mean) / std;
+                const prob1 = normalCDF(z1);
+                const prob2 = normalCDF(z2);
+                const probability = prob2 - prob1;
+                const percentage = probability * 100;
+                
+                correctAnswers = {
+                    zScore1: z1,
+                    zScore2: z2,
+                    probability: probability,
+                    percentage: percentage
+                };
+            }
+        }
+
+        function normalCDF(z) {
+            // Simplified normal CDF approximation
+            if (z <= -3.0) return 0.001;
+            if (z <= -2.5) return 0.006;
+            if (z <= -2.0) return 0.023;
+            if (z <= -1.5) return 0.067;
+            if (z <= -1.0) return 0.159;
+            if (z <= -0.5) return 0.309;
+            if (z <= 0.0) return 0.500;
+            if (z <= 0.5) return 0.691;
+            if (z <= 1.0) return 0.841;
+            if (z <= 1.5) return 0.933;
+            if (z <= 2.0) return 0.977;
+            if (z <= 2.5) return 0.994;
+            if (z <= 3.0) return 0.999;
+            return 0.999;
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            document.getElementById('meanValue').textContent = 
+                formatValue(problemData.mean, problemData.unit);
+            document.getElementById('stdValue').textContent = 
+                formatValue(problemData.std, problemData.unit);
+            document.getElementById('questionText').textContent = problemData.context.question;
+            
+            // Update Z-score calculation label
+            updateZScoreLabel();
+            updateProbabilityLabel();
+            updateEconomicMeaning();
+        }
+
+        function formatValue(value, unit) {
+            if (unit === 'CAD') {
+                return `$${value.toLocaleString()}`;
+            } else if (unit === '%') {
+                return `${value}%`;
+            }
+            return `${value} ${unit}`;
+        }
+
+        function updateZScoreLabel() {
+            const { context, mean, std } = problemData;
+            
+            if (context.type === 'less' || context.type === 'greater') {
+                document.getElementById('zScoreLabel').textContent = 
+                    `Z = (${context.value} - ${mean}) / ${std}`;
+            } else {
+                document.getElementById('zScoreLabel').textContent = 
+                    `Calculate Z-scores for both values:`;
+            }
+        }
+
+        function updateProbabilityLabel() {
+            const { context } = problemData;
+            
+            if (context.type === 'less') {
+                document.getElementById('probabilityLabel').textContent = 'P(Z ≤ z):';
+            } else if (context.type === 'greater') {
+                document.getElementById('probabilityLabel').textContent = 'P(Z > z):';
+            } else {
+                document.getElementById('probabilityLabel').textContent = 'P(z₁ < Z < z₂):';
+            }
+        }
+
+        function updateEconomicMeaning() {
+            const meaning = generateEconomicMeaning();
+            document.getElementById('economicMeaning').innerHTML = meaning;
+        }
+
+        function generateEconomicMeaning() {
+            const { scenario, context } = problemData;
+            const percentage = correctAnswers.percentage?.toFixed(1) || 'XX.X';
+            
+            let meaning = `<strong>${scenario} Analysis:</strong><br>`;
+            
+            if (context.type === 'less') {
+                meaning += `${percentage}% of observations fall below ${formatValue(context.value, problemData.unit)}. `;
+                meaning += `This represents the lower portion of the distribution, indicating areas/periods with below-average performance.`;
+            } else if (context.type === 'greater') {
+                meaning += `${percentage}% of observations exceed ${formatValue(context.value, problemData.unit)}. `;
+                meaning += `This represents the upper portion of the distribution, indicating high-performing areas/periods.`;
+            } else {
+                meaning += `${percentage}% of observations fall between ${formatValue(context.value1, problemData.unit)} and ${formatValue(context.value2, problemData.unit)}. `;
+                meaning += `This represents the middle range, capturing typical economic conditions.`;
+            }
+            
+            meaning += `<br><br><strong>Policy Implications:</strong> Understanding these probabilities helps policymakers target interventions, set thresholds, and allocate resources effectively.`;
+            
+            return meaning;
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = 0.1) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            return isCorrect;
+        }
+
+        function checkZScore() {
+            if (problemData.context.type === 'between') {
+                // For between problems, check if either Z-score is correct
+                const userAnswer = parseFloat(document.getElementById('zScoreInput').value);
+                const correct1 = Math.abs(userAnswer - correctAnswers.zScore1) <= 0.1;
+                const correct2 = Math.abs(userAnswer - correctAnswers.zScore2) <= 0.1;
+                const input = document.getElementById('zScoreInput');
+                const isCorrect = correct1 || correct2;
+                input.className = isCorrect ? 'correct' : 'incorrect';
+                return isCorrect;
+            } else {
+                return checkAnswer('zScoreInput', correctAnswers.zScore, 0.1);
+            }
+        }
+
+        function checkProbability() {
+            return checkAnswer('probabilityInput', correctAnswers.probability, 0.02);
+        }
+
+        function checkPercentage() {
+            return checkAnswer('percentageInput', correctAnswers.percentage, 1);
+        }
+
+        function showAnswer(answerType) {
+            const answerDiv = document.getElementById(answerType + '-answer');
+            
+            switch(answerType) {
+                case 'zScore':
+                    if (problemData.context.type === 'between') {
+                        answerDiv.innerHTML = `✅ Z₁ = ${correctAnswers.zScore1.toFixed(3)}, Z₂ = ${correctAnswers.zScore2.toFixed(3)}`;
+                    } else {
+                        answerDiv.innerHTML = `✅ Z = ${correctAnswers.zScore.toFixed(3)}`;
+                    }
+                    break;
+                case 'probability':
+                    answerDiv.innerHTML = `✅ Probability = ${correctAnswers.probability.toFixed(4)}`;
+                    break;
+                case 'percentage':
+                    answerDiv.innerHTML = `✅ ${correctAnswers.percentage.toFixed(1)}%`;
+                    break;
+            }
+            
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'z-calculation') {
+                let stepsHTML = '<h4>📚 Z-Score Calculation Steps:</h4>';
+                
+                if (problemData.context.type === 'between') {
+                    stepsHTML += `
+                        <div class="tutorial-step">
+                            <strong>For lower bound:</strong><br>
+                            Z₁ = (${problemData.context.value1} - ${problemData.mean}) / ${problemData.std}<br>
+                            Z₁ = ${((problemData.context.value1 - problemData.mean) / problemData.std).toFixed(3)}
+                        </div>
+                        <div class="tutorial-step">
+                            <strong>For upper bound:</strong><br>
+                            Z₂ = (${problemData.context.value2} - ${problemData.mean}) / ${problemData.std}<br>
+                            Z₂ = ${((problemData.context.value2 - problemData.mean) / problemData.std).toFixed(3)}
+                        </div>
+                    `;
+                } else {
+                    const value = problemData.context.type === 'less' ? problemData.context.value : problemData.context.value;
+                    stepsHTML += `
+                        <div class="tutorial-step">
+                            <strong>Formula:</strong> Z = (X - μ) / σ<br>
+                            Z = (${value} - ${problemData.mean}) / ${problemData.std}<br>
+                            Z = ${correctAnswers.zScore.toFixed(3)}
+                        </div>
+                        <div class="tutorial-step">
+                            <strong>Interpretation:</strong> The value is ${Math.abs(correctAnswers.zScore).toFixed(2)} standard deviations ${correctAnswers.zScore >= 0 ? 'above' : 'below'} the mean
+                        </div>
+                    `;
+                }
+                
+                tutorialDiv.innerHTML = stepsHTML;
+                
+            } else if (stepType === 'table-lookup') {
+                let stepsHTML = '<h4>📊 Normal Table Lookup:</h4>';
+                
+                if (problemData.context.type === 'between') {
+                    stepsHTML += `
+                        <div class="tutorial-step">
+                            <strong>Step 1:</strong> Find P(Z ≤ ${correctAnswers.zScore1.toFixed(3)}) = ${normalCDF(correctAnswers.zScore1).toFixed(4)}<br>
+                            <strong>Step 2:</strong> Find P(Z ≤ ${correctAnswers.zScore2.toFixed(3)}) = ${normalCDF(correctAnswers.zScore2).toFixed(4)}<br>
+                            <strong>Step 3:</strong> Subtract: ${normalCDF(correctAnswers.zScore2).toFixed(4)} - ${normalCDF(correctAnswers.zScore1).toFixed(4)} = ${correctAnswers.probability.toFixed(4)}
+                        </div>
+                    `;
+                } else {
+                    const tableProb = normalCDF(correctAnswers.zScore);
+                    stepsHTML += `
+                        <div class="tutorial-step">
+                            <strong>Table lookup:</strong> P(Z ≤ ${correctAnswers.zScore.toFixed(3)}) = ${tableProb.toFixed(4)}<br>
+                            ${problemData.context.type === 'greater' ? 
+                                `<strong>For greater than:</strong> P(Z > ${correctAnswers.zScore.toFixed(3)}) = 1 - ${tableProb.toFixed(4)} = ${correctAnswers.probability.toFixed(4)}` :
+                                `<strong>Final answer:</strong> ${correctAnswers.probability.toFixed(4)}`}
+                        </div>
+                    `;
+                }
+                
+                tutorialDiv.innerHTML = stepsHTML;
+                
+            } else if (stepType === 'percentage-conversion') {
+                tutorialDiv.innerHTML = `
+                    <h4>📈 Convert to Percentage:</h4>
+                    <div class="tutorial-step">
+                        <strong>Multiply by 100:</strong><br>
+                        ${correctAnswers.probability.toFixed(4)} × 100 = ${correctAnswers.percentage.toFixed(1)}%<br><br>
+                        <strong>Economic Interpretation:</strong> ${correctAnswers.percentage.toFixed(1)}% of cases meet this condition
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllSteps() {
+            const results = [checkZScore(), checkProbability(), checkPercentage()];
+            const correct = results.filter(r => r).length;
+            
+            alert(`You got ${correct}/3 steps correct!\n\n${correct === 3 ? '🎉 Perfect normal distribution analysis!' : 'Use the Steps buttons to see detailed solutions.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateProblem(currentScenario);
+                clearAllInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['zScoreInput', 'probabilityInput', 'percentageInput'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id.replace('Input', '') + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            // Hide all tutorial boxes
+            ['z-calculation-tutorial', 'table-lookup-tutorial', 'percentage-conversion-tutorial'].forEach(id => {
+                const div = document.getElementById(id);
+                if (div) div.style.display = 'none';
+            });
+        }
+
+        function showMethodSummary() {
+            alert(`📊 Normal Distribution Problem-Solving Method:\n\n` +
+                `STEP 1: Standardize\n` +
+                `• Use Z = (X - μ) / σ\n` +
+                `• Convert raw values to Z-scores\n\n` +
+                `STEP 2: Use Normal Table\n` +
+                `• Less than: P(Z ≤ z)\n` +
+                `• Greater than: 1 - P(Z ≤ z)\n` +
+                `• Between: P(Z ≤ z₂) - P(Z ≤ z₁)\n\n` +
+                `STEP 3: Interpret\n` +
+                `• Convert to percentage\n` +
+                `• Apply to economic context\n` +
+                `• Consider policy implications\n\n` +
+                `🇨🇦 Economic Applications:\n` +
+                `• Risk assessment\n` +
+                `• Performance benchmarking\n` +
+                `• Policy threshold setting\n` +
+                `• Resource allocation`);
+        }
+    </script>
+</body>
+</html>
