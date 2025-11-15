@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Testing for Correlation - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ffc107;
+        }
+        
+        .data-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .data-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .data-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .data-value {
+            font-size: 1.2em;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .hypothesis-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #007bff;
+        }
+        
+        .correlation-data {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .data-pairs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 10px 0;
+        }
+        
+        .variable-box {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 150px 80px 80px 100px;
+            gap: 10px;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .input-row select {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .small-button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            margin: 10px 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .decision-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .formula-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin: 10px 0;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #6c757d;
+        }
+        
+        .method-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+        }
+        
+        .method-box {
+            text-align: center;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        
+        .scatter-info {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Hypothesis Testing for Correlation - Step by Step</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Canadian Economic Correlation Testing</h2>
+            <p><strong>Learn Relationship Analysis</strong> • <strong>Real Economic Data</strong> • <strong>Three Decision Methods</strong></p>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📈 Choose Economic Correlation Testing Scenario:
+            </div>
+            <button class="scenario-btn" onclick="chooseScenario('gdp-unemployment')">📊 GDP vs Unemployment</button>
+            <button class="scenario-btn" onclick="chooseScenario('income-spending')">💰 Income vs Spending</button>
+            <button class="scenario-btn" onclick="chooseScenario('housing-income')">🏠 Housing vs Income</button>
+            <button class="scenario-btn" onclick="chooseScenario('rates-investment')">📈 Rates vs Investment</button>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="calculation-section">
+                <h3>📋 Economic Correlation Testing Scenario:</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="hypothesis-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 10px;">Hypotheses:</div>
+                    <div id="h0Display" style="margin: 5px 0;"></div>
+                    <div id="h1Display" style="margin: 5px 0;"></div>
+                    <div id="testTypeDisplay" style="margin: 5px 0; font-weight: bold; color: #007bff;"></div>
+                </div>
+                
+                <div class="correlation-data">
+                    <div class="data-label">Sample Data (n = <span id="sampleSize"></span> observations):</div>
+                    <div class="data-pairs">
+                        <div class="variable-box">
+                            <div style="font-weight: bold;" id="variable1Label">Variable X:</div>
+                            <div id="variable1Data" style="font-size: 0.9em; margin-top: 5px;"></div>
+                        </div>
+                        <div class="variable-box">
+                            <div style="font-weight: bold;" id="variable2Label">Variable Y:</div>
+                            <div id="variable2Data" style="font-size: 0.9em; margin-top: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="scatter-info">
+                    <div style="font-weight: bold; color: #1976d2;">📊 Relationship Information:</div>
+                    <div>Sample Correlation (r): <span id="observedCorrelation" class="data-value"></span></div>
+                    <div>Degrees of Freedom: <span id="degreesOfFreedom" class="data-value"></span></div>
+                    <div>Significance Level (α): <span id="alphaLevel" class="data-value">0.05</span></div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>📊 Step 1: Calculate Test Statistic</h3>
+                <div class="step-instructions">
+                    <strong>Formula:</strong> For correlation significance, use t-test
+                </div>
+                
+                <div class="formula-box">
+                    t = r × √(n-2) / √(1-r²)
+                </div>
+                
+                <div class="input-row">
+                    <label for="rSquared">r² (coefficient of determination):</label>
+                    <input type="number" id="rSquared" step="0.0001" placeholder="r × r">
+                    <button class="small-button check-btn" onclick="checkRSquared()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('rSquared')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('r-squared')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="rSquared-answer"></div>
+                <div class="tutorial-box" id="r-squared-tutorial"></div>
+                
+                <div class="input-row">
+                    <label for="standardError">Standard Error √(1-r²):</label>
+                    <input type="number" id="standardError" step="0.0001" placeholder="Calculate SE">
+                    <button class="small-button check-btn" onclick="checkStandardError()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('standardError')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('standard-error')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="standardError-answer"></div>
+                <div class="tutorial-box" id="standard-error-tutorial"></div>
+                
+                <div class="input-row">
+                    <label for="testStatistic">Test Statistic (t-value):</label>
+                    <input type="number" id="testStatistic" step="0.001" placeholder="Calculate t">
+                    <button class="small-button check-btn" onclick="checkTestStatistic()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('testStatistic')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('test-statistic')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="testStatistic-answer"></div>
+                <div class="tutorial-box" id="test-statistic-tutorial"></div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>📊 Step 2: Critical Values & Confidence Interval</h3>
+                
+                <div class="input-row">
+                    <label for="criticalValue">Critical Value (t-critical):</label>
+                    <input type="number" id="criticalValue" step="0.001" placeholder="From t-table">
+                    <button class="small-button check-btn" onclick="checkCriticalValue()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('criticalValue')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('critical-value')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="criticalValue-answer"></div>
+                
+                <div class="input-row">
+                    <label for="fisherZ">Fisher's z-transformation:</label>
+                    <input type="number" id="fisherZ" step="0.001" placeholder="0.5×ln[(1+r)/(1-r)]">
+                    <button class="small-button check-btn" onclick="checkFisherZ()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('fisherZ')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('fisher-z')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="fisherZ-answer"></div>
+                
+                <div class="input-row">
+                    <label for="lowerBound">95% CI Lower Bound (r-scale):</label>
+                    <input type="number" id="lowerBound" step="0.001" placeholder="Transform back">
+                    <button class="small-button check-btn" onclick="checkLowerBound()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('lowerBound')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('confidence-interval')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="lowerBound-answer"></div>
+                
+                <div class="input-row">
+                    <label for="upperBound">95% CI Upper Bound (r-scale):</label>
+                    <input type="number" id="upperBound" step="0.001" placeholder="Transform back">
+                    <button class="small-button check-btn" onclick="checkUpperBound()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('upperBound')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('ci-interpretation')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="upperBound-answer"></div>
+                <div class="tutorial-box" id="confidence-interval-tutorial"></div>
+            </div>
+            
+            <div class="decision-section">
+                <h3>⚖️ Step 3: Three Decision Methods</h3>
+                <div class="step-instructions">
+                    <strong>All three methods must give the SAME decision:</strong><br>
+                    <strong>1. Test Statistic:</strong> Compare |t| to t-critical<br>
+                    <strong>2. P-value:</strong> Compare p-value to α<br>
+                    <strong>3. Confidence Interval:</strong> Check if 0 is inside CI
+                </div>
+                
+                <div class="input-row">
+                    <label for="pValue">P-value (approximate):</label>
+                    <input type="number" id="pValue" step="0.001" placeholder="Probability">
+                    <button class="small-button check-btn" onclick="checkPValue()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('pValue')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('p-value')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="pValue-answer"></div>
+                
+                <div class="comparison-table">
+                    <h4 style="color: #2c3e50; margin-top: 0;">📋 Decision Comparison Table:</h4>
+                    <div class="method-grid">
+                        <div style="font-weight: bold;">Method 1: Test Statistic</div>
+                        <div style="font-weight: bold;">Method 2: P-value</div>
+                        <div style="font-weight: bold;">Method 3: Confidence Interval</div>
+                        
+                        <div id="testStatDecision" class="method-box">
+                            Calculate test statistic first
+                        </div>
+                        <div id="pValueDecision" class="method-box">
+                            Calculate p-value first
+                        </div>
+                        <div id="ciDecision" class="method-box">
+                            Calculate CI first
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-row">
+                    <label>Does 0 fall within the CI?</label>
+                    <select id="ciContainsZero">
+                        <option value="">Choose...</option>
+                        <option value="yes">Yes (0 is in CI)</option>
+                        <option value="no">No (0 is outside CI)</option>
+                    </select>
+                    <button class="small-button check-btn" onclick="checkCIContainsZero()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('ciContainsZero')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('ci-decision')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="ciContainsZero-answer"></div>
+                
+                <div class="input-row">
+                    <label>Final Statistical Decision:</label>
+                    <select id="decision">
+                        <option value="">Choose...</option>
+                        <option value="reject">Reject H₀ (Correlation is significant)</option>
+                        <option value="fail">Fail to Reject H₀ (No significant correlation)</option>
+                    </select>
+                    <button class="small-button check-btn" onclick="checkDecision()">Check</button>
+                    <button class="small-button answer-btn" onclick="showAnswer('decision')">Answer</button>
+                    <button class="small-button steps-btn" onclick="showSteps('final-decision')">Steps</button>
+                </div>
+                
+                <div class="answer-display" id="decision-answer"></div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 Generate New Problem</button>
+            <button class="button" onclick="checkAllAnswers()">✅ Check All Answers</button>
+            <button class="button" onclick="showCompleteSolution()">📖 Complete Solution</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let testData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'gdp-unemployment': {
+                name: 'GDP Growth vs Unemployment Rate Correlation',
+                description: 'Bank of Canada examining the relationship between quarterly GDP growth and unemployment rates across Canadian regions.',
+                variables: {
+                    x: { name: 'GDP Growth (%)', unit: '%' },
+                    y: { name: 'Unemployment Rate (%)', unit: '%' }
+                },
+                testTypes: [
+                    {
+                        h0: 'H₀: ρ = 0 (No correlation)',
+                        h1: 'H₁: ρ ≠ 0 (Correlation exists)', 
+                        type: 'two-tail',
+                        direction: 'Two-tail Test'
+                    }
+                ],
+                context: 'GDP growth and unemployment correlation',
+                expectedSign: -1 // Negative correlation expected
+            },
+            'income-spending': {
+                name: 'Household Income vs Consumer Spending Correlation',
+                description: 'Statistics Canada analyzing the relationship between household income and consumer spending patterns.',
+                variables: {
+                    x: { name: 'Household Income ($1000s)', unit: 'k$' },
+                    y: { name: 'Monthly Spending ($)', unit: '$' }
+                },
+                testTypes: [
+                    {
+                        h0: 'H₀: ρ = 0 (No correlation)',
+                        h1: 'H₁: ρ > 0 (Positive correlation)',
+                        type: 'right-tail',
+                        direction: 'Right-tail Test'
+                    }
+                ],
+                context: 'income and spending correlation',
+                expectedSign: 1 // Positive correlation expected
+            },
+            'housing-income': {
+                name: 'Housing Prices vs Household Income Correlation',
+                description: 'CMHC testing the relationship between regional housing prices and median household income.',
+                variables: {
+                    x: { name: 'Median Income ($1000s)', unit: 'k$' },
+                    y: { name: 'Average Housing Price ($1000s)', unit: 'k$' }
+                },
+                testTypes: [
+                    {
+                        h0: 'H₀: ρ = 0 (No correlation)',
+                        h1: 'H₁: ρ ≠ 0 (Correlation exists)',
+                        type: 'two-tail',
+                        direction: 'Two-tail Test'
+                    }
+                ],
+                context: 'housing prices and income correlation',
+                expectedSign: 1 // Positive correlation expected
+            },
+            'rates-investment': {
+                name: 'Interest Rates vs Business Investment Correlation',
+                description: 'Bank of Canada examining how interest rate changes affect business investment levels.',
+                variables: {
+                    x: { name: 'Interest Rate (%)', unit: '%' },
+                    y: { name: 'Business Investment ($ billions)', unit: '$B' }
+                },
+                testTypes: [
+                    {
+                        h0: 'H₀: ρ = 0 (No correlation)',
+                        h1: 'H₁: ρ < 0 (Negative correlation)',
+                        type: 'left-tail',
+                        direction: 'Left-tail Test'
+                    }
+                ],
+                context: 'interest rates and investment correlation',
+                expectedSign: -1 // Negative correlation expected
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            // Update button styles
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateTestData(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateTestData(scenario) {
+            const scenarioData = scenarios[scenario];
+            const testType = scenarioData.testTypes[Math.floor(Math.random() * scenarioData.testTypes.length)];
+            
+            // Generate realistic sample data
+            let sampleSize = 12 + Math.floor(Math.random() * 8); // 12-20 observations
+            let targetCorrelation = scenarioData.expectedSign * (0.4 + Math.random() * 0.5); // 0.4-0.9 correlation
+            
+            // Generate data pairs that will produce the target correlation (simplified simulation)
+            let xData = [];
+            let yData = [];
+            let xLabels = [];
+            let yLabels = [];
+            
+            // Create sample data based on scenario
+            for (let i = 0; i < sampleSize; i++) {
+                let x, y, xLabel, yLabel;
+                
+                if (scenario === 'gdp-unemployment') {
+                    x = 1 + Math.random() * 4; // GDP growth 1-5%
+                    y = 8 - targetCorrelation * 2 + (Math.random() - 0.5) * 2; // Unemployment 6-10%
+                    xLabel = x.toFixed(1);
+                    yLabel = Math.max(3, y).toFixed(1);
+                } else if (scenario === 'income-spending') {
+                    x = 60 + Math.random() * 80; // Income 60-140k
+                    y = 3000 + targetCorrelation * x * 20 + (Math.random() - 0.5) * 500;
+                    xLabel = Math.round(x);
+                    yLabel = Math.round(Math.max(2000, y));
+                } else if (scenario === 'housing-income') {
+                    x = 70 + Math.random() * 60; // Income 70-130k
+                    y = 400 + targetCorrelation * x * 3 + (Math.random() - 0.5) * 100;
+                    xLabel = Math.round(x);
+                    yLabel = Math.round(Math.max(300, y));
+                } else { // rates-investment
+                    x = 2 + Math.random() * 4; // Interest rate 2-6%
+                    y = 50 + targetCorrelation * x * 8 + (Math.random() - 0.5) * 10;
+                    xLabel = x.toFixed(1);
+                    yLabel = Math.round(Math.max(25, y));
+                }
+                
+                xData.push(x);
+                yData.push(y);
+                xLabels.push(xLabel);
+                yLabels.push(yLabel);
+            }
+            
+            // Calculate actual correlation
+            let correlation = calculateCorrelation(xData, yData);
+            
+            const alpha = 0.05;
+            
+            testData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                h0: testType.h0,
+                h1: testType.h1,
+                testType: testType.type,
+                direction: testType.direction,
+                sampleSize: sampleSize,
+                correlation: correlation,
+                xData: xData,
+                yData: yData,
+                xLabels: xLabels,
+                yLabels: yLabels,
+                xVariable: scenarioData.variables.x,
+                yVariable: scenarioData.variables.y,
+                alpha: alpha,
+                context: scenarioData.context
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrelation(xData, yData) {
+            const n = xData.length;
+            const xMean = xData.reduce((a, b) => a + b) / n;
+            const yMean = yData.reduce((a, b) => a + b) / n;
+            
+            let numerator = 0;
+            let xSumSq = 0;
+            let ySumSq = 0;
+            
+            for (let i = 0; i < n; i++) {
+                const xDev = xData[i] - xMean;
+                const yDev = yData[i] - yMean;
+                numerator += xDev * yDev;
+                xSumSq += xDev * xDev;
+                ySumSq += yDev * yDev;
+            }
+            
+            return numerator / Math.sqrt(xSumSq * ySumSq);
+        }
+
+        function calculateCorrectAnswers() {
+            const { correlation, sampleSize, alpha, testType } = testData;
+            
+            // R-squared
+            const rSquared = correlation * correlation;
+            
+            // Standard error component
+            const standardError = Math.sqrt(1 - rSquared);
+            
+            // Test Statistic
+            const testStatistic = (correlation * Math.sqrt(sampleSize - 2)) / standardError;
+            
+            // Degrees of Freedom
+            const df = sampleSize - 2;
+            
+            // Critical Values
+            let criticalValue;
+            if (testType === 'two-tail') {
+                if (df >= 30) criticalValue = 2.042;
+                else if (df >= 20) criticalValue = 2.086;
+                else if (df >= 15) criticalValue = 2.131;
+                else if (df >= 10) criticalValue = 2.228;
+                else criticalValue = 2.306;
+            } else {
+                if (df >= 30) criticalValue = 1.697;
+                else if (df >= 20) criticalValue = 1.725;
+                else if (df >= 15) criticalValue = 1.753;
+                else if (df >= 10) criticalValue = 1.812;
+                else criticalValue = 1.895;
+            }
+            
+            // P-value approximation
+            let pValue;
+            const absT = Math.abs(testStatistic);
+            if (absT > 3) pValue = 0.001;
+            else if (absT > 2.5) pValue = 0.01;
+            else if (absT > 2) pValue = 0.05;
+            else if (absT > 1.5) pValue = 0.10;
+            else pValue = 0.20;
+            
+            if (testType === 'two-tail') pValue *= 2;
+            
+            // Fisher's z-transformation for CI
+            const fisherZ = 0.5 * Math.log((1 + correlation) / (1 - correlation));
+            const zSE = 1 / Math.sqrt(sampleSize - 3);
+            const zCritical = 1.96; // For 95% CI
+            
+            const zLower = fisherZ - zCritical * zSE;
+            const zUpper = fisherZ + zCritical * zSE;
+            
+            // Transform back to correlation scale
+            const lowerBound = (Math.exp(2 * zLower) - 1) / (Math.exp(2 * zLower) + 1);
+            const upperBound = (Math.exp(2 * zUpper) - 1) / (Math.exp(2 * zUpper) + 1);
+            
+            const ciContainsZero = (lowerBound <= 0 && upperBound >= 0);
+            
+            // Decision
+            const decision = (testType === 'two-tail') ? 
+                (Math.abs(testStatistic) > criticalValue ? 'reject' : 'fail') :
+                (testType === 'right-tail' ? 
+                    (testStatistic > criticalValue ? 'reject' : 'fail') :
+                    (testStatistic < -criticalValue ? 'reject' : 'fail'));
+            
+            correctAnswers = {
+                rSquared: rSquared,
+                standardError: standardError,
+                testStatistic: testStatistic,
+                criticalValue: criticalValue,
+                pValue: pValue,
+                fisherZ: fisherZ,
+                lowerBound: lowerBound,
+                upperBound: upperBound,
+                ciContainsZero: ciContainsZero ? 'yes' : 'no',
+                decision: decision,
+                df: df
+            };
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${testData.scenario}</strong><br>${testData.description}`;
+            
+            document.getElementById('h0Display').textContent = testData.h0;
+            document.getElementById('h1Display').textContent = testData.h1;
+            document.getElementById('testTypeDisplay').textContent = testData.direction;
+            
+            document.getElementById('sampleSize').textContent = testData.sampleSize;
+            document.getElementById('observedCorrelation').textContent = testData.correlation.toFixed(3);
+            document.getElementById('degreesOfFreedom').textContent = correctAnswers.df;
+            
+            document.getElementById('variable1Label').textContent = testData.xVariable.name + ':';
+            document.getElementById('variable2Label').textContent = testData.yVariable.name + ':';
+            document.getElementById('variable1Data').textContent = testData.xLabels.join(', ');
+            document.getElementById('variable2Data').textContent = testData.yLabels.join(', ');
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = 0.01) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            return isCorrect;
+        }
+
+        function checkRSquared() {
+            return checkAnswer('rSquared', correctAnswers.rSquared, 0.001);
+        }
+
+        function checkStandardError() {
+            return checkAnswer('standardError', correctAnswers.standardError, 0.001);
+        }
+
+        function checkTestStatistic() {
+            return checkAnswer('testStatistic', correctAnswers.testStatistic, 0.05);
+        }
+
+        function checkCriticalValue() {
+            return checkAnswer('criticalValue', correctAnswers.criticalValue, 0.01);
+        }
+
+        function checkFisherZ() {
+            return checkAnswer('fisherZ', correctAnswers.fisherZ, 0.01);
+        }
+
+        function checkPValue() {
+            return checkAnswer('pValue', correctAnswers.pValue, 0.02);
+        }
+
+        function checkLowerBound() {
+            return checkAnswer('lowerBound', correctAnswers.lowerBound, 0.01);
+        }
+
+        function checkUpperBound() {
+            return checkAnswer('upperBound', correctAnswers.upperBound, 0.01);
+        }
+
+        function checkCIContainsZero() {
+            const select = document.getElementById('ciContainsZero');
+            const userAnswer = select.value;
+            const isCorrect = userAnswer === correctAnswers.ciContainsZero;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+            return isCorrect;
+        }
+
+        function checkDecision() {
+            const select = document.getElementById('decision');
+            const userAnswer = select.value;
+            const isCorrect = userAnswer === correctAnswers.decision;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+            return isCorrect;
+        }
+
+        function showAnswer(inputId) {
+            const answerDiv = document.getElementById(inputId + '-answer');
+            let correctValue = correctAnswers[inputId];
+            
+            switch(inputId) {
+                case 'rSquared':
+                    answerDiv.innerHTML = `✅ r² = ${correctValue.toFixed(4)}`;
+                    break;
+                case 'standardError':
+                    answerDiv.innerHTML = `✅ Standard Error = ${correctValue.toFixed(4)}`;
+                    break;
+                case 'testStatistic':
+                    answerDiv.innerHTML = `✅ Test Statistic (t) = ${correctValue.toFixed(3)}`;
+                    break;
+                case 'criticalValue':
+                    answerDiv.innerHTML = `✅ Critical Value = ±${correctValue.toFixed(3)}`;
+                    break;
+                case 'fisherZ':
+                    answerDiv.innerHTML = `✅ Fisher's z = ${correctValue.toFixed(3)}`;
+                    break;
+                case 'pValue':
+                    answerDiv.innerHTML = `✅ P-value ≈ ${correctValue.toFixed(3)}`;
+                    break;
+                case 'lowerBound':
+                    answerDiv.innerHTML = `✅ Lower Bound = ${correctValue.toFixed(3)}`;
+                    break;
+                case 'upperBound':
+                    answerDiv.innerHTML = `✅ Upper Bound = ${correctValue.toFixed(3)}`;
+                    break;
+                case 'ciContainsZero':
+                    const containsText = correctValue === 'yes' ? 'Yes, 0 is in the CI' : 'No, 0 is outside the CI';
+                    answerDiv.innerHTML = `✅ ${containsText}`;
+                    break;
+                case 'decision':
+                    const decisionText = correctValue === 'reject' ? 'Reject H₀ (Significant correlation)' : 'Fail to Reject H₀ (No significant correlation)';
+                    answerDiv.innerHTML = `✅ Decision: ${decisionText}`;
+                    break;
+            }
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'r-squared') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Coefficient of Determination:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> r² = r × r<br>
+                        r² = ${testData.correlation.toFixed(3)} × ${testData.correlation.toFixed(3)}<br>
+                        r² = ${correctAnswers.rSquared.toFixed(4)}<br>
+                        <strong>Interpretation:</strong> ${(correctAnswers.rSquared * 100).toFixed(1)}% of variance explained
+                    </div>
+                `;
+            } else if (stepType === 'test-statistic') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Test Statistic for Correlation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Formula:</strong> t = r × √(n-2) / √(1-r²)<br>
+                        t = ${testData.correlation.toFixed(3)} × √(${testData.sampleSize}-2) / √(1-${correctAnswers.rSquared.toFixed(4)})<br>
+                        t = ${testData.correlation.toFixed(3)} × √${correctAnswers.df} / ${correctAnswers.standardError.toFixed(4)}<br>
+                        t = ${correctAnswers.testStatistic.toFixed(3)}
+                    </div>
+                `;
+            } else if (stepType === 'confidence-interval') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Confidence Interval for Correlation:</h4>
+                    <div class="tutorial-step">
+                        <strong>Method:</strong> Fisher's z-transformation<br>
+                        z = 0.5 × ln[(1+r)/(1-r)] = ${correctAnswers.fisherZ.toFixed(3)}<br>
+                        SE(z) = 1/√(n-3) = 1/√${testData.sampleSize-3}<br>
+                        <strong>95% CI in z-scale:</strong> z ± 1.96 × SE(z)<br>
+                        <strong>Transform back to r-scale:</strong><br>
+                        Lower: ${correctAnswers.lowerBound.toFixed(3)}<br>
+                        Upper: ${correctAnswers.upperBound.toFixed(3)}
+                    </div>
+                `;
+            } else if (stepType === 'final-decision') {
+                tutorialDiv.innerHTML = `
+                    <h4>📚 Final Decision - Three Methods Must Agree:</h4>
+                    <div class="tutorial-step">
+                        <strong>Method 1:</strong> |t| = ${Math.abs(correctAnswers.testStatistic).toFixed(3)} vs ${correctAnswers.criticalValue.toFixed(3)} → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br>
+                        <strong>Method 2:</strong> p = ${correctAnswers.pValue.toFixed(3)} vs 0.05 → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br>
+                        <strong>Method 3:</strong> 0 is ${correctAnswers.ciContainsZero === 'yes' ? 'inside' : 'outside'} CI → ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                        <strong>Economic Interpretation:</strong> ${correctAnswers.decision === 'reject' ? 'Significant correlation exists between variables' : 'No significant linear relationship detected'}
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllAnswers() {
+            const results = [
+                checkRSquared(),
+                checkStandardError(),
+                checkTestStatistic(),
+                checkCriticalValue(),
+                checkFisherZ(),
+                checkPValue(),
+                checkLowerBound(),
+                checkUpperBound(),
+                checkCIContainsZero(),
+                checkDecision()
+            ];
+            
+            const correct = results.filter(r => r).length;
+            const total = results.length;
+            
+            alert(`You got ${correct}/${total} calculations correct!\n\n${correct === total ? 'Excellent! Perfect correlation analysis! 🎉' : 'Keep working on the incorrect calculations.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateTestData(currentScenario);
+                clearAllInputs();
+            } else {
+                alert('Please select an economic scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['rSquared', 'standardError', 'testStatistic', 'criticalValue', 'fisherZ', 'pValue', 'lowerBound', 'upperBound'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            const selects = ['decision', 'ciContainsZero'];
+            selects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.value = '';
+                    select.style.backgroundColor = '';
+                    select.style.borderColor = '';
+                }
+            });
+        }
+
+        function showCompleteSolution() {
+            if (!currentScenario) {
+                alert('Please select an economic scenario first.');
+                return;
+            }
+            
+            alert(`Complete Solution:\n\nScenario: ${testData.scenario}\n\nH₀: ${testData.h0}\nH₁: ${testData.h1}\n\nSample Data:\n• Sample Size: ${testData.sampleSize}\n• Correlation (r): ${testData.correlation.toFixed(3)}\n• r²: ${correctAnswers.rSquared.toFixed(4)}\n\nCalculations:\n• Test Statistic (t): ${correctAnswers.testStatistic.toFixed(3)}\n• Critical Value: ±${correctAnswers.criticalValue.toFixed(3)}\n• P-value: ${correctAnswers.pValue.toFixed(3)}\n• 95% CI: (${correctAnswers.lowerBound.toFixed(3)}, ${correctAnswers.upperBound.toFixed(3)})\n\nDecision: ${correctAnswers.decision === 'reject' ? 'Reject H₀ - Significant correlation' : 'Fail to Reject H₀ - No significant correlation'}\n\nAll three methods agree!`);
+        }
+    </script>
+</body>
+</html>
