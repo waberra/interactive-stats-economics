@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypothesis Testing Decision Fundamentals - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .fundamentals-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .three-methods-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .method-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px solid #007bff;
+            text-align: center;
+        }
+        
+        .method-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .decision-rule {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            border-left: 4px solid #28a745;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .hypothesis-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .test-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            text-align: center;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .info-value {
+            font-size: 1.4em;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .decision-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .method-practice {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .decision-row {
+            display: grid;
+            grid-template-columns: 2fr 200px 100px 100px;
+            gap: 12px;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .decision-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .decision-row select {
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .small-button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .explain-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            margin: 10px 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .explanation-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .explanation-step {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+        }
+        
+        .final-check-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #2196f3;
+        }
+        
+        .agreement-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .method-result {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .result-correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        
+        .result-incorrect {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        
+        .big-decision {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 4px solid #28a745;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .economic-interpretation {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Hypothesis Testing Decision Fundamentals</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Master the Core Logic of Statistical Decision-Making</h2>
+            <p><strong>Learn When to Reject H₀</strong> • <strong>Three Decision Methods</strong> • <strong>Canadian Economic Examples</strong></p>
+        </div>
+        
+        <div class="fundamentals-intro">
+            <h3>📚 The Foundation: Three Decision Methods That Must ALWAYS Agree</h3>
+            <p style="font-size: 1.1em; margin: 15px 0;"><strong>In every hypothesis test, these three methods will give you the SAME decision:</strong></p>
+            
+            <div class="three-methods-display">
+                <div class="method-card">
+                    <div class="method-title">🧮 Method 1: Test Statistic</div>
+                    <div class="decision-rule">
+                        <strong>Two-tail:</strong><br>
+                        If |test statistic| > critical value<br>
+                        → Reject H₀<br><br>
+                        <strong>One-tail:</strong><br>
+                        If test statistic > critical value<br>
+                        → Reject H₀
+                    </div>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-title">📊 Method 2: P-value</div>
+                    <div class="decision-rule">
+                        If p-value ≤ α<br>
+                        → Reject H₀<br><br>
+                        If p-value > α<br>
+                        → Fail to Reject H₀<br><br>
+                        <em>(Usually α = 0.05)</em>
+                    </div>
+                </div>
+                
+                <div class="method-card">
+                    <div class="method-title">🎯 Method 3: Confidence Interval</div>
+                    <div class="decision-rule">
+                        If hypothesized value is<br>
+                        OUTSIDE the CI<br>
+                        → Reject H₀<br><br>
+                        If hypothesized value is<br>
+                        INSIDE the CI<br>
+                        → Fail to Reject H₀
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📈 Choose Canadian Economic Decision Practice:
+            </div>
+            <button class="scenario-btn" onclick="chooseScenario('gdp-growth')">📊 GDP Growth Rate Test</button>
+            <button class="scenario-btn" onclick="chooseScenario('unemployment')">💼 Unemployment Rate Test</button>
+            <button class="scenario-btn" onclick="chooseScenario('housing-prices')">🏠 Housing Price Increase</button>
+            <button class="scenario-btn" onclick="chooseScenario('consumer-confidence')">📈 Consumer Confidence</button>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Economic Testing Scenario</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="hypothesis-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">🎯 Hypotheses:</div>
+                    <div id="h0Display" style="margin: 8px 0; color: #dc3545; font-weight: bold;"></div>
+                    <div id="h1Display" style="margin: 8px 0; color: #007bff; font-weight: bold;"></div>
+                    <div style="margin-top: 15px;">
+                        <strong>Test Type:</strong> <span id="testTypeDisplay" style="color: #28a745; font-weight: bold;"></span><br>
+                        <strong>Significance Level:</strong> <span style="color: #28a745; font-weight: bold;">α = 0.05</span>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff;">
+                    <div style="font-weight: bold; margin-bottom: 15px; color: #007bff;">📊 Given Information (Pre-calculated for you):</div>
+                    <div class="test-info-grid">
+                        <div class="info-box">
+                            <div class="info-label">Test Statistic</div>
+                            <div class="info-value" id="testStatValue"></div>
+                        </div>
+                        <div class="info-box">
+                            <div class="info-label">Critical Value</div>
+                            <div class="info-value" id="criticalValue"></div>
+                        </div>
+                        <div class="info-box">
+                            <div class="info-label">P-value</div>
+                            <div class="info-value" id="pValueDisplay"></div>
+                        </div>
+                    </div>
+                    <div class="test-info-grid">
+                        <div class="info-box">
+                            <div class="info-label">Confidence Interval</div>
+                            <div class="info-value" id="confidenceInterval"></div>
+                        </div>
+                        <div class="info-box">
+                            <div class="info-label">Hypothesized Value</div>
+                            <div class="info-value" id="hypothesizedValue"></div>
+                        </div>
+                        <div class="info-box">
+                            <div class="info-label">Significance Level</div>
+                            <div class="info-value">α = 0.05</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="decision-section">
+                <h3>⚖️ Practice: Apply the Three Decision Methods</h3>
+                <div class="step-instructions">
+                    <strong>Your task:</strong> Use the given information to make decisions with each method. All three must agree!
+                </div>
+                
+                <div class="method-practice">
+                    <h4 style="color: #9c27b0;">🧮 Method 1: Test Statistic Decision</h4>
+                    <div class="decision-row">
+                        <label id="method1Question">Compare |test statistic| to critical value:</label>
+                        <select id="method1Decision">
+                            <option value="">Choose decision...</option>
+                            <option value="reject">Reject H₀</option>
+                            <option value="fail">Fail to Reject H₀</option>
+                        </select>
+                        <button class="small-button check-btn" onclick="checkMethod1()">Check</button>
+                        <button class="small-button explain-btn" onclick="explainMethod1()">Explain</button>
+                    </div>
+                    <div class="explanation-box" id="method1Explanation"></div>
+                </div>
+                
+                <div class="method-practice">
+                    <h4 style="color: #9c27b0;">📊 Method 2: P-value Decision</h4>
+                    <div class="decision-row">
+                        <label>Compare p-value to α = 0.05:</label>
+                        <select id="method2Decision">
+                            <option value="">Choose decision...</option>
+                            <option value="reject">Reject H₀</option>
+                            <option value="fail">Fail to Reject H₀</option>
+                        </select>
+                        <button class="small-button check-btn" onclick="checkMethod2()">Check</button>
+                        <button class="small-button explain-btn" onclick="explainMethod2()">Explain</button>
+                    </div>
+                    <div class="explanation-box" id="method2Explanation"></div>
+                </div>
+                
+                <div class="method-practice">
+                    <h4 style="color: #9c27b0;">🎯 Method 3: Confidence Interval Decision</h4>
+                    <div class="decision-row">
+                        <label>Is hypothesized value inside or outside CI?</label>
+                        <select id="method3Decision">
+                            <option value="">Choose decision...</option>
+                            <option value="reject">Reject H₀</option>
+                            <option value="fail">Fail to Reject H₀</option>
+                        </select>
+                        <button class="small-button check-btn" onclick="checkMethod3()">Check</button>
+                        <button class="small-button explain-btn" onclick="explainMethod3()">Explain</button>
+                    </div>
+                    <div class="explanation-box" id="method3Explanation"></div>
+                </div>
+            </div>
+            
+            <div class="final-check-section">
+                <h3>✅ Step 4: Verify All Three Methods Agree</h3>
+                <div class="step-instructions">
+                    <strong>Critical Check:</strong> All three methods MUST give the same decision. If they don't, you made an error!
+                </div>
+                
+                <div class="agreement-display">
+                    <div class="method-result" id="result1">
+                        <strong>Method 1</strong><br>
+                        <span id="result1Text">Make decision first</span>
+                    </div>
+                    <div class="method-result" id="result2">
+                        <strong>Method 2</strong><br>
+                        <span id="result2Text">Make decision first</span>
+                    </div>
+                    <div class="method-result" id="result3">
+                        <strong>Method 3</strong><br>
+                        <span id="result3Text">Make decision first</span>
+                    </div>
+                </div>
+                
+                <div class="big-decision" id="finalDecision">
+                    Complete all three methods to see final decision
+                </div>
+            </div>
+            
+            <div class="economic-interpretation">
+                <h3>💼 Step 5: Economic Interpretation</h3>
+                <div id="economicMeaning" style="font-size: 1.1em;">
+                    Make your statistical decision first, then see the economic interpretation.
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New Practice Problem</button>
+            <button class="button" onclick="checkAllMethods()">✅ Check All Methods</button>
+            <button class="button" onclick="showDecisionLogic()">📖 Decision Logic Guide</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'gdp-growth': {
+                name: 'Canadian GDP Growth Rate Testing',
+                description: 'Bank of Canada economists want to test if the current quarterly GDP growth rate differs from the target of 2.5%.',
+                parameter: 'GDP Growth Rate',
+                unit: '%',
+                h0Template: 'H₀: μ = 2.5% (GDP growth equals target rate)',
+                h1Template: 'H₁: μ ≠ 2.5% (GDP growth differs from target rate)',
+                testTypeOptions: ['two-tail'],
+                economicContext: {
+                    reject: 'GDP growth is significantly different from target - monetary policy adjustment may be needed',
+                    fail: 'GDP growth is consistent with target - current monetary policy appears appropriate'
+                }
+            },
+            'unemployment': {
+                name: 'Canadian Unemployment Rate Testing',
+                description: 'Statistics Canada testing if the national unemployment rate has decreased from the previous rate of 6.2%.',
+                parameter: 'Unemployment Rate',
+                unit: '%',
+                h0Template: 'H₀: μ ≥ 6.2% (unemployment has not decreased)',
+                h1Template: 'H₁: μ < 6.2% (unemployment has decreased)',
+                testTypeOptions: ['left-tail'],
+                economicContext: {
+                    reject: 'Unemployment has significantly decreased - labor market conditions are improving',
+                    fail: 'No significant decrease in unemployment - labor market conditions remain unchanged'
+                }
+            },
+            'housing-prices': {
+                name: 'Housing Price Increase Testing',
+                description: 'CMHC examining if annual housing price increases exceed the concerning threshold of 8%.',
+                parameter: 'Annual Price Increase',
+                unit: '%',
+                h0Template: 'H₀: μ ≤ 8% (price increases are not concerning)',
+                h1Template: 'H₁: μ > 8% (price increases are concerning)',
+                testTypeOptions: ['right-tail'],
+                economicContext: {
+                    reject: 'Housing price increases are significantly above threshold - intervention policies may be needed',
+                    fail: 'Housing price increases are within acceptable range - no immediate policy action needed'
+                }
+            },
+            'consumer-confidence': {
+                name: 'Consumer Confidence Index Testing',
+                description: 'Conference Board testing if consumer confidence differs from the neutral level of 85 points.',
+                parameter: 'Confidence Index',
+                unit: 'points',
+                h0Template: 'H₀: μ = 85 (confidence is at neutral level)',
+                h1Template: 'H₁: μ ≠ 85 (confidence differs from neutral)',
+                testTypeOptions: ['two-tail'],
+                economicContext: {
+                    reject: 'Consumer confidence is significantly different from neutral - economic sentiment has shifted',
+                    fail: 'Consumer confidence is at neutral level - economic sentiment is stable'
+                }
+            }
+        };
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllSelections();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            const testType = scenarioData.testTypeOptions[Math.floor(Math.random() * scenarioData.testTypeOptions.length)];
+            
+            // Generate realistic test values based on scenario and test type
+            let testStat, criticalVal, pValue, ciLower, ciUpper, hypothesizedVal;
+            
+            if (scenario === 'gdp-growth') {
+                hypothesizedVal = 2.5;
+                testStat = (Math.random() - 0.5) * 6; // -3 to 3
+                criticalVal = 1.96; // Two-tail
+                ciLower = 2.5 + testStat * 0.3 - 0.5;
+                ciUpper = 2.5 + testStat * 0.3 + 0.5;
+            } else if (scenario === 'unemployment') {
+                hypothesizedVal = 6.2;
+                testStat = (Math.random() * 4) - 2; // -2 to 2
+                criticalVal = -1.645; // Left-tail
+                ciLower = 6.2 + testStat * 0.2 - 0.3;
+                ciUpper = 6.2 + testStat * 0.2 + 0.3;
+            } else if (scenario === 'housing-prices') {
+                hypothesizedVal = 8.0;
+                testStat = (Math.random() * 4) - 1; // -1 to 3
+                criticalVal = 1.645; // Right-tail
+                ciLower = 8.0 + testStat * 0.4 - 0.4;
+                ciUpper = 8.0 + testStat * 0.4 + 0.4;
+            } else { // consumer-confidence
+                hypothesizedVal = 85;
+                testStat = (Math.random() - 0.5) * 5; // -2.5 to 2.5
+                criticalVal = 1.96; // Two-tail
+                ciLower = 85 + testStat * 2 - 3;
+                ciUpper = 85 + testStat * 2 + 3;
+            }
+            
+            // Calculate p-value based on test statistic and type
+            if (testType === 'two-tail') {
+                if (Math.abs(testStat) > 2.58) pValue = 0.01;
+                else if (Math.abs(testStat) > 1.96) pValue = 0.05;
+                else if (Math.abs(testStat) > 1.645) pValue = 0.10;
+                else pValue = 0.15;
+            } else if (testType === 'right-tail') {
+                if (testStat > 2.33) pValue = 0.01;
+                else if (testStat > 1.645) pValue = 0.05;
+                else if (testStat > 1.28) pValue = 0.10;
+                else pValue = 0.20;
+            } else { // left-tail
+                if (testStat < -2.33) pValue = 0.01;
+                else if (testStat < -1.645) pValue = 0.05;
+                else if (testStat < -1.28) pValue = 0.10;
+                else pValue = 0.20;
+            }
+            
+            // Determine correct decisions
+            let decision1, decision2, decision3;
+            
+            // Method 1: Test statistic
+            if (testType === 'two-tail') {
+                decision1 = Math.abs(testStat) > Math.abs(criticalVal) ? 'reject' : 'fail';
+            } else if (testType === 'right-tail') {
+                decision1 = testStat > criticalVal ? 'reject' : 'fail';
+            } else { // left-tail
+                decision1 = testStat < criticalVal ? 'reject' : 'fail';
+            }
+            
+            // Method 2: P-value
+            decision2 = pValue <= 0.05 ? 'reject' : 'fail';
+            
+            // Method 3: Confidence interval
+            decision3 = (hypothesizedVal < ciLower || hypothesizedVal > ciUpper) ? 'reject' : 'fail';
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                parameter: scenarioData.parameter,
+                unit: scenarioData.unit,
+                h0: scenarioData.h0Template,
+                h1: scenarioData.h1Template,
+                testType: testType,
+                testStat: testStat,
+                criticalVal: criticalVal,
+                pValue: pValue,
+                ciLower: ciLower,
+                ciUpper: ciUpper,
+                hypothesizedVal: hypothesizedVal,
+                economicContext: scenarioData.economicContext
+            };
+            
+            correctAnswers = {
+                method1: decision1,
+                method2: decision2,
+                method3: decision3
+            };
+            
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            document.getElementById('h0Display').textContent = problemData.h0;
+            document.getElementById('h1Display').textContent = problemData.h1;
+            document.getElementById('testTypeDisplay').textContent = 
+                problemData.testType === 'two-tail' ? 'Two-tail test' :
+                problemData.testType === 'right-tail' ? 'Right-tail test' : 'Left-tail test';
+            
+            document.getElementById('testStatValue').textContent = problemData.testStat.toFixed(3);
+            document.getElementById('criticalValue').textContent = 
+                problemData.testType === 'two-tail' ? `±${Math.abs(problemData.criticalVal).toFixed(3)}` :
+                problemData.criticalVal.toFixed(3);
+            document.getElementById('pValueDisplay').textContent = problemData.pValue.toFixed(3);
+            document.getElementById('confidenceInterval').textContent = 
+                `(${problemData.ciLower.toFixed(2)}, ${problemData.ciUpper.toFixed(2)})`;
+            document.getElementById('hypothesizedValue').textContent = 
+                `${problemData.hypothesizedVal} ${problemData.unit}`;
+            
+            // Update method 1 question based on test type
+            let method1Text = '';
+            if (problemData.testType === 'two-tail') {
+                method1Text = `|${problemData.testStat.toFixed(3)}| vs ${Math.abs(problemData.criticalVal).toFixed(3)}:`;
+            } else if (problemData.testType === 'right-tail') {
+                method1Text = `${problemData.testStat.toFixed(3)} vs ${problemData.criticalVal.toFixed(3)}:`;
+            } else {
+                method1Text = `${problemData.testStat.toFixed(3)} vs ${problemData.criticalVal.toFixed(3)}:`;
+            }
+            document.getElementById('method1Question').textContent = method1Text;
+        }
+
+        function checkMethod(methodNum) {
+            const selectId = `method${methodNum}Decision`;
+            const resultId = `result${methodNum}`;
+            const resultTextId = `result${methodNum}Text`;
+            
+            const select = document.getElementById(selectId);
+            const userAnswer = select.value;
+            const correctAnswer = correctAnswers[`method${methodNum}`];
+            
+            if (userAnswer === '') {
+                select.style.backgroundColor = '';
+                return false;
+            }
+            
+            const isCorrect = userAnswer === correctAnswer;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
+            
+            // Update result display
+            const resultDiv = document.getElementById(resultId);
+            const resultText = document.getElementById(resultTextId);
+            
+            if (isCorrect) {
+                resultDiv.className = 'method-result result-correct';
+                resultText.textContent = userAnswer === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀';
+            } else {
+                resultDiv.className = 'method-result result-incorrect';
+                resultText.textContent = 'Incorrect';
+            }
+            
+            checkAgreement();
+            return isCorrect;
+        }
+
+        function checkMethod1() { return checkMethod(1); }
+        function checkMethod2() { return checkMethod(2); }
+        function checkMethod3() { return checkMethod(3); }
+
+        function explainMethod1() {
+            const explanationDiv = document.getElementById('method1Explanation');
+            const testType = problemData.testType;
+            const testStat = problemData.testStat;
+            const criticalVal = problemData.criticalVal;
+            const correctDecision = correctAnswers.method1;
+            
+            let explanation = '';
+            if (testType === 'two-tail') {
+                const absTestStat = Math.abs(testStat);
+                const absCritical = Math.abs(criticalVal);
+                explanation = `
+                    <div class="explanation-step">
+                        <strong>Two-tail Test Logic:</strong><br>
+                        We use |test statistic| = |${testStat.toFixed(3)}| = ${absTestStat.toFixed(3)}<br>
+                        Critical value = ±${absCritical.toFixed(3)}<br><br>
+                        <strong>Decision Rule:</strong> If |test statistic| > critical value → Reject H₀<br>
+                        ${absTestStat.toFixed(3)} ${absTestStat > absCritical ? '>' : '≤'} ${absCritical.toFixed(3)}<br>
+                        <strong>Decision:</strong> ${correctDecision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}
+                    </div>
+                `;
+            } else if (testType === 'right-tail') {
+                explanation = `
+                    <div class="explanation-step">
+                        <strong>Right-tail Test Logic:</strong><br>
+                        Test statistic = ${testStat.toFixed(3)}<br>
+                        Critical value = ${criticalVal.toFixed(3)}<br><br>
+                        <strong>Decision Rule:</strong> If test statistic > critical value → Reject H₀<br>
+                        ${testStat.toFixed(3)} ${testStat > criticalVal ? '>' : '≤'} ${criticalVal.toFixed(3)}<br>
+                        <strong>Decision:</strong> ${correctDecision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}
+                    </div>
+                `;
+            } else { // left-tail
+                explanation = `
+                    <div class="explanation-step">
+                        <strong>Left-tail Test Logic:</strong><br>
+                        Test statistic = ${testStat.toFixed(3)}<br>
+                        Critical value = ${criticalVal.toFixed(3)}<br><br>
+                        <strong>Decision Rule:</strong> If test statistic < critical value → Reject H₀<br>
+                        ${testStat.toFixed(3)} ${testStat < criticalVal ? '<' : '≥'} ${criticalVal.toFixed(3)}<br>
+                        <strong>Decision:</strong> ${correctDecision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}
+                    </div>
+                `;
+            }
+            
+            explanationDiv.innerHTML = explanation;
+            explanationDiv.style.display = explanationDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainMethod2() {
+            const explanationDiv = document.getElementById('method2Explanation');
+            const pValue = problemData.pValue;
+            const correctDecision = correctAnswers.method2;
+            
+            const explanation = `
+                <div class="explanation-step">
+                    <strong>P-value Method Logic:</strong><br>
+                    P-value = ${pValue.toFixed(3)}<br>
+                    Significance level α = 0.05<br><br>
+                    <strong>Decision Rule:</strong> If p-value ≤ α → Reject H₀<br>
+                    ${pValue.toFixed(3)} ${pValue <= 0.05 ? '≤' : '>'} 0.05<br>
+                    <strong>Decision:</strong> ${correctDecision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                    <strong>Interpretation:</strong> ${pValue <= 0.05 ? 
+                        'Very unlikely to see this result if H₀ were true' : 
+                        'Could reasonably see this result even if H₀ were true'}
+                </div>
+            `;
+            
+            explanationDiv.innerHTML = explanation;
+            explanationDiv.style.display = explanationDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function explainMethod3() {
+            const explanationDiv = document.getElementById('method3Explanation');
+            const ciLower = problemData.ciLower;
+            const ciUpper = problemData.ciUpper;
+            const hypothesizedVal = problemData.hypothesizedVal;
+            const correctDecision = correctAnswers.method3;
+            const isInside = hypothesizedVal >= ciLower && hypothesizedVal <= ciUpper;
+            
+            const explanation = `
+                <div class="explanation-step">
+                    <strong>Confidence Interval Method Logic:</strong><br>
+                    95% CI = (${ciLower.toFixed(2)}, ${ciUpper.toFixed(2)})<br>
+                    Hypothesized value = ${hypothesizedVal}<br><br>
+                    <strong>Check:</strong> Is ${hypothesizedVal} between ${ciLower.toFixed(2)} and ${ciUpper.toFixed(2)}?<br>
+                    Answer: ${isInside ? 'YES (inside)' : 'NO (outside)'}<br><br>
+                    <strong>Decision Rule:</strong> If hypothesized value is outside CI → Reject H₀<br>
+                    <strong>Decision:</strong> ${correctDecision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
+                    <strong>Logic:</strong> ${isInside ? 
+                        'The hypothesized value is plausible given our data' : 
+                        'The hypothesized value is not plausible given our data'}
+                </div>
+            `;
+            
+            explanationDiv.innerHTML = explanation;
+            explanationDiv.style.display = explanationDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAgreement() {
+            const decision1 = document.getElementById('method1Decision').value;
+            const decision2 = document.getElementById('method2Decision').value;
+            const decision3 = document.getElementById('method3Decision').value;
+            
+            if (decision1 && decision2 && decision3) {
+                const allAgree = (decision1 === decision2) && (decision2 === decision3);
+                const allCorrect = (decision1 === correctAnswers.method1) && 
+                                 (decision2 === correctAnswers.method2) && 
+                                 (decision3 === correctAnswers.method3);
+                
+                const finalDecisionDiv = document.getElementById('finalDecision');
+                const economicMeaningDiv = document.getElementById('economicMeaning');
+                
+                if (allCorrect && allAgree) {
+                    finalDecisionDiv.style.backgroundColor = '#d4edda';
+                    finalDecisionDiv.style.borderColor = '#c3e6cb';
+                    finalDecisionDiv.innerHTML = `🎉 PERFECT! All three methods agree: <strong>${decision1 === 'reject' ? 'REJECT H₀' : 'FAIL TO REJECT H₀'}</strong>`;
+                    
+                    const economicText = decision1 === 'reject' ? 
+                        problemData.economicContext.reject : 
+                        problemData.economicContext.fail;
+                    economicMeaningDiv.innerHTML = `<strong>Economic Interpretation:</strong><br>${economicText}`;
+                } else if (allAgree) {
+                    finalDecisionDiv.style.backgroundColor = '#fff3cd';
+                    finalDecisionDiv.style.borderColor = '#ffeaa7';
+                    finalDecisionDiv.innerHTML = `⚠️ Methods agree but check your logic: <strong>${decision1 === 'reject' ? 'REJECT H₀' : 'FAIL TO REJECT H₀'}</strong>`;
+                } else {
+                    finalDecisionDiv.style.backgroundColor = '#f8d7da';
+                    finalDecisionDiv.style.borderColor = '#f5c6cb';
+                    finalDecisionDiv.innerHTML = `❌ Methods don't agree! Check your decisions - they must all be the same.`;
+                }
+            }
+        }
+
+        function checkAllMethods() {
+            const results = [checkMethod1(), checkMethod2(), checkMethod3()];
+            const correct = results.filter(r => r).length;
+            
+            if (correct === 3) {
+                alert(`🎉 Perfect! All three methods are correct and agree!\n\nFinal Decision: ${correctAnswers.method1 === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}\n\nYou've mastered the fundamental logic of hypothesis testing!`);
+            } else {
+                alert(`You got ${correct}/3 methods correct. Use the "Explain" buttons to understand the logic, then try again!`);
+            }
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateProblem(currentScenario);
+                clearAllSelections();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllSelections() {
+            const selects = ['method1Decision', 'method2Decision', 'method3Decision'];
+            selects.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.value = '';
+                    select.style.backgroundColor = '';
+                    select.style.borderColor = '';
+                }
+            });
+            
+            // Reset result displays
+            for (let i = 1; i <= 3; i++) {
+                const resultDiv = document.getElementById(`result${i}`);
+                const resultText = document.getElementById(`result${i}Text`);
+                if (resultDiv && resultText) {
+                    resultDiv.className = 'method-result';
+                    resultText.textContent = 'Make decision first';
+                }
+            }
+            
+            // Reset final decision
+            const finalDecisionDiv = document.getElementById('finalDecision');
+            if (finalDecisionDiv) {
+                finalDecisionDiv.style.backgroundColor = '';
+                finalDecisionDiv.style.borderColor = '';
+                finalDecisionDiv.textContent = 'Complete all three methods to see final decision';
+            }
+            
+            // Reset economic meaning
+            const economicMeaningDiv = document.getElementById('economicMeaning');
+            if (economicMeaningDiv) {
+                economicMeaningDiv.textContent = 'Make your statistical decision first, then see the economic interpretation.';
+            }
+            
+            // Hide explanations
+            ['method1Explanation', 'method2Explanation', 'method3Explanation'].forEach(id => {
+                const div = document.getElementById(id);
+                if (div) div.style.display = 'none';
+            });
+        }
+
+        function showDecisionLogic() {
+            alert(`🎯 Hypothesis Testing Decision Logic:\n\n` +
+                `THREE METHODS - SAME DECISION:\n\n` +
+                `1. TEST STATISTIC:\n` +
+                `   • Two-tail: |test stat| > critical → Reject\n` +
+                `   • Right-tail: test stat > critical → Reject\n` +
+                `   • Left-tail: test stat < critical → Reject\n\n` +
+                `2. P-VALUE:\n` +
+                `   • If p ≤ α → Reject H₀\n` +
+                `   • If p > α → Fail to Reject H₀\n\n` +
+                `3. CONFIDENCE INTERVAL:\n` +
+                `   • If hypothesized value OUTSIDE CI → Reject H₀\n` +
+                `   • If hypothesized value INSIDE CI → Fail to Reject H₀\n\n` +
+                `KEY PRINCIPLE: All three methods MUST give the same decision!`);
+        }
+    </script>
+</body>
+</html>
