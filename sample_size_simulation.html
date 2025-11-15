@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Size Calculator - Statistics Education Simulation</title>
+    <style>
+        :root {
+            --primary-blue: #2c3e50;
+            --accent-blue: #3498db;
+            --success-green: #27ae60;
+            --warning-orange: #f39c12;
+            --danger-red: #e74c3c;
+            --light-gray: #ecf0f1;
+            --dark-gray: #7f8c8d;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--primary-blue);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .simulation-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .simulation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent-blue);
+        }
+
+        .card-header h2 {
+            color: var(--primary-blue);
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .card-header .subtitle {
+            color: var(--dark-gray);
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-blue);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-control {
+            padding: 12px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .input-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .unit-label {
+            font-weight: 500;
+            color: var(--dark-gray);
+            min-width: 80px;
+        }
+
+        .scenario-selector {
+            background: var(--light-gray);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-selector h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .scenario-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .scenario-btn {
+            background: white;
+            border: 2px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .scenario-btn:hover, .scenario-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, var(--success-green), #2ecc71);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border-left: 5px solid var(--success-green);
+        }
+
+        .result-section.hidden {
+            display: none;
+        }
+
+        .result-header {
+            color: var(--success-green);
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-main {
+            background: var(--success-green);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .solution-steps {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .solution-step {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .solution-step .step-title {
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+
+        .formula {
+            background: var(--light-gray);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: 2px solid var(--accent-blue);
+        }
+
+        .interpretation {
+            background: var(--warning-orange);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .interpretation h4 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .footer-info {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .footer-info h3 {
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+        }
+
+        .reference-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .reference-card {
+            background: var(--light-gray);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .reference-card h4 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .reference-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reference-card li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .reference-card li::before {
+            content: "•";
+            color: var(--accent-blue);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .toggle-section {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin: 10px 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-section:hover {
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error-message {
+            background: var(--danger-red);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .simulation-card {
+                padding: 20px;
+            }
+            
+            .scenario-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation classes */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd, #ffeeba);
+            border: 2px solid var(--warning-orange);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Sample Size Calculator</h1>
+            <p>Interactive Statistical Simulation for Population Mean and Proportion Studies</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Population Mean Sample Size Calculator -->
+            <div class="simulation-card">
+                <div class="card-header">
+                    <h2>📈 Population Mean</h2>
+                    <div class="subtitle">Sample Size Calculation (σ known)</div>
+                </div>
+
+                <div class="scenario-selector">
+                    <h4>Select Research Scenario:</h4>
+                    <div class="scenario-buttons" id="meanScenarios">
+                        <button class="scenario-btn active" onclick="setMeanScenario('manufacturing', this)">Manufacturing Quality</button>
+                        <button class="scenario-btn" onclick="setMeanScenario('satisfaction', this)">Customer Survey</button>
+                        <button class="scenario-btn" onclick="setMeanScenario('academic', this)">Academic Performance</button>
+                        <button class="scenario-btn" onclick="setMeanScenario('medical', this)">Medical Research</button>
+                    </div>
+                </div>
+
+                <div id="meanScenarioDescription" class="scenario-description">
+                    <p><strong>Manufacturing Quality Control:</strong> Estimating the mean weight of manufactured products with known population standard deviation from historical data.</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="meanConfidence">Confidence Level:</label>
+                    <div class="input-row">
+                        <select id="meanConfidence" class="input-control">
+                            <option value="90">90%</option>
+                            <option value="95" selected>95%</option>
+                            <option value="99">99%</option>
+                        </select>
+                        <span class="unit-label">confidence</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="meanSigma">Population Standard Deviation (σ):</label>
+                    <div class="input-row">
+                        <input type="number" id="meanSigma" class="input-control" value="2.5" step="0.1" min="0.1">
+                        <span class="unit-label" id="meanSigmaUnit">grams</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="meanMargin">Desired Margin of Error (E):</label>
+                    <div class="input-row">
+                        <input type="number" id="meanMargin" class="input-control" value="0.5" step="0.1" min="0.1">
+                        <span class="unit-label" id="meanMarginUnit">grams</span>
+                    </div>
+                </div>
+
+                <button class="calculate-btn" onclick="calculateMeanSampleSize()">Calculate Sample Size</button>
+
+                <div class="error-message" id="meanError"></div>
+
+                <div class="result-section hidden" id="meanResult">
+                    <div class="result-header">
+                        ✅ Sample Size Calculation Results
+                    </div>
+                    <div class="result-main" id="meanSampleSize">
+                        <!-- Results will be populated here -->
+                    </div>
+                    <div class="solution-steps" id="meanSolution">
+                        <!-- Solution steps will be populated here -->
+                    </div>
+                    <div class="interpretation" id="meanInterpretation">
+                        <!-- Interpretation will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Population Proportion Sample Size Calculator -->
+            <div class="simulation-card">
+                <div class="card-header">
+                    <h2>📊 Population Proportion</h2>
+                    <div class="subtitle">Sample Size Calculation</div>
+                </div>
+
+                <div class="scenario-selector">
+                    <h4>Select Research Scenario:</h4>
+                    <div class="scenario-buttons" id="propScenarios">
+                        <button class="scenario-btn active" onclick="setPropScenario('treatment', this)">Treatment Study</button>
+                        <button class="scenario-btn" onclick="setPropScenario('polling', this)">Political Polling</button>
+                        <button class="scenario-btn" onclick="setPropScenario('quality', this)">Quality Control</button>
+                        <button class="scenario-btn" onclick="setPropScenario('marketing', this)">Market Research</button>
+                    </div>
+                </div>
+
+                <div id="propScenarioDescription" class="scenario-description">
+                    <p><strong>Treatment Effectiveness Study:</strong> Estimating the proportion of patients who respond positively to a new medical treatment.</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="propConfidence">Confidence Level:</label>
+                    <div class="input-row">
+                        <select id="propConfidence" class="input-control">
+                            <option value="90">90%</option>
+                            <option value="95" selected>95%</option>
+                            <option value="99">99%</option>
+                        </select>
+                        <span class="unit-label">confidence</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="propMargin">Desired Margin of Error (E):</label>
+                    <div class="input-row">
+                        <input type="number" id="propMargin" class="input-control" value="0.03" step="0.001" min="0.001" max="0.5">
+                        <span class="unit-label">proportion</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        <input type="checkbox" id="usePrior" onchange="togglePriorEstimate()"> 
+                        Use prior proportion estimate
+                    </label>
+                </div>
+
+                <div class="input-group hidden" id="priorGroup">
+                    <label for="priorP">Prior Proportion Estimate (p):</label>
+                    <div class="input-row">
+                        <input type="number" id="priorP" class="input-control" value="0.65" step="0.01" min="0.01" max="0.99">
+                        <span class="unit-label">proportion</span>
+                    </div>
+                </div>
+
+                <button class="calculate-btn" onclick="calculatePropSampleSize()">Calculate Sample Size</button>
+
+                <div class="error-message" id="propError"></div>
+
+                <div class="result-section hidden" id="propResult">
+                    <div class="result-header">
+                        ✅ Sample Size Calculation Results
+                    </div>
+                    <div class="result-main" id="propSampleSize">
+                        <!-- Results will be populated here -->
+                    </div>
+                    <div class="solution-steps" id="propSolution">
+                        <!-- Solution steps will be populated here -->
+                    </div>
+                    <div class="interpretation" id="propInterpretation">
+                        <!-- Interpretation will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-info">
+            <h3>🎓 Understanding Sample Size Calculations</h3>
+            <p>Sample size determination is crucial for research planning, ensuring adequate statistical power while managing resource constraints.</p>
+            
+            <div class="reference-section">
+                <div class="reference-card">
+                    <h4>Population Mean Formula</h4>
+                    <div class="formula">n = (z<sub>α/2</sub> × σ / E)²</div>
+                    <ul>
+                        <li><strong>n</strong> = required sample size</li>
+                        <li><strong>z<sub>α/2</sub></strong> = critical value</li>
+                        <li><strong>σ</strong> = population standard deviation</li>
+                        <li><strong>E</strong> = desired margin of error</li>
+                    </ul>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Population Proportion Formula</h4>
+                    <div class="formula">n = z²<sub>α/2</sub> × p × (1-p) / E²</div>
+                    <ul>
+                        <li><strong>n</strong> = required sample size</li>
+                        <li><strong>z<sub>α/2</sub></strong> = critical value</li>
+                        <li><strong>p</strong> = estimated proportion</li>
+                        <li><strong>E</strong> = desired margin of error</li>
+                    </ul>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Critical Values</h4>
+                    <ul>
+                        <li><strong>90% confidence:</strong> z = 1.645</li>
+                        <li><strong>95% confidence:</strong> z = 1.96</li>
+                        <li><strong>99% confidence:</strong> z = 2.576</li>
+                    </ul>
+                    <p><em>Higher confidence requires larger samples</em></p>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Key Principles</h4>
+                    <ul>
+                        <li><strong>Always round UP</strong> to nearest whole number</li>
+                        <li><strong>Smaller margin of error</strong> = larger sample needed</li>
+                        <li><strong>Higher confidence</strong> = larger sample needed</li>
+                        <li><strong>Use p = 0.5</strong> for worst-case scenario</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scenario data
+        const meanScenarios = {
+            manufacturing: {
+                description: "<strong>Manufacturing Quality Control:</strong> Estimating the mean weight of manufactured products with known population standard deviation from historical data.",
+                sigmaDefault: 2.5,
+                marginDefault: 0.5,
+                unit: "grams",
+                context: "widget weight estimation"
+            },
+            satisfaction: {
+                description: "<strong>Customer Satisfaction Survey:</strong> Estimating the average satisfaction score on a standardized scale with known population variability.",
+                sigmaDefault: 1.8,
+                marginDefault: 0.3,
+                unit: "points",
+                context: "satisfaction score analysis"
+            },
+            academic: {
+                description: "<strong>Academic Performance Analysis:</strong> Estimating the mean test score with known standard deviation from previous years.",
+                sigmaDefault: 12.0,
+                marginDefault: 3.0,
+                unit: "points",
+                context: "test score evaluation"
+            },
+            medical: {
+                description: "<strong>Medical Research Study:</strong> Estimating the average blood pressure reduction with known population standard deviation.",
+                sigmaDefault: 6.5,
+                marginDefault: 2.0,
+                unit: "mmHg",
+                context: "blood pressure analysis"
+            }
+        };
+
+        const propScenarios = {
+            treatment: {
+                description: "<strong>Treatment Effectiveness Study:</strong> Estimating the proportion of patients who respond positively to a new medical treatment.",
+                marginDefault: 0.04,
+                priorDefault: 0.65,
+                context: "treatment response rate"
+            },
+            polling: {
+                description: "<strong>Political Polling Analysis:</strong> Estimating the proportion of voters who support a candidate or policy initiative.",
+                marginDefault: 0.03,
+                priorDefault: 0.5,
+                context: "voter support estimation"
+            },
+            quality: {
+                description: "<strong>Quality Control Inspection:</strong> Estimating the proportion of products that meet quality standards in manufacturing.",
+                marginDefault: 0.02,
+                priorDefault: 0.85,
+                context: "quality pass rate"
+            },
+            marketing: {
+                description: "<strong>Market Research Campaign:</strong> Estimating the proportion of consumers who prefer a new product design or feature.",
+                marginDefault: 0.05,
+                priorDefault: 0.45,
+                context: "consumer preference rate"
+            }
+        };
+
+        // Set mean scenario
+        function setMeanScenario(scenario, buttonElement) {
+            // Update active button
+            document.querySelectorAll('#meanScenarios .scenario-btn').forEach(btn => btn.classList.remove('active'));
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            } else {
+                // Find and activate the button for initial load
+                document.querySelectorAll('#meanScenarios .scenario-btn').forEach(btn => {
+                    if (btn.onclick.toString().includes(scenario)) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+            
+            // Update description
+            document.getElementById('meanScenarioDescription').innerHTML = `<p>${meanScenarios[scenario].description}</p>`;
+            
+            // Update default values
+            document.getElementById('meanSigma').value = meanScenarios[scenario].sigmaDefault;
+            document.getElementById('meanMargin').value = meanScenarios[scenario].marginDefault;
+            document.getElementById('meanSigmaUnit').textContent = meanScenarios[scenario].unit;
+            document.getElementById('meanMarginUnit').textContent = meanScenarios[scenario].unit;
+            
+            // Hide results
+            document.getElementById('meanResult').classList.add('hidden');
+        }
+
+        // Set proportion scenario
+        function setPropScenario(scenario, buttonElement) {
+            // Update active button
+            document.querySelectorAll('#propScenarios .scenario-btn').forEach(btn => btn.classList.remove('active'));
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            } else {
+                // Find and activate the button for initial load
+                document.querySelectorAll('#propScenarios .scenario-btn').forEach(btn => {
+                    if (btn.onclick.toString().includes(scenario)) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+            
+            // Update description
+            document.getElementById('propScenarioDescription').innerHTML = `<p>${propScenarios[scenario].description}</p>`;
+            
+            // Update default values
+            document.getElementById('propMargin').value = propScenarios[scenario].marginDefault;
+            document.getElementById('priorP').value = propScenarios[scenario].priorDefault;
+            
+            // Hide results
+            document.getElementById('propResult').classList.add('hidden');
+        }
+
+        // Toggle prior estimate input
+        function togglePriorEstimate() {
+            const usePrior = document.getElementById('usePrior').checked;
+            const priorGroup = document.getElementById('priorGroup');
+            
+            if (usePrior) {
+                priorGroup.classList.remove('hidden');
+            } else {
+                priorGroup.classList.add('hidden');
+            }
+        }
+
+        // Calculate mean sample size
+        function calculateMeanSampleSize() {
+            // Get input values
+            const confidence = parseInt(document.getElementById('meanConfidence').value);
+            const sigma = parseFloat(document.getElementById('meanSigma').value);
+            const margin = parseFloat(document.getElementById('meanMargin').value);
+            
+            // Validate inputs
+            if (isNaN(sigma) || sigma <= 0) {
+                showError('meanError', 'Population standard deviation must be a positive number.');
+                return;
+            }
+            
+            if (isNaN(margin) || margin <= 0) {
+                showError('meanError', 'Margin of error must be a positive number.');
+                return;
+            }
+            
+            hideError('meanError');
+            
+            // Get critical value
+            let zCritical;
+            switch(confidence) {
+                case 90: zCritical = 1.645; break;
+                case 95: zCritical = 1.96; break;
+                case 99: zCritical = 2.576; break;
+            }
+            
+            // Calculate sample size
+            const nExact = Math.pow(zCritical * sigma / margin, 2);
+            const nRequired = Math.ceil(nExact);
+            
+            // Display results
+            displayMeanResults(confidence, sigma, margin, zCritical, nExact, nRequired);
+        }
+
+        // Calculate proportion sample size
+        function calculatePropSampleSize() {
+            // Get input values
+            const confidence = parseInt(document.getElementById('propConfidence').value);
+            const margin = parseFloat(document.getElementById('propMargin').value);
+            const usePrior = document.getElementById('usePrior').checked;
+            const priorP = usePrior ? parseFloat(document.getElementById('priorP').value) : 0.5;
+            
+            // Validate inputs
+            if (isNaN(margin) || margin <= 0 || margin >= 1) {
+                showError('propError', 'Margin of error must be between 0 and 1.');
+                return;
+            }
+            
+            if (usePrior && (isNaN(priorP) || priorP <= 0 || priorP >= 1)) {
+                showError('propError', 'Prior proportion estimate must be between 0 and 1.');
+                return;
+            }
+            
+            hideError('propError');
+            
+            // Get critical value
+            let zCritical;
+            switch(confidence) {
+                case 90: zCritical = 1.645; break;
+                case 95: zCritical = 1.96; break;
+                case 99: zCritical = 2.576; break;
+            }
+            
+            // Calculate sample size
+            const p = priorP;
+            const q = 1 - p;
+            const nExact = Math.pow(zCritical, 2) * p * q / Math.pow(margin, 2);
+            const nRequired = Math.ceil(nExact);
+            
+            // Display results
+            displayPropResults(confidence, margin, p, q, zCritical, nExact, nRequired, usePrior);
+        }
+
+        // Display mean results
+        function displayMeanResults(confidence, sigma, margin, zCritical, nExact, nRequired) {
+            const unit = document.getElementById('meanSigmaUnit').textContent;
+            
+            // Main result
+            document.getElementById('meanSampleSize').innerHTML = `
+                <div>Minimum Sample Size Required</div>
+                <div style="font-size: 1.4em; margin-top: 10px;">${nRequired} participants</div>
+            `;
+            
+            // Solution steps
+            document.getElementById('meanSolution').innerHTML = `
+                <h4 style="color: var(--primary-blue); margin-bottom: 15px;">📋 Step-by-Step Solution</h4>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 1: Identify the Formula</div>
+                    <div class="formula">n = (z<sub>α/2</sub> × σ / E)²</div>
+                    <p>This formula is used when estimating a population mean with known standard deviation.</p>
+                </div>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 2: Determine Critical Value</div>
+                    <p>For ${confidence}% confidence level: <strong>z<sub>α/2</sub> = ${zCritical}</strong></p>
+                    <p>• α = ${(100-confidence)/100}, so α/2 = ${(100-confidence)/200}</p>
+                </div>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 3: Substitute Values</div>
+                    <div class="formula">n = (${zCritical} × ${sigma} / ${margin})²</div>
+                    <div class="formula">n = (${(zCritical * sigma / margin).toFixed(3)})²</div>
+                    <div class="formula">n = ${nExact.toFixed(2)}</div>
+                </div>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 4: Round Up</div>
+                    <p>Since we cannot have a fraction of a participant, we round <strong>UP</strong> to ensure we meet the desired precision.</p>
+                    <p><strong>Final Answer: n = ${nRequired} participants</strong></p>
+                </div>
+            `;
+            
+            // Interpretation
+            document.getElementById('meanInterpretation').innerHTML = `
+                <h4>💡 Research Interpretation</h4>
+                <p>To estimate the population mean within ±${margin} ${unit} with ${confidence}% confidence, you need to collect data from at least <strong>${nRequired} participants</strong>.</p>
+                <p>This sample size ensures that your confidence interval will have the desired precision, assuming the population standard deviation is ${sigma} ${unit}.</p>
+            `;
+            
+            // Show results with animation
+            const resultSection = document.getElementById('meanResult');
+            resultSection.classList.remove('hidden');
+            resultSection.classList.add('animate-in');
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Display proportion results
+        function displayPropResults(confidence, margin, p, q, zCritical, nExact, nRequired, usePrior) {
+            // Main result
+            document.getElementById('propSampleSize').innerHTML = `
+                <div>Minimum Sample Size Required</div>
+                <div style="font-size: 1.4em; margin-top: 10px;">${nRequired} participants</div>
+            `;
+            
+            // Solution steps
+            const priorText = usePrior ? 
+                `<p>Using prior estimate: p = ${p.toFixed(3)}</p><p>Therefore: q = 1 - p = ${q.toFixed(3)}</p>` : 
+                `<p>No prior estimate available, using worst-case scenario: p = 0.5</p><p>This maximizes p × (1-p) and provides the most conservative sample size.</p><p>Therefore: q = 1 - p = 0.5</p>`;
+            
+            document.getElementById('propSolution').innerHTML = `
+                <h4 style="color: var(--primary-blue); margin-bottom: 15px;">📋 Step-by-Step Solution</h4>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 1: Identify the Formula</div>
+                    <div class="formula">n = z²<sub>α/2</sub> × p × (1-p) / E²</div>
+                    <p>This formula is used when estimating a population proportion.</p>
+                </div>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 2: Determine Critical Value</div>
+                    <p>For ${confidence}% confidence level: <strong>z<sub>α/2</sub> = ${zCritical}</strong></p>
+                </div>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 3: Determine Proportion Estimate</div>
+                    ${priorText}
+                </div>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 4: Substitute Values</div>
+                    <div class="formula">n = (${zCritical})² × ${p.toFixed(3)} × ${q.toFixed(3)} / (${margin})²</div>
+                    <div class="formula">n = ${(zCritical * zCritical).toFixed(3)} × ${(p * q).toFixed(6)} / ${(margin * margin).toFixed(6)}</div>
+                    <div class="formula">n = ${nExact.toFixed(2)}</div>
+                </div>
+                
+                <div class="solution-step">
+                    <div class="step-title">Step 5: Round Up</div>
+                    <p>Since we cannot have a fraction of a participant, we round <strong>UP</strong> to ensure we meet the desired precision.</p>
+                    <p><strong>Final Answer: n = ${nRequired} participants</strong></p>
+                </div>
+            `;
+            
+            // Interpretation
+            const scenarioText = usePrior ? 
+                `Based on the prior estimate of ${(p*100).toFixed(1)}%` : 
+                `Using the conservative approach (no prior information)`;
+            
+            document.getElementById('propInterpretation').innerHTML = `
+                <h4>💡 Research Interpretation</h4>
+                <p>To estimate the population proportion within ±${margin} with ${confidence}% confidence, you need to collect data from at least <strong>${nRequired} participants</strong>.</p>
+                <p>${scenarioText}, this sample size will provide the desired precision for your proportion estimate.</p>
+                ${!usePrior ? '<p><strong>Note:</strong> Using p = 0.5 provides the largest possible sample size, ensuring adequate precision regardless of the true proportion.</p>' : ''}
+            `;
+            
+            // Show results with animation
+            const resultSection = document.getElementById('propResult');
+            resultSection.classList.remove('hidden');
+            resultSection.classList.add('animate-in');
+            resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Utility functions
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function hideError(elementId) {
+            document.getElementById(elementId).style.display = 'none';
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial scenarios
+            setMeanScenario('manufacturing');
+            setPropScenario('treatment');
+        });
+    </script>
+</body>
+</html>
