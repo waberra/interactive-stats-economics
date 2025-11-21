@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measures of Central Tendency - Interactive Statistics Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #a71e2a;
+        }
+
+        .red-title h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 25px;
+            margin: 0;
+        }
+
+        .blue-concepts h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .measures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .measure-card {
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .measure-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .arithmetic-card {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-color: #1e7e34;
+            color: white;
+        }
+
+        .median-card {
+            background: linear-gradient(135deg, #fd7e14, #e55353);
+            border-color: #d63384;
+            color: white;
+        }
+
+        .mode-card {
+            background: linear-gradient(135deg, #6f42c1, #8e44ad);
+            border-color: #563d7c;
+            color: white;
+        }
+
+        .weighted-card {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            border-color: #117a8b;
+            color: white;
+        }
+
+        .geometric-card {
+            background: linear-gradient(135deg, #ffc107, #ff8800);
+            border-color: #d39e00;
+            color: #212529;
+        }
+
+        .harmonic-card {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            border-color: #c7185d;
+            color: white;
+        }
+
+        .measure-card h4 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .measure-card .formula {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .measure-card .description {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .measure-card .use-cases {
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .measure-card .examples {
+            font-size: 0.9em;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            padding-top: 10px;
+        }
+
+        .interactive-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+
+        .scenario-display {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #28a745;
+        }
+
+        .calculation-area {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #ffc107;
+            display: none;
+        }
+
+        .results-area {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #6f42c1;
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #495057, #6c757d);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .data-table th {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .measure-result {
+            background: #e9f7ef;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .measure-result.highlight {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            animation: pulse 2s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .step-by-step {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .step h5 {
+            color: #007bff;
+            margin-bottom: 8px;
+        }
+
+        .interpretation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #c7185d;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .measures-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="red-title">
+            <h1>📊 Measures of Central Tendency</h1>
+            <p>Master All Six Essential Measures for Describing Data Centers</p>
+        </div>
+
+        <div class="blue-concepts">
+            <h3>📏 The Six Measures of Central Tendency</h3>
+            <div class="measures-grid">
+                <div class="measure-card arithmetic-card">
+                    <h4>📊 Arithmetic Mean</h4>
+                    <div class="formula">x̄ = Σx / n</div>
+                    <div class="description">
+                        The sum of all values divided by the number of values. Most common measure of central tendency.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Normally distributed data, no extreme outliers
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Average salary, GPA, test scores, daily sales
+                    </div>
+                </div>
+
+                <div class="measure-card median-card">
+                    <h4>📈 Median</h4>
+                    <div class="formula">Middle value when ordered</div>
+                    <div class="description">
+                        The middle value when data is arranged in order. Robust to extreme values and outliers.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Skewed data, presence of outliers, income analysis
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Household income, house prices, response times
+                    </div>
+                </div>
+
+                <div class="measure-card mode-card">
+                    <h4>🏷️ Mode</h4>
+                    <div class="formula">Most frequent value</div>
+                    <div class="description">
+                        The value that appears most frequently in the dataset. Can be used for any level of measurement.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Categorical data, discrete data, finding typical category
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Most common job title, preferred product, shoe size
+                    </div>
+                </div>
+
+                <div class="measure-card weighted-card">
+                    <h4>⚖️ Weighted Mean</h4>
+                    <div class="formula">Σ(x·w) / Σw</div>
+                    <div class="description">
+                        Mean where each value has a different importance or weight. Accounts for varying significance.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Different sample sizes, varying importance, portfolio analysis
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> GPA calculation, portfolio returns, survey responses
+                    </div>
+                </div>
+
+                <div class="measure-card geometric-card">
+                    <h4>📉 Geometric Mean</h4>
+                    <div class="formula">(x₁ × x₂ × ... × xₙ)^(1/n)</div>
+                    <div class="description">
+                        The nth root of the product of n values. Used for rates, ratios, and multiplicative processes.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Growth rates, investment returns, ratios, percentages
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Average growth rate, compound returns, inflation rates
+                    </div>
+                </div>
+
+                <div class="measure-card harmonic-card">
+                    <h4>⚡ Harmonic Mean</h4>
+                    <div class="formula">n / Σ(1/x)</div>
+                    <div class="description">
+                        Reciprocal of arithmetic mean of reciprocals. Used when averaging rates, speeds, or ratios.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Average rates, speeds, efficiency measures, price-to-earnings ratios
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Average speed, fuel efficiency, cost per unit
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <div class="control-panel">
+                <h3>🎮 Interactive Decision-Based Learning</h3>
+                <p>Test your understanding by choosing the right measure for real Canadian economic scenarios!</p>
+                <p style="font-size: 0.9em; color: #6c757d; margin-top: 10px;">
+                    ✨ <strong>New Approach:</strong> Think like a professional analyst - decide which measure to use, then see expert feedback!
+                </p>
+                <button class="btn" onclick="generateScenario()">📊 Generate New Scenario</button>
+                <button class="btn btn-secondary" onclick="resetCalculator()">🔄 Reset Progress</button>
+            </div>
+
+            <div id="scenarioDisplay" class="scenario-display" style="display: none;">
+                <h3 id="scenarioTitle">📋 Scenario</h3>
+                <div id="scenarioDescription"></div>
+                <div id="dataDisplay"></div>
+                
+                <div id="decisionSection" style="background: #e9f7ef; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #28a745;">
+                    <h4>🤔 Decision Time!</h4>
+                    <p style="margin-bottom: 15px; font-weight: 500;">
+                        Given this context and data, which measure(s) of central tendency would be most appropriate? 
+                        Select all that you think are suitable and explain why.
+                    </p>
+                    
+                    <div id="measureOptions" class="options-grid">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <textarea id="studentReasoning" placeholder="Explain your reasoning: Why did you choose these measure(s)? What makes them appropriate for this scenario?" 
+                                style="width: 100%; height: 100px; padding: 12px; border: 2px solid #28a745; border-radius: 8px; font-size: 1em; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="submitDecision()" id="submitBtn" style="margin-top: 15px;">📝 Submit My Analysis</button>
+                </div>
+            </div>
+
+            <div id="feedbackArea" class="scenario-display" style="display: none;">
+                <h3>📋 Expert Analysis & Feedback</h3>
+                <div id="feedbackContent"></div>
+                <div id="recommendedMeasures"></div>
+                <button class="btn" onclick="calculateSelectedMeasures()" id="calculateBtn">🧮 Calculate Recommended Measures</button>
+            </div>
+
+            <div id="calculationArea" class="calculation-area">
+                <h3>📝 Calculations & Results</h3>
+                <div id="calculationSteps"></div>
+                <div id="resultsDisplay"></div>
+                <div id="interpretationDisplay"></div>
+                <button class="btn" onclick="generateScenario()">➡️ Try Another Scenario</button>
+            </div>
+
+            <div class="score-display">
+                <h3>🎯 Decision-Making Progress</h3>
+                <div>Scenarios Analyzed: <span id="scenariosCompleted">0</span></div>
+                <div style="margin-top: 10px; font-size: 0.9em; opacity: 0.9;">
+                    Building expertise in selecting the right measure for each business context
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = {};
+        let scenariosCompleted = 0;
+        let studentChoices = [];
+        let studentReasoning = "";
+
+        const measureOptions = [
+            { id: "arithmeticMean", label: "📊 Arithmetic Mean", description: "Sum of values divided by count" },
+            { id: "median", label: "📈 Median", description: "Middle value when ordered" },
+            { id: "mode", label: "🏷️ Mode", description: "Most frequent value" },
+            { id: "weightedMean", label: "⚖️ Weighted Mean", description: "Mean with different importance weights" },
+            { id: "geometricMean", label: "📉 Geometric Mean", description: "nth root of product (for growth/ratios)" },
+            { id: "harmonicMean", label: "⚡ Harmonic Mean", description: "For rates, speeds, efficiency" }
+        ];
+
+        const scenarios = [
+            {
+                title: "Canadian Tech Startup Salaries",
+                description: "Annual salaries (in CAD) for developers at a Toronto tech startup",
+                context: "HR wants to report 'average' salary to investors and candidates",
+                data: [65000, 68000, 72000, 75000, 78000, 82000, 85000, 88000, 165000],
+                weights: null,
+                dataType: "numerical"
+            },
+            {
+                title: "Quebec Hydro-Electric Production Growth",
+                description: "Annual growth rates (%) for Hydro-Québec power generation over 5 years",
+                context: "Calculating average annual growth rate for economic impact report",
+                data: [3.2, -1.5, 4.8, 2.1, 5.4],
+                weights: null,
+                dataType: "numerical"
+            },
+            {
+                title: "University Course GPA Calculation",
+                description: "Student grades with different credit weights at University of Toronto",
+                context: "Calculating weighted GPA where courses have different credit values",
+                data: [3.7, 3.2, 4.0, 3.5, 3.8],
+                weights: [3, 4, 2, 3, 1],
+                weightLabels: ["Math (3 credits)", "Economics (4 credits)", "Statistics (2 credits)", "Finance (3 credits)", "Seminar (1 credit)"],
+                dataType: "weighted"
+            },
+            {
+                title: "Vancouver-Calgary Driving Analysis",
+                description: "Different travel speeds (km/h) for segments of Vancouver to Calgary route",
+                context: "Logistics company needs average speed for scheduling delivery trucks",
+                data: [90, 100, 80, 110, 70],
+                weights: null,
+                dataType: "numerical"
+            },
+            {
+                title: "Canadian Housing Prices by Region",
+                description: "Median home prices (CAD) in major Canadian cities",
+                context: "Real estate market analysis for national housing policy",
+                data: [450000, 520000, 380000, 1200000, 490000, 410000, 580000],
+                regionLabels: ["Winnipeg", "Calgary", "Halifax", "Vancouver", "Ottawa", "Quebec City", "Toronto"],
+                weights: null,
+                dataType: "numerical"
+            },
+            {
+                title: "Tim Hortons Order Preferences",
+                description: "Most popular order types at a Toronto location during morning rush",
+                context: "Determining most common customer preference for inventory planning",
+                data: ["Coffee & Donut", "Coffee & Donut", "Double-Double", "Coffee & Donut", "Iced Coffee", "Double-Double", "Coffee & Donut", "Tea", "Double-Double", "Coffee & Donut"],
+                weights: null,
+                dataType: "categorical"
+            },
+            {
+                title: "Canadian Dollar Exchange Rate Volatility",
+                description: "Daily CAD/USD exchange rates during a volatile trading week",
+                context: "Bank needs representative exchange rate for weekly international transfers",
+                data: [0.725, 0.731, 0.718, 0.742, 0.728, 0.735, 0.721],
+                weights: null,
+                dataType: "numerical"
+            },
+            {
+                title: "Canadian Agriculture Investment Returns",
+                description: "Annual investment returns (%) for agricultural technology fund over 6 years",
+                context: "Investment firm reporting average annual return to potential investors",
+                data: [8.2, -12.1, 15.3, 4.7, 18.9, -3.4],
+                weights: null,
+                dataType: "numerical"
+            }
+        ];
+
+        // Expert answers (hidden from students until after they submit)
+        const expertAnswers = {
+            "Canadian Tech Startup Salaries": {
+                recommendedMeasures: ["median"],
+                expertReasoning: "With one high outlier ($165,000), the median better represents the 'typical' developer salary. The mean is pulled significantly upward by the senior developer's salary.",
+                wrongChoices: {
+                    "arithmeticMean": "Mean is misleading here because the outlier makes it seem like developers typically earn $90,111 when most earn around $78,000.",
+                    "mode": "No repeated values in this dataset, so mode isn't meaningful.",
+                    "geometricMean": "Not appropriate for salary data - used for growth rates and ratios.",
+                    "harmonicMean": "Not appropriate for salary data - used for rates and speeds."
+                },
+                keyInsight: "For salary data with outliers, median is often more representative than mean."
+            },
+            "Quebec Hydro-Electric Production Growth": {
+                recommendedMeasures: ["geometricMean"],
+                expertReasoning: "For compound growth processes, geometric mean gives the true average growth rate. Arithmetic mean would overestimate the compound effect.",
+                wrongChoices: {
+                    "arithmeticMean": "Arithmetic mean doesn't account for the compounding nature of growth rates.",
+                    "median": "Median doesn't give meaningful average growth for compound processes.",
+                    "mode": "No repeated values, and mode doesn't represent average growth.",
+                    "harmonicMean": "Used for rates, not growth percentages."
+                },
+                keyInsight: "For growth rates and percentages, geometric mean provides the correct average for compound processes."
+            },
+            "University Course GPA Calculation": {
+                recommendedMeasures: ["weightedMean"],
+                expertReasoning: "Courses have different credit values, so a 4-credit course should count more than a 1-credit course. Weighted mean properly accounts for varying importance.",
+                wrongChoices: {
+                    "arithmeticMean": "Treats all courses equally, ignoring the fact that Economics (4 credits) should count more than Seminar (1 credit).",
+                    "median": "Doesn't account for credit weights and gives misleading GPA.",
+                    "mode": "No repeated grades, and doesn't handle weights.",
+                    "geometricMean": "Not appropriate for GPA calculation.",
+                    "harmonicMean": "Not appropriate for academic grades."
+                },
+                keyInsight: "When observations have different importance levels, weighted mean is essential."
+            },
+            "Vancouver-Calgary Driving Analysis": {
+                recommendedMeasures: ["harmonicMean"],
+                expertReasoning: "When calculating average speed over different segments, harmonic mean gives the correct mathematical average for rates.",
+                wrongChoices: {
+                    "arithmeticMean": "Overestimates average speed for rate calculations - gives wrong travel time estimates.",
+                    "median": "Doesn't provide the correct average speed for logistics planning.",
+                    "mode": "No repeated speeds, and doesn't represent average rate.",
+                    "geometricMean": "Used for growth rates, not for averaging speeds."
+                },
+                keyInsight: "For rates, speeds, and efficiency measures, harmonic mean provides the mathematically correct average."
+            },
+            "Canadian Housing Prices by Region": {
+                recommendedMeasures: ["median"],
+                expertReasoning: "Vancouver's extreme price ($1.2M) creates significant skewness. Median better represents the 'typical' Canadian housing market.",
+                wrongChoices: {
+                    "arithmeticMean": "Heavily influenced by Vancouver's extreme price, making it seem like typical Canadian home costs $575,714 when most are around $490,000.",
+                    "mode": "No repeated prices in this dataset.",
+                    "geometricMean": "Not appropriate for price level analysis.",
+                    "harmonicMean": "Not appropriate for price data."
+                },
+                keyInsight: "In real estate with extreme outliers, median better represents market reality."
+            },
+            "Tim Hortons Order Preferences": {
+                recommendedMeasures: ["mode"],
+                expertReasoning: "With categorical data, only mode makes sense. It identifies the most frequent order type for inventory planning.",
+                wrongChoices: {
+                    "arithmeticMean": "Cannot calculate mean of categories - what would be the 'average' of 'Coffee & Donut' and 'Tea'?",
+                    "median": "Cannot order categories meaningfully - is 'Double-Double' greater than 'Tea'?",
+                    "geometricMean": "Meaningless for categorical data.",
+                    "harmonicMean": "Meaningless for categorical data.",
+                    "weightedMean": "Cannot weight categories numerically."
+                },
+                keyInsight: "For categorical data, mode is the only meaningful measure of central tendency."
+            },
+            "Canadian Dollar Exchange Rate Volatility": {
+                recommendedMeasures: ["arithmeticMean", "median"],
+                expertReasoning: "No extreme outliers and roughly symmetric data. Both mean and median are appropriate, giving similar values for this financial data.",
+                wrongChoices: {
+                    "mode": "No repeated exchange rates in continuous financial data.",
+                    "geometricMean": "Used for growth rates, not for price levels.",
+                    "harmonicMean": "Used for rates, not for exchange rate levels."
+                },
+                keyInsight: "For symmetric financial data without outliers, both mean and median provide valid central measures."
+            },
+            "Canadian Agriculture Investment Returns": {
+                recommendedMeasures: ["geometricMean"],
+                expertReasoning: "For investment returns over multiple periods, geometric mean gives the true compound average return that an investor actually experienced.",
+                wrongChoices: {
+                    "arithmeticMean": "Overstates the compound return - investors care about what $100 becomes, not simple average of yearly percentages.",
+                    "median": "Doesn't capture the compound effect of investment returns over time.",
+                    "mode": "No repeated returns, and doesn't represent investment performance.",
+                    "harmonicMean": "Used for rates, not investment return percentages."
+                },
+                keyInsight: "For investment returns and compound growth, geometric mean shows actual investor experience."
+            }
+        };
+
+        function generateScenario() {
+            const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            currentScenario = scenario;
+            studentChoices = [];
+            studentReasoning = "";
+            
+            document.getElementById('scenarioDisplay').style.display = 'block';
+            document.getElementById('feedbackArea').style.display = 'none';
+            document.getElementById('calculationArea').style.display = 'none';
+            
+            document.getElementById('scenarioTitle').textContent = `📊 ${scenario.title}`;
+            document.getElementById('scenarioDescription').innerHTML = `
+                <div style="background: #e9f7ef; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4>📋 Context:</h4>
+                    <p style="margin-top: 10px;">${scenario.description}</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6c757d;"><strong>Business Goal:</strong> ${scenario.context}</p>
+                </div>
+            `;
+            
+            displayData(scenario);
+            createMeasureOptions(scenario);
+        }
+
+        function createMeasureOptions(scenario) {
+            const optionsContainer = document.getElementById('measureOptions');
+            optionsContainer.innerHTML = '';
+            
+            measureOptions.forEach(option => {
+                // Skip weighted mean if no weights provided
+                if (option.id === 'weightedMean' && !scenario.weights) return;
+                // Skip numeric measures for categorical data
+                if (scenario.dataType === 'categorical' && !['mode'].includes(option.id)) return;
+                
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-btn';
+                optionDiv.style.cursor = 'pointer';
+                optionDiv.innerHTML = `
+                    <div style="text-align: left;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">${option.label}</div>
+                        <div style="font-size: 0.85em; color: #6c757d;">${option.description}</div>
+                    </div>
+                `;
+                
+                optionDiv.onclick = () => toggleMeasureSelection(option.id, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Reset reasoning textarea
+            document.getElementById('studentReasoning').value = '';
+        }
+
+        function toggleMeasureSelection(measureId, element) {
+            if (studentChoices.includes(measureId)) {
+                // Remove selection
+                studentChoices = studentChoices.filter(id => id !== measureId);
+                element.style.background = 'linear-gradient(135deg, #e9ecef, #dee2e6)';
+                element.style.border = '2px solid #ced4da';
+                element.style.color = '#495057';
+            } else {
+                // Add selection
+                studentChoices.push(measureId);
+                element.style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
+                element.style.border = '2px solid #28a745';
+                element.style.color = '#155724';
+            }
+        }
+
+        function submitDecision() {
+            studentReasoning = document.getElementById('studentReasoning').value.trim();
+            
+            if (studentChoices.length === 0) {
+                alert('Please select at least one measure of central tendency.');
+                return;
+            }
+            
+            if (studentReasoning.length < 10) {
+                alert('Please provide reasoning for your choices (at least 10 characters).');
+                return;
+            }
+            
+            showFeedback();
+        }
+
+        function showFeedback() {
+            document.getElementById('feedbackArea').style.display = 'block';
+            
+            // Get expert answers (now revealed for first time)
+            const expertData = expertAnswers[currentScenario.title];
+            const correctChoices = expertData.recommendedMeasures;
+            const studentCorrect = studentChoices.filter(choice => correctChoices.includes(choice));
+            const studentIncorrect = studentChoices.filter(choice => !correctChoices.includes(choice));
+            const missedCorrect = correctChoices.filter(choice => !studentChoices.includes(choice));
+            
+            let feedbackHTML = `
+                <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4>🎯 Your Analysis vs Expert Recommendation</h4>
+                    
+                    <div style="margin: 20px 0;">
+                        <h5>📝 Your Reasoning:</h5>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #007bff;">
+                            "${studentReasoning}"
+                        </div>
+                    </div>
+            `;
+            
+            if (studentCorrect.length > 0) {
+                feedbackHTML += `
+                    <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>✅ Correct Choices:</strong> ${studentCorrect.map(choice => 
+                            measureOptions.find(opt => opt.id === choice)?.label || choice
+                        ).join(', ')}
+                    </div>
+                `;
+            }
+            
+            if (studentIncorrect.length > 0) {
+                feedbackHTML += `
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>❌ Not Recommended:</strong> ${studentIncorrect.map(choice => 
+                            measureOptions.find(opt => opt.id === choice)?.label || choice
+                        ).join(', ')}
+                        <div style="margin-top: 10px; font-size: 0.9em;">
+                            ${studentIncorrect.map(choice => 
+                                expertData.wrongChoices[choice] ? `<div><strong>${measureOptions.find(opt => opt.id === choice)?.label}:</strong> ${expertData.wrongChoices[choice]}</div>` : ''
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (missedCorrect.length > 0) {
+                feedbackHTML += `
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>💡 You Also Could Have Selected:</strong> ${missedCorrect.map(choice => 
+                            measureOptions.find(opt => opt.id === choice)?.label || choice
+                        ).join(', ')}
+                    </div>
+                `;
+            }
+            
+            feedbackHTML += `</div>`;
+            
+            document.getElementById('feedbackContent').innerHTML = feedbackHTML;
+            
+            // Show expert reasoning
+            document.getElementById('recommendedMeasures').innerHTML = `
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 5px solid #2196f3;">
+                    <h4>🧠 Expert Analysis</h4>
+                    <p><strong>Recommended Measure(s):</strong> ${correctChoices.map(choice => 
+                        measureOptions.find(opt => opt.id === choice)?.label || choice
+                    ).join(', ')}</p>
+                    
+                    <p><strong>Expert Reasoning:</strong></p>
+                    <p>${expertData.expertReasoning}</p>
+                    
+                    <div style="background: rgba(255,255,255,0.7); padding: 15px; margin-top: 15px; border-radius: 8px;">
+                        <strong>💡 Key Learning Point:</strong> ${expertData.keyInsight}
+                    </div>
+                </div>
+            `;
+            
+            // Scroll to feedback
+            document.getElementById('feedbackArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateSelectedMeasures() {
+            const expertData = expertAnswers[currentScenario.title];
+            const measuresToCalculate = expertData.recommendedMeasures;
+            document.getElementById('calculationArea').style.display = 'block';
+            
+            const results = {};
+            let calculationSteps = '';
+            
+            if (currentScenario.dataType === 'categorical') {
+                calculationSteps = calculateCategoricalSteps();
+                results.mode = calculateMode(currentScenario.data);
+            } else {
+                calculationSteps = calculateSelectedNumericalSteps(measuresToCalculate);
+                
+                measuresToCalculate.forEach(measure => {
+                    switch(measure) {
+                        case 'arithmeticMean':
+                            results.arithmeticMean = calculateArithmeticMean(currentScenario.data);
+                            break;
+                        case 'median':
+                            results.median = calculateMedian([...currentScenario.data]);
+                            break;
+                        case 'mode':
+                            results.mode = calculateMode(currentScenario.data);
+                            break;
+                        case 'weightedMean':
+                            if (currentScenario.weights) {
+                                results.weightedMean = calculateWeightedMean(currentScenario.data, currentScenario.weights);
+                            }
+                            break;
+                        case 'geometricMean':
+                            if (currentScenario.data.every(x => x > 0)) {
+                                results.geometricMean = calculateGeometricMean(currentScenario.data);
+                            }
+                            break;
+                        case 'harmonicMean':
+                            if (currentScenario.data.every(x => x > 0)) {
+                                results.harmonicMean = calculateHarmonicMean(currentScenario.data);
+                            }
+                            break;
+                    }
+                });
+            }
+            
+            document.getElementById('calculationSteps').innerHTML = calculationSteps;
+            displayResults(results);
+            displayInterpretation(results);
+            
+            scenariosCompleted++;
+            document.getElementById('scenariosCompleted').textContent = scenariosCompleted;
+            
+            // Scroll to results
+            document.getElementById('calculationArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayData(scenario) {
+            let dataHTML = '';
+            
+            if (scenario.weights) {
+                // Weighted data display
+                dataHTML = `
+                    <h4>📋 Data with Weights:</h4>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Course/Item</th>
+                                <th>Value</th>
+                                <th>Weight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                scenario.data.forEach((value, index) => {
+                    dataHTML += `
+                        <tr>
+                            <td>${scenario.weightLabels ? scenario.weightLabels[index] : `Item ${index + 1}`}</td>
+                            <td>${value}</td>
+                            <td>${scenario.weights[index]}</td>
+                        </tr>
+                    `;
+                });
+                
+                dataHTML += `
+                        </tbody>
+                    </table>
+                `;
+            } else if (typeof scenario.data[0] === 'string') {
+                // Categorical data display
+                const frequencies = {};
+                scenario.data.forEach(item => {
+                    frequencies[item] = (frequencies[item] || 0) + 1;
+                });
+                
+                dataHTML = `
+                    <h4>📋 Categorical Data:</h4>
+                    <div style="background: white; padding: 20px; border-radius: 10px; border: 2px solid #007bff;">
+                        <p><strong>Raw Data:</strong> ${scenario.data.join(', ')}</p>
+                    </div>
+                    <table class="data-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Frequency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                
+                Object.entries(frequencies).forEach(([category, freq]) => {
+                    dataHTML += `
+                        <tr>
+                            <td>${category}</td>
+                            <td>${freq}</td>
+                        </tr>
+                    `;
+                });
+                
+                dataHTML += `
+                        </tbody>
+                    </table>
+                `;
+            } else {
+                // Numerical data display
+                dataHTML = `
+                    <h4>📋 Numerical Data:</h4>
+                    <div style="background: white; padding: 20px; border-radius: 10px; border: 2px solid #007bff; margin: 15px 0;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; text-align: center;">
+                `;
+                
+                scenario.data.forEach((value, index) => {
+                    dataHTML += `<div style="background: #f8f9fa; padding: 10px; border-radius: 5px; border: 1px solid #dee2e6;"><strong>${value}</strong></div>`;
+                });
+                
+                dataHTML += `
+                        </div>
+                        <p style="margin-top: 15px; text-align: center; color: #6c757d;">
+                            ${scenario.regionLabels ? 'Cities: ' + scenario.regionLabels.join(', ') : `n = ${scenario.data.length} observations`}
+                        </p>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('dataDisplay').innerHTML = dataHTML;
+        }
+
+        function calculateSelectedNumericalSteps(measuresToCalculate) {
+            const data = currentScenario.data;
+            const sortedData = [...data].sort((a, b) => a - b);
+            
+            let steps = `<div class="step-by-step">`;
+            
+            measuresToCalculate.forEach((measure, index) => {
+                switch(measure) {
+                    case 'arithmeticMean':
+                        steps += `
+                            <div class="step">
+                                <h5>📊 ${index + 1}. Arithmetic Mean Calculation</h5>
+                                <p><strong>Formula:</strong> x̄ = Σx / n</p>
+                                <p><strong>Calculation:</strong> (${data.join(' + ')}) / ${data.length}</p>
+                                <p><strong>Sum:</strong> ${data.reduce((a, b) => a + b, 0)}</p>
+                                <p><strong>Result:</strong> ${calculateArithmeticMean(data).toFixed(3)}</p>
+                            </div>
+                        `;
+                        break;
+                    case 'median':
+                        steps += `
+                            <div class="step">
+                                <h5>📈 ${index + 1}. Median Calculation</h5>
+                                <p><strong>Step 1:</strong> Order data: [${sortedData.join(', ')}]</p>
+                                <p><strong>Step 2:</strong> Find middle value(s)</p>
+                                ${data.length % 2 === 0 ? 
+                                    `<p><strong>Even n:</strong> Average of positions ${data.length/2} and ${data.length/2 + 1}</p>
+                                     <p><strong>Calculation:</strong> (${sortedData[data.length/2 - 1]} + ${sortedData[data.length/2]}) / 2</p>` :
+                                    `<p><strong>Odd n:</strong> Position ${Math.ceil(data.length/2)}</p>`
+                                }
+                                <p><strong>Result:</strong> ${calculateMedian([...data]).toFixed(3)}</p>
+                            </div>
+                        `;
+                        break;
+                    case 'mode':
+                        steps += `
+                            <div class="step">
+                                <h5>🏷️ ${index + 1}. Mode Calculation</h5>
+                                <p><strong>Method:</strong> Count frequency of each value</p>
+                                ${getModeCalculationDetails()}
+                            </div>
+                        `;
+                        break;
+                    case 'weightedMean':
+                        if (currentScenario.weights) {
+                            steps += `
+                                <div class="step">
+                                    <h5>⚖️ ${index + 1}. Weighted Mean Calculation</h5>
+                                    <p><strong>Formula:</strong> Σ(x·w) / Σw</p>
+                                    <p><strong>Weighted products:</strong> ${data.map((x, i) => `${x}×${currentScenario.weights[i]}=${x * currentScenario.weights[i]}`).join(', ')}</p>
+                                    <p><strong>Sum of products:</strong> ${data.reduce((sum, x, i) => sum + (x * currentScenario.weights[i]), 0)}</p>
+                                    <p><strong>Sum of weights:</strong> ${currentScenario.weights.reduce((a, b) => a + b, 0)}</p>
+                                    <p><strong>Result:</strong> ${calculateWeightedMean(data, currentScenario.weights).toFixed(3)}</p>
+                                </div>
+                            `;
+                        }
+                        break;
+                    case 'geometricMean':
+                        if (data.every(x => x > 0)) {
+                            steps += `
+                                <div class="step">
+                                    <h5>📉 ${index + 1}. Geometric Mean Calculation</h5>
+                                    <p><strong>Formula:</strong> (x₁ × x₂ × ... × xₙ)^(1/n) = nth root of product</p>
+                                    <p><strong>Product:</strong> ${data.join(' × ')} = ${data.reduce((a, b) => a * b, 1).toFixed(3)}</p>
+                                    <p><strong>nth root:</strong> ${data.length}th root of ${data.reduce((a, b) => a * b, 1).toFixed(3)}</p>
+                                    <p><strong>Result:</strong> ${calculateGeometricMean(data).toFixed(3)}</p>
+                                </div>
+                            `;
+                        }
+                        break;
+                    case 'harmonicMean':
+                        if (data.every(x => x > 0)) {
+                            steps += `
+                                <div class="step">
+                                    <h5>⚡ ${index + 1}. Harmonic Mean Calculation</h5>
+                                    <p><strong>Formula:</strong> n / Σ(1/x)</p>
+                                    <p><strong>Reciprocals:</strong> ${data.map(x => `1/${x} = ${(1/x).toFixed(4)}`).join(', ')}</p>
+                                    <p><strong>Sum of reciprocals:</strong> ${data.reduce((sum, x) => sum + (1/x), 0).toFixed(4)}</p>
+                                    <p><strong>Result:</strong> ${data.length} / ${data.reduce((sum, x) => sum + (1/x), 0).toFixed(4)} = ${calculateHarmonicMean(data).toFixed(3)}</p>
+                                </div>
+                            `;
+                        }
+                        break;
+                }
+            });
+            
+            steps += `</div>`;
+            return steps;
+        }
+
+        function calculateArithmeticMean(data) {
+            return data.reduce((sum, value) => sum + value, 0) / data.length;
+        }
+
+        function calculateMedian(data) {
+            data.sort((a, b) => a - b);
+            const n = data.length;
+            if (n % 2 === 0) {
+                return (data[n/2 - 1] + data[n/2]) / 2;
+            } else {
+                return data[Math.floor(n/2)];
+            }
+        }
+
+        function calculateMode(data) {
+            const frequencies = {};
+            data.forEach(value => {
+                frequencies[value] = (frequencies[value] || 0) + 1;
+            });
+            
+            let maxFreq = 0;
+            let modes = [];
+            
+            for (const [value, freq] of Object.entries(frequencies)) {
+                if (freq > maxFreq) {
+                    maxFreq = freq;
+                    modes = [value];
+                } else if (freq === maxFreq) {
+                    modes.push(value);
+                }
+            }
+            
+            return modes.length === 1 ? modes[0] : modes;
+        }
+
+        function calculateWeightedMean(data, weights) {
+            const weightedSum = data.reduce((sum, value, index) => sum + (value * weights[index]), 0);
+            const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+            return weightedSum / totalWeight;
+        }
+
+        function calculateGeometricMean(data) {
+            const product = data.reduce((prod, value) => prod * value, 1);
+            return Math.pow(product, 1 / data.length);
+        }
+
+        function calculateHarmonicMean(data) {
+            const reciprocalSum = data.reduce((sum, value) => sum + (1 / value), 0);
+            return data.length / reciprocalSum;
+        }
+
+        function calculateCategoricalSteps() {
+            const frequencies = {};
+            currentScenario.data.forEach(item => {
+                frequencies[item] = (frequencies[item] || 0) + 1;
+            });
+            
+            return `
+                <div class="step-by-step">
+                    <div class="step">
+                        <h5>🏷️ Mode Calculation for Categorical Data</h5>
+                        <p><strong>Method:</strong> Count frequency of each category</p>
+                        ${Object.entries(frequencies).map(([cat, freq]) => 
+                            `<p><strong>${cat}:</strong> ${freq} occurrences</p>`
+                        ).join('')}
+                        <p><strong>Mode:</strong> ${calculateMode(currentScenario.data)} (most frequent category)</p>
+                    </div>
+                    
+                    <div class="step">
+                        <h5>⚠️ Note on Other Measures</h5>
+                        <p>For categorical data, only the <strong>mode</strong> is meaningful.</p>
+                        <p>Mean, median, geometric mean, and harmonic mean require numerical data.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getModeCalculationDetails() {
+            const frequencies = {};
+            currentScenario.data.forEach(value => {
+                frequencies[value] = (frequencies[value] || 0) + 1;
+            });
+            
+            let details = Object.entries(frequencies).map(([value, freq]) => 
+                `<strong>${value}:</strong> ${freq} time${freq > 1 ? 's' : ''}`
+            ).join(', ');
+            
+            const mode = calculateMode(currentScenario.data);
+            details += `<br><strong>Result:</strong> ${Array.isArray(mode) ? mode.join(', ') + ' (multimodal)' : mode}`;
+            
+            return `<p>${details}</p>`;
+        }
+
+        function displayResults(results) {
+            let resultsHTML = '<h4>📊 All Calculated Measures:</h4>';
+            
+            const measureNames = {
+                arithmeticMean: '📊 Arithmetic Mean',
+                median: '📈 Median',
+                mode: '🏷️ Mode',
+                weightedMean: '⚖️ Weighted Mean',
+                geometricMean: '📉 Geometric Mean',
+                harmonicMean: '⚡ Harmonic Mean'
+            };
+            
+            Object.entries(results).forEach(([measure, value]) => {
+                const displayValue = typeof value === 'number' ? value.toFixed(3) : 
+                                  Array.isArray(value) ? value.join(', ') : value;
+                
+                resultsHTML += `
+                    <div class="measure-result">
+                        <span><strong>${measureNames[measure]}:</strong></span>
+                        <span style="font-size: 1.2em; font-weight: bold;">${displayValue}</span>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('resultsDisplay').innerHTML = resultsHTML;
+        }
+
+        function displayInterpretation(results) {
+            const expertData = expertAnswers[currentScenario.title];
+            
+            let interpretationHTML = `
+                <div class="interpretation-box">
+                    <h4>🧠 Final Analysis</h4>
+                    <p><strong>Expert Choice Confirmed:</strong> ${expertData.expertReasoning}</p>
+                    
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                        <h5>💡 Key Takeaway:</h5>
+                        <p>${expertData.keyInsight}</p>
+                    </div>
+            `;
+            
+            if (typeof currentScenario.data[0] === 'number') {
+                interpretationHTML += getComparisonAnalysis(results);
+            }
+            
+            interpretationHTML += `</div>`;
+            
+            document.getElementById('interpretationDisplay').innerHTML = interpretationHTML;
+        }
+
+        function getComparisonAnalysis(results) {
+            let analysis = `
+                <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                    <h5>📈 Comparing the Measures:</h5>
+            `;
+            
+            if (results.arithmeticMean && results.median) {
+                const diff = Math.abs(results.arithmeticMean - results.median);
+                if (diff < 0.1) {
+                    analysis += `<p>• Mean ≈ Median: Data appears roughly symmetric</p>`;
+                } else if (results.arithmeticMean > results.median) {
+                    analysis += `<p>• Mean > Median: Data is right-skewed (high outliers pull mean up)</p>`;
+                } else {
+                    analysis += `<p>• Mean < Median: Data is left-skewed (low outliers pull mean down)</p>`;
+                }
+            }
+            
+            if (results.geometricMean && results.arithmeticMean) {
+                analysis += `<p>• Geometric mean (${results.geometricMean.toFixed(3)}) < Arithmetic mean (${results.arithmeticMean.toFixed(3)}): Normal for positive data</p>`;
+            }
+            
+            if (results.harmonicMean && results.arithmeticMean) {
+                analysis += `<p>• Harmonic mean (${results.harmonicMean.toFixed(3)}) ≤ Arithmetic mean: Always true for positive data</p>`;
+            }
+            
+            analysis += `</div>`;
+            return analysis;
+        }
+
+        function resetCalculator() {
+            scenariosCompleted = 0;
+            studentChoices = [];
+            studentReasoning = "";
+            document.getElementById('scenariosCompleted').textContent = '0';
+            document.getElementById('scenarioDisplay').style.display = 'none';
+            document.getElementById('feedbackArea').style.display = 'none';
+            document.getElementById('calculationArea').style.display = 'none';
+        }
+
+        // Initialize display
+        document.getElementById('scenariosCompleted').textContent = '0';
+    </script>
+</body>
+</html>
