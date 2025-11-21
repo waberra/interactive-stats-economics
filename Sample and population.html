@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample vs. Population Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Trebuchet MS", sans-serif;
+      padding: 20px;
+      background: #1e1e1e; /* dark chalkboard */
+      display: flex;
+      justify-content: center;
+      color: white;
+    }
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    /* Sticky Note Title */
+    .header-box {
+      background: #ffe95b;           /* neon yellow sticky */
+      color: #1b1b1b;
+      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px #00000060;
+      margin-bottom: 20px;
+      border: 3px solid #fff;
+    }
+    .header-box h1 {
+      margin: 0 0 10px 0;
+    }
+
+    /* Neon Question Boxes */
+    .question {
+      margin: 12px 0;
+      padding: 12px;
+      background: #6c4cff;           /* neon purple */
+      border: 2px solid #fff5;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #6c4cff80;
+    }
+    .options {
+      margin-top: 6px;
+    }
+    .options label {
+      margin-right: 12px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .options input {
+      margin-right: 4px;
+    }
+
+    /* Neon Feedback */
+    .feedback {
+      margin-top: 6px;
+      font-size: 0.95em;
+      font-weight: bold;
+    }
+    .correct {
+      color: #3bffdd;                /* electric aqua */
+      text-shadow: 0 0 7px #3bffdd;
+    }
+    .incorrect {
+      color: #ff4d6d;                /* neon red */
+      text-shadow: 0 0 7px #ff4d6d;
+    }
+
+    /* Glow Buttons */
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95em;
+      background: #32ff7e;           /* glow green */
+      color: #1b1b1b;
+      font-weight: bold;
+      box-shadow: 0 0 10px #32ff7e;
+    }
+    button:hover {
+      background: #45ff90;
+      box-shadow: 0 0 15px #45ff90;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="header-box">
+      <h1>📘 Sample vs. Population Quiz</h1>
+      <p>
+        Decide whether each statement describes a <strong>Sample</strong> or a <strong>Population</strong>.
+        Select your answer for each question, then click <strong>Check Answers</strong>.
+        Click <strong>New Questions</strong> to generate a fresh randomized set.
+      </p>
+    </div>
+
+    <div id="questions"></div>
+
+    <div class="buttons">
+      <button onclick="checkAnswers()">✔ Check Answers</button>
+      <button onclick="generate()">🔄 New Questions</button>
+    </div>
+
+  </div>
+
+  <script>
+    // Phrase pools
+    const sampleStarters = [
+      "50 randomly selected", "100 surveyed", "25 participants chosen",
+      "A sample of", "80 chosen", "30 surveyed", "20 selected",
+      "A chosen group of", "75 surveyed", "A randomly picked group of"
+    ];
+
+    const populationStarters = [
+      "All", "Every", "The entire group of", "Each and every", "100% of",
+      "All registered", "All enrolled", "All residents", "All members of",
+      "All recorded"
+    ];
+
+    const subjects = [
+      "students in a school", "patients in a hospital", "citizens of a city",
+      "employees in a company", "basketball players in a league", "drivers in a state",
+      "voters in an election", "teachers in a district", "teenagers in a town",
+      "customers at a store", "college students", "workers in a factory",
+      "athletes at a tournament", "residents in a village", "passengers on a flight"
+    ];
+
+    // Store: { text, type }
+    let questionsData = [];
+
+    function randomItem(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function buildSentence(type) {
+      return type === "sample"
+        ? `${randomItem(sampleStarters)} ${randomItem(subjects)}.`
+        : `${randomItem(populationStarters)} ${randomItem(subjects)}.`;
+    }
+
+    function explanation(type) {
+      return type === "sample"
+        ? "This is a sample because it includes only part of the group."
+        : "This is a population because it includes every member of the entire group.";
+    }
+
+    // Generate and render 10 random questions
+    function generate() {
+      const container = document.getElementById("questions");
+      container.innerHTML = "";
+      questionsData = [];
+
+      const numQuestions = 10;
+      for (let i = 0; i < numQuestions; i++) {
+        const type = Math.random() < 0.5 ? "sample" : "population";
+        const text = buildSentence(type);
+        questionsData.push({ text, type });
+
+        container.innerHTML += `
+          <div class="question">
+            <strong>${i + 1}. ${text}</strong>
+            <div class="options">
+              <label>
+                <input type="radio" name="q${i}" value="sample">
+                Sample
+              </label>
+              <label>
+                <input type="radio" name="q${i}" value="population">
+                Population
+              </label>
+            </div>
+            <div class="feedback" id="f${i}"></div>
+          </div>
+        `;
+      }
+    }
+
+    // Check answers and show explanations
+    function checkAnswers() {
+      questionsData.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const fb = document.getElementById(`f${i}`);
+
+        if (!selected) {
+          fb.innerHTML =
+            `<span class="incorrect">No answer selected.</span> ` +
+            `Correct: <strong>${q.type}</strong>. ${explanation(q.type)}`;
+          return;
+        }
+
+        if (selected.value === q.type) {
+          fb.innerHTML =
+            `<span class="correct">Correct!</span> ${explanation(q.type)}`;
+        } else {
+          fb.innerHTML =
+            `<span class="incorrect">Incorrect.</span> ` +
+            `Correct: <strong>${q.type}</strong>. ${explanation(q.type)}`;
+        }
+      });
+    }
+
+    // Initial load
+    generate();
+  </script>
+</body>
+</html>
