@@ -8,91 +8,96 @@
     body {
       font-family: "Trebuchet MS", sans-serif;
       padding: 20px;
-      background: #c9e9ff; /* sky blue */
+      background: #fde3d9; /* peach background */
       /* subtle notebook-style horizontal lines */
       background-image: linear-gradient(
         to bottom,
-        rgba(255, 255, 255, 0.6) 1px,
+        rgba(255, 255, 255, 0.7) 1px,
         transparent 1px
       );
       background-size: 100% 32px;
       display: flex;
       justify-content: center;
-      color: white;
+      color: #143057; /* deep navy, not black */
       box-sizing: border-box;
     }
+
     .container {
       max-width: 900px;
       width: 100%;
     }
 
-    /* Red Title Banner */
+    /* Coral Red Title Card (rounded) */
     .header-box {
-      background: #ff6b6b;           /* red */
+      background: #ff4d6d;           /* coral red */
       color: #ffffff;
       padding: 18px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px #00000060;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.35);
       margin-bottom: 20px;
-      border: 3px solid #fff;
+      border: 3px solid #ffffff;
     }
     .header-box h1 {
       margin: 0 0 10px 0;
       color: #ffffff;
     }
+    .header-box p {
+      margin: 0;
+    }
 
-    /* Dark Gray Question Card */
+    /* Aqua Question Card */
     #question-card {
       margin: 12px 0;
       padding: 16px;
-      background: #333333;           /* dark gray */
-      border: 2px solid #ffffff80;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #00000066;
+      background: #a6f5e9;           /* aqua pastel */
+      border: 2px solid #46cbb0;     /* teal border */
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(70, 203, 176, 0.45);
       display: none;                 /* shown after questions are generated */
+      color: #143057;                /* navy text inside card */
     }
     #question-text {
       font-weight: bold;
       margin-bottom: 8px;
-      color: #ffffff;
     }
     #progress {
       font-size: 0.9em;
       margin-bottom: 10px;
       opacity: 0.9;
-      color: #f0f0f0;
     }
+
     .options {
       margin-top: 6px;
       margin-bottom: 8px;
     }
     .options label {
-      margin-right: 12px;
+      margin-right: 16px;
       cursor: pointer;
-      color: #ffffff;
+      color: #143057;
     }
     .options input {
       margin-right: 4px;
     }
+
     #warning {
       font-size: 0.9em;
-      color: #ffb3c6;
+      color: #e8113b; /* cherry red */
       min-height: 1.2em;
     }
 
-    /* Neon Feedback / results */
+    /* Feedback / results */
     .feedback {
       margin-top: 6px;
       font-size: 0.95em;
       font-weight: bold;
     }
     .correct {
-      color: #3bffdd;                /* electric aqua */
-      text-shadow: 0 0 7px #3bffdd;
+      color: #1ccb8f;                /* ocean green */
+      text-shadow: 0 0 6px rgba(28, 203, 143, 0.6);
     }
     .incorrect {
-      color: #ff4d6d;                /* neon red */
-      text-shadow: 0 0 7px #ff4d6d;
+      color: #e8113b;                /* cherry red */
+      text-shadow: 0 0 6px rgba(232, 17, 59, 0.5);
     }
 
     /* Result summary */
@@ -102,10 +107,10 @@
     .result-item {
       margin: 10px 0;
       padding: 10px;
-      background: #222222;
-      border-radius: 8px;
-      border: 1px solid #444444;
-      color: #ffffff;
+      background: #f3f7ff;           /* very light bluish */
+      border-radius: 10px;
+      border: 1px solid #c2d4ff;
+      color: #143057;
     }
 
     /* Buttons */
@@ -117,18 +122,18 @@
     }
     button {
       padding: 10px 16px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
       font-size: 0.95em;
-      background: #32ff7e;           /* glow green */
-      color: #1b1b1b;
+      background: #6dfc9b;           /* mint green */
+      color: #143057;                /* navy text */
       font-weight: bold;
-      box-shadow: 0 0 10px #32ff7e;
+      box-shadow: 0 0 10px rgba(109, 252, 155, 0.6);
     }
     button:hover {
-      background: #45ff90;
-      box-shadow: 0 0 15px #45ff90;
+      background: #82ffd6;
+      box-shadow: 0 0 14px rgba(130, 255, 214, 0.8);
     }
 
     /* Mobile tweaks */
@@ -255,7 +260,9 @@
     document.querySelectorAll('input[name="answer"]').forEach(r => r.checked = false);
     if (userAnswers[currentIndex]) {
       const saved = userAnswers[currentIndex];
-      const radio = document.querySelector(`input[name="answer"][value="${saved}"]`);
+      const radio = document.querySelector(
+        `input[name="answer"][value="${saved}"]`
+      );
       if (radio) radio.checked = true;
     }
 
