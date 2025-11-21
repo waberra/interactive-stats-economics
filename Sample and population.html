@@ -1,310 +1,462 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sample vs. Population Quiz</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: "Trebuchet MS", sans-serif;
-      padding: 20px;
-      background: #1e1e1e; /* dark chalkboard */
-      display: flex;
-      justify-content: center;
-      color: white;
-    }
-    .container {
-      max-width: 900px;
-      width: 100%;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample vs Population Classification Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
 
-    /* Sticky Note Title */
-    .header-box {
-      background: #ffe95b;           /* neon yellow sticky */
-      color: #1b1b1b;
-      padding: 18px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px #00000060;
-      margin-bottom: 20px;
-      border: 3px solid #fff;
-    }
-    .header-box h1 {
-      margin: 0 0 10px 0;
-    }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-    /* Question card */
-    #question-card {
-      margin: 12px 0;
-      padding: 16px;
-      background: #6c4cff;           /* neon purple */
-      border: 2px solid #fff5;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #6c4cff80;
-      display: none;                 /* shown after questions are generated */
-    }
-    #question-text {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    #progress {
-      font-size: 0.9em;
-      margin-bottom: 10px;
-      opacity: 0.9;
-    }
-    .options {
-      margin-top: 6px;
-      margin-bottom: 8px;
-    }
-    .options label {
-      margin-right: 12px;
-      cursor: pointer;
-      color: #fff;
-    }
-    .options input {
-      margin-right: 4px;
-    }
-    #warning {
-      font-size: 0.9em;
-      color: #ffb3c6;
-      min-height: 1.2em;
-    }
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 3px solid #b21e2d;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
 
-    /* Neon Feedback / results */
-    .feedback {
-      margin-top: 6px;
-      font-size: 0.95em;
-      font-weight: bold;
-    }
-    .correct {
-      color: #3bffdd;                /* electric aqua */
-      text-shadow: 0 0 7px #3bffdd;
-    }
-    .incorrect {
-      color: #ff4d6d;                /* neon red */
-      text-shadow: 0 0 7px #ff4d6d;
-    }
+        .red-title h1 {
+            margin: 0;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
 
-    /* Result summary */
-    #results {
-      margin-top: 20px;
-    }
-    .result-item {
-      margin: 10px 0;
-      padding: 10px;
-      background: #2b2b2b;
-      border-radius: 8px;
-      border: 1px solid #444;
-    }
+        .red-title p {
+            margin: 10px 0 0 0;
+            color: #ffe6e6;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
 
-    /* Buttons */
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    button {
-      padding: 10px 16px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.95em;
-      background: #32ff7e;           /* glow green */
-      color: #1b1b1b;
-      font-weight: bold;
-      box-shadow: 0 0 10px #32ff7e;
-    }
-    button:hover {
-      background: #45ff90;
-      box-shadow: 0 0 15px #45ff90;
-    }
-  </style>
+        .blue-concepts {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #117a8b;
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .blue-concepts h3 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .concept-boxes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .green-box {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 3px solid #1c7430;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .orange-box {
+            background: linear-gradient(135deg, #fd7e14, #e55a00);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 3px solid #dc5200;
+            box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+        }
+
+        .green-box h4, .orange-box h4 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .green-box em, .orange-box em {
+            color: #ffff99;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #1e3f73;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .purple-questions {
+            background: linear-gradient(135deg, #6f42c1, #5a2a9d);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #502a78;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+        }
+
+        .teal-scenario {
+            background: linear-gradient(135deg, #20c997, #17a085);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #15856f;
+            box-shadow: 0 3px 12px rgba(32, 201, 151, 0.3);
+        }
+
+        .teal-scenario h3 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .white-statement {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+        }
+
+        .white-statement strong {
+            color: #333;
+        }
+
+        .classify-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 500;
+        }
+
+        .sample-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .population-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .classify-btn:hover {
+            opacity: 0.8;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .pink-score {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #c7185d;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar-container {
+            background: rgba(255,255,255,0.3);
+            height: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #ffc107, #ff8800);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .concept-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="container">
+    <div class="container">
+        <div class="red-title">
+            <h1>🎯 Sample vs Population Classification</h1>
+            <p>Master the fundamental distinction in statistical analysis</p>
+        </div>
 
-    <div class="header-box">
-      <h1>📘 Sample vs. Population Quiz</h1>
-      <p>
-        You will answer <strong>10 questions</strong>, one at a time.  
-        For each statement, decide whether it describes a <strong>Sample</strong> or a <strong>Population</strong>.  
-        At the end, you’ll see your <strong>score</strong> and explanations.
-      </p>
+        <div class="blue-concepts">
+            <h3>🧠 Key Concepts</h3>
+            <div class="concept-boxes">
+                <div class="orange-box">
+                    <h4>🌐 Population</h4>
+                    <p><strong>The complete group</strong> of all individuals, items, or units of interest that we want to study or make conclusions about.</p>
+                    <p><em>Examples: All Canadian households, Every student at Dawson College</em></p>
+                </div>
+                <div class="green-box">
+                    <h4>📊 Sample</h4>
+                    <p><strong>A subset</strong> of the population that we actually collect data from. Used to make inferences about the population.</p>
+                    <p><em>Examples: 500 randomly selected Canadian households, 50 students surveyed at Dawson</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="btn" onclick="generateNewScenario()">🎲 New Scenario</button>
+            <button class="btn" onclick="showAllExplanations()" id="explainBtn" disabled>💡 Show Explanations</button>
+            <button class="btn" onclick="checkAllAnswers()" id="checkBtn" disabled>✅ Check Answers</button>
+            <button class="btn" onclick="resetEverything()">🔄 Reset</button>
+        </div>
+
+        <div class="pink-score" id="scoreDisplay">
+            Score: 0/0 | Progress: 0%
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div id="questionsContainer"></div>
     </div>
 
-    <!-- Question card -->
-    <div id="question-card">
-      <div id="progress"></div>
-      <div id="question-text"></div>
-      <div class="options">
-        <label>
-          <input type="radio" name="answer" value="sample">
-          Sample
-        </label>
-        <label>
-          <input type="radio" name="answer" value="population">
-          Population
-        </label>
-      </div>
-      <div id="warning"></div>
-    </div>
+    <script>
+        let currentQuestions = null;
+        let userChoices = {};
+        let totalQuestions = 0;
+        let correctAnswers = 0;
+        let questionsAnswered = 0;
 
-    <div class="buttons">
-      <button id="start-btn" onclick="startBatch()">▶ Start New Batch</button>
-      <button id="next-btn" onclick="nextQuestion()" style="display:none;">Next Question ▶</button>
-    </div>
+        const scenarioDatabase = [
+            {
+                title: "Canadian Household Income Study",
+                context: "Statistics Canada wants to understand household income patterns across the country.",
+                questions: [
+                    { text: "All households in Canada", type: "population", explanation: "This refers to every household in the entire country - the complete group of interest." },
+                    { text: "1,200 households randomly selected from across all provinces", type: "sample", explanation: "This is a subset of Canadian households selected to represent the larger population." },
+                    { text: "Every household that filed a tax return in 2023", type: "population", explanation: "This encompasses all tax-filing households - the complete group being studied." },
+                    { text: "500 households surveyed in Toronto and Montreal", type: "sample", explanation: "This represents only a portion of households, limited to two specific cities." }
+                ]
+            },
+            {
+                title: "Quebec Student Performance Analysis", 
+                context: "The Ministry of Education wants to assess math performance in Quebec high schools.",
+                questions: [
+                    { text: "All Grade 11 students in Quebec", type: "population", explanation: "This includes every Grade 11 student in the province - the complete group of interest." },
+                    { text: "300 students selected from 20 randomly chosen high schools", type: "sample", explanation: "This is a representative subset chosen to make inferences about all Quebec Grade 11 students." },
+                    { text: "Students who took the standardized math test in 2024", type: "population", explanation: "If all students took this test, this represents the complete group being studied." },
+                    { text: "150 students from urban schools and 150 from rural schools", type: "sample", explanation: "This is a selected subset designed to compare different school environments." }
+                ]
+            },
+            {
+                title: "Bank of Canada Economic Indicators",
+                context: "The Bank of Canada analyzes spending patterns to inform monetary policy decisions.",
+                questions: [
+                    { text: "All consumer transactions in Canada during Q3 2024", type: "population", explanation: "This includes every purchase made by consumers - the complete set of transactions being studied." },
+                    { text: "Credit card data from 50,000 randomly selected customers", type: "sample", explanation: "This subset of consumer spending data is used to estimate broader spending patterns." },
+                    { text: "Every mortgage approved by Canadian banks in October", type: "population", explanation: "This encompasses all mortgage approvals in the specified period - the complete group of interest." },
+                    { text: "500 small businesses surveyed about spending plans", type: "sample", explanation: "This represents a subset of businesses selected to understand broader business spending intentions." }
+                ]
+            }
+        ];
 
-    <div id="results"></div>
+        function generateNewScenario() {
+            console.log("🎲 Generating new scenario...");
+            
+            // Reset everything
+            userChoices = {};
+            questionsAnswered = 0;
+            correctAnswers = 0;
+            
+            // Pick random scenario
+            currentQuestions = scenarioDatabase[Math.floor(Math.random() * scenarioDatabase.length)];
+            totalQuestions = currentQuestions.questions.length;
+            
+            console.log("📋 Selected:", currentQuestions.title);
+            
+            // Build the HTML
+            let html = `
+                <div class="purple-questions">
+                    <div class="teal-scenario">
+                        <h3>${currentQuestions.title}</h3>
+                        <p><strong>Context:</strong> ${currentQuestions.context}</p>
+                        <p><strong>Instructions:</strong> Classify each statement below as describing either a <strong style="color: #ff6b6b; background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px;">POPULATION</strong> or a <strong style="color: #51cf66; background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px;">SAMPLE</strong>.</p>
+                    </div>
+            `;
+            
+            currentQuestions.questions.forEach((question, index) => {
+                html += `
+                    <div class="white-statement" id="statement-${index}">
+                        <div><strong>Statement ${index + 1}:</strong> ${question.text}</div>
+                        <div style="margin-top: 10px;">
+                            <button class="classify-btn sample-btn" onclick="makeChoice(${index}, 'sample')">📊 Sample</button>
+                            <button class="classify-btn population-btn" onclick="makeChoice(${index}, 'population')">🌐 Population</button>
+                        </div>
+                        <div class="feedback" id="feedback-${index}"></div>
+                        <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 6px; margin-top: 15px; display: none;" id="explanation-${index}">
+                            <strong>Explanation:</strong> ${question.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            // Insert the HTML
+            document.getElementById('questionsContainer').innerHTML = html;
+            
+            // Enable buttons
+            document.getElementById('checkBtn').disabled = false;
+            document.getElementById('explainBtn').disabled = false;
+            
+            updateScore();
+            console.log("✅ Scenario generated successfully!");
+        }
 
-  </div>
+        function makeChoice(questionIndex, choice) {
+            console.log(`📝 Question ${questionIndex + 1}: ${choice}`);
+            
+            userChoices[questionIndex] = choice;
+            questionsAnswered = Object.keys(userChoices).length;
+            
+            // Update button styling
+            const statement = document.getElementById(`statement-${questionIndex}`);
+            const buttons = statement.querySelectorAll('.classify-btn');
+            
+            buttons.forEach(btn => {
+                btn.style.background = '#6c757d';
+                btn.disabled = true;
+            });
+            
+            updateScore();
+        }
 
-  <script>
-    const NUM_QUESTIONS = 10;
+        function checkAllAnswers() {
+            console.log("🔍 Checking all answers...");
+            correctAnswers = 0;
+            
+            currentQuestions.questions.forEach((question, index) => {
+                const userAnswer = userChoices[index];
+                const correctAnswer = question.type;
+                const feedbackElement = document.getElementById(`feedback-${index}`);
+                
+                if (userAnswer === correctAnswer) {
+                    correctAnswers++;
+                    feedbackElement.className = 'feedback correct show';
+                    feedbackElement.innerHTML = '✅ Correct! Well done.';
+                } else if (userAnswer) {
+                    feedbackElement.className = 'feedback incorrect show';
+                    feedbackElement.innerHTML = `❌ Incorrect. The correct answer is <strong>${correctAnswer}</strong>.`;
+                }
+            });
+            
+            document.getElementById('checkBtn').disabled = true;
+            updateScore();
+            console.log(`✅ Results: ${correctAnswers}/${totalQuestions} correct`);
+        }
 
-    const sampleStarters = [
-      "50 randomly selected", "100 surveyed", "25 participants chosen",
-      "A sample of", "80 chosen", "30 surveyed", "20 selected",
-      "A chosen group of", "75 surveyed", "A randomly picked group of"
-    ];
+        function showAllExplanations() {
+            console.log("💡 Showing explanations...");
+            
+            currentQuestions.questions.forEach((question, index) => {
+                const explanation = document.getElementById(`explanation-${index}`);
+                explanation.style.display = 'block';
+            });
+            
+            document.getElementById('explainBtn').disabled = true;
+        }
 
-    const populationStarters = [
-      "All", "Every", "The entire group of", "Each and every", "100% of",
-      "All registered", "All enrolled", "All residents", "All members of",
-      "All recorded"
-    ];
+        function updateScore() {
+            const progress = totalQuestions > 0 ? (questionsAnswered / totalQuestions * 100) : 0;
+            const accuracy = questionsAnswered > 0 ? (correctAnswers / questionsAnswered * 100).toFixed(0) : 0;
+            
+            document.getElementById('scoreDisplay').innerHTML = `
+                Score: ${correctAnswers}/${totalQuestions} | Questions Answered: ${questionsAnswered}/${totalQuestions} | Accuracy: ${accuracy}%
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: ${progress}%"></div>
+                </div>
+            `;
+        }
 
-    const subjects = [
-      "students in a school", "patients in a hospital", "citizens of a city",
-      "employees in a company", "basketball players in a league", "drivers in a state",
-      "voters in an election", "teachers in a district", "teenagers in a town",
-      "customers at a store", "college students", "workers in a factory",
-      "athletes at a tournament", "residents in a village", "passengers on a flight"
-    ];
+        function resetEverything() {
+            document.getElementById('questionsContainer').innerHTML = '';
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('explainBtn').disabled = true;
+            
+            userChoices = {};
+            totalQuestions = 0;
+            correctAnswers = 0;
+            questionsAnswered = 0;
+            currentQuestions = null;
+            
+            updateScore();
+            console.log("🔄 Reset complete");
+        }
 
-    let questionsData = [];         // { text, type }
-    let userAnswers = [];           // "sample" | "population" | null
-    let currentIndex = 0;
-
-    function randomItem(list) {
-      return list[Math.floor(Math.random() * list.length)];
-    }
-
-    function buildSentence(type) {
-      return type === "sample"
-        ? `${randomItem(sampleStarters)} ${randomItem(subjects)}.`
-        : `${randomItem(populationStarters)} ${randomItem(subjects)}.`;
-    }
-
-    function explanation(type) {
-      return type === "sample"
-        ? "This is a sample because it includes only part of the group."
-        : "This is a population because it includes every member of the entire group.";
-    }
-
-    function startBatch() {
-      // Create new batch
-      questionsData = [];
-      userAnswers = new Array(NUM_QUESTIONS).fill(null);
-      currentIndex = 0;
-      document.getElementById("results").innerHTML = "";
-
-      for (let i = 0; i < NUM_QUESTIONS; i++) {
-        const type = Math.random() < 0.5 ? "sample" : "population";
-        const text = buildSentence(type);
-        questionsData.push({ text, type });
-      }
-
-      document.getElementById("start-btn").textContent = "🔁 Restart Batch";
-      document.getElementById("question-card").style.display = "block";
-      document.getElementById("next-btn").style.display = "inline-block";
-      renderQuestion();
-    }
-
-    function renderQuestion() {
-      const q = questionsData[currentIndex];
-      const qText = document.getElementById("question-text");
-      const progress = document.getElementById("progress");
-      const warning = document.getElementById("warning");
-
-      qText.textContent = `${currentIndex + 1}. ${q.text}`;
-      progress.textContent = `Question ${currentIndex + 1} of ${NUM_QUESTIONS}`;
-      warning.textContent = "";
-
-      // clear radios
-      const radios = document.querySelectorAll('input[name="answer"]');
-      radios.forEach(r => r.checked = false);
-
-      // if this question already answered (when moving back in future versions)
-      if (userAnswers[currentIndex]) {
-        const val = userAnswers[currentIndex];
-        const radioToCheck = document.querySelector(`input[name="answer"][value="${val}"]`);
-        if (radioToCheck) radioToCheck.checked = true;
-      }
-
-      // Change button label on last question
-      const nextBtn = document.getElementById("next-btn");
-      nextBtn.textContent = (currentIndex === NUM_QUESTIONS - 1)
-        ? "✅ Finish & Grade"
-        : "Next Question ▶";
-    }
-
-    function nextQuestion() {
-      const warning = document.getElementById("warning");
-      const selected = document.querySelector('input[name="answer"]:checked');
-
-      if (!selected) {
-        warning.textContent = "Please choose Sample or Population before continuing.";
-        return;
-      }
-
-      warning.textContent = "";
-      userAnswers[currentIndex] = selected.value;
-
-      if (currentIndex < NUM_QUESTIONS - 1) {
-        currentIndex++;
-        renderQuestion();
-      } else {
-        gradeQuiz();
-      }
-    }
-
-    function gradeQuiz() {
-      let correctCount = 0;
-      const resultsDiv = document.getElementById("results");
-      resultsDiv.innerHTML = "";
-
-      questionsData.forEach((q, idx) => {
-        const user = userAnswers[idx];
-        const correct = q.type;
-        const isCorrect = user === correct;
-        if (isCorrect) correctCount++;
-
-        const item = document.createElement("div");
-        item.className = "result-item";
-
-        let userText = user ? user : "(no answer)";
-        item.innerHTML = `
-          <div><strong>Question ${idx + 1}:</strong> ${q.text}</div>
-          <div>Your answer: <strong>${userText}</strong></div>
-          <div>Correct answer: <strong>${correct}</strong></div>
-          <div class="${isCorrect ? "correct" : "incorrect"}">
-            ${isCorrect ? "Correct!" : "Incorrect."} ${explanation(correct)}
-          </div>
-        `;
-        resultsDiv.appendChild(item);
-      });
-
-      const scoreP = document.createElement("p");
-      scoreP.className = "feedback";
-      scoreP.innerHTML = `You scored <span class="correct">${correctCount} / ${NUM_QUESTIONS}</span>.`;
-      resultsDiv.prepend(scoreP);
-
-      // Optionally keep the last question visible, but quiz is done
-      document.getElementById("next-btn").style.display = "none";
-    }
-
-    // Ready to go – user clicks "Start New Batch" to begin
-  </script>
+        // Initialize when page loads
+        window.onload = function() {
+            console.log("🚀 Sample vs Population Classification Tool loaded!");
+            updateScore();
+        };
+    </script>
 </body>
 </html>
