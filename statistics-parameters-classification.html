@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics vs Parameters Classification Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 3px solid #b21e2d;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .red-title h1 {
+            margin: 0;
+            font-size: 2.2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            margin: 10px 0 0 0;
+            color: #ffe6e6;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #117a8b;
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .blue-concepts h3 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .concept-boxes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .green-box {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 3px solid #1c7430;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .orange-box {
+            background: linear-gradient(135deg, #fd7e14, #e55a00);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 3px solid #dc5200;
+            box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+        }
+
+        .green-box h4, .orange-box h4 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .green-box em, .orange-box em {
+            color: #ffff99;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #1e3f73;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .purple-questions {
+            background: linear-gradient(135deg, #6f42c1, #5a2a9d);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #502a78;
+            box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+        }
+
+        .teal-scenario {
+            background: linear-gradient(135deg, #20c997, #17a085);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #15856f;
+            box-shadow: 0 3px 12px rgba(32, 201, 151, 0.3);
+        }
+
+        .teal-scenario h3 {
+            margin-top: 0;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .white-statement {
+            background: white;
+            color: #333;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+        }
+
+        .white-statement strong {
+            color: #333;
+        }
+
+        .classify-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: 500;
+        }
+
+        .statistic-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .parameter-btn {
+            background: #fd7e14;
+            color: white;
+        }
+
+        .classify-btn:hover {
+            opacity: 0.8;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .pink-score {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #c7185d;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar-container {
+            background: rgba(255,255,255,0.3);
+            height: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #ffc107, #ff8800);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .concept-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="red-title">
+            <h1>📊 Statistics vs Parameters Classification</h1>
+            <p>Master the fundamental distinction between sample and population measures</p>
+        </div>
+
+        <div class="blue-concepts">
+            <h3>🧠 Key Concepts</h3>
+            <div class="concept-boxes">
+                <div class="orange-box">
+                    <h4>🌐 Parameter</h4>
+                    <p><strong>A numerical measure</strong> that describes a characteristic of a <strong>population</strong>. Usually unknown and estimated from sample data.</p>
+                    <p><em>Examples: Mean income of ALL Canadian households, True unemployment rate for ALL working-age adults</em></p>
+                </div>
+                <div class="green-box">
+                    <h4>📈 Statistic</h4>
+                    <p><strong>A numerical measure</strong> that describes a characteristic of a <strong>sample</strong>. Used to estimate the corresponding population parameter.</p>
+                    <p><em>Examples: Mean income of 1,000 surveyed households, Unemployment rate from Labour Force Survey</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="btn" onclick="generateNewScenario()">🎲 New Scenario</button>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div class="pink-score" id="scoreDisplay">
+            Score: 0/0 | Progress: 0%
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div id="actionButtons" style="text-align: center; margin: 20px 0; display: none;">
+            <button class="btn" onclick="showAllExplanations()" id="explainBtn" disabled>💡 Show Explanations</button>
+            <button class="btn" onclick="checkAllAnswers()" id="checkBtn" disabled>✅ Check Answers</button>
+            <button class="btn" onclick="resetEverything()">🔄 Reset</button>
+            <button class="btn" onclick="generateNewScenario()">🎲 New Scenario</button>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestions = null;
+        let userChoices = {};
+        let totalQuestions = 0;
+        let correctAnswers = 0;
+        let questionsAnswered = 0;
+
+        const scenarioDatabase = [
+            {
+                title: "Canadian Household Income Analysis",
+                context: "Statistics Canada conducts regular surveys to understand income patterns across Canadian households.",
+                questions: [
+                    { text: "The true mean household income for all Canadian families", type: "parameter", explanation: "This describes a characteristic of the entire population (all Canadian families) - making it a parameter." },
+                    { text: "The mean income of 2,500 families surveyed by Statistics Canada", type: "statistic", explanation: "This describes a characteristic calculated from a sample of 2,500 families - making it a statistic." },
+                    { text: "The actual median wealth of every Canadian household", type: "parameter", explanation: "This refers to the true median for the entire population of Canadian households - making it a parameter." },
+                    { text: "The standard deviation of income from a random sample of 1,200 households", type: "statistic", explanation: "This measures variability calculated from sample data - making it a statistic." }
+                ]
+            },
+            {
+                title: "Quebec Education Performance Study", 
+                context: "The Ministry of Education analyzes student performance across Quebec high schools using standardized test scores.",
+                questions: [
+                    { text: "The true average test score of all Grade 11 students in Quebec", type: "parameter", explanation: "This describes the actual mean for the entire population of Quebec Grade 11 students - making it a parameter." },
+                    { text: "The average score of 800 students randomly selected from 25 schools", type: "statistic", explanation: "This is calculated from a sample of 800 students - making it a statistic." },
+                    { text: "The proportion of all Quebec students scoring above 80%", type: "parameter", explanation: "This describes a characteristic of the entire population of Quebec students - making it a parameter." },
+                    { text: "The percentage of sampled students who passed the standardized test", type: "statistic", explanation: "This proportion is calculated from the sample data - making it a statistic." }
+                ]
+            },
+            {
+                title: "Canadian Labour Force Analysis",
+                context: "Employment and Social Development Canada studies employment patterns using the monthly Labour Force Survey.",
+                questions: [
+                    { text: "The true unemployment rate for all working-age Canadians", type: "parameter", explanation: "This is the actual unemployment rate for the entire population of working-age adults - making it a parameter." },
+                    { text: "The unemployment rate calculated from 56,000 surveyed individuals", type: "statistic", explanation: "This rate is calculated from the Labour Force Survey sample - making it a statistic." },
+                    { text: "The actual average wage of every employed person in Canada", type: "parameter", explanation: "This describes the true mean wage for the entire population of employed Canadians - making it a parameter." },
+                    { text: "The mean wage from a survey of 3,000 randomly selected workers", type: "statistic", explanation: "This mean is calculated from sample data - making it a statistic." }
+                ]
+            },
+            {
+                title: "Bank of Canada Economic Indicators",
+                context: "The Bank of Canada tracks consumer spending and economic indicators to inform monetary policy decisions.",
+                questions: [
+                    { text: "The true average monthly spending of all Canadian consumers", type: "parameter", explanation: "This describes actual spending for the entire population of Canadian consumers - making it a parameter." },
+                    { text: "The median spending calculated from 10,000 credit card transactions", type: "statistic", explanation: "This median is computed from a sample of transactions - making it a statistic." },
+                    { text: "The actual inflation rate experienced by every Canadian household", type: "parameter", explanation: "This is the true inflation effect on the entire population of households - making it a parameter." },
+                    { text: "The Consumer Price Index based on a basket of goods and services", type: "statistic", explanation: "The CPI is calculated from a sample of representative goods and services - making it a statistic." }
+                ]
+            },
+            {
+                title: "Ontario Healthcare System Metrics",
+                context: "Ontario Health evaluates healthcare system performance using patient data and satisfaction surveys.",
+                questions: [
+                    { text: "The true average wait time for all emergency department visits in Ontario", type: "parameter", explanation: "This describes the actual mean for all ED visits in the population - making it a parameter." },
+                    { text: "The average wait time from a study of 500 randomly selected ED visits", type: "statistic", explanation: "This mean is calculated from a sample of 500 visits - making it a statistic." },
+                    { text: "The actual patient satisfaction rate for every hospital patient in Ontario", type: "parameter", explanation: "This describes satisfaction for the entire population of Ontario hospital patients - making it a parameter." },
+                    { text: "The satisfaction percentage from surveys of 1,200 discharged patients", type: "statistic", explanation: "This percentage is calculated from sample survey data - making it a statistic." }
+                ]
+            },
+            {
+                title: "Canadian University Research Study",
+                context: "Universities Canada analyzes graduation rates and student performance across Canadian post-secondary institutions.",
+                questions: [
+                    { text: "The true graduation rate for all undergraduate students in Canada", type: "parameter", explanation: "This describes the actual graduation rate for the entire population of undergraduates - making it a parameter." },
+                    { text: "The graduation rate calculated from data at 30 randomly selected universities", type: "statistic", explanation: "This rate is calculated from a sample of 30 universities - making it a statistic." },
+                    { text: "The actual average GPA of every STEM student in Canadian universities", type: "parameter", explanation: "This describes the true mean GPA for all STEM students in the population - making it a parameter." },
+                    { text: "The mean GPA from a survey of 2,000 randomly selected STEM students", type: "statistic", explanation: "This mean is calculated from sample data - making it a statistic." }
+                ]
+            }
+        ];
+
+        function generateNewScenario() {
+            console.log("🎲 Generating new scenario...");
+            
+            // Reset everything
+            userChoices = {};
+            questionsAnswered = 0;
+            correctAnswers = 0;
+            
+            // Pick random scenario
+            currentQuestions = scenarioDatabase[Math.floor(Math.random() * scenarioDatabase.length)];
+            totalQuestions = currentQuestions.questions.length;
+            
+            console.log("📋 Selected:", currentQuestions.title);
+            
+            // Build the HTML
+            let html = `
+                <div class="purple-questions">
+                    <div class="teal-scenario">
+                        <h3>${currentQuestions.title}</h3>
+                        <p><strong>Context:</strong> ${currentQuestions.context}</p>
+                        <p><strong>Instructions:</strong> Classify each measure below as either a <strong style="color: #ff6b6b; background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px;">PARAMETER</strong> or a <strong style="color: #51cf66; background: rgba(255,255,255,0.8); padding: 2px 6px; border-radius: 3px;">STATISTIC</strong>.</p>
+                    </div>
+            `;
+            
+            currentQuestions.questions.forEach((question, index) => {
+                html += `
+                    <div class="white-statement" id="statement-${index}">
+                        <div><strong>Measure ${index + 1}:</strong> ${question.text}</div>
+                        <div style="margin-top: 10px;">
+                            <button class="classify-btn statistic-btn" onclick="makeChoice(${index}, 'statistic')">📈 Statistic</button>
+                            <button class="classify-btn parameter-btn" onclick="makeChoice(${index}, 'parameter')">🌐 Parameter</button>
+                        </div>
+                        <div class="feedback" id="feedback-${index}"></div>
+                        <div style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 6px; margin-top: 15px; display: none;" id="explanation-${index}">
+                            <strong>Explanation:</strong> ${question.explanation}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            // Insert the HTML
+            document.getElementById('questionsContainer').innerHTML = html;
+            
+            // Show action buttons
+            document.getElementById('actionButtons').style.display = 'block';
+            
+            // Enable buttons
+            document.getElementById('checkBtn').disabled = false;
+            document.getElementById('explainBtn').disabled = false;
+            
+            updateScore();
+            console.log("✅ Scenario generated successfully!");
+        }
+
+        function makeChoice(questionIndex, choice) {
+            console.log(`📝 Question ${questionIndex + 1}: ${choice}`);
+            
+            userChoices[questionIndex] = choice;
+            questionsAnswered = Object.keys(userChoices).length;
+            
+            // Update button styling
+            const statement = document.getElementById(`statement-${questionIndex}`);
+            const buttons = statement.querySelectorAll('.classify-btn');
+            
+            buttons.forEach(btn => {
+                btn.style.background = '#6c757d';
+                btn.disabled = true;
+            });
+            
+            updateScore();
+        }
+
+        function checkAllAnswers() {
+            console.log("🔍 Checking all answers...");
+            correctAnswers = 0;
+            
+            currentQuestions.questions.forEach((question, index) => {
+                const userAnswer = userChoices[index];
+                const correctAnswer = question.type;
+                const feedbackElement = document.getElementById(`feedback-${index}`);
+                
+                if (userAnswer === correctAnswer) {
+                    correctAnswers++;
+                    feedbackElement.className = 'feedback correct show';
+                    feedbackElement.innerHTML = '✅ Correct! Well done.';
+                } else if (userAnswer) {
+                    feedbackElement.className = 'feedback incorrect show';
+                    feedbackElement.innerHTML = `❌ Incorrect. The correct answer is <strong>${correctAnswer}</strong>.`;
+                }
+            });
+            
+            document.getElementById('checkBtn').disabled = true;
+            updateScore();
+            console.log(`✅ Results: ${correctAnswers}/${totalQuestions} correct`);
+        }
+
+        function showAllExplanations() {
+            console.log("💡 Showing explanations...");
+            
+            currentQuestions.questions.forEach((question, index) => {
+                const explanation = document.getElementById(`explanation-${index}`);
+                explanation.style.display = 'block';
+            });
+            
+            document.getElementById('explainBtn').disabled = true;
+        }
+
+        function updateScore() {
+            const progress = totalQuestions > 0 ? (questionsAnswered / totalQuestions * 100) : 0;
+            const accuracy = questionsAnswered > 0 ? (correctAnswers / questionsAnswered * 100).toFixed(0) : 0;
+            
+            document.getElementById('scoreDisplay').innerHTML = `
+                Score: ${correctAnswers}/${totalQuestions} | Questions Answered: ${questionsAnswered}/${totalQuestions} | Accuracy: ${accuracy}%
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: ${progress}%"></div>
+                </div>
+            `;
+        }
+
+        function resetEverything() {
+            document.getElementById('questionsContainer').innerHTML = '';
+            document.getElementById('actionButtons').style.display = 'none';
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('explainBtn').disabled = true;
+            
+            userChoices = {};
+            totalQuestions = 0;
+            correctAnswers = 0;
+            questionsAnswered = 0;
+            currentQuestions = null;
+            
+            updateScore();
+            console.log("🔄 Reset complete");
+        }
+
+        // Initialize when page loads
+        window.onload = function() {
+            console.log("🚀 Statistics vs Parameters Classification Tool loaded!");
+            updateScore();
+        };
+    </script>
+</body>
+</html>
