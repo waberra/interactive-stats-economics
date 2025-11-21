@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Levels of Measurement - Interactive Statistics Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #a71e2a;
+        }
+
+        .red-title h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 25px;
+            margin: 0;
+        }
+
+        .blue-concepts h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .measurement-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .level-card {
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .level-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .nominal-card {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-color: #e17055;
+            color: #2d3436;
+        }
+
+        .ordinal-card {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            border-color: #5f3dc4;
+            color: white;
+        }
+
+        .interval-card {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            border-color: #d63384;
+            color: white;
+        }
+
+        .ratio-card {
+            background: linear-gradient(135deg, #00cec9, #00b894);
+            border-color: #00a085;
+            color: white;
+        }
+
+        .level-card h4 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .level-card .description {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .level-card .examples {
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .level-card .operations {
+            font-size: 0.9em;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            padding-top: 10px;
+        }
+
+        .interactive-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+
+        .question-area {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #28a745;
+        }
+
+        .solution-area {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #ffc107;
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #495057, #6c757d);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-btn {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            color: #495057;
+            border: 2px solid #ced4da;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .option-btn:hover {
+            background: linear-gradient(135deg, #dee2e6, #ced4da);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .option-btn.incorrect {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #c7185d;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.3);
+            height: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, #ffc107, #ff8800);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .step-by-step {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+            background: rgba(255, 193, 7, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .measurement-levels {
+                grid-template-columns: 1fr;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="red-title">
+            <h1>📊 Levels of Measurement</h1>
+            <p>Master Stevens' Four-Level Classification System</p>
+        </div>
+
+        <div class="blue-concepts">
+            <h3>🎯 The Four Levels of Measurement</h3>
+            <div class="measurement-levels">
+                <div class="level-card nominal-card">
+                    <h4>🏷️ NOMINAL</h4>
+                    <div class="description">
+                        <strong>Categories Only</strong><br>
+                        Data that can only be labeled or named. No mathematical order exists.
+                    </div>
+                    <div class="examples">
+                        Examples: Province of birth, Industry sector, Marital status, Blood type
+                    </div>
+                    <div class="operations">
+                        <strong>Valid:</strong> Frequency counts, mode, chi-square tests<br>
+                        <strong>Invalid:</strong> Mean, median, standard deviation
+                    </div>
+                </div>
+
+                <div class="level-card ordinal-card">
+                    <h4>📈 ORDINAL</h4>
+                    <div class="description">
+                        <strong>Ranked Categories</strong><br>
+                        Data with meaningful order, but unequal intervals between categories.
+                    </div>
+                    <div class="examples">
+                        Examples: Education level, Customer satisfaction ratings, Economic class (Lower/Middle/Upper)
+                    </div>
+                    <div class="operations">
+                        <strong>Valid:</strong> Median, percentiles, rank correlation<br>
+                        <strong>Invalid:</strong> Mean, standard deviation (though often used)
+                    </div>
+                </div>
+
+                <div class="level-card interval-card">
+                    <h4>📏 INTERVAL</h4>
+                    <div class="description">
+                        <strong>Equal Intervals, No True Zero</strong><br>
+                        Numerical data with equal distances between values but no meaningful zero point.
+                    </div>
+                    <div class="examples">
+                        Examples: Temperature (°C/°F), IQ scores, Likert scale responses, Years (CE/BCE)
+                    </div>
+                    <div class="operations">
+                        <strong>Valid:</strong> Mean, standard deviation, correlation<br>
+                        <strong>Invalid:</strong> Ratios ("twice as hot")
+                    </div>
+                </div>
+
+                <div class="level-card ratio-card">
+                    <h4>⚖️ RATIO</h4>
+                    <div class="description">
+                        <strong>Equal Intervals, True Zero</strong><br>
+                        Numerical data with equal intervals and a meaningful zero point indicating absence.
+                    </div>
+                    <div class="examples">
+                        Examples: Income, Age, Height, Weight, Number of employees, Sales revenue
+                    </div>
+                    <div class="operations">
+                        <strong>Valid:</strong> All mathematical operations including ratios<br>
+                        <strong>Can say:</strong> "Twice as much income," "Three times older"
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <div class="control-panel">
+                <h3>🎮 Interactive Practice</h3>
+                <p>Test your understanding with randomized Canadian economic examples!</p>
+                <button class="btn" onclick="generateQuestion()">📝 Generate New Question</button>
+                <button class="btn btn-secondary" onclick="resetQuiz()">🔄 Reset Progress</button>
+            </div>
+
+            <div id="questionArea" class="question-area" style="display: none;">
+                <h3>📋 Question</h3>
+                <div id="questionText"></div>
+                <div id="optionsContainer" class="options-grid"></div>
+                <div id="feedbackArea"></div>
+                <button class="btn" onclick="showSolution()" id="solutionBtn" style="display: none;">📖 Show Solution</button>
+            </div>
+
+            <div id="solutionArea" class="solution-area">
+                <h3>📚 Step-by-Step Solution</h3>
+                <div id="solutionContent"></div>
+                <button class="btn" onclick="generateQuestion()">➡️ Next Question</button>
+            </div>
+
+            <div class="score-display">
+                <h3>📊 Your Progress</h3>
+                <div>Score: <span id="score">0</span> out of <span id="total">0</span> questions</div>
+                <div class="progress-container">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+                <div>Accuracy: <span id="accuracy">0%</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = {};
+        let score = 0;
+        let totalQuestions = 0;
+        let questionAnswered = false;
+
+        const scenarios = [
+            {
+                context: "Statistics Canada Employment Survey",
+                variables: [
+                    { name: "Annual salary in Canadian dollars", level: "ratio", reason: "Has a true zero (no income) and equal intervals. Can say someone earns 'twice as much' as another person." },
+                    { name: "Industry sector (Agriculture, Manufacturing, Services)", level: "nominal", reason: "Pure categories with no meaningful order. Agriculture is not 'greater than' Manufacturing." },
+                    { name: "Job satisfaction rating (Very Dissatisfied to Very Satisfied)", level: "ordinal", reason: "Has meaningful order but unequal intervals. Distance between 'Satisfied' and 'Very Satisfied' may not equal distance between other levels." },
+                    { name: "Years of work experience", level: "ratio", reason: "Has true zero (no experience) and equal intervals. Someone with 10 years has twice as much experience as someone with 5 years." }
+                ]
+            },
+            {
+                context: "Canadian Healthcare System Analysis",
+                variables: [
+                    { name: "Patient waiting time in minutes", level: "ratio", reason: "Has true zero (no wait time) and equal intervals. 60 minutes is exactly twice as long as 30 minutes." },
+                    { name: "Hospital department (Emergency, Cardiology, Pediatrics)", level: "nominal", reason: "Categories with no inherent order. Emergency is not 'higher' or 'lower' than Cardiology." },
+                    { name: "Treatment priority level (Low, Medium, High, Critical)", level: "ordinal", reason: "Clear ranking order but intervals between levels are not necessarily equal." },
+                    { name: "Patient temperature in Celsius", level: "interval", reason: "Equal intervals but no true zero (0°C does not mean absence of temperature). Cannot say 40°C is twice as hot as 20°C." }
+                ]
+            },
+            {
+                context: "Quebec Education System Study",
+                variables: [
+                    { name: "Student GPA (0.0 to 4.0)", level: "interval", reason: "Equal intervals between grade points, but zero does not represent 'no knowledge' - it's an arbitrary reference point." },
+                    { name: "Program of study (Arts, Sciences, Business)", level: "nominal", reason: "Different categories with no meaningful ranking order." },
+                    { name: "Education level (High School, CEGEP, Bachelor's, Master's, PhD)", level: "ordinal", reason: "Clear hierarchical order but unequal intervals - the difference between Bachelor's and Master's differs from High School to CEGEP." },
+                    { name: "Number of courses completed", level: "ratio", reason: "True zero (no courses) and equal intervals. 20 courses is exactly twice as many as 10 courses." }
+                ]
+            },
+            {
+                context: "Canadian Consumer Spending Research",
+                variables: [
+                    { name: "Monthly spending amount in CAD", level: "ratio", reason: "True zero (no spending) and equal intervals. $2000 spending is exactly twice $1000 spending." },
+                    { name: "Payment method (Cash, Credit Card, Debit, Mobile)", level: "nominal", reason: "Different categories with no inherent ranking or order." },
+                    { name: "Purchase frequency (Never, Rarely, Sometimes, Often, Always)", level: "ordinal", reason: "Clear order but unequal intervals - difference between 'Never' and 'Rarely' may differ from 'Often' and 'Always'." },
+                    { name: "Customer age in years", level: "ratio", reason: "True zero (birth) and equal intervals. A 60-year-old is exactly twice as old as a 30-year-old." }
+                ]
+            },
+            {
+                context: "Canadian Housing Market Analysis",
+                variables: [
+                    { name: "House price in Canadian dollars", level: "ratio", reason: "True zero (free house) and equal intervals. A $800,000 house costs exactly twice as much as a $400,000 house." },
+                    { name: "Province of location", level: "nominal", reason: "Geographic categories with no inherent ranking order." },
+                    { name: "Home condition rating (Poor, Fair, Good, Excellent)", level: "ordinal", reason: "Meaningful order but unequal intervals between condition levels." },
+                    { name: "Number of bedrooms", level: "ratio", reason: "True zero (studio apartment) and equal intervals. 4 bedrooms is exactly twice as many as 2 bedrooms." }
+                ]
+            },
+            {
+                context: "Canadian Banking Sector Study",
+                variables: [
+                    { name: "Account balance in CAD", level: "ratio", reason: "True zero (empty account) and equal intervals. $10,000 is exactly twice $5,000." },
+                    { name: "Bank branch type (Urban, Suburban, Rural)", level: "nominal", reason: "Location categories with no inherent ranking order." },
+                    { name: "Customer satisfaction score (1-10)", level: "interval", reason: "Equal intervals but arbitrary zero point - score of 0 doesn't mean 'no satisfaction exists'." },
+                    { name: "Credit rating (Poor, Fair, Good, Excellent)", level: "ordinal", reason: "Clear ranking but unequal intervals between rating categories." }
+                ]
+            }
+        ];
+
+        const levelOptions = [
+            { value: "nominal", label: "Nominal (Categories only)" },
+            { value: "ordinal", label: "Ordinal (Ranked categories)" },
+            { value: "interval", label: "Interval (Equal intervals, no true zero)" },
+            { value: "ratio", label: "Ratio (Equal intervals, true zero)" }
+        ];
+
+        function generateQuestion() {
+            if (questionAnswered) {
+                document.getElementById('solutionArea').style.display = 'none';
+            }
+            
+            questionAnswered = false;
+            document.getElementById('feedbackArea').innerHTML = '';
+            document.getElementById('solutionBtn').style.display = 'none';
+            
+            // Select random scenario and variable
+            const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            const variable = scenario.variables[Math.floor(Math.random() * scenario.variables.length)];
+            
+            currentQuestion = {
+                context: scenario.context,
+                variable: variable.name,
+                correctLevel: variable.level,
+                reason: variable.reason
+            };
+            
+            // Display question
+            document.getElementById('questionArea').style.display = 'block';
+            document.getElementById('questionText').innerHTML = `
+                <div style="background: #e9f7ef; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #28a745;">
+                    <h4>📊 Context: ${scenario.context}</h4>
+                    <p style="margin-top: 10px; font-size: 1.1em; font-weight: 600;">
+                        What level of measurement is this variable?
+                    </p>
+                    <div style="background: white; padding: 15px; margin-top: 15px; border-radius: 8px; border: 2px solid #28a745;">
+                        <strong>"${variable.name}"</strong>
+                    </div>
+                </div>
+            `;
+            
+            // Create option buttons
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            levelOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.innerHTML = option.label;
+                button.onclick = () => selectAnswer(option.value, button);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(selectedLevel, buttonElement) {
+            if (questionAnswered) return;
+            
+            questionAnswered = true;
+            totalQuestions++;
+            
+            const isCorrect = selectedLevel === currentQuestion.correctLevel;
+            
+            if (isCorrect) {
+                score++;
+                buttonElement.className = 'option-btn correct';
+                showFeedback(true, "Correct! " + currentQuestion.reason);
+            } else {
+                buttonElement.className = 'option-btn incorrect';
+                
+                // Highlight correct answer
+                const buttons = document.querySelectorAll('.option-btn');
+                buttons.forEach(btn => {
+                    if (btn.innerHTML.includes(currentQuestion.correctLevel.charAt(0).toUpperCase() + currentQuestion.correctLevel.slice(1))) {
+                        btn.className = 'option-btn correct';
+                    }
+                });
+                
+                showFeedback(false, `Incorrect. The correct answer is ${currentQuestion.correctLevel}. ${currentQuestion.reason}`);
+            }
+            
+            document.getElementById('solutionBtn').style.display = 'inline-block';
+            updateScore();
+        }
+
+        function showFeedback(isCorrect, message) {
+            const feedbackArea = document.getElementById('feedbackArea');
+            feedbackArea.innerHTML = `
+                <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                    ${isCorrect ? '✅' : '❌'} ${message}
+                </div>
+            `;
+        }
+
+        function showSolution() {
+            document.getElementById('solutionArea').style.display = 'block';
+            
+            const solutionContent = document.getElementById('solutionContent');
+            solutionContent.innerHTML = `
+                <div class="step-by-step">
+                    <h4>🔍 Analysis Process</h4>
+                    
+                    <div class="step">
+                        <strong>Step 1:</strong> Identify the variable type<br>
+                        Variable: "${currentQuestion.variable}"
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 2:</strong> Check for meaningful order<br>
+                        ${getMeaningfulOrderExplanation()}
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 3:</strong> Assess interval equality<br>
+                        ${getIntervalEqualityExplanation()}
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Step 4:</strong> Determine if true zero exists<br>
+                        ${getTrueZeroExplanation()}
+                    </div>
+                    
+                    <div class="step">
+                        <strong>Conclusion:</strong> This is <strong>${currentQuestion.correctLevel.toUpperCase()}</strong> level measurement.<br>
+                        ${currentQuestion.reason}
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; margin-top: 15px; border-radius: 8px;">
+                        <h5>💡 Key Insight</h5>
+                        ${getKeyInsight()}
+                    </div>
+                </div>
+            `;
+            
+            // Scroll to solution
+            document.getElementById('solutionArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getMeaningfulOrderExplanation() {
+            switch(currentQuestion.correctLevel) {
+                case 'nominal':
+                    return "No meaningful order exists between categories. They are simply different labels.";
+                case 'ordinal':
+                    return "Yes, there is a clear ranking or order, but the distances between ranks are not equal.";
+                case 'interval':
+                case 'ratio':
+                    return "Yes, there is both meaningful order AND equal intervals between values.";
+                default:
+                    return "";
+            }
+        }
+
+        function getIntervalEqualityExplanation() {
+            switch(currentQuestion.correctLevel) {
+                case 'nominal':
+                    return "Not applicable - nominal data doesn't have numerical intervals.";
+                case 'ordinal':
+                    return "Intervals are NOT equal - the difference between ranks varies.";
+                case 'interval':
+                case 'ratio':
+                    return "Yes, intervals are equal - the difference between consecutive values is constant.";
+                default:
+                    return "";
+            }
+        }
+
+        function getTrueZeroExplanation() {
+            switch(currentQuestion.correctLevel) {
+                case 'nominal':
+                case 'ordinal':
+                    return "Not applicable for categorical data.";
+                case 'interval':
+                    return "NO true zero - zero is arbitrary and doesn't mean 'absence' of the measured quality.";
+                case 'ratio':
+                    return "YES, true zero exists - zero represents the complete absence of the measured quality.";
+                default:
+                    return "";
+            }
+        }
+
+        function getKeyInsight() {
+            switch(currentQuestion.correctLevel) {
+                case 'nominal':
+                    return "With nominal data, you can only count frequencies and find the mode. Mathematical operations like mean or median don't make sense.";
+                case 'ordinal':
+                    return "With ordinal data, you can use median and percentiles, but mean can be misleading due to unequal intervals.";
+                case 'interval':
+                    return "With interval data, mean and standard deviation are valid, but ratios are not meaningful due to the arbitrary zero point.";
+                case 'ratio':
+                    return "Ratio data allows all mathematical operations, including meaningful ratios and proportions.";
+                default:
+                    return "";
+            }
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = totalQuestions;
+            
+            const accuracy = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = accuracy + '%';
+        }
+
+        function resetQuiz() {
+            score = 0;
+            totalQuestions = 0;
+            questionAnswered = false;
+            
+            document.getElementById('questionArea').style.display = 'none';
+            document.getElementById('solutionArea').style.display = 'none';
+            
+            updateScore();
+        }
+
+        // Initialize on page load
+        updateScore();
+    </script>
+</body>
+</html>
