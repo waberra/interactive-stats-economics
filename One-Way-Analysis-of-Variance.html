@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One-Way ANOVA - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .ci-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .confidence-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .interval-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .interval-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .interval-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        
+        .interval-formula {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            border-left: 4px solid #28a745;
+            font-weight: bold;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            margin: 6px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .data-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .group-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #007bff;
+        }
+        
+        .group-name {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .group-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 8px 0;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: #6c757d;
+            margin-bottom: 2px;
+        }
+        
+        .stat-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .step-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .step-number {
+            background: #9c27b0;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 120px 70px 70px 90px;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9em;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input, .input-row select {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .small-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .interval-result {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .final-interval {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 3px solid #2196f3;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .interpretation-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .interpretation-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .hypothesis-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #dc3545;
+        }
+
+        .hypothesis-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            border-left: 4px solid #dc3545;
+            font-weight: bold;
+        }
+        
+        .posthoc-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff9800;
+            display: none;
+        }
+        
+        .comparison-table {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .comparison-table th {
+            background: #ff9800;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .comparison-table .significant {
+            background: #ffebee;
+            font-weight: bold;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 One-Way ANOVA</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Compare Multiple Group Means</h2>
+            <p><strong>Analysis of Variance</strong> • <strong>F-Tests</strong> • <strong>Canadian Economic Comparisons</strong></p>
+        </div>
+        
+        <div class="ci-intro">
+            <h3>🎯 What is One-Way ANOVA?</h3>
+            
+            <div class="confidence-concept">
+                <div class="concept-title">📈 Compare Means from Three or More Groups</div>
+                
+                <div class="concept-explanation">
+                    <strong>🎯 The Goal:</strong> Determine if there are statistically significant differences between the means of three or more independent groups. ANOVA tests whether at least one group mean differs from the others.
+                </div>
+                
+                <div style="background: #fff; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin: 15px 0; text-align: center;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🔑 Key Idea:</div>
+                    <div style="font-size: 1.1em;">H₀: μ₁ = μ₂ = μ₃ = μ₄ vs H₁: At least one μᵢ is different</div>
+                    <div style="font-style: italic; margin-top: 5px;">Test if all groups have the same mean or if some differ</div>
+                </div>
+                
+                <div class="interval-types">
+                    <div class="interval-card">
+                        <div class="interval-title">📊 F-Statistic</div>
+                        <div class="interval-formula">
+                            F = MSB / MSW<br>
+                            <div style="font-size: 0.8em; margin-top: 5px;">Between-group variance / Within-group variance</div>
+                        </div>
+                    </div>
+                    
+                    <div class="interval-card">
+                        <div class="interval-title">📈 Sum of Squares</div>
+                        <div class="interval-formula">
+                            SST = SSB + SSW<br>
+                            <div style="font-size: 0.8em; margin-top: 5px;">Total = Between + Within</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Canadian Economic ANOVA Problem:
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('provincial-gdp')">💰 Provincial GDP</button>
+                <button class="scenario-btn" onclick="chooseScenario('regional-unemployment')">📉 Regional Unemployment</button>
+                <button class="scenario-btn" onclick="chooseScenario('industry-wages')">💼 Industry Wages</button>
+            </div>
+            <div>
+                <button class="scenario-btn" onclick="chooseScenario('city-housing')">🏠 City Housing Prices</button>
+                <button class="scenario-btn" onclick="chooseScenario('university-tuition')">🎓 University Tuition</button>
+                <button class="scenario-btn" onclick="chooseScenario('healthcare-spending')">🏥 Healthcare Spending</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Step 1: Sample Data & Research Question</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="hypothesis-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">🎯 Hypotheses:</div>
+                    <div class="hypothesis-box" id="nullHypothesis">
+                        H₀: μ₁ = μ₂ = μ₃ = μ₄ (All group means are equal)
+                    </div>
+                    <div class="hypothesis-box" id="altHypothesis">
+                        H₁: At least one group mean is different
+                    </div>
+                </div>
+                
+                <div class="data-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">📊 Group Statistics:</div>
+                    <div class="groups-container" id="groupsContainer">
+                        <!-- Groups will be populated here -->
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin-top: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🎯 Research Question:</div>
+                    <div id="researchQuestion" style="font-size: 1.1em;"></div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>🧮 Step 2: ANOVA Calculations</h3>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 1</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Sum of Squares Between Groups (SSB)</div>
+                    <div class="step-instructions">
+                        <strong>Between-Group Sum of Squares:</strong> SSB = Σnᵢ(x̄ᵢ - x̄)²
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Sum of Squares Between (SSB):</label>
+                        <input type="number" id="ssbInput" step="0.01" placeholder="SSB">
+                        <button class="small-button check-btn" onclick="checkSSB()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('ssb')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('ssb-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="ssb-answer"></div>
+                    <div class="tutorial-box" id="ssb-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 2</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Sum of Squares Within Groups (SSW)</div>
+                    <div class="step-instructions">
+                        <strong>Within-Group Sum of Squares:</strong> SSW = Σ(nᵢ-1)sᵢ²
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Sum of Squares Within (SSW):</label>
+                        <input type="number" id="sswInput" step="0.01" placeholder="SSW">
+                        <button class="small-button check-btn" onclick="checkSSW()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('ssw')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('ssw-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="ssw-answer"></div>
+                    <div class="tutorial-box" id="ssw-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 3</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate F-Statistic</div>
+                    <div class="step-instructions">
+                        <strong>F-Statistic:</strong> F = MSB / MSW = (SSB/dfB) / (SSW/dfW)
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>F-Statistic:</label>
+                        <input type="number" id="fstatInput" step="0.001" placeholder="F-value">
+                        <button class="small-button check-btn" onclick="checkFStat()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('fstat')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('fstat-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="fstat-answer"></div>
+                    <div class="tutorial-box" id="fstat-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 4</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Find Critical F-Value</div>
+                    <div class="step-instructions">
+                        <strong id="criticalInstructions">Find F-critical for α = 0.05</strong>
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Critical F-Value:</label>
+                        <input type="number" id="fcriticalInput" step="0.001" placeholder="F-critical">
+                        <button class="small-button check-btn" onclick="checkFCritical()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('fcritical')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('fcritical-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="fcritical-answer"></div>
+                    <div class="tutorial-box" id="fcritical-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 5</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Make Statistical Decision</div>
+                    <div class="step-instructions">
+                        <strong>Decision Rule:</strong> Reject H₀ if F > F-critical
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-row">
+                            <label>P-value:</label>
+                            <input type="number" id="pvalueInput" step="0.001" placeholder="p-value">
+                            <button class="small-button check-btn" onclick="checkPvalue()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('pvalue')">Answer</button>
+                        </div>
+                        
+                        <div class="input-row">
+                            <label>Decision:</label>
+                            <select id="decisionInput">
+                                <option value="">Choose...</option>
+                                <option value="reject">Reject H₀</option>
+                                <option value="fail">Fail to Reject H₀</option>
+                            </select>
+                            <button class="small-button check-btn" onclick="checkDecision()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('decision')">Answer</button>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-display" id="pvalue-answer"></div>
+                    <div class="answer-display" id="decision-answer"></div>
+                </div>
+            </div>
+            
+            <div class="interval-result">
+                <h3>📊 Step 3: ANOVA Results & Decision</h3>
+                <div class="final-interval" id="finalResult">
+                    Complete all calculations to see your ANOVA test results
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-style: italic;">
+                    Statistical decision at <strong>α = 0.05</strong> significance level
+                </div>
+            </div>
+            
+            <div class="posthoc-section" id="posthocSection">
+                <h3>🔍 Step 4: Post-Hoc Analysis (Tukey's HSD)</h3>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #e65100;">📊 Pairwise Comparisons:</div>
+                    <p>Since the ANOVA was significant, we conduct pairwise comparisons to determine which specific groups differ.</p>
+                    <div class="comparison-table" id="comparisonTable">
+                        <!-- Pairwise comparisons will be populated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="interpretation-section">
+                <h3>💼 Step 5: Economic Interpretation</h3>
+                <div class="interpretation-text">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">📈 What This Means:</div>
+                    <div id="economicInterpretation"></div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New ANOVA Problem</button>
+            <button class="button" onclick="checkAllSteps()">✅ Check All Calculations</button>
+            <button class="button" onclick="showANOVASummary()">📖 ANOVA Summary</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'provincial-gdp': {
+                name: 'Provincial GDP per Capita Comparison',
+                description: 'Statistics Canada comparing GDP per capita across four major provinces to assess economic performance differences.',
+                groups: ['Ontario', 'Quebec', 'British Columbia', 'Alberta'],
+                variable: 'GDP per Capita',
+                unit: 'CAD',
+                question: 'Is there a significant difference in GDP per capita among the four provinces?'
+            },
+            'regional-unemployment': {
+                name: 'Regional Unemployment Rate Comparison',
+                description: 'Employment Canada analyzing unemployment rates across four economic regions of Canada.',
+                groups: ['Atlantic', 'Central', 'Prairie', 'Pacific'],
+                variable: 'Unemployment Rate',
+                unit: '%',
+                question: 'Is there a significant difference in unemployment rates among the four regions?'
+            },
+            'industry-wages': {
+                name: 'Industry Average Wage Comparison',
+                description: 'Labour Canada comparing average wages across four major industry sectors.',
+                groups: ['Manufacturing', 'Services', 'Resources', 'Technology'],
+                variable: 'Average Annual Wage',
+                unit: 'CAD',
+                question: 'Is there a significant difference in wages among the four industry sectors?'
+            },
+            'city-housing': {
+                name: 'Major City Housing Price Comparison',
+                description: 'Canadian Real Estate Association comparing average housing prices across four major Canadian cities.',
+                groups: ['Vancouver', 'Toronto', 'Calgary', 'Montreal'],
+                variable: 'Average House Price',
+                unit: 'CAD',
+                question: 'Is there a significant difference in housing prices among the four cities?'
+            },
+            'university-tuition': {
+                name: 'University Tuition Comparison',
+                description: 'Statistics Canada comparing average undergraduate tuition fees across four Canadian universities.',
+                groups: ['UofT', 'UBC', 'McGill', 'University of Alberta'],
+                variable: 'Annual Tuition',
+                unit: 'CAD',
+                question: 'Is there a significant difference in tuition fees among the four universities?'
+            },
+            'healthcare-spending': {
+                name: 'Provincial Healthcare Spending Comparison',
+                description: 'Health Canada comparing per-capita healthcare spending across four provinces.',
+                groups: ['Ontario', 'Quebec', 'Alberta', 'British Columbia'],
+                variable: 'Healthcare Spending per Capita',
+                unit: 'CAD',
+                question: 'Is there a significant difference in healthcare spending among the four provinces?'
+            }
+        };
+
+        function generateRandomData(scenario) {
+            let baseData = {};
+            
+            switch(scenario) {
+                case 'provincial-gdp':
+                    baseData = [
+                        { n: 25 + Math.floor(Math.random() * 10), mean: 62000 + Math.random() * 8000, std: 8000 + Math.random() * 2000 },
+                        { n: 28 + Math.floor(Math.random() * 12), mean: 58000 + Math.random() * 6000, std: 7500 + Math.random() * 1500 },
+                        { n: 22 + Math.floor(Math.random() * 8), mean: 65000 + Math.random() * 10000, std: 9000 + Math.random() * 2500 },
+                        { n: 26 + Math.floor(Math.random() * 10), mean: 70000 + Math.random() * 12000, std: 10000 + Math.random() * 3000 }
+                    ];
+                    break;
+                case 'regional-unemployment':
+                    baseData = [
+                        { n: 30 + Math.floor(Math.random() * 10), mean: 8.2 + Math.random() * 2.0, std: 1.8 + Math.random() * 0.5 },
+                        { n: 35 + Math.floor(Math.random() * 12), mean: 6.8 + Math.random() * 1.5, std: 1.5 + Math.random() * 0.4 },
+                        { n: 28 + Math.floor(Math.random() * 8), mean: 5.4 + Math.random() * 1.2, std: 1.2 + Math.random() * 0.3 },
+                        { n: 32 + Math.floor(Math.random() * 10), mean: 7.1 + Math.random() * 1.8, std: 1.6 + Math.random() * 0.5 }
+                    ];
+                    break;
+                case 'industry-wages':
+                    baseData = [
+                        { n: 40 + Math.floor(Math.random() * 15), mean: 55000 + Math.random() * 8000, std: 12000 + Math.random() * 3000 },
+                        { n: 45 + Math.floor(Math.random() * 18), mean: 48000 + Math.random() * 6000, std: 10000 + Math.random() * 2500 },
+                        { n: 35 + Math.floor(Math.random() * 12), mean: 72000 + Math.random() * 12000, std: 15000 + Math.random() * 4000 },
+                        { n: 38 + Math.floor(Math.random() * 15), mean: 85000 + Math.random() * 15000, std: 18000 + Math.random() * 5000 }
+                    ];
+                    break;
+                case 'city-housing':
+                    baseData = [
+                        { n: 50 + Math.floor(Math.random() * 20), mean: 1300000 + Math.random() * 200000, std: 250000 + Math.random() * 50000 },
+                        { n: 55 + Math.floor(Math.random() * 22), mean: 1150000 + Math.random() * 180000, std: 220000 + Math.random() * 40000 },
+                        { n: 42 + Math.floor(Math.random() * 15), mean: 520000 + Math.random() * 80000, std: 90000 + Math.random() * 20000 },
+                        { n: 48 + Math.floor(Math.random() * 18), mean: 650000 + Math.random() * 100000, std: 110000 + Math.random() * 25000 }
+                    ];
+                    break;
+                case 'university-tuition':
+                    baseData = [
+                        { n: 200 + Math.floor(Math.random() * 50), mean: 14000 + Math.random() * 2000, std: 1500 + Math.random() * 300 },
+                        { n: 180 + Math.floor(Math.random() * 40), mean: 12500 + Math.random() * 1800, std: 1200 + Math.random() * 250 },
+                        { n: 160 + Math.floor(Math.random() * 35), mean: 13200 + Math.random() * 1500, std: 1300 + Math.random() * 200 },
+                        { n: 190 + Math.floor(Math.random() * 45), mean: 11800 + Math.random() * 1600, std: 1100 + Math.random() * 220 }
+                    ];
+                    break;
+                case 'healthcare-spending':
+                    baseData = [
+                        { n: 35 + Math.floor(Math.random() * 12), mean: 4800 + Math.random() * 600, std: 420 + Math.random() * 80 },
+                        { n: 40 + Math.floor(Math.random() * 15), mean: 4650 + Math.random() * 550, std: 380 + Math.random() * 70 },
+                        { n: 32 + Math.floor(Math.random() * 10), mean: 5200 + Math.random() * 700, std: 450 + Math.random() * 90 },
+                        { n: 38 + Math.floor(Math.random() * 13), mean: 4950 + Math.random() * 620, std: 400 + Math.random() * 75 }
+                    ];
+                    break;
+            }
+            
+            // Round values appropriately
+            baseData.forEach(group => {
+                group.n = Math.round(group.n);
+                if (scenario === 'regional-unemployment') {
+                    group.mean = Math.round(group.mean * 100) / 100;
+                    group.std = Math.round(group.std * 100) / 100;
+                } else {
+                    group.mean = Math.round(group.mean);
+                    group.std = Math.round(group.std);
+                }
+            });
+            
+            return baseData;
+        }
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            const randomData = generateRandomData(scenario);
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                groups: scenarioData.groups,
+                variable: scenarioData.variable,
+                unit: scenarioData.unit,
+                data: randomData,
+                question: scenarioData.question,
+                alpha: 0.05
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { data } = problemData;
+            const k = data.length; // number of groups
+            const totalN = data.reduce((sum, group) => sum + group.n, 0);
+            
+            // Calculate overall mean
+            let totalSum = 0;
+            data.forEach(group => {
+                totalSum += group.n * group.mean;
+            });
+            const overallMean = totalSum / totalN;
+            
+            // Calculate SSB (Sum of Squares Between)
+            let ssb = 0;
+            data.forEach(group => {
+                ssb += group.n * Math.pow(group.mean - overallMean, 2);
+            });
+            
+            // Calculate SSW (Sum of Squares Within)
+            let ssw = 0;
+            data.forEach(group => {
+                ssw += (group.n - 1) * Math.pow(group.std, 2);
+            });
+            
+            // Calculate degrees of freedom
+            const dfBetween = k - 1;
+            const dfWithin = totalN - k;
+            
+            // Calculate Mean Squares
+            const msb = ssb / dfBetween;
+            const msw = ssw / dfWithin;
+            
+            // Calculate F-statistic
+            const fStat = msb / msw;
+            
+            // Get critical F-value (α = 0.05)
+            const fCritical = getFCritical(dfBetween, dfWithin, 0.05);
+            
+            // Calculate p-value (approximation)
+            const pValue = getFPValue(fStat, dfBetween, dfWithin);
+            
+            // Decision
+            const decision = fStat > fCritical ? 'reject' : 'fail';
+            
+            correctAnswers = {
+                ssb: ssb,
+                ssw: ssw,
+                dfBetween: dfBetween,
+                dfWithin: dfWithin,
+                msb: msb,
+                msw: msw,
+                fStat: fStat,
+                fCritical: fCritical,
+                pValue: pValue,
+                decision: decision,
+                overallMean: overallMean
+            };
+        }
+
+        function getFCritical(df1, df2, alpha) {
+            // Simplified F-critical values for α = 0.05
+            // This is a rough approximation - in practice would use more comprehensive table
+            if (df1 === 3) {
+                if (df2 >= 120) return 2.68;
+                if (df2 >= 60) return 2.76;
+                if (df2 >= 40) return 2.84;
+                if (df2 >= 30) return 2.92;
+                if (df2 >= 24) return 2.99;
+                if (df2 >= 20) return 3.10;
+                if (df2 >= 15) return 3.29;
+                return 3.49; // df2 >= 12
+            }
+            
+            // Default approximation
+            return 2.5 + (4 - df1) * 0.3 + (30 - Math.min(df2, 30)) * 0.02;
+        }
+
+        function getFPValue(f, df1, df2) {
+            // Very rough approximation of F-distribution p-value
+            if (f < 1) return 0.5;
+            if (f < 2) return 0.3;
+            if (f < 3) return 0.15;
+            if (f < 4) return 0.08;
+            if (f < 5) return 0.04;
+            if (f < 7) return 0.02;
+            if (f < 10) return 0.01;
+            return 0.001;
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            // Update hypotheses
+            const groupNames = problemData.groups.join(', ');
+            document.getElementById('nullHypothesis').innerHTML = 
+                `H₀: μ₁ = μ₂ = μ₃ = μ₄ (All group means are equal)`;
+            document.getElementById('altHypothesis').innerHTML = 
+                `H₁: At least one group mean is different`;
+            
+            // Update groups display
+            const container = document.getElementById('groupsContainer');
+            container.innerHTML = '';
+            
+            problemData.groups.forEach((groupName, index) => {
+                const groupData = problemData.data[index];
+                const groupCard = document.createElement('div');
+                groupCard.className = 'group-card';
+                groupCard.innerHTML = `
+                    <div class="group-name">${groupName}</div>
+                    <div class="group-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">n</div>
+                            <div class="stat-value">${groupData.n}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">x̄</div>
+                            <div class="stat-value">${formatValue(groupData.mean, problemData.unit)}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">s</div>
+                            <div class="stat-value">${formatValue(groupData.std, problemData.unit)}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">α</div>
+                            <div class="stat-value">0.05</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(groupCard);
+            });
+            
+            document.getElementById('researchQuestion').textContent = problemData.question;
+            document.getElementById('criticalInstructions').textContent = 
+                `Find F-critical for α = 0.05 with df₁ = ${correctAnswers.dfBetween}, df₂ = ${correctAnswers.dfWithin}`;
+            
+            updateEconomicInterpretation();
+        }
+
+        function formatValue(value, unit) {
+            if (unit === 'CAD') {
+                return value >= 1000 ? `$${(value/1000).toFixed(0)}k` : `$${value.toLocaleString()}`;
+            } else if (unit === '%') {
+                return `${value}%`;
+            }
+            return `${value} ${unit}`;
+        }
+
+        function updateEconomicInterpretation() {
+            if (correctAnswers.decision) {
+                const reject = correctAnswers.decision === 'reject';
+                
+                let interpretation = `
+                    <strong>${problemData.scenario} Results:</strong><br>
+                    ${reject ? 
+                        `<span style="color: #dc3545; font-weight: bold;">REJECT H₀:</span> There IS a statistically significant difference among the groups (p ≈ ${correctAnswers.pValue.toFixed(4)}).` :
+                        `<span style="color: #28a745; font-weight: bold;">FAIL TO REJECT H₀:</span> There is NO statistically significant difference among the groups (p ≈ ${correctAnswers.pValue.toFixed(4)}).`
+                    }<br><br>
+                    <strong>Practical Significance:</strong> ${reject ? 
+                        `The differences among groups are unlikely due to chance alone. Some groups have meaningfully different ${problemData.variable.toLowerCase()} values.` :
+                        `Any observed differences among groups could reasonably be explained by random sampling variation.`
+                    }<br><br>
+                    <strong>Policy Implications:</strong> ${reject ?
+                        `These differences warrant investigation and may require targeted interventions or policy adjustments for specific groups.` :
+                        `Current policies appear to be affecting all groups similarly.`
+                    }
+                `;
+                
+                document.getElementById('economicInterpretation').innerHTML = interpretation;
+                
+                document.getElementById('finalResult').innerHTML = `
+                    F-Statistic: F = ${correctAnswers.fStat.toFixed(3)}<br>
+                    df = ${correctAnswers.dfBetween}, ${correctAnswers.dfWithin}<br>
+                    P-value ≈ ${correctAnswers.pValue.toFixed(4)}<br>
+                    Decision: <strong style="color: ${reject ? '#dc3545' : '#28a745'}">${reject ? 'Reject H₀' : 'Fail to Reject H₀'}</strong>
+                `;
+                
+                // Show post-hoc analysis if significant
+                if (reject) {
+                    showPostHocAnalysis();
+                } else {
+                    document.getElementById('posthocSection').style.display = 'none';
+                }
+            }
+        }
+
+        function showPostHocAnalysis() {
+            document.getElementById('posthocSection').style.display = 'block';
+            
+            // Calculate Tukey's HSD
+            const mse = correctAnswers.msw;
+            const criticalQ = 3.96; // approximate for 4 groups, large df
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Comparison</th>
+                            <th>Mean Difference</th>
+                            <th>HSD Threshold</th>
+                            <th>Significant?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            for (let i = 0; i < problemData.groups.length; i++) {
+                for (let j = i + 1; j < problemData.groups.length; j++) {
+                    const group1 = problemData.groups[i];
+                    const group2 = problemData.groups[j];
+                    const mean1 = problemData.data[i].mean;
+                    const mean2 = problemData.data[j].mean;
+                    const n1 = problemData.data[i].n;
+                    const n2 = problemData.data[j].n;
+                    
+                    const meanDiff = Math.abs(mean1 - mean2);
+                    const hsdThreshold = criticalQ * Math.sqrt(mse * (1/n1 + 1/n2) / 2);
+                    const isSignificant = meanDiff > hsdThreshold;
+                    
+                    tableHTML += `
+                        <tr ${isSignificant ? 'class="significant"' : ''}>
+                            <td>${group1} vs ${group2}</td>
+                            <td>${formatValue(meanDiff, problemData.unit)}</td>
+                            <td>${formatValue(hsdThreshold, problemData.unit)}</td>
+                            <td>${isSignificant ? 'Yes*' : 'No'}</td>
+                        </tr>
+                    `;
+                }
+            }
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            document.getElementById('comparisonTable').innerHTML = tableHTML;
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = null) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            if (!tolerance) {
+                tolerance = Math.max(0.001, Math.abs(correctValue) * 0.05);
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            
+            return isCorrect;
+        }
+
+        function checkSSB() {
+            return checkAnswer('ssbInput', correctAnswers.ssb);
+        }
+
+        function checkSSW() {
+            return checkAnswer('sswInput', correctAnswers.ssw);
+        }
+
+        function checkFStat() {
+            return checkAnswer('fstatInput', correctAnswers.fStat, 0.01);
+        }
+
+        function checkFCritical() {
+            return checkAnswer('fcriticalInput', correctAnswers.fCritical, 0.01);
+        }
+
+        function checkPvalue() {
+            return checkAnswer('pvalueInput', correctAnswers.pValue, 0.01);
+        }
+
+        function checkDecision() {
+            const select = document.getElementById('decisionInput');
+            const isCorrect = select.value === correctAnswers.decision;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            
+            if (isCorrect) {
+                updateEconomicInterpretation();
+            }
+            
+            return isCorrect;
+        }
+
+        function showAnswer(answerType) {
+            const answerDiv = document.getElementById(answerType + '-answer');
+            
+            switch(answerType) {
+                case 'ssb':
+                    answerDiv.innerHTML = `✅ Sum of Squares Between = ${correctAnswers.ssb.toFixed(2)}`;
+                    break;
+                case 'ssw':
+                    answerDiv.innerHTML = `✅ Sum of Squares Within = ${correctAnswers.ssw.toFixed(2)}`;
+                    break;
+                case 'fstat':
+                    answerDiv.innerHTML = `✅ F-Statistic = ${correctAnswers.fStat.toFixed(3)}`;
+                    break;
+                case 'fcritical':
+                    answerDiv.innerHTML = `✅ Critical F-Value = ${correctAnswers.fCritical.toFixed(3)}`;
+                    break;
+                case 'pvalue':
+                    answerDiv.innerHTML = `✅ P-value ≈ ${correctAnswers.pValue.toFixed(4)}`;
+                    break;
+                case 'decision':
+                    answerDiv.innerHTML = `✅ Decision = ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}`;
+                    break;
+            }
+            
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'ssb-calculation') {
+                let stepsHTML = `
+                    <h4>📊 Sum of Squares Between Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>SSB = Σnᵢ(x̄ᵢ - x̄)²</strong><br>
+                        Overall mean x̄ = ${correctAnswers.overallMean.toFixed(2)}<br>
+                `;
+                
+                problemData.data.forEach((group, i) => {
+                    stepsHTML += `
+                        Group ${i+1}: ${group.n} × (${group.mean} - ${correctAnswers.overallMean.toFixed(2)})² = ${group.n} × ${Math.pow(group.mean - correctAnswers.overallMean, 2).toFixed(2)} = ${(group.n * Math.pow(group.mean - correctAnswers.overallMean, 2)).toFixed(2)}<br>
+                    `;
+                });
+                
+                stepsHTML += `
+                        SSB = ${correctAnswers.ssb.toFixed(2)}
+                    </div>
+                `;
+                
+                tutorialDiv.innerHTML = stepsHTML;
+            } else if (stepType === 'ssw-calculation') {
+                let stepsHTML = `
+                    <h4>📊 Sum of Squares Within Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>SSW = Σ(nᵢ-1)sᵢ²</strong><br>
+                `;
+                
+                problemData.data.forEach((group, i) => {
+                    stepsHTML += `
+                        Group ${i+1}: (${group.n}-1) × ${group.std}² = ${group.n-1} × ${Math.pow(group.std, 2).toFixed(2)} = ${((group.n-1) * Math.pow(group.std, 2)).toFixed(2)}<br>
+                    `;
+                });
+                
+                stepsHTML += `
+                        SSW = ${correctAnswers.ssw.toFixed(2)}
+                    </div>
+                `;
+                
+                tutorialDiv.innerHTML = stepsHTML;
+            } else if (stepType === 'fstat-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📐 F-Statistic Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>F = MSB / MSW</strong><br>
+                        MSB = SSB / df₁ = ${correctAnswers.ssb.toFixed(2)} / ${correctAnswers.dfBetween} = ${correctAnswers.msb.toFixed(2)}<br>
+                        MSW = SSW / df₂ = ${correctAnswers.ssw.toFixed(2)} / ${correctAnswers.dfWithin} = ${correctAnswers.msw.toFixed(2)}<br>
+                        F = ${correctAnswers.msb.toFixed(2)} / ${correctAnswers.msw.toFixed(2)} = ${correctAnswers.fStat.toFixed(3)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Interpretation:</strong><br>
+                        ${correctAnswers.fStat > 1 ? 'Between-group variance exceeds within-group variance' : 'Within-group variance exceeds between-group variance'}<br>
+                        ${correctAnswers.fStat > correctAnswers.fCritical ? 'F > F-critical: Significant difference' : 'F < F-critical: No significant difference'}
+                    </div>
+                `;
+            } else if (stepType === 'fcritical-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Critical F-Value:</h4>
+                    <div class="tutorial-step">
+                        <strong>F-critical for α = 0.05:</strong><br>
+                        df₁ = k - 1 = ${correctAnswers.dfBetween} (between groups)<br>
+                        df₂ = N - k = ${correctAnswers.dfWithin} (within groups)<br>
+                        F-critical(${correctAnswers.dfBetween}, ${correctAnswers.dfWithin}) = ${correctAnswers.fCritical.toFixed(3)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Decision Rule:</strong><br>
+                        Reject H₀ if F > ${correctAnswers.fCritical.toFixed(3)}<br>
+                        Our F = ${correctAnswers.fStat.toFixed(3)}<br>
+                        ${correctAnswers.fStat > correctAnswers.fCritical ? 'Reject H₀' : 'Fail to Reject H₀'}
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllSteps() {
+            const results = [
+                checkSSB(),
+                checkSSW(),
+                checkFStat(),
+                checkFCritical(),
+                checkPvalue(),
+                checkDecision()
+            ];
+            const correct = results.filter(r => r).length;
+            
+            alert(`You got ${correct}/6 steps correct!\n\n${correct === 6 ? '🎉 Perfect ANOVA analysis!' : 'Use the Steps buttons to see detailed solutions.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateProblem(currentScenario);
+                clearAllInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['ssbInput', 'sswInput', 'fstatInput', 'fcriticalInput', 'pvalueInput'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id.replace('Input', '') + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            // Reset decision select
+            const decisionSelect = document.getElementById('decisionInput');
+            decisionSelect.value = '';
+            decisionSelect.style.backgroundColor = '';
+            
+            // Hide tutorials
+            ['ssb-calculation-tutorial', 'ssw-calculation-tutorial', 'fstat-calculation-tutorial', 'fcritical-calculation-tutorial'].forEach(id => {
+                const div = document.getElementById(id);
+                if (div) div.style.display = 'none';
+            });
+            
+            // Hide post-hoc
+            document.getElementById('posthocSection').style.display = 'none';
+            
+            // Reset results
+            document.getElementById('finalResult').textContent = 'Complete all calculations to see your ANOVA test results';
+            document.getElementById('economicInterpretation').textContent = 'Complete the ANOVA test to see economic interpretation.';
+        }
+
+        function showANOVASummary() {
+            alert(`📊 One-Way ANOVA Summary:\n\n` +
+                `WHEN TO USE:\n` +
+                `• Comparing means from three or more independent groups\n` +
+                `• Want to test if at least one group differs from others\n\n` +
+                `STEPS:\n` +
+                `1. State hypotheses: H₀: all means equal vs H₁: at least one differs\n` +
+                `2. Calculate Sum of Squares Between (SSB) and Within (SSW)\n` +
+                `3. Calculate F-statistic: F = MSB / MSW\n` +
+                `4. Find critical F-value or p-value\n` +
+                `5. Make decision and interpret\n` +
+                `6. If significant, conduct post-hoc tests\n\n` +
+                `INTERPRETATION:\n` +
+                `• Reject H₀: At least one group differs significantly\n` +
+                `• Fail to reject H₀: No evidence of group differences\n\n` +
+                `🇨🇦 ECONOMIC APPLICATIONS:\n` +
+                `• Regional economic comparisons\n` +
+                `• Industry performance analysis\n` +
+                `• Policy effectiveness across groups\n` +
+                `• Multi-group market research`);
+        }
+    </script>
+</body>
+</html>
