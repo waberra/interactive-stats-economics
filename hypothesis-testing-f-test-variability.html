@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F-Test for Equality of Variances - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            margin: 6px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #dc3545;
+        }
+        
+        .hypothesis-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .hypothesis-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #4caf50;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        
+        .data-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .data-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .sample-group {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #2196f3;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .data-table th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: bold;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #fff3e0, #ffcc80);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff9800;
+        }
+        
+        .calculation-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #ff9800;
+        }
+        
+        .formula {
+            background: #f0f8ff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 10px 0;
+            border: 1px solid #4169e1;
+        }
+        
+        .answer-section {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .control-panel {
+            background: #343a40;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .control-btn {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background-color: #5a32a3;
+            transform: translateY(-2px);
+        }
+        
+        .hidden { display: none; }
+        
+        .economic-context {
+            background: linear-gradient(135deg, #fff8e1, #ffcc02);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #ff6f00;
+            font-style: italic;
+        }
+        
+        .tutorial-section {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4169e1;
+        }
+        
+        .variance-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .variance-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #17a2b8;
+            text-align: center;
+        }
+        
+        .variance-card h4 {
+            margin: 0 0 10px 0;
+            color: #17a2b8;
+        }
+        
+        .variance-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #dc3545;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; }
+            .data-display { grid-template-columns: 1fr; }
+            .variance-comparison { grid-template-columns: 1fr; }
+            .scenario-btn, .control-btn { padding: 10px 15px; font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🇨🇦 F-Test for Equality of Variances</h1>
+    <div class="canada-header">
+        <h2>🍁 Canadian Economic Volatility Analysis 🍁</h2>
+        <p><strong>Master variance testing with real Canadian economic scenarios!</strong></p>
+        <p><em>Testing if two populations have equal variability (homoscedasticity)</em></p>
+    </div>
+
+    <!-- Scenario Selection -->
+    <div class="scenario-selector">
+        <h3>📊 Choose Your F-Test Scenario:</h3>
+        <button class="scenario-btn" onclick="generateScenario('housing-volatility', this)">🏠 Housing Price Volatility<br><small>BC vs Ontario</small></button>
+        <button class="scenario-btn" onclick="generateScenario('stock-volatility', this)">📈 Stock Sector Volatility<br><small>Tech vs Energy</small></button>
+        <button class="scenario-btn" onclick="generateScenario('employment-stability', this)">💼 Employment Rate Stability<br><small>East vs West Canada</small></button>
+        <button class="scenario-btn" onclick="generateScenario('gdp-consistency', this)">💰 GDP Growth Consistency<br><small>Provincial Comparison</small></button>
+        <button class="scenario-btn" onclick="generateScenario('inflation-volatility', this)">💸 Inflation Volatility<br><small>Pre vs Post-Pandemic</small></button>
+        <button class="scenario-btn" onclick="generateScenario('wage-distribution', this)">💼 Wage Distribution Variance<br><small>Public vs Private Sector</small></button>
+    </div>
+
+    <!-- Economic Context -->
+    <div id="economic-context" class="economic-context hidden">
+        <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Hypothesis Section -->
+    <div id="hypothesis-section" class="hypothesis-section hidden">
+        <h3>📝 Step 1: Hypothesis Formulation</h3>
+        <div id="hypothesis-display" class="hypothesis-display">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Data Section -->
+    <div id="data-section" class="data-section hidden">
+        <h3>📊 Step 2: Sample Data Analysis</h3>
+        <div id="data-display" class="data-display">
+            <!-- Will be populated by JavaScript -->
+        </div>
+        <div id="variance-summary" class="variance-comparison">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Calculation Section -->
+    <div id="calculation-section" class="calculation-section hidden">
+        <h3>🧮 Step 3: F-Test Calculations</h3>
+        <div id="calculation-display">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Answer Section -->
+    <div id="answer-section" class="answer-section hidden">
+        <h3>🎯 Step 4: Statistical Decision & Economic Interpretation</h3>
+        <div id="answer-display">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Tutorial Section -->
+    <div id="tutorial-section" class="tutorial-section hidden">
+        <h3>📚 Understanding F-Tests for Variance</h3>
+        <div id="tutorial-content">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" onclick="showTutorial()">📚 Tutorial</button>
+        <button class="control-btn" onclick="showCalculations()">🧮 Show Calculations</button>
+        <button class="control-btn" onclick="showAnswer()">🎯 Show Answer</button>
+        <button class="control-btn" onclick="generateNewScenario()">🔄 New Scenario</button>
+    </div>
+</div>
+
+<script>
+let currentScenario = '';
+let testData = {};
+let correctAnswers = {};
+
+// F-test scenarios data
+const scenarios = {
+    'housing-volatility': {
+        title: '🏠 Housing Price Volatility: BC vs Ontario',
+        context: 'Testing if housing price volatility is equal between BC and Ontario markets.',
+        description: 'Canada Mortgage and Housing Corporation wants to determine if housing price stability differs significantly between these major markets for policy planning.',
+        group1: { name: 'BC Housing Prices', unit: 'Monthly % Change', context: 'British Columbia housing market volatility' },
+        group2: { name: 'Ontario Housing Prices', unit: 'Monthly % Change', context: 'Ontario housing market volatility' },
+        interpretation: {
+            reject: 'Housing price volatility differs significantly between BC and Ontario. Different risk management strategies may be needed for each market.',
+            fail: 'Housing price volatility is similar between BC and Ontario. Uniform housing policy approaches may be effective across both markets.'
+        }
+    },
+    'stock-volatility': {
+        title: '📈 Stock Sector Volatility: Technology vs Energy',
+        context: 'Testing if stock price volatility is equal between technology and energy sectors on the TSX.',
+        description: 'Investment analysts need to determine if these sectors have similar risk profiles for portfolio diversification strategies.',
+        group1: { name: 'Technology Sector Returns', unit: 'Daily % Return', context: 'TSX Technology sector volatility' },
+        group2: { name: 'Energy Sector Returns', unit: 'Daily % Return', context: 'TSX Energy sector volatility' },
+        interpretation: {
+            reject: 'Technology and energy sectors have significantly different volatility levels. Sector-specific risk management is essential for balanced portfolios.',
+            fail: 'Technology and energy sectors have similar volatility patterns. These sectors may provide equivalent risk exposure in diversified portfolios.'
+        }
+    },
+    'employment-stability': {
+        title: '💼 Employment Rate Stability: Eastern vs Western Canada',
+        context: 'Testing if employment rate variability is equal between Eastern and Western Canadian provinces.',
+        description: 'Employment and Social Development Canada evaluates regional labor market stability for targeted employment program planning.',
+        group1: { name: 'Eastern Canada Employment', unit: 'Monthly Rate', context: 'Atlantic + Quebec employment stability' },
+        group2: { name: 'Western Canada Employment', unit: 'Monthly Rate', context: 'Prairies + BC employment stability' },
+        interpretation: {
+            reject: 'Employment stability differs significantly between Eastern and Western Canada. Region-specific employment strategies are warranted.',
+            fail: 'Employment stability is similar across Eastern and Western regions. National employment policies may be equally effective in both regions.'
+        }
+    },
+    'gdp-consistency': {
+        title: '💰 Provincial GDP Growth Consistency',
+        context: 'Testing if GDP growth variability is equal between resource-rich and manufacturing-focused provinces.',
+        description: 'Statistics Canada examines whether economic diversification affects GDP stability for federal transfer payment calculations.',
+        group1: { name: 'Resource Provinces GDP', unit: 'Quarterly % Growth', context: 'Alberta, Saskatchewan, Newfoundland GDP volatility' },
+        group2: { name: 'Manufacturing Provinces GDP', unit: 'Quarterly % Growth', context: 'Ontario, Quebec GDP volatility' },
+        interpretation: {
+            reject: 'Economic volatility differs significantly between resource-rich and manufacturing provinces. Diversified fiscal policies are needed.',
+            fail: 'Economic volatility is similar across different provincial economic structures. Uniform fiscal approaches may be appropriate.'
+        }
+    },
+    'inflation-volatility': {
+        title: '💸 Inflation Rate Volatility: Pre vs Post-Pandemic',
+        context: 'Testing if inflation volatility changed significantly between pre-pandemic and post-pandemic periods.',
+        description: 'Bank of Canada analyzes whether pandemic-related economic disruptions have fundamentally altered inflation predictability.',
+        group1: { name: 'Pre-Pandemic Inflation', unit: 'Monthly CPI % Change', context: '2018-2019 inflation stability' },
+        group2: { name: 'Post-Pandemic Inflation', unit: 'Monthly CPI % Change', context: '2021-2022 inflation volatility' },
+        interpretation: {
+            reject: 'Inflation volatility changed significantly post-pandemic. Monetary policy frameworks may need adjustment for new economic conditions.',
+            fail: 'Inflation volatility patterns remain similar. Existing monetary policy tools continue to be appropriate for inflation management.'
+        }
+    },
+    'wage-distribution': {
+        title: '💼 Wage Distribution Variance: Public vs Private Sector',
+        context: 'Testing if wage distribution variability differs between public and private sector employees.',
+        description: 'Treasury Board of Canada studies compensation structure differences to inform public sector wage policy decisions.',
+        group1: { name: 'Public Sector Wages', unit: 'Annual Salary ($000s)', context: 'Federal government employee wages' },
+        group2: { name: 'Private Sector Wages', unit: 'Annual Salary ($000s)', context: 'Private industry employee wages' },
+        interpretation: {
+            reject: 'Wage variability differs significantly between sectors. Sector-specific compensation strategies are justified.',
+            fail: 'Wage variability is similar between sectors. Compensation policies may be aligned across public and private employment.'
+        }
+    }
+};
+
+function generateScenario(scenario, clickedButton) {
+    currentScenario = scenario;
+    
+    // Update button states
+    document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+    clickedButton.classList.add('active');
+    
+    generateTestData(scenario);
+    updateDisplay();
+    hideCalculationsAndAnswers();
+}
+
+function generateTestData(scenario) {
+    const scenarioData = scenarios[scenario];
+    
+    // Generate sample sizes (reasonable for economic data)
+    const n1 = Math.floor(Math.random() * 15) + 20; // 20-34 observations
+    const n2 = Math.floor(Math.random() * 15) + 20; // 20-34 observations
+    
+    // Generate realistic sample data with different characteristics
+    let sample1 = [];
+    let sample2 = [];
+    
+    // Base parameters for different scenarios
+    const baseParams = getScenarioParameters(scenario);
+    
+    // Generate sample 1
+    for (let i = 0; i < n1; i++) {
+        sample1.push(generateRandomValue(baseParams.mean1, baseParams.std1));
+    }
+    
+    // Generate sample 2 (potentially different variance)
+    for (let i = 0; i < n2; i++) {
+        sample2.push(generateRandomValue(baseParams.mean2, baseParams.std2));
+    }
+    
+    // Calculate sample statistics
+    const stats1 = calculateSampleStats(sample1);
+    const stats2 = calculateSampleStats(sample2);
+    
+    testData = {
+        scenario: scenarioData,
+        sample1: sample1,
+        sample2: sample2,
+        n1: n1,
+        n2: n2,
+        stats1: stats1,
+        stats2: stats2
+    };
+    
+    calculateCorrectAnswers();
+}
+
+function getScenarioParameters(scenario) {
+    const params = {
+        'housing-volatility': { mean1: 2.5, std1: 3.2, mean2: 1.8, std2: 2.1 },
+        'stock-volatility': { mean1: 0.05, std1: 2.8, mean2: -0.1, std2: 1.9 },
+        'employment-stability': { mean1: 7.2, std1: 0.8, mean2: 6.9, std2: 1.2 },
+        'gdp-consistency': { mean1: 1.9, std1: 2.1, mean2: 1.5, std2: 1.3 },
+        'inflation-volatility': { mean1: 0.15, std1: 0.3, mean2: 0.45, std2: 0.8 },
+        'wage-distribution': { mean1: 75, std1: 12, mean2: 68, std2: 18 }
+    };
+    return params[scenario] || params['housing-volatility'];
+}
+
+function generateRandomValue(mean, std) {
+    // Box-Muller transformation for normal distribution
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random(); // Converting [0,1) to (0,1)
+    while(v === 0) v = Math.random();
+    let z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    return mean + z * std;
+}
+
+function calculateSampleStats(sample) {
+    const n = sample.length;
+    const mean = sample.reduce((sum, val) => sum + val, 0) / n;
+    
+    const variance = sample.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / (n - 1);
+    const stdDev = Math.sqrt(variance);
+    
+    return {
+        n: n,
+        mean: mean,
+        variance: variance,
+        stdDev: stdDev
+    };
+}
+
+function calculateCorrectAnswers() {
+    const { stats1, stats2 } = testData;
+    
+    // F-statistic calculation (larger variance in numerator)
+    const largerVar = Math.max(stats1.variance, stats2.variance);
+    const smallerVar = Math.min(stats1.variance, stats2.variance);
+    const fStat = largerVar / smallerVar;
+    
+    // Determine which sample has larger variance for df calculation
+    const largerIsFirst = stats1.variance >= stats2.variance;
+    const df1 = largerIsFirst ? stats1.n - 1 : stats2.n - 1;
+    const df2 = largerIsFirst ? stats2.n - 1 : stats1.n - 1;
+    
+    // Critical value approximation for α = 0.05 (two-tailed, so α/2 = 0.025)
+    const fCritical = getFCritical(df1, df2);
+    
+    // P-value approximation
+    let pValue;
+    if (fStat > fCritical * 2) pValue = 0.01;
+    else if (fStat > fCritical * 1.5) pValue = 0.02;
+    else if (fStat > fCritical) pValue = 0.05;
+    else if (fStat > fCritical * 0.7) pValue = 0.10;
+    else pValue = 0.20;
+    
+    // Decision
+    const decision = fStat > fCritical ? 'reject' : 'fail';
+    
+    correctAnswers = {
+        fStat: fStat,
+        df1: df1,
+        df2: df2,
+        fCritical: fCritical,
+        pValue: pValue,
+        decision: decision,
+        largerVar: largerVar,
+        smallerVar: smallerVar,
+        largerIsFirst: largerIsFirst
+    };
+}
+
+function getFCritical(df1, df2) {
+    // Simplified F-critical values for α = 0.05 (two-tailed test)
+    // This is a basic approximation - real applications would use F-tables
+    if (df1 <= 10 && df2 <= 10) return 3.18;
+    else if (df1 <= 20 && df2 <= 20) return 2.46;
+    else if (df1 <= 30 && df2 <= 30) return 2.25;
+    else return 2.10;
+}
+
+function updateDisplay() {
+    updateEconomicContext();
+    updateHypothesisDisplay();
+    updateDataDisplay();
+    
+    // Show relevant sections
+    document.getElementById('economic-context').classList.remove('hidden');
+    document.getElementById('hypothesis-section').classList.remove('hidden');
+    document.getElementById('data-section').classList.remove('hidden');
+}
+
+function updateEconomicContext() {
+    const scenario = testData.scenario;
+    let contextHTML = `
+        <h4>🇨🇦 ${scenario.title}</h4>
+        <p><strong>Context:</strong> ${scenario.context}</p>
+        <p><strong>Research Question:</strong> ${scenario.description}</p>
+        <p><strong>Comparing:</strong> ${scenario.group1.name} vs ${scenario.group2.name}</p>
+        <p><strong>Measurement:</strong> ${scenario.group1.unit}</p>
+    `;
+    
+    document.getElementById('economic-context').innerHTML = contextHTML;
+}
+
+function updateHypothesisDisplay() {
+    const scenario = testData.scenario;
+    let hypothesisHTML = `
+        <h4>🔍 F-Test for Equality of Variances</h4>
+        <p><strong>H₀ (Null Hypothesis):</strong> σ₁² = σ₂² (The variances are equal)</p>
+        <p><strong>H₁ (Alternative Hypothesis):</strong> σ₁² ≠ σ₂² (The variances are not equal)</p>
+        <p><strong>Test Type:</strong> Two-sample F-test for equality of variances</p>
+        <p><strong>Significance Level:</strong> α = 0.05 (two-tailed test)</p>
+        <p><strong>Assumption:</strong> Both samples come from normally distributed populations</p>
+    `;
+    
+    document.getElementById('hypothesis-display').innerHTML = hypothesisHTML;
+}
+
+function updateDataDisplay() {
+    const { sample1, sample2, stats1, stats2, scenario } = testData;
+    
+    let dataHTML = `
+        <div class="sample-group">
+            <h4>${scenario.group1.name}</h4>
+            <p><strong>Sample Size:</strong> n₁ = ${stats1.n}</p>
+            <p><strong>Sample Mean:</strong> x̄₁ = ${stats1.mean.toFixed(3)}</p>
+            <p><strong>Sample Std Dev:</strong> s₁ = ${stats1.stdDev.toFixed(3)}</p>
+            <p><strong>Sample Variance:</strong> s₁² = ${stats1.variance.toFixed(3)}</p>
+            
+            <table class="data-table">
+                <tr><th>Observation</th><th>Value</th></tr>
+    `;
+    
+    for (let i = 0; i < Math.min(8, sample1.length); i++) {
+        dataHTML += `<tr><td>${i+1}</td><td>${sample1[i].toFixed(2)}</td></tr>`;
+    }
+    
+    if (sample1.length > 8) {
+        dataHTML += `<tr><td colspan="2">... and ${sample1.length - 8} more observations</td></tr>`;
+    }
+    
+    dataHTML += `</table></div>`;
+    
+    dataHTML += `
+        <div class="sample-group">
+            <h4>${scenario.group2.name}</h4>
+            <p><strong>Sample Size:</strong> n₂ = ${stats2.n}</p>
+            <p><strong>Sample Mean:</strong> x̄₂ = ${stats2.mean.toFixed(3)}</p>
+            <p><strong>Sample Std Dev:</strong> s₂ = ${stats2.stdDev.toFixed(3)}</p>
+            <p><strong>Sample Variance:</strong> s₂² = ${stats2.variance.toFixed(3)}</p>
+            
+            <table class="data-table">
+                <tr><th>Observation</th><th>Value</th></tr>
+    `;
+    
+    for (let i = 0; i < Math.min(8, sample2.length); i++) {
+        dataHTML += `<tr><td>${i+1}</td><td>${sample2[i].toFixed(2)}</td></tr>`;
+    }
+    
+    if (sample2.length > 8) {
+        dataHTML += `<tr><td colspan="2">... and ${sample2.length - 8} more observations</td></tr>`;
+    }
+    
+    dataHTML += `</table></div>`;
+    
+    document.getElementById('data-display').innerHTML = dataHTML;
+    
+    // Update variance comparison
+    const { largerVar, smallerVar } = correctAnswers;
+    let varianceHTML = `
+        <div class="variance-card">
+            <h4>Larger Variance</h4>
+            <div class="variance-value">${largerVar.toFixed(3)}</div>
+            <p><small>${correctAnswers.largerIsFirst ? scenario.group1.name : scenario.group2.name}</small></p>
+        </div>
+        <div class="variance-card">
+            <h4>Smaller Variance</h4>
+            <div class="variance-value">${smallerVar.toFixed(3)}</div>
+            <p><small>${correctAnswers.largerIsFirst ? scenario.group2.name : scenario.group1.name}</small></p>
+        </div>
+        <div class="variance-card">
+            <h4>Variance Ratio</h4>
+            <div class="variance-value">${(largerVar/smallerVar).toFixed(3)}</div>
+            <p><small>F = Larger/Smaller</small></p>
+        </div>
+    `;
+    
+    document.getElementById('variance-summary').innerHTML = varianceHTML;
+}
+
+function showCalculations() {
+    const { stats1, stats2 } = testData;
+    const { fStat, df1, df2, fCritical, largerVar, smallerVar, largerIsFirst } = correctAnswers;
+    
+    let calcHTML = `
+        <div class="calculation-step">
+            <h4>📊 Step 1: Sample Variance Calculations</h4>
+            <div class="formula">s² = Σ(x - x̄)² / (n - 1)</div>
+            
+            <p><strong>Sample 1 Variance:</strong></p>
+            <p>s₁² = ${stats1.variance.toFixed(4)} (n₁ = ${stats1.n}, df₁ = ${stats1.n - 1})</p>
+            
+            <p><strong>Sample 2 Variance:</strong></p>
+            <p>s₂² = ${stats2.variance.toFixed(4)} (n₂ = ${stats2.n}, df₂ = ${stats2.n - 1})</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🧮 Step 2: F-Statistic Calculation</h4>
+            <div class="formula">F = s²(larger) / s²(smaller)</div>
+            
+            <p><strong>Identify Larger and Smaller Variances:</strong></p>
+            <p>Larger Variance: ${largerVar.toFixed(4)} (${largerIsFirst ? 'Sample 1' : 'Sample 2'})</p>
+            <p>Smaller Variance: ${smallerVar.toFixed(4)} (${largerIsFirst ? 'Sample 2' : 'Sample 1'})</p>
+            
+            <p><strong>Calculate F-Statistic:</strong></p>
+            <p>F = ${largerVar.toFixed(4)} / ${smallerVar.toFixed(4)} = ${fStat.toFixed(4)}</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🎯 Step 3: Degrees of Freedom</h4>
+            <p><strong>Numerator df:</strong> df₁ = n(larger variance) - 1 = ${df1}</p>
+            <p><strong>Denominator df:</strong> df₂ = n(smaller variance) - 1 = ${df2}</p>
+            <p><strong>F Distribution:</strong> F(${df1}, ${df2})</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>📈 Step 4: Critical Value</h4>
+            <p><strong>Significance Level:</strong> α = 0.05 (two-tailed test)</p>
+            <p><strong>Critical Value:</strong> F₀.₀₂₅,${df1},${df2} = ${fCritical.toFixed(3)}</p>
+            <p><em>Note: For a two-tailed test, we use α/2 = 0.025 in the upper tail</em></p>
+        </div>
+    `;
+    
+    document.getElementById('calculation-display').innerHTML = calcHTML;
+    document.getElementById('calculation-section').classList.remove('hidden');
+}
+
+function showAnswer() {
+    const { fStat, df1, df2, fCritical, pValue, decision } = correctAnswers;
+    const scenario = testData.scenario;
+    
+    let answerHTML = `
+        <div class="calculation-step">
+            <h4>📊 Test Statistics Summary</h4>
+            <p><strong>Calculated F-statistic:</strong> F = ${fStat.toFixed(4)}</p>
+            <p><strong>Degrees of Freedom:</strong> df₁ = ${df1}, df₂ = ${df2}</p>
+            <p><strong>Critical Value (α = 0.05):</strong> F₀.₀₂₅,${df1},${df2} = ${fCritical.toFixed(3)}</p>
+            <p><strong>Estimated P-value:</strong> p ≈ ${pValue.toFixed(3)}</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🎯 Statistical Decision</h4>
+            <p><strong>Decision Rule:</strong> If F > F₀.₀₂₅,df₁,df₂, reject H₀</p>
+            <p><strong>Comparison:</strong> ${fStat.toFixed(4)} ${fStat > fCritical ? '>' : '≤'} ${fCritical.toFixed(3)}</p>
+            <p><strong>Decision:</strong> <span style="color: ${decision === 'reject' ? '#dc3545' : '#28a745'}; font-weight: bold;">
+                ${decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}</span></p>
+            <p><strong>Conclusion:</strong> ${decision === 'reject' ? 'The variances are significantly different' : 'The variances are not significantly different'}</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🇨🇦 Economic Interpretation</h4>
+            <p><strong>Statistical Result:</strong> ${scenario.interpretation[decision]}</p>
+            
+            <p><strong>Practical Implications:</strong></p>
+    `;
+    
+    if (decision === 'reject') {
+        answerHTML += `
+            <p>• The two groups show significantly different levels of variability</p>
+            <p>• Risk assessment and policy strategies should account for these differences</p>
+            <p>• Separate analytical models may be appropriate for each group</p>
+            <p>• Different volatility levels may require tailored interventions</p>
+        `;
+    } else {
+        answerHTML += `
+            <p>• The two groups show similar levels of variability</p>
+            <p>• Uniform risk management strategies may be appropriate</p>
+            <p>• Combined analytical models may be suitable</p>
+            <p>• Similar volatility patterns support integrated policy approaches</p>
+        `;
+    }
+    
+    answerHTML += `
+            <p><strong>Policy Recommendation:</strong> ${decision === 'reject' ? 
+                'Consider differentiated strategies that account for varying levels of risk and volatility.' : 
+                'Unified approaches may be effective given similar variability patterns.'}</p>
+        </div>
+    `;
+    
+    document.getElementById('answer-display').innerHTML = answerHTML;
+    document.getElementById('answer-section').classList.remove('hidden');
+}
+
+function showTutorial() {
+    let tutorialHTML = `
+        <h4>📚 Understanding F-Tests for Equality of Variances</h4>
+        
+        <div class="calculation-step">
+            <h4>🎯 Purpose of F-Tests</h4>
+            <p><strong>What it tests:</strong> Whether two populations have equal variances (σ₁² = σ₂²)</p>
+            <p><strong>Also called:</strong> Test for homoscedasticity or homogeneity of variance</p>
+            <p><strong>Why it matters:</strong> Many statistical tests assume equal variances - this test checks that assumption</p>
+            <p><strong>Economic relevance:</strong> Compares stability, risk, or volatility between economic indicators</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🧮 F-Statistic Formula</h4>
+            <div class="formula">F = s₁² / s₂² (where s₁² ≥ s₂²)</div>
+            <p>• Always put the larger variance in the numerator</p>
+            <p>• This ensures F ≥ 1, simplifying critical value lookup</p>
+            <p>• F follows an F-distribution with degrees of freedom df₁ and df₂</p>
+            <p>• df₁ = n₁ - 1 (for numerator), df₂ = n₂ - 1 (for denominator)</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>📊 Interpreting Results</h4>
+            <p><strong>Large F-values:</strong> Suggest significantly different variances</p>
+            <p><strong>F ≈ 1:</strong> Suggests similar variances (what we expect if H₀ is true)</p>
+            <p><strong>Economic meaning:</strong></p>
+            <p>• Equal variances → Similar volatility/risk patterns</p>
+            <p>• Unequal variances → Different stability/predictability levels</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>⚠️ Important Assumptions</h4>
+            <p>1. <strong>Normal Distributions:</strong> Both samples come from normal populations</p>
+            <p>2. <strong>Independent Samples:</strong> Observations are independent within and between groups</p>
+            <p>3. <strong>Random Sampling:</strong> Data represents random samples from target populations</p>
+            <p><em>Note: F-test is sensitive to non-normality - consider alternatives if this assumption is violated</em></p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🇨🇦 Economic Applications</h4>
+            <p><strong>Risk Management:</strong> Compare volatility between investment sectors</p>
+            <p><strong>Policy Analysis:</strong> Test if interventions change economic stability</p>
+            <p><strong>Regional Studies:</strong> Compare economic consistency across provinces</p>
+            <p><strong>Time Series:</strong> Test if volatility changed between different periods</p>
+        </div>
+    `;
+    
+    document.getElementById('tutorial-content').innerHTML = tutorialHTML;
+    document.getElementById('tutorial-section').classList.remove('hidden');
+}
+
+function generateNewScenario() {
+    if (currentScenario) {
+        generateTestData(currentScenario);
+        updateDisplay();
+        hideCalculationsAndAnswers();
+    }
+}
+
+function hideCalculationsAndAnswers() {
+    document.getElementById('calculation-section').classList.add('hidden');
+    document.getElementById('answer-section').classList.add('hidden');
+    document.getElementById('tutorial-section').classList.add('hidden');
+}
+
+</script>
+
+</body>
+</html>
