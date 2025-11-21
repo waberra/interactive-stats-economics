@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Proportion Test - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .ci-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .confidence-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .interval-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .interval-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .interval-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        
+        .interval-formula {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            border-left: 4px solid #28a745;
+            font-weight: bold;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            margin: 6px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .data-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .sample-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .stat-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .stat-value {
+            font-size: 1.3em;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .step-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .step-number {
+            background: #9c27b0;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 120px 70px 70px 90px;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9em;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input, .input-row select {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .small-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .interval-result {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .final-interval {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 3px solid #2196f3;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .interpretation-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .interpretation-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .hypothesis-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #dc3545;
+        }
+
+        .hypothesis-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            border-left: 4px solid #dc3545;
+            font-weight: bold;
+        }
+        
+        .proportion-display {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .proportion-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .proportion-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .proportion-calc {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Two-Proportion Test</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Compare Proportions from Two Populations</h2>
+            <p><strong>Z-Test for Proportions</strong> • <strong>Statistical Significance</strong> • <strong>Canadian Population Comparisons</strong></p>
+        </div>
+        
+        <div class="ci-intro">
+            <h3>🎯 What is a Two-Proportion Test?</h3>
+            
+            <div class="confidence-concept">
+                <div class="concept-title">📈 Compare Success Rates from Two Different Populations</div>
+                
+                <div class="concept-explanation">
+                    <strong>🎯 The Goal:</strong> Determine if there is a statistically significant difference between two population proportions. We test whether p₁ = p₂ or if one group has a significantly different success rate than another.
+                </div>
+                
+                <div style="background: #fff; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin: 15px 0; text-align: center;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🔑 Key Idea:</div>
+                    <div style="font-size: 1.1em;">H₀: p₁ = p₂ vs H₁: p₁ ≠ p₂</div>
+                    <div style="font-style: italic; margin-top: 5px;">Test if difference in proportions is due to chance or real difference</div>
+                </div>
+                
+                <div class="interval-types">
+                    <div class="interval-card">
+                        <div class="interval-title">📊 Sample Proportions</div>
+                        <div class="interval-formula">
+                            p̂₁ = x₁/n₁, p̂₂ = x₂/n₂<br>
+                            <div style="font-size: 0.8em; margin-top: 5px;">Observed success rates</div>
+                        </div>
+                    </div>
+                    
+                    <div class="interval-card">
+                        <div class="interval-title">📈 Z-Test Statistic</div>
+                        <div class="interval-formula">
+                            z = (p̂₁ - p̂₂) / SE<br>
+                            <div style="font-size: 0.8em; margin-top: 5px;">Standardized difference</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Canadian Economic Proportion Comparison:
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('provincial-employment')">💼 Provincial Employment</button>
+                <button class="scenario-btn" onclick="chooseScenario('program-participation')">📋 Program Participation</button>
+                <button class="scenario-btn" onclick="chooseScenario('business-ownership')">🏢 Business Ownership</button>
+            </div>
+            <div>
+                <button class="scenario-btn" onclick="chooseScenario('healthcare-coverage')">🏥 Healthcare Coverage</button>
+                <button class="scenario-btn" onclick="chooseScenario('education-completion')">🎓 Education Completion</button>
+                <button class="scenario-btn" onclick="chooseScenario('voting-patterns')">🗳️ Voting Patterns</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Step 1: Sample Data & Research Question</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="hypothesis-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">🎯 Hypotheses:</div>
+                    <div class="hypothesis-box" id="nullHypothesis">
+                        H₀: p₁ = p₂ (No difference between population proportions)
+                    </div>
+                    <div class="hypothesis-box" id="altHypothesis">
+                        H₁: p₁ ≠ p₂ (There is a difference between population proportions)
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="data-display">
+                        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;" id="group1Label">📊 Population 1 Statistics:</div>
+                        <div class="sample-stats">
+                            <div class="stat-box">
+                                <div class="stat-label">Sample Size (n₁)</div>
+                                <div class="stat-value" id="sampleSize1"></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Successes (x₁)</div>
+                                <div class="stat-value" id="successes1"></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Proportion (p̂₁)</div>
+                                <div class="stat-value" id="proportion1"></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Significance</div>
+                                <div class="stat-value">α = 0.05</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-display">
+                        <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;" id="group2Label">📊 Population 2 Statistics:</div>
+                        <div class="sample-stats">
+                            <div class="stat-box">
+                                <div class="stat-label">Sample Size (n₂)</div>
+                                <div class="stat-value" id="sampleSize2"></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Successes (x₂)</div>
+                                <div class="stat-value" id="successes2"></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Proportion (p̂₂)</div>
+                                <div class="stat-value" id="proportion2"></div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-label">Test Type</div>
+                                <div class="stat-value">Two-tailed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin-top: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🎯 Research Question:</div>
+                    <div id="researchQuestion" style="font-size: 1.1em;"></div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>🧮 Step 2: Two-Proportion Test Calculations</h3>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 1</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Pooled Proportion</div>
+                    <div class="step-instructions">
+                        <strong>Pooled Proportion:</strong> p̂_pooled = (x₁ + x₂) / (n₁ + n₂)
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Pooled Proportion (p̂_pooled):</label>
+                        <input type="number" id="pooledInput" step="0.001" placeholder="p̂_pooled">
+                        <button class="small-button check-btn" onclick="checkPooled()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('pooled')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('pooled-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="pooled-answer"></div>
+                    <div class="tutorial-box" id="pooled-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 2</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Standard Error</div>
+                    <div class="step-instructions">
+                        <strong>Standard Error:</strong> SE = √[p̂_pooled(1 - p̂_pooled)(1/n₁ + 1/n₂)]
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Standard Error (SE):</label>
+                        <input type="number" id="seInput" step="0.0001" placeholder="SE">
+                        <button class="small-button check-btn" onclick="checkSE()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('se')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('se-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="se-answer"></div>
+                    <div class="tutorial-box" id="se-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 3</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Z-Test Statistic</div>
+                    <div class="step-instructions">
+                        <strong>Z-Statistic:</strong> z = (p̂₁ - p̂₂) / SE
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Z-Test Statistic:</label>
+                        <input type="number" id="zstatInput" step="0.001" placeholder="z-value">
+                        <button class="small-button check-btn" onclick="checkZStat()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('zstat')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('zstat-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="zstat-answer"></div>
+                    <div class="tutorial-box" id="zstat-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 4</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Find Critical Z-Value</div>
+                    <div class="step-instructions">
+                        <strong>Critical Z-Value:</strong> For α = 0.05, two-tailed test: ±1.96
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Critical Z-Value (±z):</label>
+                        <input type="number" id="zcriticalInput" step="0.01" placeholder="±z">
+                        <button class="small-button check-btn" onclick="checkZCritical()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('zcritical')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('zcritical-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="zcritical-answer"></div>
+                    <div class="tutorial-box" id="zcritical-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 5</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Make Statistical Decision</div>
+                    <div class="step-instructions">
+                        <strong>Decision Rule:</strong> Reject H₀ if |z| > z-critical
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-row">
+                            <label>P-value:</label>
+                            <input type="number" id="pvalueInput" step="0.001" placeholder="p-value">
+                            <button class="small-button check-btn" onclick="checkPvalue()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('pvalue')">Answer</button>
+                        </div>
+                        
+                        <div class="input-row">
+                            <label>Decision:</label>
+                            <select id="decisionInput">
+                                <option value="">Choose...</option>
+                                <option value="reject">Reject H₀</option>
+                                <option value="fail">Fail to Reject H₀</option>
+                            </select>
+                            <button class="small-button check-btn" onclick="checkDecision()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('decision')">Answer</button>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-display" id="pvalue-answer"></div>
+                    <div class="answer-display" id="decision-answer"></div>
+                </div>
+            </div>
+            
+            <div class="interval-result">
+                <h3>📊 Step 3: Test Results & Decision</h3>
+                <div class="final-interval" id="finalResult">
+                    Complete all calculations to see your two-proportion test results
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-style: italic;">
+                    Statistical decision at <strong>α = 0.05</strong> significance level
+                </div>
+            </div>
+            
+            <div class="interpretation-section">
+                <h3>💼 Step 4: Economic Interpretation</h3>
+                <div class="interpretation-text">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">📈 What This Means:</div>
+                    <div id="economicInterpretation"></div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New Proportion Test</button>
+            <button class="button" onclick="checkAllSteps()">✅ Check All Calculations</button>
+            <button class="button" onclick="showTwoProportionSummary()">📖 Two-Proportion Test Summary</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'provincial-employment': {
+                name: 'Provincial Employment Rate Comparison',
+                description: 'Statistics Canada comparing employment rates between two provinces to assess regional economic performance differences.',
+                group1Name: 'Ontario',
+                group2Name: 'Quebec',
+                variable: 'Employment',
+                context: 'employed vs. total workforce',
+                question: 'Is there a significant difference in employment rates between Ontario and Quebec?'
+            },
+            'program-participation': {
+                name: 'Government Program Participation Comparison',
+                description: 'Employment Canada comparing participation rates in job training programs between urban and rural areas.',
+                group1Name: 'Urban Areas',
+                group2Name: 'Rural Areas', 
+                variable: 'Program Participation',
+                context: 'participants vs. eligible individuals',
+                question: 'Is there a significant difference in program participation rates between urban and rural areas?'
+            },
+            'business-ownership': {
+                name: 'Small Business Ownership by Gender',
+                description: 'Innovation Canada analyzing small business ownership rates by gender to assess entrepreneurship equality.',
+                group1Name: 'Male Entrepreneurs',
+                group2Name: 'Female Entrepreneurs',
+                variable: 'Business Ownership',
+                context: 'business owners vs. total surveyed',
+                question: 'Is there a significant difference in small business ownership rates between men and women?'
+            },
+            'healthcare-coverage': {
+                name: 'Healthcare Coverage Comparison',
+                description: 'Health Canada comparing supplementary healthcare coverage rates between different age groups.',
+                group1Name: 'Young Adults (25-35)',
+                group2Name: 'Middle-Aged (45-55)',
+                variable: 'Healthcare Coverage',
+                context: 'covered vs. total surveyed',
+                question: 'Is there a significant difference in supplementary healthcare coverage between young adults and middle-aged Canadians?'
+            },
+            'education-completion': {
+                name: 'Post-Secondary Completion by Region',
+                description: 'Education Canada comparing post-secondary completion rates between Atlantic and Western provinces.',
+                group1Name: 'Atlantic Provinces',
+                group2Name: 'Western Provinces',
+                variable: 'Post-Secondary Completion',
+                context: 'completed vs. total surveyed',
+                question: 'Is there a significant difference in post-secondary completion rates between Atlantic and Western provinces?'
+            },
+            'voting-patterns': {
+                name: 'Political Support by Income Level',
+                description: 'Elections Canada analyzing support rates for economic policies between different income brackets.',
+                group1Name: 'Lower Income',
+                group2Name: 'Higher Income',
+                variable: 'Policy Support',
+                context: 'supporters vs. total voters',
+                question: 'Is there a significant difference in economic policy support between lower and higher income voters?'
+            }
+        };
+
+        function generateRandomData(scenario) {
+            let baseData = {};
+            
+            switch(scenario) {
+                case 'provincial-employment':
+                    baseData = {
+                        n1: 800 + Math.floor(Math.random() * 400),
+                        n2: 750 + Math.floor(Math.random() * 350),
+                        p1: 0.72 + Math.random() * 0.08,
+                        p2: 0.68 + Math.random() * 0.08
+                    };
+                    break;
+                case 'program-participation':
+                    baseData = {
+                        n1: 600 + Math.floor(Math.random() * 300),
+                        n2: 450 + Math.floor(Math.random() * 250),
+                        p1: 0.65 + Math.random() * 0.15,
+                        p2: 0.58 + Math.random() * 0.12
+                    };
+                    break;
+                case 'business-ownership':
+                    baseData = {
+                        n1: 1200 + Math.floor(Math.random() * 600),
+                        n2: 1100 + Math.floor(Math.random() * 550),
+                        p1: 0.42 + Math.random() * 0.10,
+                        p2: 0.35 + Math.random() * 0.08
+                    };
+                    break;
+                case 'healthcare-coverage':
+                    baseData = {
+                        n1: 900 + Math.floor(Math.random() * 300),
+                        n2: 850 + Math.floor(Math.random() * 350),
+                        p1: 0.58 + Math.random() * 0.12,
+                        p2: 0.68 + Math.random() * 0.10
+                    };
+                    break;
+                case 'education-completion':
+                    baseData = {
+                        n1: 1500 + Math.floor(Math.random() * 500),
+                        n2: 1400 + Math.floor(Math.random() * 600),
+                        p1: 0.52 + Math.random() * 0.10,
+                        p2: 0.58 + Math.random() * 0.08
+                    };
+                    break;
+                case 'voting-patterns':
+                    baseData = {
+                        n1: 2000 + Math.floor(Math.random() * 800),
+                        n2: 1800 + Math.floor(Math.random() * 700),
+                        p1: 0.62 + Math.random() * 0.12,
+                        p2: 0.45 + Math.random() * 0.10
+                    };
+                    break;
+            }
+            
+            // Calculate successes from proportions
+            baseData.x1 = Math.round(baseData.n1 * baseData.p1);
+            baseData.x2 = Math.round(baseData.n2 * baseData.p2);
+            
+            // Recalculate exact proportions from integer successes
+            baseData.p1 = baseData.x1 / baseData.n1;
+            baseData.p2 = baseData.x2 / baseData.n2;
+            
+            return baseData;
+        }
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            const randomData = generateRandomData(scenario);
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                group1Name: scenarioData.group1Name,
+                group2Name: scenarioData.group2Name,
+                variable: scenarioData.variable,
+                context: scenarioData.context,
+                n1: randomData.n1,
+                n2: randomData.n2,
+                x1: randomData.x1,
+                x2: randomData.x2,
+                p1: randomData.p1,
+                p2: randomData.p2,
+                question: scenarioData.question,
+                alpha: 0.05
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { n1, n2, x1, x2, p1, p2, alpha } = problemData;
+            
+            // Pooled proportion
+            const pooled = (x1 + x2) / (n1 + n2);
+            
+            // Standard error
+            const se = Math.sqrt(pooled * (1 - pooled) * (1/n1 + 1/n2));
+            
+            // Z-statistic
+            const z = (p1 - p2) / se;
+            
+            // Critical z-value (two-tailed, α = 0.05)
+            const zCritical = 1.96;
+            
+            // P-value (two-tailed)
+            const pValue = 2 * (1 - normalCDF(Math.abs(z)));
+            
+            // Decision
+            const decision = Math.abs(z) > zCritical ? 'reject' : 'fail';
+            
+            correctAnswers = {
+                pooled: pooled,
+                se: se,
+                z: z,
+                zCritical: zCritical,
+                pValue: pValue,
+                decision: decision
+            };
+        }
+
+        function normalCDF(z) {
+            return 0.5 * (1 + erf(z / Math.sqrt(2)));
+        }
+
+        function erf(x) {
+            const a1 = 0.254829592;
+            const a2 = -0.284496736;
+            const a3 = 1.421413741;
+            const a4 = -1.453152027;
+            const a5 = 1.061405429;
+            const p = 0.3275911;
+
+            const sign = x >= 0 ? 1 : -1;
+            x = Math.abs(x);
+
+            const t = 1.0 / (1.0 + p * x);
+            const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+
+            return sign * y;
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            document.getElementById('group1Label').textContent = `📊 ${problemData.group1Name}:`;
+            document.getElementById('group2Label').textContent = `📊 ${problemData.group2Name}:`;
+            
+            document.getElementById('sampleSize1').textContent = problemData.n1;
+            document.getElementById('successes1').textContent = problemData.x1;
+            document.getElementById('proportion1').textContent = (problemData.p1 * 100).toFixed(1) + '%';
+            
+            document.getElementById('sampleSize2').textContent = problemData.n2;
+            document.getElementById('successes2').textContent = problemData.x2;
+            document.getElementById('proportion2').textContent = (problemData.p2 * 100).toFixed(1) + '%';
+            
+            document.getElementById('nullHypothesis').innerHTML = 
+                `H₀: p₁ = p₂ (No difference in ${problemData.variable.toLowerCase()} rates between groups)`;
+            document.getElementById('altHypothesis').innerHTML = 
+                `H₁: p₁ ≠ p₂ (There is a difference in ${problemData.variable.toLowerCase()} rates between groups)`;
+            
+            document.getElementById('researchQuestion').textContent = problemData.question;
+            
+            updateEconomicInterpretation();
+        }
+
+        function updateEconomicInterpretation() {
+            if (correctAnswers.decision) {
+                const reject = correctAnswers.decision === 'reject';
+                const diff = problemData.p1 - problemData.p2;
+                const higherGroup = diff > 0 ? problemData.group1Name : problemData.group2Name;
+                
+                document.getElementById('economicInterpretation').innerHTML = `
+                    <strong>${problemData.scenario} Results:</strong><br>
+                    ${reject ? 
+                        `<span style="color: #dc3545; font-weight: bold;">REJECT H₀:</span> There IS a statistically significant difference in ${problemData.variable.toLowerCase()} rates between the groups (p = ${correctAnswers.pValue.toFixed(4)}).` :
+                        `<span style="color: #28a745; font-weight: bold;">FAIL TO REJECT H₀:</span> There is NO statistically significant difference in ${problemData.variable.toLowerCase()} rates between the groups (p = ${correctAnswers.pValue.toFixed(4)}).`
+                    }<br><br>
+                    <strong>Practical Significance:</strong> ${reject ? 
+                        `${higherGroup} has a significantly ${Math.abs(diff) > 0 ? (diff > 0 ? 'higher' : 'lower') : 'different'} ${problemData.variable.toLowerCase()} rate. The difference (${(Math.abs(diff) * 100).toFixed(1)} percentage points) is unlikely due to chance alone.` :
+                        `Any observed difference (${(Math.abs(diff) * 100).toFixed(1)} percentage points) could reasonably be explained by random sampling variation.`
+                    }<br><br>
+                    <strong>Policy Implications:</strong> ${reject ?
+                        `This difference suggests targeted interventions may be needed to address the disparity between groups.` :
+                        `Current policies appear to be affecting both groups similarly - no evidence of systematic inequality.`
+                    }
+                `;
+                
+                document.getElementById('finalResult').innerHTML = `
+                    ${problemData.group1Name}: ${(problemData.p1 * 100).toFixed(1)}% (${problemData.x1}/${problemData.n1})<br>
+                    ${problemData.group2Name}: ${(problemData.p2 * 100).toFixed(1)}% (${problemData.x2}/${problemData.n2})<br>
+                    Z = ${correctAnswers.z.toFixed(3)}, P-value = ${correctAnswers.pValue.toFixed(4)}<br>
+                    Decision: <strong style="color: ${reject ? '#dc3545' : '#28a745'}">${reject ? 'Reject H₀' : 'Fail to Reject H₀'}</strong>
+                `;
+            }
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = null) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            if (!tolerance) {
+                tolerance = Math.max(0.001, Math.abs(correctValue) * 0.05);
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            
+            return isCorrect;
+        }
+
+        function checkPooled() {
+            return checkAnswer('pooledInput', correctAnswers.pooled);
+        }
+
+        function checkSE() {
+            return checkAnswer('seInput', correctAnswers.se);
+        }
+
+        function checkZStat() {
+            return checkAnswer('zstatInput', correctAnswers.z, 0.01);
+        }
+
+        function checkZCritical() {
+            return checkAnswer('zcriticalInput', correctAnswers.zCritical, 0.01);
+        }
+
+        function checkPvalue() {
+            return checkAnswer('pvalueInput', correctAnswers.pValue, 0.01);
+        }
+
+        function checkDecision() {
+            const select = document.getElementById('decisionInput');
+            const isCorrect = select.value === correctAnswers.decision;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            
+            if (isCorrect) {
+                updateEconomicInterpretation();
+            }
+            
+            return isCorrect;
+        }
+
+        function showAnswer(answerType) {
+            const answerDiv = document.getElementById(answerType + '-answer');
+            
+            switch(answerType) {
+                case 'pooled':
+                    answerDiv.innerHTML = `✅ Pooled Proportion = ${correctAnswers.pooled.toFixed(4)}`;
+                    break;
+                case 'se':
+                    answerDiv.innerHTML = `✅ Standard Error = ${correctAnswers.se.toFixed(4)}`;
+                    break;
+                case 'zstat':
+                    answerDiv.innerHTML = `✅ Z-Statistic = ${correctAnswers.z.toFixed(3)}`;
+                    break;
+                case 'zcritical':
+                    answerDiv.innerHTML = `✅ Critical Z-Value = ±${correctAnswers.zCritical.toFixed(2)}`;
+                    break;
+                case 'pvalue':
+                    answerDiv.innerHTML = `✅ P-value = ${correctAnswers.pValue.toFixed(4)}`;
+                    break;
+                case 'decision':
+                    answerDiv.innerHTML = `✅ Decision = ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}`;
+                    break;
+            }
+            
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'pooled-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Pooled Proportion Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>p̂_pooled = (x₁ + x₂) / (n₁ + n₂)</strong><br>
+                        p̂_pooled = (${problemData.x1} + ${problemData.x2}) / (${problemData.n1} + ${problemData.n2})<br>
+                        p̂_pooled = ${problemData.x1 + problemData.x2} / ${problemData.n1 + problemData.n2} = ${correctAnswers.pooled.toFixed(4)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Why pool?</strong><br>
+                        Under H₀: p₁ = p₂, so we estimate the common proportion<br>
+                        using data from both samples combined.
+                    </div>
+                `;
+            } else if (stepType === 'se-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Standard Error Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>SE = √[p̂_pooled(1 - p̂_pooled)(1/n₁ + 1/n₂)]</strong><br>
+                        SE = √[${correctAnswers.pooled.toFixed(4)} × ${(1-correctAnswers.pooled).toFixed(4)} × (1/${problemData.n1} + 1/${problemData.n2})]<br>
+                        SE = √[${correctAnswers.pooled.toFixed(4)} × ${(1-correctAnswers.pooled).toFixed(4)} × ${(1/problemData.n1 + 1/problemData.n2).toFixed(6)}]<br>
+                        SE = ${correctAnswers.se.toFixed(4)}
+                    </div>
+                `;
+            } else if (stepType === 'zstat-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📐 Z-Statistic Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>z = (p̂₁ - p̂₂) / SE</strong><br>
+                        z = (${problemData.p1.toFixed(4)} - ${problemData.p2.toFixed(4)}) / ${correctAnswers.se.toFixed(4)}<br>
+                        z = ${(problemData.p1 - problemData.p2).toFixed(4)} / ${correctAnswers.se.toFixed(4)}<br>
+                        z = ${correctAnswers.z.toFixed(3)}
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Interpretation:</strong><br>
+                        The difference is ${Math.abs(correctAnswers.z).toFixed(1)} standard errors from zero<br>
+                        ${Math.abs(correctAnswers.z) > 1.96 ? 'Large difference - likely significant' : 'Small difference - possibly not significant'}
+                    </div>
+                `;
+            } else if (stepType === 'zcritical-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Critical Z-Value:</h4>
+                    <div class="tutorial-step">
+                        <strong>Two-tailed test, α = 0.05:</strong><br>
+                        Critical z-values: ±1.96<br>
+                        (This cuts off 2.5% in each tail)
+                    </div>
+                    <div class="tutorial-step">
+                        <strong>Decision Rule:</strong><br>
+                        Reject H₀ if |z| > 1.96<br>
+                        Our |z| = ${Math.abs(correctAnswers.z).toFixed(3)}<br>
+                        ${Math.abs(correctAnswers.z) > 1.96 ? 'Reject H₀' : 'Fail to Reject H₀'}
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllSteps() {
+            const results = [
+                checkPooled(),
+                checkSE(),
+                checkZStat(),
+                checkZCritical(),
+                checkPvalue(),
+                checkDecision()
+            ];
+            const correct = results.filter(r => r).length;
+            
+            alert(`You got ${correct}/6 steps correct!\n\n${correct === 6 ? '🎉 Perfect two-proportion test!' : 'Use the Steps buttons to see detailed solutions.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateProblem(currentScenario);
+                clearAllInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['pooledInput', 'seInput', 'zstatInput', 'zcriticalInput', 'pvalueInput'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id.replace('Input', '') + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            // Reset decision select
+            const decisionSelect = document.getElementById('decisionInput');
+            decisionSelect.value = '';
+            decisionSelect.style.backgroundColor = '';
+            
+            // Hide tutorials
+            ['pooled-calculation-tutorial', 'se-calculation-tutorial', 'zstat-calculation-tutorial', 'zcritical-calculation-tutorial'].forEach(id => {
+                const div = document.getElementById(id);
+                if (div) div.style.display = 'none';
+            });
+            
+            // Reset results
+            document.getElementById('finalResult').textContent = 'Complete all calculations to see your two-proportion test results';
+            document.getElementById('economicInterpretation').textContent = 'Complete the two-proportion test to see economic interpretation.';
+        }
+
+        function showTwoProportionSummary() {
+            alert(`📊 Two-Proportion Test Summary:\n\n` +
+                `WHEN TO USE:\n` +
+                `• Comparing success rates between two independent groups\n` +
+                `• Both samples are large (n₁p̂₁, n₁(1-p̂₁), n₂p̂₂, n₂(1-p̂₂) ≥ 5)\n` +
+                `• Want to test if proportions are significantly different\n\n` +
+                `STEPS:\n` +
+                `1. State hypotheses: H₀: p₁ = p₂ vs H₁: p₁ ≠ p₂\n` +
+                `2. Calculate pooled proportion: p̂ = (x₁+x₂)/(n₁+n₂)\n` +
+                `3. Calculate standard error using pooled proportion\n` +
+                `4. Calculate z-statistic: z = (p̂₁-p̂₂)/SE\n` +
+                `5. Find critical value or p-value\n` +
+                `6. Make decision and interpret\n\n` +
+                `INTERPRETATION:\n` +
+                `• Reject H₀: Significant difference in success rates\n` +
+                `• Fail to reject H₀: No evidence of difference\n\n` +
+                `🇨🇦 ECONOMIC APPLICATIONS:\n` +
+                `• Regional employment comparisons\n` +
+                `• Program effectiveness evaluation\n` +
+                `• Demographic disparity analysis\n` +
+                `• Policy impact assessment\n\n` +
+                `ALTERNATIVE: Chi-square test of independence\n` +
+                `(mathematically equivalent for 2×2 tables)`);
+        }
+    </script>
+</body>
+</html>
