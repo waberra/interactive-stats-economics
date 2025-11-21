@@ -32,17 +32,28 @@
       margin: 0 0 10px 0;
     }
 
-    /* Neon Question Boxes */
-    .question {
+    /* Question card */
+    #question-card {
       margin: 12px 0;
-      padding: 12px;
+      padding: 16px;
       background: #6c4cff;           /* neon purple */
       border: 2px solid #fff5;
       border-radius: 12px;
       box-shadow: 0 0 10px #6c4cff80;
+      display: none;                 /* shown after questions are generated */
+    }
+    #question-text {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    #progress {
+      font-size: 0.9em;
+      margin-bottom: 10px;
+      opacity: 0.9;
     }
     .options {
       margin-top: 6px;
+      margin-bottom: 8px;
     }
     .options label {
       margin-right: 12px;
@@ -52,8 +63,13 @@
     .options input {
       margin-right: 4px;
     }
+    #warning {
+      font-size: 0.9em;
+      color: #ffb3c6;
+      min-height: 1.2em;
+    }
 
-    /* Neon Feedback */
+    /* Neon Feedback / results */
     .feedback {
       margin-top: 6px;
       font-size: 0.95em;
@@ -68,7 +84,19 @@
       text-shadow: 0 0 7px #ff4d6d;
     }
 
-    /* Glow Buttons */
+    /* Result summary */
+    #results {
+      margin-top: 20px;
+    }
+    .result-item {
+      margin: 10px 0;
+      padding: 10px;
+      background: #2b2b2b;
+      border-radius: 8px;
+      border: 1px solid #444;
+    }
+
+    /* Buttons */
     .buttons {
       margin-top: 20px;
       display: flex;
@@ -99,23 +127,41 @@
     <div class="header-box">
       <h1>📘 Sample vs. Population Quiz</h1>
       <p>
-        Decide whether each statement describes a <strong>Sample</strong> or a <strong>Population</strong>.
-        Select your answer for each question, then click <strong>Check Answers</strong>.
-        Click <strong>New Questions</strong> to generate a fresh randomized set.
+        You will answer <strong>10 questions</strong>, one at a time.  
+        For each statement, decide whether it describes a <strong>Sample</strong> or a <strong>Population</strong>.  
+        At the end, you’ll see your <strong>score</strong> and explanations.
       </p>
     </div>
 
-    <div id="questions"></div>
+    <!-- Question card -->
+    <div id="question-card">
+      <div id="progress"></div>
+      <div id="question-text"></div>
+      <div class="options">
+        <label>
+          <input type="radio" name="answer" value="sample">
+          Sample
+        </label>
+        <label>
+          <input type="radio" name="answer" value="population">
+          Population
+        </label>
+      </div>
+      <div id="warning"></div>
+    </div>
 
     <div class="buttons">
-      <button onclick="checkAnswers()">✔ Check Answers</button>
-      <button onclick="generate()">🔄 New Questions</button>
+      <button id="start-btn" onclick="startBatch()">▶ Start New Batch</button>
+      <button id="next-btn" onclick="nextQuestion()" style="display:none;">Next Question ▶</button>
     </div>
+
+    <div id="results"></div>
 
   </div>
 
   <script>
-    // Phrase pools
+    const NUM_QUESTIONS = 10;
+
     const sampleStarters = [
       "50 randomly selected", "100 surveyed", "25 participants chosen",
       "A sample of", "80 chosen", "30 surveyed", "20 selected",
@@ -136,8 +182,9 @@
       "athletes at a tournament", "residents in a village", "passengers on a flight"
     ];
 
-    // Store: { text, type }
-    let questionsData = [];
+    let questionsData = [];         // { text, type }
+    let userAnswers = [];           // "sample" | "population" | null
+    let currentIndex = 0;
 
     function randomItem(list) {
       return list[Math.floor(Math.random() * list.length)];
@@ -155,63 +202,109 @@
         : "This is a population because it includes every member of the entire group.";
     }
 
-    // Generate and render 10 random questions
-    function generate() {
-      const container = document.getElementById("questions");
-      container.innerHTML = "";
+    function startBatch() {
+      // Create new batch
       questionsData = [];
+      userAnswers = new Array(NUM_QUESTIONS).fill(null);
+      currentIndex = 0;
+      document.getElementById("results").innerHTML = "";
 
-      const numQuestions = 10;
-      for (let i = 0; i < numQuestions; i++) {
+      for (let i = 0; i < NUM_QUESTIONS; i++) {
         const type = Math.random() < 0.5 ? "sample" : "population";
         const text = buildSentence(type);
         questionsData.push({ text, type });
+      }
 
-        container.innerHTML += `
-          <div class="question">
-            <strong>${i + 1}. ${text}</strong>
-            <div class="options">
-              <label>
-                <input type="radio" name="q${i}" value="sample">
-                Sample
-              </label>
-              <label>
-                <input type="radio" name="q${i}" value="population">
-                Population
-              </label>
-            </div>
-            <div class="feedback" id="f${i}"></div>
-          </div>
-        `;
+      document.getElementById("start-btn").textContent = "🔁 Restart Batch";
+      document.getElementById("question-card").style.display = "block";
+      document.getElementById("next-btn").style.display = "inline-block";
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = questionsData[currentIndex];
+      const qText = document.getElementById("question-text");
+      const progress = document.getElementById("progress");
+      const warning = document.getElementById("warning");
+
+      qText.textContent = `${currentIndex + 1}. ${q.text}`;
+      progress.textContent = `Question ${currentIndex + 1} of ${NUM_QUESTIONS}`;
+      warning.textContent = "";
+
+      // clear radios
+      const radios = document.querySelectorAll('input[name="answer"]');
+      radios.forEach(r => r.checked = false);
+
+      // if this question already answered (when moving back in future versions)
+      if (userAnswers[currentIndex]) {
+        const val = userAnswers[currentIndex];
+        const radioToCheck = document.querySelector(`input[name="answer"][value="${val}"]`);
+        if (radioToCheck) radioToCheck.checked = true;
+      }
+
+      // Change button label on last question
+      const nextBtn = document.getElementById("next-btn");
+      nextBtn.textContent = (currentIndex === NUM_QUESTIONS - 1)
+        ? "✅ Finish & Grade"
+        : "Next Question ▶";
+    }
+
+    function nextQuestion() {
+      const warning = document.getElementById("warning");
+      const selected = document.querySelector('input[name="answer"]:checked');
+
+      if (!selected) {
+        warning.textContent = "Please choose Sample or Population before continuing.";
+        return;
+      }
+
+      warning.textContent = "";
+      userAnswers[currentIndex] = selected.value;
+
+      if (currentIndex < NUM_QUESTIONS - 1) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        gradeQuiz();
       }
     }
 
-    // Check answers and show explanations
-    function checkAnswers() {
-      questionsData.forEach((q, i) => {
-        const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        const fb = document.getElementById(`f${i}`);
+    function gradeQuiz() {
+      let correctCount = 0;
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
 
-        if (!selected) {
-          fb.innerHTML =
-            `<span class="incorrect">No answer selected.</span> ` +
-            `Correct: <strong>${q.type}</strong>. ${explanation(q.type)}`;
-          return;
-        }
+      questionsData.forEach((q, idx) => {
+        const user = userAnswers[idx];
+        const correct = q.type;
+        const isCorrect = user === correct;
+        if (isCorrect) correctCount++;
 
-        if (selected.value === q.type) {
-          fb.innerHTML =
-            `<span class="correct">Correct!</span> ${explanation(q.type)}`;
-        } else {
-          fb.innerHTML =
-            `<span class="incorrect">Incorrect.</span> ` +
-            `Correct: <strong>${q.type}</strong>. ${explanation(q.type)}`;
-        }
+        const item = document.createElement("div");
+        item.className = "result-item";
+
+        let userText = user ? user : "(no answer)";
+        item.innerHTML = `
+          <div><strong>Question ${idx + 1}:</strong> ${q.text}</div>
+          <div>Your answer: <strong>${userText}</strong></div>
+          <div>Correct answer: <strong>${correct}</strong></div>
+          <div class="${isCorrect ? "correct" : "incorrect"}">
+            ${isCorrect ? "Correct!" : "Incorrect."} ${explanation(correct)}
+          </div>
+        `;
+        resultsDiv.appendChild(item);
       });
+
+      const scoreP = document.createElement("p");
+      scoreP.className = "feedback";
+      scoreP.innerHTML = `You scored <span class="correct">${correctCount} / ${NUM_QUESTIONS}</span>.`;
+      resultsDiv.prepend(scoreP);
+
+      // Optionally keep the last question visible, but quiz is done
+      document.getElementById("next-btn").style.display = "none";
     }
 
-    // Initial load
-    generate();
+    // Ready to go – user clicks "Start New Batch" to begin
   </script>
 </body>
 </html>
