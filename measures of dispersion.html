@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measures of Dispersion - Interactive Statistics Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #a71e2a;
+        }
+
+        .red-title h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 25px;
+            margin: 0;
+        }
+
+        .blue-concepts h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .measures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .measure-card {
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .measure-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+
+        .range-card {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-color: #1e7e34;
+            color: white;
+        }
+
+        .variance-card {
+            background: linear-gradient(135deg, #fd7e14, #e55353);
+            border-color: #d63384;
+            color: white;
+        }
+
+        .std-card {
+            background: linear-gradient(135deg, #6f42c1, #8e44ad);
+            border-color: #563d7c;
+            color: white;
+        }
+
+        .iqr-card {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            border-color: #117a8b;
+            color: white;
+        }
+
+        .mad-card {
+            background: linear-gradient(135deg, #ffc107, #ff8800);
+            border-color: #d39e00;
+            color: #212529;
+        }
+
+        .cv-card {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            border-color: #c7185d;
+            color: white;
+        }
+
+        .measure-card h4 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .measure-card .formula {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .measure-card .description {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .measure-card .use-cases {
+            margin-bottom: 15px;
+            font-style: italic;
+            font-size: 0.95em;
+        }
+
+        .measure-card .examples {
+            font-size: 0.9em;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            padding-top: 10px;
+        }
+
+        .interactive-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+
+        .scenario-display {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #28a745;
+        }
+
+        .calculation-area {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #ffc107;
+            display: none;
+        }
+
+        .results-area {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #6f42c1;
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #495057, #6c757d);
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .data-table th {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .measure-result {
+            background: #e9f7ef;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .measure-result.highlight {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            animation: pulse 2s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .step-by-step {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .step h5 {
+            color: #007bff;
+            margin-bottom: 8px;
+        }
+
+        .interpretation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #c7185d;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* options grid used in decision section */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            border-radius: 10px;
+            border: 2px solid #ced4da;
+            padding: 12px 14px;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .measures-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="red-title">
+            <h1>📊 Measures of Dispersion</h1>
+            <p>Understand How Spread, Variability, and Risk Are Measured in Real Data</p>
+        </div>
+
+        <div class="blue-concepts">
+            <h3>📏 Six Key Measures of Dispersion</h3>
+            <div class="measures-grid">
+                <div class="measure-card range-card">
+                    <h4>📏 Range</h4>
+                    <div class="formula">Range = Max − Min</div>
+                    <div class="description">
+                        The simplest measure of spread: the difference between the largest and smallest values.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Quick sense of total spread; first look at variability.
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Temperature range in a week, highest vs lowest stock price in a day.
+                    </div>
+                </div>
+
+                <div class="measure-card variance-card">
+                    <h4>σ² / s² Variance</h4>
+                    <div class="formula">Variance = Σ(x − x̄)² / (n − 1)</div>
+                    <div class="description">
+                        The average squared distance from the mean. Basis for standard deviation.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Theoretical/statistical work, inferential analysis, ANOVA, regression.
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Variance of returns, variance of production errors, variance in test scores.
+                    </div>
+                </div>
+
+                <div class="measure-card std-card">
+                    <h4>σ / s Standard Deviation</h4>
+                    <div class="formula">SD = √Variance</div>
+                    <div class="description">
+                        Typical distance of observations from the mean, in the same units as the data.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Roughly symmetric numerical data, risk/volatility, quality control.
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Volatility of daily returns, variation in delivery times, spread of exam marks.
+                    </div>
+                </div>
+
+                <div class="measure-card iqr-card">
+                    <h4>📦 Interquartile Range (IQR)</h4>
+                    <div class="formula">IQR = Q₃ − Q₁</div>
+                    <div class="description">
+                        Spread of the middle 50% of the data; robust to extreme values and outliers.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Skewed distributions, outliers present, median-based summaries.
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Income distribution, house prices, skewed waiting times.
+                    </div>
+                </div>
+
+                <div class="measure-card mad-card">
+                    <h4>📉 Mean Absolute Deviation (MAD)</h4>
+                    <div class="formula">MAD = Σ|x − x̄| / n</div>
+                    <div class="description">
+                        Average absolute distance from the mean; easier to interpret than squared deviations.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Teaching variability, robust alternative to variance, intuitive spread.
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Average deviation of quiz marks, deviations from target production level.
+                    </div>
+                </div>
+
+                <div class="measure-card cv-card">
+                    <h4>📊 Coefficient of Variation (CV)</h4>
+                    <div class="formula">CV = (SD / Mean) × 100%</div>
+                    <div class="description">
+                        Measures relative variability as a percentage of the mean. Allows comparison across different scales.
+                    </div>
+                    <div class="use-cases">
+                        <strong>When to use:</strong> Comparing risk across assets, comparing variability of different units.
+                    </div>
+                    <div class="examples">
+                        <strong>Examples:</strong> Comparing volatility of two stocks, comparing variability of sales vs costs.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <div class="control-panel">
+                <h3>🎮 Interactive Decision-Based Learning</h3>
+                <p>Test your understanding by choosing the right measure of dispersion for real Canadian economic scenarios!</p>
+                <p style="font-size: 0.9em; color: #6c757d; margin-top: 10px;">
+                    ✨ <strong>New Approach:</strong> Think like a professional analyst – decide which spread measure to use, then see expert feedback!
+                </p>
+                <button class="btn" onclick="generateScenario()">📊 Generate New Scenario</button>
+                <button class="btn btn-secondary" onclick="resetCalculator()">🔄 Reset Progress</button>
+            </div>
+
+            <div id="scenarioDisplay" class="scenario-display" style="display: none;">
+                <h3 id="scenarioTitle">📋 Scenario</h3>
+                <div id="scenarioDescription"></div>
+                <div id="dataDisplay"></div>
+                
+                <div id="decisionSection" style="background: #e9f7ef; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #28a745;">
+                    <h4>🤔 Decision Time!</h4>
+                    <p style="margin-bottom: 15px; font-weight: 500;">
+                        Given this context and data, which measure(s) of dispersion would be most appropriate? 
+                        Select all that you think are suitable and explain why.
+                    </p>
+                    
+                    <div id="measureOptions" class="options-grid">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <textarea id="studentReasoning" placeholder="Explain your reasoning: Why did you choose these measure(s)? What makes them appropriate for this scenario?" 
+                                style="width: 100%; height: 100px; padding: 12px; border: 2px solid #28a745; border-radius: 8px; font-size: 1em; resize: vertical;"></textarea>
+                    </div>
+                    
+                    <button class="btn" onclick="submitDecision()" id="submitBtn" style="margin-top: 15px;">📝 Submit My Analysis</button>
+                </div>
+            </div>
+
+            <div id="feedbackArea" class="scenario-display" style="display: none;">
+                <h3>📋 Expert Analysis & Feedback</h3>
+                <div id="feedbackContent"></div>
+                <div id="recommendedMeasures"></div>
+                <button class="btn" onclick="calculateSelectedMeasures()" id="calculateBtn">🧮 Calculate Recommended Measures</button>
+            </div>
+
+            <div id="calculationArea" class="calculation-area">
+                <h3>📝 Calculations & Results</h3>
+                <div id="calculationSteps"></div>
+                <div id="resultsDisplay"></div>
+                <div id="interpretationDisplay"></div>
+                <button class="btn" onclick="generateScenario()">➡️ Try Another Scenario</button>
+            </div>
+
+            <div class="score-display">
+                <h3>🎯 Decision-Making Progress</h3>
+                <div>Scenarios Analyzed: <span id="scenariosCompleted">0</span></div>
+                <div style="margin-top: 10px; font-size: 0.9em; opacity: 0.9;">
+                    Building expertise in selecting the right measure of dispersion for each business context
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = {};
+        let scenariosCompleted = 0;
+        let studentChoices = [];
+        let studentReasoning = "";
+
+        const measureOptions = [
+            { id: "range", label: "📏 Range", description: "Total spread: max − min" },
+            { id: "iqr", label: "📦 Interquartile Range (IQR)", description: "Spread of the middle 50% (Q3 − Q1)" },
+            { id: "variance", label: "σ² / s² Variance", description: "Average squared distance from the mean" },
+            { id: "stdDev", label: "σ / s Standard Deviation", description: "Typical distance from the mean" },
+            { id: "mad", label: "📉 Mean Absolute Deviation (MAD)", description: "Average absolute distance from the mean" },
+            { id: "cv", label: "📊 Coefficient of Variation (CV)", description: "Standard deviation as % of mean" }
+        ];
+
+        const scenarios = [
+            {
+                title: "Salary Spread at a Canadian Retail Chain",
+                description: "Annual salaries (CAD) of employees at several branches of a Canadian retail chain.",
+                context: "Head office wants to understand how unequal salaries are to check for fairness and outliers.",
+                data: [32000, 34000, 35500, 36000, 36500, 37000, 39000, 42000, 92000],
+                dataType: "numerical"
+            },
+            {
+                title: "On-Time Delivery Performance in Toronto",
+                description: "Delivery times (minutes late/early; negative means early) for a same-day courier service.",
+                context: "Operations team wants to measure consistency of delivery performance, not just the average time.",
+                data: [-3, 0, 2, 4, -1, 6, 3, 1, -2, 10],
+                dataType: "numerical"
+            },
+            {
+                title: "Daily Electricity Usage of Apartments in Montréal",
+                description: "Daily electricity consumption (kWh) for a sample of apartments in a building.",
+                context: "The building manager wants to understand the typical spread in usage to plan capacity and pricing.",
+                data: [14, 15, 15, 16, 18, 19, 21, 23, 26, 40],
+                dataType: "numerical"
+            },
+            {
+                title: "Monthly Returns of Two Canadian Mutual Funds",
+                description: "Monthly returns (%) from a Canadian bond fund over 12 months.",
+                context: "An investor wants to judge the riskiness of this fund and compare it to a stock fund later.",
+                data: [0.8, 1.2, -0.3, 0.6, 0.9, 1.1, -0.1, 0.5, 0.7, 1.0, -0.2, 0.6],
+                dataType: "numerical"
+            },
+            {
+                title: "Processing Time Variability at a Call Centre",
+                description: "Call handling times (minutes) for customer service representatives.",
+                context: "Management wants to assess how consistent their service time is and whether some calls take much longer.",
+                data: [4, 5, 5, 6, 6, 7, 8, 9, 15, 18],
+                dataType: "numerical"
+            }
+        ];
+
+        // Expert answers for dispersion
+        const expertAnswers = {
+            "Salary Spread at a Canadian Retail Chain": {
+                recommendedMeasures: ["iqr", "stdDev"],
+                expertReasoning: "The dataset has a clear high outlier ($92,000). IQR captures the spread of typical salaries and standard deviation quantifies total variability, but range alone is dominated by the outlier.",
+                wrongChoices: {
+                    "range": "Range is very sensitive to one extreme salary and does not describe how most salaries are spread.",
+                    "cv": "CV mixes level and spread and is best for comparing different groups on different scales.",
+                    "mad": "MAD is okay, but IQR is more standard for skewed income distributions.",
+                    "variance": "Variance is informative but harder to interpret, and SD is usually reported instead."
+                },
+                keyInsight: "For skewed salary data with outliers, prefer IQR (and sometimes SD) over just the range."
+            },
+            "On-Time Delivery Performance in Toronto": {
+                recommendedMeasures: ["stdDev", "mad"],
+                expertReasoning: "Delivery times are centered near zero with both early and late deliveries. Standard deviation and MAD both give a sense of typical deviation from the target time.",
+                wrongChoices: {
+                    "range": "Range is useful but too influenced by a single very late delivery.",
+                    "iqr": "IQR is less intuitive here because we care about average deviation from the target.",
+                    "cv": "Mean delivery time is near zero, so CV is unstable and misleading.",
+                    "variance": "Variance is mathematically useful but harder to interpret than SD or MAD."
+                },
+                keyInsight: "When assessing consistency around a target (like 0 minutes late), SD and MAD provide intuitive measures."
+            },
+            "Daily Electricity Usage of Apartments in Montréal": {
+                recommendedMeasures: ["iqr", "stdDev"],
+                expertReasoning: "Most apartments have moderate usage, but there is at least one high-usage outlier (40 kWh). IQR shows the spread of typical apartments; SD summarizes overall variability.",
+                wrongChoices: {
+                    "range": "Range over-reacts to the one extreme apartment.",
+                    "cv": "CV is useful for comparing different groups; here we are focused on one building.",
+                    "mad": "MAD is fine but IQR is more commonly used with medians in skewed contexts.",
+                    "variance": "Variance is valid but less interpretable for non-specialists."
+                },
+                keyInsight: "In skewed usage data, IQR is robust, while SD summarizes total variability, including outliers."
+            },
+            "Monthly Returns of Two Canadian Mutual Funds": {
+                recommendedMeasures: ["stdDev", "cv"],
+                expertReasoning: "For investment returns, standard deviation is the classic risk measure. Coefficient of variation shows risk relative to average return, which is useful when comparing funds with different average returns.",
+                wrongChoices: {
+                    "range": "Range only looks at the worst and best months, ignoring typical fluctuations.",
+                    "iqr": "IQR is less commonly used in finance than SD.",
+                    "mad": "MAD is a possible risk measure but SD is standard in finance.",
+                    "variance": "Variance is the square of SD; SD is easier to interpret."
+                },
+                keyInsight: "In finance, SD measures volatility; CV helps compare relative risk across investments."
+            },
+            "Processing Time Variability at a Call Centre": {
+                recommendedMeasures: ["iqr", "stdDev", "mad"],
+                expertReasoning: "Most calls cluster in a moderate range with a few very long calls. IQR reveals typical variability, SD and MAD describe how spread out call times are around the mean.",
+                wrongChoices: {
+                    "range": "Range is heavily influenced by one or two extremely long calls.",
+                    "cv": "CV could be used, but managers usually care about actual minutes of variation.",
+                    "variance": "Variance is valid but less intuitive than SD or MAD in minutes."
+                },
+                keyInsight: "When there are occasional long calls, robust measures like IQR plus SD/MAD give a clearer picture than range alone."
+            }
+        };
+
+        function generateScenario() {
+            const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            currentScenario = scenario;
+            studentChoices = [];
+            studentReasoning = "";
+            
+            document.getElementById('scenarioDisplay').style.display = 'block';
+            document.getElementById('feedbackArea').style.display = 'none';
+            document.getElementById('calculationArea').style.display = 'none';
+            
+            document.getElementById('scenarioTitle').textContent = `📊 ${scenario.title}`;
+            document.getElementById('scenarioDescription').innerHTML = `
+                <div style="background: #e9f7ef; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4>📋 Context:</h4>
+                    <p style="margin-top: 10px;">${scenario.description}</p>
+                    <p style="margin-top: 10px; font-style: italic; color: #6c757d;"><strong>Business Goal:</strong> ${scenario.context}</p>
+                </div>
+            `;
+            
+            displayData(scenario);
+            createMeasureOptions(scenario);
+        }
+
+        function createMeasureOptions(scenario) {
+            const optionsContainer = document.getElementById('measureOptions');
+            optionsContainer.innerHTML = '';
+            
+            measureOptions.forEach(option => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-btn';
+                optionDiv.innerHTML = `
+                    <div style="text-align: left;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">${option.label}</div>
+                        <div style="font-size: 0.85em; color: #6c757d;">${option.description}</div>
+                    </div>
+                `;
+                
+                optionDiv.onclick = () => toggleMeasureSelection(option.id, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            document.getElementById('studentReasoning').value = '';
+        }
+
+        function toggleMeasureSelection(measureId, element) {
+            if (studentChoices.includes(measureId)) {
+                studentChoices = studentChoices.filter(id => id !== measureId);
+                element.style.background = 'linear-gradient(135deg, #e9ecef, #dee2e6)';
+                element.style.border = '2px solid #ced4da';
+                element.style.color = '#495057';
+            } else {
+                studentChoices.push(measureId);
+                element.style.background = 'linear-gradient(135deg, #d4edda, #c3e6cb)';
+                element.style.border = '2px solid #28a745';
+                element.style.color = '#155724';
+            }
+        }
+
+        function submitDecision() {
+            studentReasoning = document.getElementById('studentReasoning').value.trim();
+            
+            if (studentChoices.length === 0) {
+                alert('Please select at least one measure of dispersion.');
+                return;
+            }
+            
+            if (studentReasoning.length < 10) {
+                alert('Please provide reasoning for your choices (at least 10 characters).');
+                return;
+            }
+            
+            showFeedback();
+        }
+
+        function showFeedback() {
+            document.getElementById('feedbackArea').style.display = 'block';
+            const expertData = expertAnswers[currentScenario.title];
+            const correctChoices = expertData.recommendedMeasures;
+            const studentCorrect = studentChoices.filter(choice => correctChoices.includes(choice));
+            const studentIncorrect = studentChoices.filter(choice => !correctChoices.includes(choice));
+            const missedCorrect = correctChoices.filter(choice => !studentChoices.includes(choice));
+            
+            let feedbackHTML = `
+                <div style="background: white; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4>🎯 Your Analysis vs Expert Recommendation</h4>
+                    
+                    <div style="margin: 20px 0;">
+                        <h5>📝 Your Reasoning:</h5>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #007bff;">
+                            "${studentReasoning}"
+                        </div>
+                    </div>
+            `;
+            
+            if (studentCorrect.length > 0) {
+                feedbackHTML += `
+                    <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>✅ Correct Choices:</strong> ${studentCorrect.map(choice => 
+                            measureOptions.find(opt => opt.id === choice)?.label || choice
+                        ).join(', ')}
+                    </div>
+                `;
+            }
+            
+            if (studentIncorrect.length > 0) {
+                feedbackHTML += `
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>❌ Not Recommended:</strong> ${studentIncorrect.map(choice => 
+                            measureOptions.find(opt => opt.id === choice)?.label || choice
+                        ).join(', ')}
+                        <div style="margin-top: 10px; font-size: 0.9em;">
+                            ${studentIncorrect.map(choice => 
+                                expertData.wrongChoices[choice] ? `<div><strong>${measureOptions.find(opt => opt.id === choice)?.label}:</strong> ${expertData.wrongChoices[choice]}</div>` : ''
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (missedCorrect.length > 0) {
+                feedbackHTML += `
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>💡 You Also Could Have Selected:</strong> ${missedCorrect.map(choice => 
+                            measureOptions.find(opt => opt.id === choice)?.label || choice
+                        ).join(', ')}
+                    </div>
+                `;
+            }
+            
+            feedbackHTML += `</div>`;
+            
+            document.getElementById('feedbackContent').innerHTML = feedbackHTML;
+            
+            document.getElementById('recommendedMeasures').innerHTML = `
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 15px 0; border-left: 5px solid #2196f3;">
+                    <h4>🧠 Expert Analysis</h4>
+                    <p><strong>Recommended Measure(s):</strong> ${correctChoices.map(choice => 
+                        measureOptions.find(opt => opt.id === choice)?.label || choice
+                    ).join(', ')}</p>
+                    
+                    <p><strong>Expert Reasoning:</strong></p>
+                    <p>${expertData.expertReasoning}</p>
+                    
+                    <div style="background: rgba(255,255,255,0.7); padding: 15px; margin-top: 15px; border-radius: 8px;">
+                        <strong>💡 Key Learning Point:</strong> ${expertData.keyInsight}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('feedbackArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateSelectedMeasures() {
+            const expertData = expertAnswers[currentScenario.title];
+            const measuresToCalculate = expertData.recommendedMeasures;
+            document.getElementById('calculationArea').style.display = 'block';
+            
+            const results = {};
+            let calculationSteps = '';
+            
+            const data = currentScenario.data;
+
+            calculationSteps = calculateSelectedDispersionSteps(measuresToCalculate, data);
+            
+            measuresToCalculate.forEach(measure => {
+                switch(measure) {
+                    case 'range':
+                        results.range = calculateRange(data);
+                        break;
+                    case 'iqr':
+                        results.iqr = calculateIQR([...data]);
+                        break;
+                    case 'variance':
+                        results.variance = calculateVariance(data);
+                        break;
+                    case 'stdDev':
+                        results.stdDev = calculateStdDev(data);
+                        break;
+                    case 'mad':
+                        results.mad = calculateMAD(data);
+                        break;
+                    case 'cv':
+                        const mean = calculateMean(data);
+                        const sd = calculateStdDev(data);
+                        results.cv = mean !== 0 ? (sd / mean) * 100 : NaN;
+                        results.stdDev = results.stdDev || sd;
+                        break;
+                }
+            });
+            
+            document.getElementById('calculationSteps').innerHTML = calculationSteps;
+            displayResults(results);
+            displayInterpretation(results);
+            
+            scenariosCompleted++;
+            document.getElementById('scenariosCompleted').textContent = scenariosCompleted;
+            
+            document.getElementById('calculationArea').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayData(scenario) {
+            let dataHTML = `
+                <h4>📋 Numerical Data:</h4>
+                <div style="background: white; padding: 20px; border-radius: 10px; border: 2px solid #007bff; margin: 15px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; text-align: center;">
+            `;
+            
+            scenario.data.forEach(value => {
+                dataHTML += `<div style="background: #f8f9fa; padding: 10px; border-radius: 5px; border: 1px solid #dee2e6;"><strong>${value}</strong></div>`;
+            });
+            
+            dataHTML += `
+                    </div>
+                    <p style="margin-top: 15px; text-align: center; color: #6c757d;">
+                        n = ${scenario.data.length} observations
+                    </p>
+                </div>
+            `;
+            
+            document.getElementById('dataDisplay').innerHTML = dataHTML;
+        }
+
+        function calculateSelectedDispersionSteps(measuresToCalculate, data) {
+            const sortedData = [...data].sort((a, b) => a - b);
+            let steps = `<div class="step-by-step">`;
+            
+            measuresToCalculate.forEach((measure, index) => {
+                switch(measure) {
+                    case 'range':
+                        steps += `
+                            <div class="step">
+                                <h5>📏 ${index + 1}. Range Calculation</h5>
+                                <p><strong>Formula:</strong> Range = Max − Min</p>
+                                <p><strong>Ordered data:</strong> [${sortedData.join(', ')}]</p>
+                                <p><strong>Max:</strong> ${sortedData[sortedData.length - 1]}, <strong>Min:</strong> ${sortedData[0]}</p>
+                                <p><strong>Result:</strong> ${sortedData[sortedData.length - 1]} − ${sortedData[0]} = ${calculateRange(data).toFixed(3)}</p>
+                            </div>
+                        `;
+                        break;
+                    case 'iqr':
+                        const { q1, q3 } = quartiles(sortedData);
+                        steps += `
+                            <div class="step">
+                                <h5>📦 ${index + 1}. Interquartile Range (IQR) Calculation</h5>
+                                <p><strong>Ordered data:</strong> [${sortedData.join(', ')}]</p>
+                                <p><strong>Q₁ (25th percentile):</strong> ${q1.toFixed(3)}</p>
+                                <p><strong>Q₃ (75th percentile):</strong> ${q3.toFixed(3)}</p>
+                                <p><strong>IQR:</strong> Q₃ − Q₁ = ${q3.toFixed(3)} − ${q1.toFixed(3)} = ${calculateIQR([...data]).toFixed(3)}</p>
+                            </div>
+                        `;
+                        break;
+                    case 'variance':
+                        const meanVar = calculateMean(data);
+                        const sqDiffs = data.map(x => (x - meanVar) ** 2);
+                        steps += `
+                            <div class="step">
+                                <h5>σ² ${index + 1}. Variance Calculation (Sample)</h5>
+                                <p><strong>Formula:</strong> s² = Σ(x − x̄)² / (n − 1)</p>
+                                <p><strong>Mean (x̄):</strong> ${meanVar.toFixed(3)}</p>
+                                <p><strong>Squared deviations:</strong> ${data.map(
+                                    (x,i) => `(${x} − ${meanVar.toFixed(3)})² = ${sqDiffs[i].toFixed(3)}`
+                                ).join('; ')}</p>
+                                <p><strong>Sum of squared deviations:</strong> ${sqDiffs.reduce((a,b)=>a+b,0).toFixed(3)}</p>
+                                <p><strong>Result:</strong> ${sqDiffs.reduce((a,b)=>a+b,0).toFixed(3)} / (${data.length} − 1) = ${calculateVariance(data).toFixed(3)}</p>
+                            </div>
+                        `;
+                        break;
+                    case 'stdDev':
+                        steps += `
+                            <div class="step">
+                                <h5>σ ${index + 1}. Standard Deviation Calculation</h5>
+                                <p><strong>Formula:</strong> s = √Variance</p>
+                                <p><strong>Variance (from above):</strong> ${calculateVariance(data).toFixed(3)}</p>
+                                <p><strong>Result:</strong> s = √${calculateVariance(data).toFixed(3)} = ${calculateStdDev(data).toFixed(3)}</p>
+                            </div>
+                        `;
+                        break;
+                    case 'mad':
+                        const meanMad = calculateMean(data);
+                        const absDiffs = data.map(x => Math.abs(x - meanMad));
+                        steps += `
+                            <div class="step">
+                                <h5>📉 ${index + 1}. Mean Absolute Deviation (MAD)</h5>
+                                <p><strong>Formula:</strong> MAD = Σ|x − x̄| / n</p>
+                                <p><strong>Mean (x̄):</strong> ${meanMad.toFixed(3)}</p>
+                                <p><strong>Absolute deviations:</strong> ${data.map(
+                                    (x,i) => `|${x} − ${meanMad.toFixed(3)}| = ${absDiffs[i].toFixed(3)}`
+                                ).join('; ')}</p>
+                                <p><strong>Result:</strong> (${absDiffs.map(v => v.toFixed(3)).join(' + ')}) / ${data.length} = ${calculateMAD(data).toFixed(3)}</p>
+                            </div>
+                        `;
+                        break;
+                    case 'cv':
+                        const meanCV = calculateMean(data);
+                        const sdCV = calculateStdDev(data);
+                        steps += `
+                            <div class="step">
+                                <h5>📊 ${index + 1}. Coefficient of Variation (CV)</h5>
+                                <p><strong>Formula:</strong> CV = (SD / Mean) × 100%</p>
+                                <p><strong>Mean:</strong> ${meanCV.toFixed(3)}, <strong>SD:</strong> ${sdCV.toFixed(3)}</p>
+                                <p><strong>Result:</strong> (${sdCV.toFixed(3)} / ${meanCV.toFixed(3)}) × 100% = ${meanCV !== 0 ? ((sdCV / meanCV) * 100).toFixed(2) : 'undefined'}%</p>
+                            </div>
+                        `;
+                        break;
+                }
+            });
+            
+            steps += `</div>`;
+            return steps;
+        }
+
+        function calculateMean(data) {
+            return data.reduce((sum, value) => sum + value, 0) / data.length;
+        }
+
+        function calculateRange(data) {
+            const sorted = [...data].sort((a, b) => a - b);
+            return sorted[sorted.length - 1] - sorted[0];
+        }
+
+        function quartiles(sortedData) {
+            const n = sortedData.length;
+            const medianIndex = Math.floor(n / 2);
+
+            let lowerHalf, upperHalf;
+            if (n % 2 === 0) {
+                lowerHalf = sortedData.slice(0, medianIndex);
+                upperHalf = sortedData.slice(medianIndex);
+            } else {
+                lowerHalf = sortedData.slice(0, medianIndex);
+                upperHalf = sortedData.slice(medianIndex + 1);
+            }
+
+            return {
+                q1: calculateMedianArray(lowerHalf),
+                q3: calculateMedianArray(upperHalf)
+            };
+        }
+
+        function calculateMedianArray(arr) {
+            const data = [...arr].sort((a, b) => a - b);
+            const n = data.length;
+            if (n === 0) return NaN;
+            if (n % 2 === 0) {
+                return (data[n/2 - 1] + data[n/2]) / 2;
+            } else {
+                return data[Math.floor(n/2)];
+            }
+        }
+
+        function calculateIQR(data) {
+            const sorted = [...data].sort((a, b) => a - b);
+            const { q1, q3 } = quartiles(sorted);
+            return q3 - q1;
+        }
+
+        function calculateVariance(data) {
+            const mean = calculateMean(data);
+            const sqDiffs = data.map(x => (x - mean) ** 2);
+            return sqDiffs.reduce((a, b) => a + b, 0) / (data.length - 1); // sample variance
+        }
+
+        function calculateStdDev(data) {
+            return Math.sqrt(calculateVariance(data));
+        }
+
+        function calculateMAD(data) {
+            const mean = calculateMean(data);
+            const absDiffs = data.map(x => Math.abs(x - mean));
+            return absDiffs.reduce((a, b) => a + b, 0) / data.length;
+        }
+
+        function displayResults(results) {
+            let resultsHTML = '<h4>📊 Calculated Measures of Dispersion:</h4>';
+            
+            const measureNames = {
+                range: '📏 Range',
+                iqr: '📦 Interquartile Range (IQR)',
+                variance: 'σ² Variance (sample)',
+                stdDev: 'σ Standard Deviation (sample)',
+                mad: '📉 Mean Absolute Deviation (MAD)',
+                cv: '📊 Coefficient of Variation (CV)'
+            };
+            
+            Object.entries(results).forEach(([measure, value]) => {
+                const displayValue =
+                    typeof value === 'number'
+                        ? (measure === 'cv' ? `${value.toFixed(2)} %` : value.toFixed(3))
+                        : value;
+
+                resultsHTML += `
+                    <div class="measure-result">
+                        <span><strong>${measureNames[measure]}:</strong></span>
+                        <span style="font-size: 1.1em; font-weight: bold;">${displayValue}</span>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('resultsDisplay').innerHTML = resultsHTML;
+        }
+
+        function displayInterpretation(results) {
+            const expertData = expertAnswers[currentScenario.title];
+            
+            let interpretationHTML = `
+                <div class="interpretation-box">
+                    <h4>🧠 Final Analysis of Spread</h4>
+                    <p><strong>Expert Focus:</strong> ${expertData.expertReasoning}</p>
+                    
+                    <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                        <h5>💡 Key Takeaway:</h5>
+                        <p>${expertData.keyInsight}</p>
+                    </div>
+            `;
+
+            // Optional comparison commentary
+            const rangeVal = results.range;
+            const sdVal = results.stdDev;
+            const iqrVal = results.iqr;
+            const cvVal = results.cv;
+
+            interpretationHTML += `<div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.7); border-radius: 8px;">
+                <h5>📈 What the Numbers Suggest:</h5>
+            `;
+
+            if (typeof rangeVal === 'number') {
+                interpretationHTML += `<p>• The range of ${rangeVal.toFixed(3)} shows the total spread from smallest to largest value.</p>`;
+            }
+            if (typeof iqrVal === 'number') {
+                interpretationHTML += `<p>• The IQR of ${iqrVal.toFixed(3)} shows how spread out the middle 50% of observations are.</p>`;
+            }
+            if (typeof sdVal === 'number') {
+                interpretationHTML += `<p>• The standard deviation of ${sdVal.toFixed(3)} indicates the typical distance from the mean.</p>`;
+            }
+            if (typeof cvVal === 'number' && !isNaN(cvVal)) {
+                interpretationHTML += `<p>• The coefficient of variation of ${cvVal.toFixed(2)}% shows the variability relative to the mean.</p>`;
+            }
+
+            interpretationHTML += `</div></div>`;
+            
+            document.getElementById('interpretationDisplay').innerHTML = interpretationHTML;
+        }
+
+        function resetCalculator() {
+            scenariosCompleted = 0;
+            studentChoices = [];
+            studentReasoning = "";
+            document.getElementById('scenariosCompleted').textContent = '0';
+            document.getElementById('scenarioDisplay').style.display = 'none';
+            document.getElementById('feedbackArea').style.display = 'none';
+            document.getElementById('calculationArea').style.display = 'none';
+        }
+
+        // Initialize display
+        document.getElementById('scenariosCompleted').textContent = '0';
+    </script>
+</body>
+</html>
