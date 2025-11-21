@@ -221,7 +221,7 @@
             color: #2c3e50;
         }
         
-        .input-row input {
+        .input-row input, .input-row select {
             padding: 6px;
             border: 2px solid #ddd;
             border-radius: 5px;
@@ -639,8 +639,6 @@
                 group2Name: 'Quebec Workers',
                 variable: 'Annual Wage',
                 unit: 'CAD',
-                group1Data: { n: 45, mean: 58400, std: 12800 },
-                group2Data: { n: 52, mean: 54200, std: 11600 },
                 question: 'Is there a significant difference in average wages between Ontario and Quebec workers?'
             },
             'housing-cities': {
@@ -650,8 +648,6 @@
                 group2Name: 'Toronto',
                 variable: 'Average House Price',
                 unit: 'CAD',
-                group1Data: { n: 38, mean: 1235000, std: 285000 },
-                group2Data: { n: 42, mean: 1140000, std: 245000 },
                 question: 'Is there a significant difference in average house prices between Vancouver and Toronto?'
             },
             'gdp-regions': {
@@ -661,8 +657,6 @@
                 group2Name: 'Western Provinces',
                 variable: 'GDP Growth Rate',
                 unit: '%',
-                group1Data: { n: 28, mean: 1.8, std: 0.7 },
-                group2Data: { n: 35, mean: 2.4, std: 0.9 },
                 question: 'Is there a significant difference in GDP growth rates between Atlantic and Western provinces?'
             },
             'employment-sectors': {
@@ -672,8 +666,6 @@
                 group2Name: 'Services',
                 variable: 'Employment Rate',
                 unit: '%',
-                group1Data: { n: 32, mean: 74.2, std: 5.8 },
-                group2Data: { n: 38, mean: 78.6, std: 6.4 },
                 question: 'Is there a significant difference in employment rates between manufacturing and service sectors?'
             },
             'business-revenue': {
@@ -683,8 +675,6 @@
                 group2Name: 'Traditional Businesses',
                 variable: 'Monthly Revenue',
                 unit: 'CAD',
-                group1Data: { n: 25, mean: 85000, std: 28000 },
-                group2Data: { n: 30, mean: 92000, std: 24000 },
                 question: 'Is there a significant difference in monthly revenue between tech startups and traditional businesses?'
             },
             'inflation-periods': {
@@ -694,11 +684,66 @@
                 group2Name: 'Post-Pandemic',
                 variable: 'Monthly Inflation Rate',
                 unit: '%',
-                group1Data: { n: 24, mean: 1.9, std: 0.4 },
-                group2Data: { n: 24, mean: 6.2, std: 1.8 },
                 question: 'Is there a significant difference in inflation rates between pre-pandemic and post-pandemic periods?'
             }
         };
+
+        function generateRandomData(scenario) {
+            let baseData = {};
+            
+            switch(scenario) {
+                case 'provincial-wages':
+                    baseData = {
+                        group1: { n: 35 + Math.floor(Math.random() * 20), mean: 55000 + Math.random() * 10000, std: 10000 + Math.random() * 5000 },
+                        group2: { n: 40 + Math.floor(Math.random() * 20), mean: 52000 + Math.random() * 8000, std: 9000 + Math.random() * 4000 }
+                    };
+                    break;
+                case 'housing-cities':
+                    baseData = {
+                        group1: { n: 30 + Math.floor(Math.random() * 15), mean: 1200000 + Math.random() * 300000, std: 250000 + Math.random() * 100000 },
+                        group2: { n: 35 + Math.floor(Math.random() * 15), mean: 1100000 + Math.random() * 250000, std: 200000 + Math.random() * 80000 }
+                    };
+                    break;
+                case 'gdp-regions':
+                    baseData = {
+                        group1: { n: 25 + Math.floor(Math.random() * 10), mean: 1.5 + Math.random() * 1.0, std: 0.5 + Math.random() * 0.5 },
+                        group2: { n: 30 + Math.floor(Math.random() * 15), mean: 2.0 + Math.random() * 1.2, std: 0.7 + Math.random() * 0.6 }
+                    };
+                    break;
+                case 'employment-sectors':
+                    baseData = {
+                        group1: { n: 28 + Math.floor(Math.random() * 12), mean: 72 + Math.random() * 8, std: 4 + Math.random() * 4 },
+                        group2: { n: 32 + Math.floor(Math.random() * 15), mean: 76 + Math.random() * 10, std: 5 + Math.random() * 4 }
+                    };
+                    break;
+                case 'business-revenue':
+                    baseData = {
+                        group1: { n: 20 + Math.floor(Math.random() * 15), mean: 80000 + Math.random() * 30000, std: 20000 + Math.random() * 15000 },
+                        group2: { n: 25 + Math.floor(Math.random() * 15), mean: 85000 + Math.random() * 25000, std: 18000 + Math.random() * 12000 }
+                    };
+                    break;
+                case 'inflation-periods':
+                    baseData = {
+                        group1: { n: 20 + Math.floor(Math.random() * 8), mean: 1.8 + Math.random() * 0.6, std: 0.3 + Math.random() * 0.3 },
+                        group2: { n: 20 + Math.floor(Math.random() * 8), mean: 5.5 + Math.random() * 2.0, std: 1.2 + Math.random() * 1.0 }
+                    };
+                    break;
+            }
+            
+            // Round values appropriately
+            ['group1', 'group2'].forEach(group => {
+                baseData[group].n = Math.round(baseData[group].n);
+                if (scenario === 'gdp-regions' || scenario === 'employment-sectors' || scenario === 'inflation-periods') {
+                    baseData[group].mean = Math.round(baseData[group].mean * 100) / 100;
+                    baseData[group].std = Math.round(baseData[group].std * 100) / 100;
+                } else {
+                    baseData[group].mean = Math.round(baseData[group].mean);
+                    baseData[group].std = Math.round(baseData[group].std);
+                }
+            });
+            
+            return baseData;
+        }
 
         function chooseScenario(scenario) {
             currentScenario = scenario;
@@ -716,6 +761,7 @@
 
         function generateProblem(scenario) {
             const scenarioData = scenarios[scenario];
+            const randomData = generateRandomData(scenario);
             
             problemData = {
                 scenario: scenarioData.name,
@@ -724,8 +770,8 @@
                 group2Name: scenarioData.group2Name,
                 variable: scenarioData.variable,
                 unit: scenarioData.unit,
-                group1: scenarioData.group1Data,
-                group2: scenarioData.group2Data,
+                group1: randomData.group1,
+                group2: randomData.group2,
                 question: scenarioData.question,
                 alpha: 0.05
             };
@@ -787,14 +833,14 @@
         }
 
         function getTCDF(t, df) {
-            // Approximation for t-distribution CDF
+            // Approximation for t-distribution CDF using normal approximation for large df
             if (df >= 100) {
                 return normalCDF(t);
             }
             
-            // Simple approximation - in practice would use more accurate method
-            const x = t / Math.sqrt(df);
-            return 0.5 + 0.5 * Math.sign(t) * Math.min(0.5, Math.abs(x) * 0.4);
+            // Simple approximation for smaller df
+            const correction = 1 + 1/(4*df);
+            return normalCDF(t / correction);
         }
 
         function normalCDF(z) {
@@ -1024,13 +1070,6 @@
 
         function generateNewProblem() {
             if (currentScenario) {
-                // Add some random variation to the data
-                const scenario = scenarios[currentScenario];
-                scenario.group1Data.mean *= (0.95 + Math.random() * 0.1);
-                scenario.group2Data.mean *= (0.95 + Math.random() * 0.1);
-                scenario.group1Data.std *= (0.9 + Math.random() * 0.2);
-                scenario.group2Data.std *= (0.9 + Math.random() * 0.2);
-                
                 generateProblem(currentScenario);
                 clearAllInputs();
             } else {
