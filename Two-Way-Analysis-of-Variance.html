@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Way ANOVA - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.3em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .ci-intro {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #4caf50;
+        }
+        
+        .confidence-concept {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #007bff;
+        }
+        
+        .concept-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .concept-explanation {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #28a745;
+        }
+        
+        .interval-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .interval-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .interval-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .interval-formula {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-family: monospace;
+            border-left: 4px solid #28a745;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .scenario-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+        
+        .scenario-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 16px;
+            margin: 6px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.active {
+            background-color: #007bff;
+        }
+        
+        .problem-section {
+            background: linear-gradient(135deg, #fff8e1, #ffecb3);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #ffc107;
+        }
+        
+        .data-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #007bff;
+        }
+        
+        .factors-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .factor-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #2196f3;
+        }
+        
+        .factor-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .data-table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .data-table th {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .data-table .factor-a-header {
+            background: #28a745;
+            color: white;
+        }
+        
+        .data-table .factor-b-header {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .data-table .mean-cell {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid #9c27b0;
+        }
+        
+        .step-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .step-number {
+            background: #9c27b0;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 120px 70px 70px 90px;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-size: 0.9em;
+        }
+        
+        .input-row label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .input-row input, .input-row select {
+            padding: 6px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        
+        .small-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.75em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .check-btn {
+            background: #17a2b8;
+        }
+        
+        .answer-btn {
+            background: #28a745;
+        }
+        
+        .steps-btn {
+            background: #6f42c1;
+        }
+        
+        .button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 8px 4px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #218838;
+        }
+        
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+        }
+        
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+        }
+        
+        .step-instructions {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tutorial-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            display: none;
+        }
+        
+        .tutorial-step {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #007bff;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .answer-display {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            border: 1px solid #c3e6cb;
+            font-weight: bold;
+            display: none;
+            font-size: 0.9em;
+        }
+        
+        .interval-result {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+        }
+        
+        .final-interval {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 3px solid #2196f3;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        
+        .interpretation-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .interpretation-text {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .hypothesis-display {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #dc3545;
+        }
+
+        .hypothesis-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            border-left: 4px solid #dc3545;
+            font-weight: bold;
+        }
+        
+        .interaction-section {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff9800;
+        }
+        
+        .interaction-explanation {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .result-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #007bff;
+            text-align: center;
+        }
+        
+        .result-title {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .result-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .significant {
+            color: #dc3545 !important;
+        }
+        
+        .not-significant {
+            color: #28a745 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Two-Way ANOVA</h1>
+        
+        <div class="canada-header">
+            <h2>🇨🇦 Analyze Two Factors and Their Interaction</h2>
+            <p><strong>Factorial Design</strong> • <strong>Main Effects & Interactions</strong> • <strong>Canadian Economic Analysis</strong></p>
+        </div>
+        
+        <div class="ci-intro">
+            <h3>🎯 What is Two-Way ANOVA?</h3>
+            
+            <div class="confidence-concept">
+                <div class="concept-title">📈 Analyze Two Independent Variables Simultaneously</div>
+                
+                <div class="concept-explanation">
+                    <strong>🎯 The Goal:</strong> Determine if there are main effects for each factor AND if there's an interaction effect between the two factors. Two-Way ANOVA examines how two different categorical variables affect a continuous outcome variable.
+                </div>
+                
+                <div style="background: #fff; padding: 15px; border-radius: 8px; border: 2px solid #007bff; margin: 15px 0; text-align: center;">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #007bff;">🔑 Three Research Questions:</div>
+                    <div style="font-size: 1em;">
+                        1. Is there a main effect of Factor A?<br>
+                        2. Is there a main effect of Factor B?<br>
+                        3. Is there an interaction between Factors A and B?
+                    </div>
+                </div>
+                
+                <div class="interval-types">
+                    <div class="interval-card">
+                        <div class="interval-title">📊 Main Effect A</div>
+                        <div class="interval-formula">
+                            F_A = MS_A / MS_Error<br>
+                            <div style="font-size: 0.8em; margin-top: 5px;">Factor A effect</div>
+                        </div>
+                    </div>
+                    
+                    <div class="interval-card">
+                        <div class="interval-title">📈 Main Effect B</div>
+                        <div class="interval-formula">
+                            F_B = MS_B / MS_Error<br>
+                            <div style="font-size: 0.8em; margin-top: 5px;">Factor B effect</div>
+                        </div>
+                    </div>
+                    
+                    <div class="interval-card">
+                        <div class="interval-title">🔄 Interaction</div>
+                        <div class="interval-formula">
+                            F_AB = MS_AB / MS_Error<br>
+                            <div style="font-size: 0.8em; margin-top: 5px;">A × B interaction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-selector">
+            <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
+                📊 Choose Canadian Economic Two-Way ANOVA Problem:
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <button class="scenario-btn" onclick="chooseScenario('gdp-province-industry')">💰 GDP by Province × Industry</button>
+                <button class="scenario-btn" onclick="chooseScenario('wages-education-gender')">💼 Wages by Education × Gender</button>
+                <button class="scenario-btn" onclick="chooseScenario('housing-city-type')">🏠 Housing by City × Type</button>
+            </div>
+            <div>
+                <button class="scenario-btn" onclick="chooseScenario('employment-region-age')">📊 Employment by Region × Age</button>
+                <button class="scenario-btn" onclick="chooseScenario('spending-province-sector')">🏥 Spending by Province × Sector</button>
+                <button class="scenario-btn" onclick="chooseScenario('productivity-industry-season')">📈 Productivity by Industry × Season</button>
+            </div>
+        </div>
+        
+        <div id="problemArea" style="display: none;">
+            <div class="problem-section">
+                <h3>📋 Step 1: Factorial Design & Research Questions</h3>
+                <div class="step-instructions">
+                    <div id="scenarioDescription"></div>
+                </div>
+                
+                <div class="factors-header">
+                    <div class="factor-info">
+                        <div class="factor-title" id="factorATitle">📊 Factor A:</div>
+                        <div id="factorALevels"></div>
+                    </div>
+                    <div class="factor-info">
+                        <div class="factor-title" id="factorBTitle">📈 Factor B:</div>
+                        <div id="factorBLevels"></div>
+                    </div>
+                </div>
+                
+                <div class="hypothesis-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">🎯 Research Hypotheses:</div>
+                    <div class="hypothesis-box" id="hypothesesA">
+                        <strong>Factor A:</strong> H₀: No main effect of Factor A vs H₁: Main effect of Factor A exists
+                    </div>
+                    <div class="hypothesis-box" id="hypothesesB">
+                        <strong>Factor B:</strong> H₀: No main effect of Factor B vs H₁: Main effect of Factor B exists
+                    </div>
+                    <div class="hypothesis-box" id="hypothesesAB">
+                        <strong>Interaction:</strong> H₀: No A×B interaction vs H₁: A×B interaction exists
+                    </div>
+                </div>
+                
+                <div class="data-display">
+                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">📊 Sample Data (Cell Means and Sample Sizes):</div>
+                    <div class="data-table-container">
+                        <table class="data-table" id="dataTable">
+                            <!-- Data table will be populated here -->
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calculation-section">
+                <h3>🧮 Step 2: Two-Way ANOVA Calculations</h3>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 1</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Sum of Squares for Factor A (SSA)</div>
+                    <div class="step-instructions">
+                        <strong>Main Effect of Factor A:</strong> SSA = bn∑(ȳᵢ.. - ȳ...)²
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Sum of Squares A (SSA):</label>
+                        <input type="number" id="ssaInput" step="0.01" placeholder="SSA">
+                        <button class="small-button check-btn" onclick="checkSSA()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('ssa')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('ssa-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="ssa-answer"></div>
+                    <div class="tutorial-box" id="ssa-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 2</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Sum of Squares for Factor B (SSB)</div>
+                    <div class="step-instructions">
+                        <strong>Main Effect of Factor B:</strong> SSB = an∑(ȳ.ⱼ. - ȳ...)²
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Sum of Squares B (SSB):</label>
+                        <input type="number" id="ssbInput" step="0.01" placeholder="SSB">
+                        <button class="small-button check-btn" onclick="checkSSB()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('ssb')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('ssb-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="ssb-answer"></div>
+                    <div class="tutorial-box" id="ssb-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 3</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Sum of Squares for Interaction (SSAB)</div>
+                    <div class="step-instructions">
+                        <strong>A×B Interaction:</strong> SSAB = n∑∑(ȳᵢⱼ. - ȳᵢ.. - ȳ.ⱼ. + ȳ...)²
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Sum of Squares AB (SSAB):</label>
+                        <input type="number" id="ssabInput" step="0.01" placeholder="SSAB">
+                        <button class="small-button check-btn" onclick="checkSSAB()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('ssab')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('ssab-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="ssab-answer"></div>
+                    <div class="tutorial-box" id="ssab-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 4</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate Sum of Squares Error (SSE)</div>
+                    <div class="step-instructions">
+                        <strong>Error Term:</strong> SSE = ∑∑∑(yᵢⱼₖ - ȳᵢⱼ.)² or use MSE approximation
+                    </div>
+                    
+                    <div class="input-row">
+                        <label>Sum of Squares Error (SSE):</label>
+                        <input type="number" id="sseInput" step="0.01" placeholder="SSE">
+                        <button class="small-button check-btn" onclick="checkSSE()">Check</button>
+                        <button class="small-button answer-btn" onclick="showAnswer('sse')">Answer</button>
+                        <button class="small-button steps-btn" onclick="showSteps('sse-calculation')">Steps</button>
+                    </div>
+                    
+                    <div class="answer-display" id="sse-answer"></div>
+                    <div class="tutorial-box" id="sse-calculation-tutorial"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 5</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Calculate F-Statistics</div>
+                    <div class="step-instructions">
+                        <strong>Three F-Tests:</strong> F = MS / MSE for each effect
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                        <div class="input-row">
+                            <label>F-Statistic A:</label>
+                            <input type="number" id="faInput" step="0.001" placeholder="F_A">
+                            <button class="small-button check-btn" onclick="checkFA()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('fa')">Answer</button>
+                        </div>
+                        
+                        <div class="input-row">
+                            <label>F-Statistic B:</label>
+                            <input type="number" id="fbInput" step="0.001" placeholder="F_B">
+                            <button class="small-button check-btn" onclick="checkFB()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('fb')">Answer</button>
+                        </div>
+                        
+                        <div class="input-row">
+                            <label>F-Statistic AB:</label>
+                            <input type="number" id="fabInput" step="0.001" placeholder="F_AB">
+                            <button class="small-button check-btn" onclick="checkFAB()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('fab')">Answer</button>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-display" id="fa-answer"></div>
+                    <div class="answer-display" id="fb-answer"></div>
+                    <div class="answer-display" id="fab-answer"></div>
+                </div>
+                
+                <div class="step-container">
+                    <div class="step-number">Step 6</div>
+                    <div style="font-weight: bold; margin-bottom: 10px;">Make Statistical Decisions</div>
+                    <div class="step-instructions">
+                        <strong>Decision Rule:</strong> Reject H₀ if F > F-critical for each test
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                        <div class="input-row">
+                            <label>Decision A:</label>
+                            <select id="decisionAInput">
+                                <option value="">Choose...</option>
+                                <option value="reject">Reject H₀</option>
+                                <option value="fail">Fail to Reject H₀</option>
+                            </select>
+                            <button class="small-button check-btn" onclick="checkDecisionA()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('decisiona')">Answer</button>
+                        </div>
+                        
+                        <div class="input-row">
+                            <label>Decision B:</label>
+                            <select id="decisionBInput">
+                                <option value="">Choose...</option>
+                                <option value="reject">Reject H₀</option>
+                                <option value="fail">Fail to Reject H₀</option>
+                            </select>
+                            <button class="small-button check-btn" onclick="checkDecisionB()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('decisionb')">Answer</button>
+                        </div>
+                        
+                        <div class="input-row">
+                            <label>Decision AB:</label>
+                            <select id="decisionABInput">
+                                <option value="">Choose...</option>
+                                <option value="reject">Reject H₀</option>
+                                <option value="fail">Fail to Reject H₀</option>
+                            </select>
+                            <button class="small-button check-btn" onclick="checkDecisionAB()">Check</button>
+                            <button class="small-button answer-btn" onclick="showAnswer('decisionab')">Answer</button>
+                        </div>
+                    </div>
+                    
+                    <div class="answer-display" id="decisiona-answer"></div>
+                    <div class="answer-display" id="decisionb-answer"></div>
+                    <div class="answer-display" id="decisionab-answer"></div>
+                </div>
+            </div>
+            
+            <div class="interval-result">
+                <h3>📊 Step 3: Two-Way ANOVA Results</h3>
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Results will be populated here -->
+                </div>
+                <div style="text-align: center; margin-top: 15px; font-style: italic;">
+                    Statistical decisions at <strong>α = 0.05</strong> significance level
+                </div>
+            </div>
+            
+            <div class="interaction-section" id="interactionSection">
+                <h3>🔄 Step 4: Interaction Analysis</h3>
+                <div class="interaction-explanation" id="interactionExplanation">
+                    Complete the analysis to see interaction interpretation.
+                </div>
+            </div>
+            
+            <div class="interpretation-section">
+                <h3>💼 Step 5: Economic Interpretation</h3>
+                <div class="interpretation-text">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #2e7d32;">📈 What This Means:</div>
+                    <div id="economicInterpretation"></div>
+                </div>
+            </div>
+            
+            <button class="button" onclick="generateNewProblem()">🎲 New Two-Way ANOVA Problem</button>
+            <button class="button" onclick="checkAllSteps()">✅ Check All Calculations</button>
+            <button class="button" onclick="showTwoWayANOVASummary()">📖 Two-Way ANOVA Summary</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+        let problemData = {};
+        let correctAnswers = {};
+
+        const scenarios = {
+            'gdp-province-industry': {
+                name: 'Provincial GDP by Industry Sector',
+                description: 'Statistics Canada analyzing GDP per capita across provinces and industry sectors to understand regional and sectoral economic differences.',
+                factorA: 'Province',
+                factorB: 'Industry Sector',
+                levelsA: ['Ontario', 'Quebec', 'British Columbia'],
+                levelsB: ['Manufacturing', 'Services', 'Resources'],
+                variable: 'GDP per Capita',
+                unit: 'CAD',
+                question: 'Do provinces and industries have different GDP per capita? Is there an interaction between province and industry?'
+            },
+            'wages-education-gender': {
+                name: 'Wages by Education Level and Gender',
+                description: 'Employment Canada examining wage differences across education levels and gender to assess pay equity and education premiums.',
+                factorA: 'Education Level',
+                factorB: 'Gender',
+                levelsA: ['High School', 'Bachelor\'s', 'Graduate'],
+                levelsB: ['Male', 'Female'],
+                variable: 'Annual Salary',
+                unit: 'CAD',
+                question: 'Do education levels and gender affect wages? Is there an interaction between education and gender in wage determination?'
+            },
+            'housing-city-type': {
+                name: 'Housing Prices by City and Home Type',
+                description: 'Canadian Real Estate Association comparing housing prices across major cities and housing types to understand market dynamics.',
+                factorA: 'City',
+                factorB: 'Home Type',
+                levelsA: ['Vancouver', 'Toronto', 'Calgary'],
+                levelsB: ['Condo', 'Townhouse', 'Detached'],
+                variable: 'Average Price',
+                unit: 'CAD',
+                question: 'Do cities and home types have different prices? Is there an interaction between city and home type in pricing?'
+            },
+            'employment-region-age': {
+                name: 'Employment Rates by Region and Age Group',
+                description: 'Employment Canada analyzing employment rates across regions and age groups to understand demographic employment patterns.',
+                factorA: 'Region',
+                factorB: 'Age Group',
+                levelsA: ['Atlantic', 'Central', 'Prairie', 'Pacific'],
+                levelsB: ['25-34', '35-54'],
+                variable: 'Employment Rate',
+                unit: '%',
+                question: 'Do regions and age groups have different employment rates? Is there an interaction between region and age in employment?'
+            },
+            'spending-province-sector': {
+                name: 'Government Spending by Province and Sector',
+                description: 'Treasury Board analyzing per-capita government spending across provinces and spending sectors to assess fiscal priorities.',
+                factorA: 'Province',
+                factorB: 'Spending Sector',
+                levelsA: ['Ontario', 'Quebec', 'Alberta'],
+                levelsB: ['Healthcare', 'Education', 'Infrastructure'],
+                variable: 'Per Capita Spending',
+                unit: 'CAD',
+                question: 'Do provinces and sectors have different spending levels? Is there an interaction between province and sector in spending allocation?'
+            },
+            'productivity-industry-season': {
+                name: 'Labor Productivity by Industry and Season',
+                description: 'Statistics Canada measuring labor productivity across industries and seasons to understand cyclical economic patterns.',
+                factorA: 'Industry',
+                factorB: 'Season',
+                levelsA: ['Agriculture', 'Tourism', 'Manufacturing'],
+                levelsB: ['Summer', 'Winter'],
+                variable: 'Productivity Index',
+                unit: 'Index',
+                question: 'Do industries and seasons affect productivity? Is there an interaction between industry and season in productivity patterns?'
+            }
+        };
+
+        function generateRandomData(scenario) {
+            const scenarioData = scenarios[scenario];
+            const aLevels = scenarioData.levelsA.length;
+            const bLevels = scenarioData.levelsB.length;
+            let baseData = [];
+            
+            // Generate base means and sample sizes
+            for (let i = 0; i < aLevels; i++) {
+                baseData[i] = [];
+                for (let j = 0; j < bLevels; j++) {
+                    let cellData = {};
+                    
+                    switch(scenario) {
+                        case 'gdp-province-industry':
+                            cellData = {
+                                n: 15 + Math.floor(Math.random() * 10),
+                                mean: 45000 + Math.random() * 25000 + (i * 5000) + (j * 3000),
+                                std: 8000 + Math.random() * 3000
+                            };
+                            break;
+                        case 'wages-education-gender':
+                            cellData = {
+                                n: 25 + Math.floor(Math.random() * 15),
+                                mean: 35000 + (i * 15000) + (j * (i > 0 ? -5000 : 0)) + Math.random() * 5000,
+                                std: 6000 + Math.random() * 2000
+                            };
+                            break;
+                        case 'housing-city-type':
+                            cellData = {
+                                n: 20 + Math.floor(Math.random() * 15),
+                                mean: 400000 + (i * 200000) + (j * 150000) + Math.random() * 100000,
+                                std: 80000 + Math.random() * 40000
+                            };
+                            break;
+                        case 'employment-region-age':
+                            cellData = {
+                                n: 30 + Math.floor(Math.random() * 20),
+                                mean: 72 + (i * 2) + (j * 3) + Math.random() * 8,
+                                std: 4 + Math.random() * 2
+                            };
+                            break;
+                        case 'spending-province-sector':
+                            cellData = {
+                                n: 12 + Math.floor(Math.random() * 8),
+                                mean: 2500 + (i * 400) + (j * 300) + Math.random() * 600,
+                                std: 300 + Math.random() * 150
+                            };
+                            break;
+                        case 'productivity-industry-season':
+                            cellData = {
+                                n: 18 + Math.floor(Math.random() * 12),
+                                mean: 95 + (i * 5) + (j * (i === 0 ? 15 : i === 1 ? -10 : 0)) + Math.random() * 8,
+                                std: 8 + Math.random() * 4
+                            };
+                            break;
+                    }
+                    
+                    // Round appropriately
+                    cellData.n = Math.round(cellData.n);
+                    if (scenario === 'employment-region-age' || scenario === 'productivity-industry-season') {
+                        cellData.mean = Math.round(cellData.mean * 100) / 100;
+                        cellData.std = Math.round(cellData.std * 100) / 100;
+                    } else {
+                        cellData.mean = Math.round(cellData.mean);
+                        cellData.std = Math.round(cellData.std);
+                    }
+                    
+                    baseData[i][j] = cellData;
+                }
+            }
+            
+            return baseData;
+        }
+
+        function chooseScenario(scenario) {
+            currentScenario = scenario;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            generateProblem(scenario);
+            document.getElementById('problemArea').style.display = 'block';
+            clearAllInputs();
+        }
+
+        function generateProblem(scenario) {
+            const scenarioData = scenarios[scenario];
+            const data = generateRandomData(scenario);
+            
+            problemData = {
+                scenario: scenarioData.name,
+                description: scenarioData.description,
+                factorA: scenarioData.factorA,
+                factorB: scenarioData.factorB,
+                levelsA: scenarioData.levelsA,
+                levelsB: scenarioData.levelsB,
+                variable: scenarioData.variable,
+                unit: scenarioData.unit,
+                data: data,
+                question: scenarioData.question,
+                alpha: 0.05
+            };
+            
+            calculateCorrectAnswers();
+            updateDisplay();
+        }
+
+        function calculateCorrectAnswers() {
+            const { data, levelsA, levelsB } = problemData;
+            const a = levelsA.length;
+            const b = levelsB.length;
+            
+            // Calculate cell totals and overall totals
+            let totalN = 0;
+            let grandTotal = 0;
+            let marginalTotalsA = new Array(a).fill(0);
+            let marginalTotalsB = new Array(b).fill(0);
+            let marginalNsA = new Array(a).fill(0);
+            let marginalNsB = new Array(b).fill(0);
+            
+            for (let i = 0; i < a; i++) {
+                for (let j = 0; j < b; j++) {
+                    const cell = data[i][j];
+                    const cellTotal = cell.n * cell.mean;
+                    
+                    totalN += cell.n;
+                    grandTotal += cellTotal;
+                    marginalTotalsA[i] += cellTotal;
+                    marginalTotalsB[j] += cellTotal;
+                    marginalNsA[i] += cell.n;
+                    marginalNsB[j] += cell.n;
+                }
+            }
+            
+            const grandMean = grandTotal / totalN;
+            
+            // Calculate marginal means
+            const marginalMeansA = marginalTotalsA.map((total, i) => total / marginalNsA[i]);
+            const marginalMeansB = marginalTotalsB.map((total, j) => total / marginalNsB[j]);
+            
+            // Calculate Sum of Squares
+            // SSA (Main effect A)
+            let ssA = 0;
+            for (let i = 0; i < a; i++) {
+                ssA += marginalNsA[i] * Math.pow(marginalMeansA[i] - grandMean, 2);
+            }
+            
+            // SSB (Main effect B)
+            let ssB = 0;
+            for (let j = 0; j < b; j++) {
+                ssB += marginalNsB[j] * Math.pow(marginalMeansB[j] - grandMean, 2);
+            }
+            
+            // SSAB (Interaction)
+            let ssAB = 0;
+            for (let i = 0; i < a; i++) {
+                for (let j = 0; j < b; j++) {
+                    const cellMean = data[i][j].mean;
+                    const expected = marginalMeansA[i] + marginalMeansB[j] - grandMean;
+                    ssAB += data[i][j].n * Math.pow(cellMean - expected, 2);
+                }
+            }
+            
+            // SSE (Error) - approximation using MSE
+            let ssE = 0;
+            for (let i = 0; i < a; i++) {
+                for (let j = 0; j < b; j++) {
+                    ssE += (data[i][j].n - 1) * Math.pow(data[i][j].std, 2);
+                }
+            }
+            
+            // Degrees of freedom
+            const dfA = a - 1;
+            const dfB = b - 1;
+            const dfAB = (a - 1) * (b - 1);
+            const dfE = totalN - (a * b);
+            
+            // Mean Squares
+            const msA = ssA / dfA;
+            const msB = ssB / dfB;
+            const msAB = ssAB / dfAB;
+            const msE = ssE / dfE;
+            
+            // F-statistics
+            const fA = msA / msE;
+            const fB = msB / msE;
+            const fAB = msAB / msE;
+            
+            // Critical F-values (α = 0.05)
+            const fCriticalA = getFCritical(dfA, dfE, 0.05);
+            const fCriticalB = getFCritical(dfB, dfE, 0.05);
+            const fCriticalAB = getFCritical(dfAB, dfE, 0.05);
+            
+            // Decisions
+            const decisionA = fA > fCriticalA ? 'reject' : 'fail';
+            const decisionB = fB > fCriticalB ? 'reject' : 'fail';
+            const decisionAB = fAB > fCriticalAB ? 'reject' : 'fail';
+            
+            // P-values (approximation)
+            const pValueA = getFPValue(fA, dfA, dfE);
+            const pValueB = getFPValue(fB, dfB, dfE);
+            const pValueAB = getFPValue(fAB, dfAB, dfE);
+            
+            correctAnswers = {
+                ssA: ssA,
+                ssB: ssB,
+                ssAB: ssAB,
+                ssE: ssE,
+                dfA: dfA,
+                dfB: dfB,
+                dfAB: dfAB,
+                dfE: dfE,
+                msA: msA,
+                msB: msB,
+                msAB: msAB,
+                msE: msE,
+                fA: fA,
+                fB: fB,
+                fAB: fAB,
+                fCriticalA: fCriticalA,
+                fCriticalB: fCriticalB,
+                fCriticalAB: fCriticalAB,
+                decisionA: decisionA,
+                decisionB: decisionB,
+                decisionAB: decisionAB,
+                pValueA: pValueA,
+                pValueB: pValueB,
+                pValueAB: pValueAB,
+                grandMean: grandMean,
+                marginalMeansA: marginalMeansA,
+                marginalMeansB: marginalMeansB
+            };
+        }
+
+        function getFCritical(df1, df2, alpha) {
+            // Simplified F-critical values for α = 0.05
+            if (df1 === 1) {
+                if (df2 >= 120) return 3.84;
+                if (df2 >= 60) return 4.00;
+                if (df2 >= 30) return 4.17;
+                return 4.35;
+            } else if (df1 === 2) {
+                if (df2 >= 120) return 3.07;
+                if (df2 >= 60) return 3.15;
+                if (df2 >= 30) return 3.32;
+                return 3.49;
+            }
+            
+            return 2.5 + (4 - df1) * 0.3 + (30 - Math.min(df2, 30)) * 0.02;
+        }
+
+        function getFPValue(f, df1, df2) {
+            if (f < 1) return 0.5;
+            if (f < 2) return 0.3;
+            if (f < 3) return 0.15;
+            if (f < 4) return 0.08;
+            if (f < 5) return 0.04;
+            if (f < 7) return 0.02;
+            if (f < 10) return 0.01;
+            return 0.001;
+        }
+
+        function updateDisplay() {
+            document.getElementById('scenarioDescription').innerHTML = 
+                `<strong>${problemData.scenario}</strong><br>${problemData.description}`;
+            
+            // Update factor information
+            document.getElementById('factorATitle').textContent = `📊 Factor A: ${problemData.factorA}`;
+            document.getElementById('factorBTitle').textContent = `📈 Factor B: ${problemData.factorB}`;
+            document.getElementById('factorALevels').textContent = problemData.levelsA.join(', ');
+            document.getElementById('factorBLevels').textContent = problemData.levelsB.join(', ');
+            
+            // Update hypotheses
+            document.getElementById('hypothesesA').innerHTML = 
+                `<strong>Factor A (${problemData.factorA}):</strong> H₀: No main effect vs H₁: Main effect exists`;
+            document.getElementById('hypothesesB').innerHTML = 
+                `<strong>Factor B (${problemData.factorB}):</strong> H₀: No main effect vs H₁: Main effect exists`;
+            document.getElementById('hypothesesAB').innerHTML = 
+                `<strong>Interaction:</strong> H₀: No ${problemData.factorA}×${problemData.factorB} interaction vs H₁: Interaction exists`;
+            
+            // Create data table
+            createDataTable();
+            
+            updateEconomicInterpretation();
+        }
+
+        function createDataTable() {
+            const table = document.getElementById('dataTable');
+            const { levelsA, levelsB, data } = problemData;
+            
+            let tableHTML = `
+                <thead>
+                    <tr>
+                        <th>${problemData.factorA} \\ ${problemData.factorB}</th>
+            `;
+            
+            // Header row with Factor B levels
+            levelsB.forEach(levelB => {
+                tableHTML += `<th class="factor-b-header">${levelB}</th>`;
+            });
+            tableHTML += `<th class="factor-a-header">Row Mean</th></tr></thead><tbody>`;
+            
+            // Data rows
+            levelsA.forEach((levelA, i) => {
+                tableHTML += `<tr><th class="factor-a-header">${levelA}</th>`;
+                
+                let rowTotal = 0;
+                let rowCount = 0;
+                
+                levelsB.forEach((levelB, j) => {
+                    const cellData = data[i][j];
+                    tableHTML += `<td class="mean-cell">
+                        <div style="font-weight: bold;">${formatValue(cellData.mean, problemData.unit)}</div>
+                        <div style="font-size: 0.8em; color: #666;">n=${cellData.n}, s=${formatValue(cellData.std, problemData.unit)}</div>
+                    </td>`;
+                    
+                    rowTotal += cellData.n * cellData.mean;
+                    rowCount += cellData.n;
+                });
+                
+                tableHTML += `<td class="mean-cell" style="background: #e8f4f8;">
+                    <div style="font-weight: bold;">${formatValue(rowTotal/rowCount, problemData.unit)}</div>
+                </td></tr>`;
+            });
+            
+            // Column means row
+            tableHTML += `<tr><th class="factor-b-header">Column Mean</th>`;
+            levelsB.forEach((levelB, j) => {
+                let colTotal = 0;
+                let colCount = 0;
+                
+                levelsA.forEach((levelA, i) => {
+                    colTotal += data[i][j].n * data[i][j].mean;
+                    colCount += data[i][j].n;
+                });
+                
+                tableHTML += `<td class="mean-cell" style="background: #ffe8e8;">
+                    <div style="font-weight: bold;">${formatValue(colTotal/colCount, problemData.unit)}</div>
+                </td>`;
+            });
+            
+            // Grand mean
+            tableHTML += `<td class="mean-cell" style="background: #f0f0f0;">
+                <div style="font-weight: bold;">${formatValue(correctAnswers.grandMean, problemData.unit)}</div>
+                <div style="font-size: 0.8em;">Grand Mean</div>
+            </td></tr></tbody>`;
+            
+            table.innerHTML = tableHTML;
+        }
+
+        function formatValue(value, unit) {
+            if (unit === 'CAD') {
+                return value >= 1000 ? `$${(value/1000).toFixed(0)}k` : `$${Math.round(value).toLocaleString()}`;
+            } else if (unit === '%' || unit === 'Index') {
+                return `${value.toFixed(1)}${unit === '%' ? '%' : ''}`;
+            }
+            return `${Math.round(value)} ${unit}`;
+        }
+
+        function updateEconomicInterpretation() {
+            if (correctAnswers.decisionA) {
+                const rejectA = correctAnswers.decisionA === 'reject';
+                const rejectB = correctAnswers.decisionB === 'reject';
+                const rejectAB = correctAnswers.decisionAB === 'reject';
+                
+                let interpretation = `
+                    <strong>${problemData.scenario} Results:</strong><br><br>
+                    <strong>Main Effect ${problemData.factorA}:</strong> ${rejectA ? 
+                        `<span class="significant">SIGNIFICANT</span> (p ≈ ${correctAnswers.pValueA.toFixed(4)}) - Different ${problemData.factorA.toLowerCase()} levels have different ${problemData.variable.toLowerCase()} values.` :
+                        `<span class="not-significant">NOT SIGNIFICANT</span> (p ≈ ${correctAnswers.pValueA.toFixed(4)}) - No evidence of ${problemData.factorA.toLowerCase()} differences.`
+                    }<br><br>
+                    <strong>Main Effect ${problemData.factorB}:</strong> ${rejectB ? 
+                        `<span class="significant">SIGNIFICANT</span> (p ≈ ${correctAnswers.pValueB.toFixed(4)}) - Different ${problemData.factorB.toLowerCase()} levels have different ${problemData.variable.toLowerCase()} values.` :
+                        `<span class="not-significant">NOT SIGNIFICANT</span> (p ≈ ${correctAnswers.pValueB.toFixed(4)}) - No evidence of ${problemData.factorB.toLowerCase()} differences.`
+                    }<br><br>
+                    <strong>Interaction Effect:</strong> ${rejectAB ? 
+                        `<span class="significant">SIGNIFICANT</span> (p ≈ ${correctAnswers.pValueAB.toFixed(4)}) - The effect of ${problemData.factorA.toLowerCase()} depends on ${problemData.factorB.toLowerCase()} (or vice versa).` :
+                        `<span class="not-significant">NOT SIGNIFICANT</span> (p ≈ ${correctAnswers.pValueAB.toFixed(4)}) - The two factors act independently.`
+                    }<br><br>
+                    <strong>Policy Implications:</strong> ${rejectAB ? 
+                        `The interaction effect suggests that policies need to be tailored based on the combination of both factors.` :
+                        rejectA || rejectB ? 
+                        `Policies can focus on the significant main effects independently.` :
+                        `No evidence of systematic differences - current policies appear equitable across groups.`
+                    }
+                `;
+                
+                document.getElementById('economicInterpretation').innerHTML = interpretation;
+                
+                // Update results grid
+                const resultsHTML = `
+                    <div class="result-card">
+                        <div class="result-title">Factor A: ${problemData.factorA}</div>
+                        <div class="result-value ${rejectA ? 'significant' : 'not-significant'}">
+                            F = ${correctAnswers.fA.toFixed(3)}<br>
+                            ${rejectA ? 'Significant*' : 'Not Significant'}
+                        </div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-title">Factor B: ${problemData.factorB}</div>
+                        <div class="result-value ${rejectB ? 'significant' : 'not-significant'}">
+                            F = ${correctAnswers.fB.toFixed(3)}<br>
+                            ${rejectB ? 'Significant*' : 'Not Significant'}
+                        </div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-title">Interaction: A×B</div>
+                        <div class="result-value ${rejectAB ? 'significant' : 'not-significant'}">
+                            F = ${correctAnswers.fAB.toFixed(3)}<br>
+                            ${rejectAB ? 'Significant*' : 'Not Significant'}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('resultsGrid').innerHTML = resultsHTML;
+                
+                // Update interaction explanation
+                updateInteractionExplanation();
+            }
+        }
+
+        function updateInteractionExplanation() {
+            const rejectAB = correctAnswers.decisionAB === 'reject';
+            
+            let explanation = '';
+            if (rejectAB) {
+                explanation = `
+                    <div style="font-weight: bold; color: #e65100; margin-bottom: 15px;">🔄 Significant Interaction Detected!</div>
+                    <p><strong>What this means:</strong> The effect of ${problemData.factorA} on ${problemData.variable} depends on the level of ${problemData.factorB}. You cannot interpret the main effects in isolation.</p>
+                    <p><strong>Example:</strong> The difference in ${problemData.variable.toLowerCase()} between ${problemData.levelsA[0]} and ${problemData.levelsA[1]} varies depending on whether you're looking at ${problemData.levelsB[0]} or ${problemData.levelsB[1]}.</p>
+                    <p><strong>Next Steps:</strong> Examine the cell means in the data table to understand the pattern of the interaction. Consider simple effects analysis or post-hoc tests.</p>
+                `;
+            } else {
+                explanation = `
+                    <div style="font-weight: bold; color: #2e7d32; margin-bottom: 15px;">🔄 No Interaction Effect</div>
+                    <p><strong>What this means:</strong> The two factors (${problemData.factorA} and ${problemData.factorB}) act independently. The effect of one factor is consistent across all levels of the other factor.</p>
+                    <p><strong>Interpretation:</strong> You can interpret the main effects separately without worrying about how they interact with each other.</p>
+                    <p><strong>Simplified Analysis:</strong> Focus on the main effects to understand how each factor individually affects ${problemData.variable.toLowerCase()}.</p>
+                `;
+            }
+            
+            document.getElementById('interactionExplanation').innerHTML = explanation;
+        }
+
+        function checkAnswer(inputId, correctValue, tolerance = null) {
+            const input = document.getElementById(inputId);
+            const userAnswer = parseFloat(input.value);
+            
+            if (isNaN(userAnswer)) {
+                input.className = '';
+                return false;
+            }
+            
+            if (!tolerance) {
+                tolerance = Math.max(0.001, Math.abs(correctValue) * 0.05);
+            }
+            
+            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
+            input.className = isCorrect ? 'correct' : 'incorrect';
+            
+            return isCorrect;
+        }
+
+        function checkSSA() {
+            return checkAnswer('ssaInput', correctAnswers.ssA);
+        }
+
+        function checkSSB() {
+            return checkAnswer('ssbInput', correctAnswers.ssB);
+        }
+
+        function checkSSAB() {
+            return checkAnswer('ssabInput', correctAnswers.ssAB);
+        }
+
+        function checkSSE() {
+            return checkAnswer('sseInput', correctAnswers.ssE);
+        }
+
+        function checkFA() {
+            return checkAnswer('faInput', correctAnswers.fA, 0.01);
+        }
+
+        function checkFB() {
+            return checkAnswer('fbInput', correctAnswers.fB, 0.01);
+        }
+
+        function checkFAB() {
+            return checkAnswer('fabInput', correctAnswers.fAB, 0.01);
+        }
+
+        function checkDecision(selectId, correctDecision) {
+            const select = document.getElementById(selectId);
+            const isCorrect = select.value === correctDecision;
+            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+            
+            if (isCorrect) {
+                updateEconomicInterpretation();
+            }
+            
+            return isCorrect;
+        }
+
+        function checkDecisionA() {
+            return checkDecision('decisionAInput', correctAnswers.decisionA);
+        }
+
+        function checkDecisionB() {
+            return checkDecision('decisionBInput', correctAnswers.decisionB);
+        }
+
+        function checkDecisionAB() {
+            return checkDecision('decisionABInput', correctAnswers.decisionAB);
+        }
+
+        function showAnswer(answerType) {
+            const answerDiv = document.getElementById(answerType + '-answer');
+            
+            switch(answerType) {
+                case 'ssa':
+                    answerDiv.innerHTML = `✅ Sum of Squares A = ${correctAnswers.ssA.toFixed(2)}`;
+                    break;
+                case 'ssb':
+                    answerDiv.innerHTML = `✅ Sum of Squares B = ${correctAnswers.ssB.toFixed(2)}`;
+                    break;
+                case 'ssab':
+                    answerDiv.innerHTML = `✅ Sum of Squares AB = ${correctAnswers.ssAB.toFixed(2)}`;
+                    break;
+                case 'sse':
+                    answerDiv.innerHTML = `✅ Sum of Squares Error = ${correctAnswers.ssE.toFixed(2)}`;
+                    break;
+                case 'fa':
+                    answerDiv.innerHTML = `✅ F-Statistic A = ${correctAnswers.fA.toFixed(3)}`;
+                    break;
+                case 'fb':
+                    answerDiv.innerHTML = `✅ F-Statistic B = ${correctAnswers.fB.toFixed(3)}`;
+                    break;
+                case 'fab':
+                    answerDiv.innerHTML = `✅ F-Statistic AB = ${correctAnswers.fAB.toFixed(3)}`;
+                    break;
+                case 'decisiona':
+                    answerDiv.innerHTML = `✅ Decision A = ${correctAnswers.decisionA === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}`;
+                    break;
+                case 'decisionb':
+                    answerDiv.innerHTML = `✅ Decision B = ${correctAnswers.decisionB === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}`;
+                    break;
+                case 'decisionab':
+                    answerDiv.innerHTML = `✅ Decision AB = ${correctAnswers.decisionAB === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}`;
+                    break;
+            }
+            
+            answerDiv.style.display = 'block';
+        }
+
+        function showSteps(stepType) {
+            const tutorialDiv = document.getElementById(stepType + '-tutorial');
+            
+            if (stepType === 'ssa-calculation') {
+                let stepsHTML = `
+                    <h4>📊 Sum of Squares Factor A Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>SSA = Σnⱼ(x̄ᵢ. - x̄..)² for each level of Factor A</strong><br>
+                        Grand Mean = ${correctAnswers.grandMean.toFixed(2)}<br>
+                `;
+                
+                problemData.levelsA.forEach((level, i) => {
+                    stepsHTML += `
+                        ${level}: n=${correctAnswers.marginalMeansA[i] ? 'calculated' : 'N/A'}, mean=${correctAnswers.marginalMeansA[i].toFixed(2)}<br>
+                    `;
+                });
+                
+                stepsHTML += `SSA = ${correctAnswers.ssA.toFixed(2)}</div>`;
+                tutorialDiv.innerHTML = stepsHTML;
+            } else if (stepType === 'ssb-calculation') {
+                let stepsHTML = `
+                    <h4>📊 Sum of Squares Factor B Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>SSB = Σnᵢ(x̄.ⱼ - x̄..)² for each level of Factor B</strong><br>
+                        Grand Mean = ${correctAnswers.grandMean.toFixed(2)}<br>
+                `;
+                
+                problemData.levelsB.forEach((level, j) => {
+                    stepsHTML += `
+                        ${level}: mean=${correctAnswers.marginalMeansB[j].toFixed(2)}<br>
+                    `;
+                });
+                
+                stepsHTML += `SSB = ${correctAnswers.ssB.toFixed(2)}</div>`;
+                tutorialDiv.innerHTML = stepsHTML;
+            } else if (stepType === 'ssab-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📐 Sum of Squares Interaction Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>SSAB = Σn(x̄ᵢⱼ - x̄ᵢ. - x̄.ⱼ + x̄..)²</strong><br>
+                        This measures how much the cell means deviate from what would be expected<br>
+                        based on the main effects alone.<br>
+                        SSAB = ${correctAnswers.ssAB.toFixed(2)}
+                    </div>
+                `;
+            } else if (stepType === 'sse-calculation') {
+                tutorialDiv.innerHTML = `
+                    <h4>📊 Sum of Squares Error Calculation:</h4>
+                    <div class="tutorial-step">
+                        <strong>SSE = Σ(n-1)s² for each cell</strong><br>
+                        This represents the within-cell variation.<br>
+                        SSE = ${correctAnswers.ssE.toFixed(2)}<br>
+                        df_Error = ${correctAnswers.dfE}
+                    </div>
+                `;
+            }
+            
+            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function checkAllSteps() {
+            const results = [
+                checkSSA(),
+                checkSSB(),
+                checkSSAB(),
+                checkSSE(),
+                checkFA(),
+                checkFB(),
+                checkFAB(),
+                checkDecisionA(),
+                checkDecisionB(),
+                checkDecisionAB()
+            ];
+            const correct = results.filter(r => r).length;
+            
+            alert(`You got ${correct}/10 steps correct!\n\n${correct >= 8 ? '🎉 Excellent Two-Way ANOVA analysis!' : 'Use the Steps buttons to see detailed solutions.'}`);
+        }
+
+        function generateNewProblem() {
+            if (currentScenario) {
+                generateProblem(currentScenario);
+                clearAllInputs();
+            } else {
+                alert('Please select a scenario first.');
+            }
+        }
+
+        function clearAllInputs() {
+            const inputs = ['ssaInput', 'ssbInput', 'ssabInput', 'sseInput', 'faInput', 'fbInput', 'fabInput'];
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = '';
+                    input.className = '';
+                }
+                
+                const answerDiv = document.getElementById(id.replace('Input', '') + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            // Reset decision selects
+            ['decisionAInput', 'decisionBInput', 'decisionABInput'].forEach(id => {
+                const select = document.getElementById(id);
+                select.value = '';
+                select.style.backgroundColor = '';
+                
+                const answerDiv = document.getElementById(id.replace('Input', '').toLowerCase() + '-answer');
+                if (answerDiv) answerDiv.style.display = 'none';
+            });
+            
+            // Hide tutorials
+            ['ssa-calculation-tutorial', 'ssb-calculation-tutorial', 'ssab-calculation-tutorial', 'sse-calculation-tutorial'].forEach(id => {
+                const div = document.getElementById(id);
+                if (div) div.style.display = 'none';
+            });
+            
+            // Reset results
+            document.getElementById('resultsGrid').innerHTML = '<div>Complete all calculations to see your Two-Way ANOVA results</div>';
+            document.getElementById('economicInterpretation').textContent = 'Complete the Two-Way ANOVA test to see economic interpretation.';
+            document.getElementById('interactionExplanation').textContent = 'Complete the analysis to see interaction interpretation.';
+        }
+
+        function showTwoWayANOVASummary() {
+            alert(`📊 Two-Way ANOVA Summary:\n\n` +
+                `WHEN TO USE:\n` +
+                `• Analyzing the effect of two categorical factors on a continuous outcome\n` +
+                `• Want to test main effects AND interactions between factors\n\n` +
+                `THREE RESEARCH QUESTIONS:\n` +
+                `1. Main Effect A: Do factor A levels differ?\n` +
+                `2. Main Effect B: Do factor B levels differ?\n` +
+                `3. Interaction: Does the effect of A depend on B?\n\n` +
+                `STEPS:\n` +
+                `1. Calculate SSA, SSB, SSAB, and SSE\n` +
+                `2. Calculate three F-statistics\n` +
+                `3. Make three separate decisions\n` +
+                `4. Interpret interaction effects carefully\n\n` +
+                `INTERPRETATION PRIORITY:\n` +
+                `1. Check interaction first\n` +
+                `2. If significant: analyze simple effects\n` +
+                `3. If not significant: interpret main effects\n\n` +
+                `🇨🇦 ECONOMIC APPLICATIONS:\n` +
+                `• Regional + Industry analysis\n` +
+                `• Demographic + Economic factors\n` +
+                `• Policy + Context interactions\n` +
+                `• Market + Product combinations`);
+        }
+    </script>
+</body>
+</html>
