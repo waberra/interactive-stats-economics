@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi-Square Hypothesis Testing - Canadian Economics</title>
+    <title>Chi-Square Testing: Independence & Goodness of Fit - Canadian Economics</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,7 +26,7 @@
         h1 {
             color: #2c3e50;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: 2.2em;
         }
         
@@ -39,6 +39,37 @@
             text-align: center;
         }
         
+        .test-type-selector {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+            text-align: center;
+        }
+        
+        .test-type-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .test-type-btn:hover {
+            background-color: #495057;
+            transform: translateY(-2px);
+        }
+        
+        .test-type-btn.active {
+            background-color: #007bff;
+        }
+        
         .scenario-selector {
             background: #f8f9fa;
             padding: 20px;
@@ -48,12 +79,12 @@
         }
         
         .scenario-btn {
-            background-color: #6c757d;
+            background-color: #28a745;
             color: white;
             border: none;
             padding: 12px 18px;
             margin: 6px;
-            border-radius: 25px;
+            border-radius: 20px;
             cursor: pointer;
             font-size: 0.95em;
             font-weight: bold;
@@ -61,12 +92,12 @@
         }
         
         .scenario-btn:hover {
-            background-color: #495057;
+            background-color: #218838;
             transform: translateY(-2px);
         }
         
         .scenario-btn.active {
-            background-color: #007bff;
+            background-color: #dc3545;
         }
         
         .hypothesis-section {
@@ -82,196 +113,12 @@
             padding: 20px;
             border-radius: 10px;
             margin: 15px 0;
-            border: 3px solid #007bff;
-        }
-        
-        .hypothesis-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            border-left: 4px solid #007bff;
+            border: 3px solid #4caf50;
             font-size: 1.1em;
-            font-family: monospace;
+            line-height: 1.6;
         }
         
         .data-section {
-            background: linear-gradient(135deg, #fff8e1, #ffecb3);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 2px solid #ffc107;
-        }
-        
-        .contingency-table {
-            background: white;
-            border-radius: 8px;
-            margin: 15px 0;
-            border: 2px solid #007bff;
-            overflow-x: auto;
-        }
-        
-        .chi-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-        }
-        
-        .chi-table th {
-            background: #007bff;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-        }
-        
-        .chi-table td {
-            padding: 8px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-        }
-        
-        .chi-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-        
-        .observed-cell {
-            background: #e8f5e8;
-            font-weight: bold;
-        }
-        
-        .expected-cell {
-            background: #fff8e1;
-            color: #856404;
-        }
-        
-        .calculation-section {
-            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border: 2px solid #9c27b0;
-        }
-        
-        .input-row {
-            display: grid;
-            grid-template-columns: 2fr 120px 70px 70px 90px;
-            gap: 8px;
-            align-items: center;
-            margin: 12px 0;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            background: #f8f9fa;
-            font-size: 0.9em;
-        }
-        
-        .input-row label {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .input-row input {
-            padding: 6px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 13px;
-        }
-        
-        .input-row select {
-            padding: 6px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 13px;
-        }
-        
-        .small-button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.75em;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .check-btn {
-            background: #17a2b8;
-        }
-        
-        .answer-btn {
-            background: #28a745;
-        }
-        
-        .steps-btn {
-            background: #6f42c1;
-        }
-        
-        .button {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            margin: 8px 4px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-        }
-        
-        .button:hover {
-            background: #218838;
-        }
-        
-        .correct {
-            background-color: #d4edda !important;
-            border-color: #c3e6cb !important;
-        }
-        
-        .incorrect {
-            background-color: #f8d7da !important;
-            border-color: #f5c6cb !important;
-        }
-        
-        .step-instructions {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid #2196f3;
-        }
-        
-        .tutorial-box {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
-            border: 1px solid #dee2e6;
-            display: none;
-        }
-        
-        .tutorial-step {
-            background: white;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border-left: 3px solid #007bff;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-        
-        .answer-display {
-            background: #d4edda;
-            padding: 8px;
-            border-radius: 5px;
-            margin: 5px 0;
-            border: 1px solid #c3e6cb;
-            font-weight: bold;
-            display: none;
-            font-size: 0.9em;
-        }
-        
-        .decision-section {
             background: linear-gradient(135deg, #e3f2fd, #bbdefb);
             padding: 20px;
             border-radius: 10px;
@@ -279,780 +126,917 @@
             border: 2px solid #2196f3;
         }
         
-        .formula-box {
-            background: #fff;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            margin: 10px 0;
-            font-family: monospace;
-            text-align: center;
-            font-size: 1em;
-        }
-        
-        .expected-calc-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
             margin: 15px 0;
-        }
-        
-        .expected-cell-calc {
             background: white;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 0.85em;
+            border-radius: 8px;
+            overflow: hidden;
         }
         
-        .test-type-selector {
-            background: #e7f3ff;
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .data-table th {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+        
+        .calculation-section {
+            background: linear-gradient(135deg, #fff3e0, #ffcc80);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff9800;
+        }
+        
+        .calculation-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #ff9800;
+        }
+        
+        .answer-section {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        
+        .control-panel {
+            background: #343a40;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .control-btn {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background-color: #5a32a3;
+            transform: translateY(-2px);
+        }
+        
+        .hidden { display: none; }
+        
+        .economic-context {
+            background: linear-gradient(135deg, #fff8e1, #ffcc02);
             padding: 15px;
             border-radius: 8px;
             margin: 15px 0;
-            border: 2px solid #2196f3;
+            border: 2px solid #ff6f00;
+            font-style: italic;
+        }
+        
+        .tutorial-section {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4169e1;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; }
+            .data-table { font-size: 0.9em; }
+            .scenario-btn, .control-btn { padding: 10px 15px; font-size: 0.9em; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎯 Chi-Square Hypothesis Testing - Advanced</h1>
-        
-        <div class="canada-header">
-            <h2>🇨🇦 Canadian Economic Categorical Data Analysis</h2>
-            <p><strong>Independence Testing</strong> • <strong>Goodness of Fit</strong> • <strong>Expected Frequencies</strong> • <strong>Three Decision Methods</strong></p>
-        </div>
-        
-        <div class="scenario-selector">
-            <div style="font-size: 1.2em; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">
-                📊 Choose Chi-Square Testing Scenario:
-            </div>
-            <button class="scenario-btn" onclick="chooseScenario('employment-province')">💼 Employment vs Province</button>
-            <button class="scenario-btn" onclick="chooseScenario('industry-size')">🏭 Industry vs Company Size</button>
-            <button class="scenario-btn" onclick="chooseScenario('investment-age')">💰 Investment vs Age</button>
-            <button class="scenario-btn" onclick="chooseScenario('spending-income')">🛒 Spending vs Income</button>
-        </div>
-        
-        <div id="problemArea" style="display: none;">
-            <div class="hypothesis-section">
-                <h3>📋 Step 1: Formulating Chi-Square Hypotheses</h3>
-                <div class="step-instructions">
-                    <div id="scenarioDescription"></div>
-                </div>
-                
-                <div class="test-type-selector">
-                    <div style="font-weight: bold; margin-bottom: 10px;">🔬 Type of Chi-Square Test:</div>
-                    <div id="testTypeDisplay" style="font-size: 1.1em; color: #007bff; font-weight: bold;"></div>
-                    <div id="testExplanation" style="margin-top: 10px; font-style: italic;"></div>
-                </div>
-                
-                <div class="hypothesis-display">
-                    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px;">🎯 Null and Alternative Hypotheses:</div>
-                    <div class="hypothesis-box">
-                        <div id="h0Display" style="margin: 8px 0; color: #dc3545;"><strong>H₀:</strong> Loading...</div>
-                        <div id="h1Display" style="margin: 8px 0; color: #007bff;"><strong>H₁:</strong> Loading...</div>
-                    </div>
-                    <div style="margin-top: 15px;">
-                        <strong>🧮 Test Statistic:</strong> χ² = Σ[(Observed - Expected)²/Expected]<br>
-                        <strong>📐 Degrees of Freedom:</strong> <span id="degreesOfFreedom">Calculate after selecting scenario</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="data-section">
-                <h3>📊 Step 2: Observed Data (Contingency Table)</h3>
-                <div class="step-instructions">
-                    <strong>Observed frequencies</strong> from the sample data:
-                </div>
-                
-                <div class="contingency-table" id="observedTable">
-                    <!-- Will be populated dynamically -->
-                </div>
-                
-                <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin: 10px 0;">
-                    <div style="font-weight: bold;">Sample Information:</div>
-                    <div>Total Sample Size (n): <span id="totalSample" style="color: #007bff; font-weight: bold;"></span></div>
-                    <div>Significance Level (α): <span style="color: #007bff; font-weight: bold;">0.05</span></div>
-                </div>
-            </div>
-            
-            <div class="calculation-section">
-                <h3>📊 Step 3: Calculate Expected Frequencies</h3>
-                <div class="step-instructions">
-                    <strong>Formula:</strong> Expected = (Row Total × Column Total) / Grand Total
-                </div>
-                
-                <div id="expectedCalculations">
-                    <!-- Expected frequency calculations will be populated dynamically -->
-                </div>
-                
-                <div class="contingency-table" id="expectedTable">
-                    <!-- Expected frequencies table will be populated dynamically -->
-                </div>
-            </div>
-            
-            <div class="calculation-section">
-                <h3>🧮 Step 4: Calculate Chi-Square Test Statistic</h3>
-                <div class="step-instructions">
-                    <strong>Calculate χ² for each cell, then sum:</strong> χ² = Σ[(O-E)²/E]
-                </div>
-                
-                <div class="formula-box">
-                    χ² = Σ[(Observed - Expected)²/Expected]
-                </div>
-                
-                <div class="input-row">
-                    <label for="chiSquareCalc">Chi-Square Test Statistic:</label>
-                    <input type="number" id="chiSquareCalc" step="0.001" placeholder="Calculate χ²">
-                    <button class="small-button check-btn" onclick="checkChiSquare()">Check</button>
-                    <button class="small-button answer-btn" onclick="showAnswer('chiSquareCalc')">Answer</button>
-                    <button class="small-button steps-btn" onclick="showSteps('chi-square-calc')">Steps</button>
-                </div>
-                
-                <div class="answer-display" id="chiSquareCalc-answer"></div>
-                <div class="tutorial-box" id="chi-square-calc-tutorial"></div>
-                
-                <div class="input-row">
-                    <label for="degreesOfFreedomCalc">Degrees of Freedom:</label>
-                    <input type="number" id="degreesOfFreedomCalc" step="1" placeholder="Calculate df">
-                    <button class="small-button check-btn" onclick="checkDegreesOfFreedom()">Check</button>
-                    <button class="small-button answer-btn" onclick="showAnswer('degreesOfFreedomCalc')">Answer</button>
-                    <button class="small-button steps-btn" onclick="showSteps('degrees-freedom')">Steps</button>
-                </div>
-                
-                <div class="answer-display" id="degreesOfFreedomCalc-answer"></div>
-                <div class="tutorial-box" id="degrees-freedom-tutorial"></div>
-            </div>
-            
-            <div class="decision-section">
-                <h3>⚖️ Step 5: Three Decision Methods</h3>
-                <div class="step-instructions">
-                    <strong>All three methods must give the SAME decision:</strong><br>
-                    <strong>1. Critical Value:</strong> Compare χ² to χ²-critical<br>
-                    <strong>2. P-value:</strong> Compare p-value to α<br>
-                    <strong>3. Interpretation:</strong> Economic meaning of independence/dependence
-                </div>
-                
-                <div class="input-row">
-                    <label for="chiCritical">χ²-Critical Value:</label>
-                    <input type="number" id="chiCritical" step="0.001" placeholder="From χ²-table">
-                    <button class="small-button check-btn" onclick="checkChiCritical()">Check</button>
-                    <button class="small-button answer-btn" onclick="showAnswer('chiCritical')">Answer</button>
-                    <button class="small-button steps-btn" onclick="showSteps('chi-critical')">Steps</button>
-                </div>
-                
-                <div class="answer-display" id="chiCritical-answer"></div>
-                <div class="tutorial-box" id="chi-critical-tutorial"></div>
-                
-                <div class="input-row">
-                    <label for="pValue">P-value (approximate):</label>
-                    <input type="number" id="pValue" step="0.001" placeholder="Probability">
-                    <button class="small-button check-btn" onclick="checkPValue()">Check</button>
-                    <button class="small-button answer-btn" onclick="showAnswer('pValue')">Answer</button>
-                    <button class="small-button steps-btn" onclick="showSteps('p-value')">Steps</button>
-                </div>
-                
-                <div class="answer-display" id="pValue-answer"></div>
-                <div class="tutorial-box" id="p-value-tutorial"></div>
-                
-                <div class="input-row">
-                    <label>Statistical Decision:</label>
-                    <select id="decision">
-                        <option value="">Choose...</option>
-                        <option value="reject">Reject H₀ (Variables are dependent)</option>
-                        <option value="fail">Fail to Reject H₀ (Variables are independent)</option>
-                    </select>
-                    <button class="small-button check-btn" onclick="checkDecision()">Check</button>
-                    <button class="small-button answer-btn" onclick="showAnswer('decision')">Answer</button>
-                    <button class="small-button steps-btn" onclick="showSteps('final-decision')">Steps</button>
-                </div>
-                
-                <div class="answer-display" id="decision-answer"></div>
-                <div class="tutorial-box" id="final-decision-tutorial"></div>
-                
-                <div class="input-row">
-                    <label>Economic Interpretation:</label>
-                    <select id="interpretation">
-                        <option value="">Choose...</option>
-                        <option value="relationship">Significant relationship exists</option>
-                        <option value="no-relationship">No significant relationship</option>
-                    </select>
-                    <button class="small-button check-btn" onclick="checkInterpretation()">Check</button>
-                    <button class="small-button answer-btn" onclick="showAnswer('interpretation')">Answer</button>
-                    <button class="small-button steps-btn" onclick="showSteps('economic-interpretation')">Steps</button>
-                </div>
-                
-                <div class="answer-display" id="interpretation-answer"></div>
-                <div class="tutorial-box" id="economic-interpretation-tutorial"></div>
-            </div>
-            
-            <button class="button" onclick="generateNewProblem()">🎲 Generate New Problem</button>
-            <button class="button" onclick="checkAllAnswers()">✅ Check All Calculations</button>
-            <button class="button" onclick="showCompleteAnalysis()">📖 Complete Analysis</button>
+
+<div class="container">
+    <h1>🇨🇦 Chi-Square Testing: Independence & Goodness of Fit</h1>
+    <div class="canada-header">
+        <h2>🍁 Canadian Economic Data Analysis 🍁</h2>
+        <p><strong>Master both types of chi-square testing with real Canadian economic scenarios!</strong></p>
+    </div>
+
+    <!-- Test Type Selection -->
+    <div class="test-type-selector">
+        <h3>🎯 Select Chi-Square Test Type:</h3>
+        <button class="test-type-btn active" onclick="selectTestType('independence', this)">
+            📊 Test of Independence<br><small>(Two Variables)</small>
+        </button>
+        <button class="test-type-btn" onclick="selectTestType('goodness', this)">
+            📈 Goodness of Fit<br><small>(One Variable vs Expected)</small>
+        </button>
+    </div>
+
+    <!-- Independence Test Scenarios -->
+    <div id="independence-scenarios" class="scenario-selector">
+        <h3>🔗 Test of Independence Scenarios (Two Categorical Variables):</h3>
+        <button class="scenario-btn" onclick="generateScenario('employment-province', this)">💼 Employment vs Province</button>
+        <button class="scenario-btn" onclick="generateScenario('industry-size', this)">🏭 Industry vs Company Size</button>
+        <button class="scenario-btn" onclick="generateScenario('investment-age', this)">💰 Investment vs Age Group</button>
+        <button class="scenario-btn" onclick="generateScenario('spending-income', this)">🛒 Spending vs Income Level</button>
+    </div>
+
+    <!-- Goodness of Fit Test Scenarios -->
+    <div id="goodness-scenarios" class="scenario-selector hidden">
+        <h3>📈 Goodness of Fit Scenarios (One Variable vs Expected Distribution):</h3>
+        <button class="scenario-btn" onclick="generateScenario('gdp-distribution', this)">📊 Provincial GDP Distribution</button>
+        <button class="scenario-btn" onclick="generateScenario('employment-education', this)">🎓 Employment by Education</button>
+        <button class="scenario-btn" onclick="generateScenario('housing-market', this)">🏠 Housing Market Distribution</button>
+        <button class="scenario-btn" onclick="generateScenario('retail-sales', this)">🛒 Retail Sales Categories</button>
+        <button class="scenario-btn" onclick="generateScenario('tax-revenue', this)">💰 Tax Revenue Sources</button>
+        <button class="scenario-btn" onclick="generateScenario('banking-assets', this)">🏦 Banking Sector Assets</button>
+    </div>
+
+    <!-- Economic Context -->
+    <div id="economic-context" class="economic-context hidden">
+        <!-- Will be populated by JavaScript -->
+    </div>
+
+    <!-- Hypothesis Section -->
+    <div id="hypothesis-section" class="hypothesis-section hidden">
+        <h3>📝 Step 1: Hypothesis Formulation</h3>
+        <div id="hypothesis-display" class="hypothesis-display">
+            <!-- Will be populated by JavaScript -->
         </div>
     </div>
 
-    <script>
-        let currentScenario = '';
-        let testData = {};
-        let correctAnswers = {};
+    <!-- Data Section -->
+    <div id="data-section" class="data-section hidden">
+        <h3>📊 Step 2: Data Analysis</h3>
+        <div id="data-display">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
 
-        const scenarios = {
-            'employment-province': {
-                name: 'Employment Status vs Province Analysis',
-                description: 'Statistics Canada examining whether employment status varies significantly across Canadian provinces.',
-                testType: 'Test of Independence',
-                explanation: 'Testing whether employment status (employed/unemployed) is independent of province of residence.',
-                variables: {
-                    row: { name: 'Employment Status', categories: ['Employed', 'Unemployed'] },
-                    col: { name: 'Province', categories: ['Ontario', 'Quebec', 'BC', 'Alberta'] }
-                },
-                h0: 'Employment status is independent of province (no regional employment differences)',
-                h1: 'Employment status depends on province (regional employment differences exist)',
-                context: 'labor market policy',
-                meaning: {
-                    reject: 'Employment rates vary significantly by province - targeted regional policies needed',
-                    fail: 'Employment rates are consistent across provinces - uniform policies appropriate'
-                }
-            },
-            'industry-size': {
-                name: 'Industry Type vs Company Size Analysis',
-                description: 'Innovation Canada analyzing the relationship between industry sectors and company size distribution.',
-                testType: 'Test of Independence',
-                explanation: 'Testing whether industry type is independent of company size category.',
-                variables: {
-                    row: { name: 'Industry Type', categories: ['Manufacturing', 'Services', 'Technology'] },
-                    col: { name: 'Company Size', categories: ['Small', 'Medium', 'Large'] }
-                },
-                h0: 'Industry type is independent of company size (no sector-size patterns)',
-                h1: 'Industry type depends on company size (sector-size patterns exist)',
-                context: 'business development policy',
-                meaning: {
-                    reject: 'Different industries have distinct size patterns - sector-specific support needed',
-                    fail: 'Size distribution is similar across industries - uniform business policies work'
-                }
-            },
-            'investment-age': {
-                name: 'Investment Preference vs Age Group Analysis',
-                description: 'Bank of Canada studying whether investment preferences vary systematically across age demographics.',
-                testType: 'Test of Independence',
-                explanation: 'Testing whether investment type preference is independent of age group.',
-                variables: {
-                    row: { name: 'Investment Type', categories: ['Conservative', 'Moderate', 'Aggressive'] },
-                    col: { name: 'Age Group', categories: ['18-35', '36-55', '56+'] }
-                },
-                h0: 'Investment preference is independent of age (no age-based investment patterns)',
-                h1: 'Investment preference depends on age (age-based investment patterns exist)',
-                context: 'financial services regulation',
-                meaning: {
-                    reject: 'Age significantly influences investment choices - age-targeted financial products needed',
-                    fail: 'Investment preferences are consistent across ages - uniform financial services work'
-                }
-            },
-            'spending-income': {
-                name: 'Spending Category vs Income Level Analysis',
-                description: 'Statistics Canada examining whether consumer spending patterns vary by income levels.',
-                testType: 'Test of Independence',
-                explanation: 'Testing whether primary spending category is independent of household income level.',
-                variables: {
-                    row: { name: 'Primary Spending', categories: ['Essentials', 'Discretionary', 'Savings'] },
-                    col: { name: 'Income Level', categories: ['Low', 'Middle', 'High'] }
-                },
-                h0: 'Spending patterns are independent of income level (no income-based spending differences)',
-                h1: 'Spending patterns depend on income level (income-based spending patterns exist)',
-                context: 'fiscal and tax policy',
-                meaning: {
-                    reject: 'Income significantly affects spending patterns - income-targeted policies needed',
-                    fail: 'Spending patterns are similar across income levels - broad-based policies work'
-                }
-            }
-        };
+    <!-- Calculation Section -->
+    <div id="calculation-section" class="calculation-section hidden">
+        <h3>🧮 Step 3: Chi-Square Calculations</h3>
+        <div id="calculation-display">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
 
-        function chooseScenario(scenario) {
-            currentScenario = scenario;
-            
-            document.querySelectorAll('.scenario-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            event.target.classList.add('active');
-            
-            generateTestData(scenario);
-            document.getElementById('problemArea').style.display = 'block';
-            clearAllInputs();
+    <!-- Answer Section -->
+    <div id="answer-section" class="answer-section hidden">
+        <h3>🎯 Step 4: Statistical Decision & Economic Interpretation</h3>
+        <div id="answer-display">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Tutorial Section -->
+    <div id="tutorial-section" class="tutorial-section hidden">
+        <h3>📚 Understanding Chi-Square Testing</h3>
+        <div id="tutorial-content">
+            <!-- Will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" onclick="showTutorial()">📚 Tutorial</button>
+        <button class="control-btn" onclick="showCalculations()">🧮 Show Calculations</button>
+        <button class="control-btn" onclick="showAnswer()">🎯 Show Answer</button>
+        <button class="control-btn" onclick="generateNewScenario()">🔄 New Scenario</button>
+    </div>
+</div>
+
+<script>
+let currentTestType = 'independence';
+let currentScenario = '';
+let testData = {};
+let correctAnswers = {};
+
+// Test scenarios data
+const independenceScenarios = {
+    'employment-province': {
+        title: '💼 Employment Status vs Province',
+        context: 'Testing if employment status is independent of province in Canada.',
+        description: 'Statistics Canada wants to determine if employment status varies significantly across Canadian provinces.',
+        variables: ['Employment Status', 'Province'],
+        categories: {
+            rows: ['Employed', 'Unemployed', 'Not in Labor Force'],
+            cols: ['Ontario', 'Quebec', 'BC', 'Alberta']
         }
-
-        function generateTestData(scenario) {
-            const scenarioData = scenarios[scenario];
-            
-            // Generate realistic contingency table data
-            const rowCategories = scenarioData.variables.row.categories;
-            const colCategories = scenarioData.variables.col.categories;
-            const rows = rowCategories.length;
-            const cols = colCategories.length;
-            
-            // Generate observed frequencies with some pattern to make realistic
-            let observedFreq = [];
-            let totalSample = 800 + Math.floor(Math.random() * 400); // 800-1200 sample
-            
-            // Create base distribution
-            for (let i = 0; i < rows; i++) {
-                observedFreq[i] = [];
-                for (let j = 0; j < cols; j++) {
-                    // Add some realistic variation
-                    let baseFreq = totalSample / (rows * cols);
-                    let variation = (Math.random() - 0.5) * baseFreq * 0.6;
-                    observedFreq[i][j] = Math.max(5, Math.round(baseFreq + variation));
-                }
-            }
-            
-            // Adjust to match target sample size
-            let currentTotal = observedFreq.flat().reduce((a, b) => a + b, 0);
-            let adjustment = totalSample / currentTotal;
-            for (let i = 0; i < rows; i++) {
-                for (let j = 0; j < cols; j++) {
-                    observedFreq[i][j] = Math.max(5, Math.round(observedFreq[i][j] * adjustment));
-                }
-            }
-            
-            // Recalculate actual total
-            totalSample = observedFreq.flat().reduce((a, b) => a + b, 0);
-            
-            testData = {
-                scenario: scenarioData.name,
-                description: scenarioData.description,
-                testType: scenarioData.testType,
-                explanation: scenarioData.explanation,
-                h0: scenarioData.h0,
-                h1: scenarioData.h1,
-                context: scenarioData.context,
-                meaning: scenarioData.meaning,
-                variables: scenarioData.variables,
-                observedFreq: observedFreq,
-                rows: rows,
-                cols: cols,
-                totalSample: totalSample,
-                alpha: 0.05
-            };
-            
-            calculateCorrectAnswers();
-            updateDisplay();
+    },
+    'industry-size': {
+        title: '🏭 Industry Type vs Company Size',
+        context: 'Testing if industry type is independent of company size in Canadian businesses.',
+        description: 'Innovation, Science and Economic Development Canada investigates whether certain industries favor specific company sizes.',
+        variables: ['Industry Type', 'Company Size'],
+        categories: {
+            rows: ['Technology', 'Manufacturing', 'Services'],
+            cols: ['Small (1-99)', 'Medium (100-499)', 'Large (500+)']
         }
-
-        function calculateCorrectAnswers() {
-            const { observedFreq, rows, cols, totalSample } = testData;
-            
-            // Calculate row and column totals
-            let rowTotals = [];
-            let colTotals = [];
-            
-            for (let i = 0; i < rows; i++) {
-                rowTotals[i] = observedFreq[i].reduce((a, b) => a + b, 0);
-            }
-            
-            for (let j = 0; j < cols; j++) {
-                colTotals[j] = 0;
-                for (let i = 0; i < rows; i++) {
-                    colTotals[j] += observedFreq[i][j];
-                }
-            }
-            
-            // Calculate expected frequencies
-            let expectedFreq = [];
-            for (let i = 0; i < rows; i++) {
-                expectedFreq[i] = [];
-                for (let j = 0; j < cols; j++) {
-                    expectedFreq[i][j] = (rowTotals[i] * colTotals[j]) / totalSample;
-                }
-            }
-            
-            // Calculate chi-square statistic
-            let chiSquare = 0;
-            for (let i = 0; i < rows; i++) {
-                for (let j = 0; j < cols; j++) {
-                    let o = observedFreq[i][j];
-                    let e = expectedFreq[i][j];
-                    chiSquare += Math.pow(o - e, 2) / e;
-                }
-            }
-            
-            // Degrees of freedom
-            const df = (rows - 1) * (cols - 1);
-            
-            // Chi-square critical value (approximate for α = 0.05)
-            let chiCritical;
-            if (df === 1) chiCritical = 3.841;
-            else if (df === 2) chiCritical = 5.991;
-            else if (df === 3) chiCritical = 7.815;
-            else if (df === 4) chiCritical = 9.488;
-            else if (df === 5) chiCritical = 11.071;
-            else if (df === 6) chiCritical = 12.592;
-            else chiCritical = 3.841 + df * 2; // Rough approximation for larger df
-            
-            // P-value approximation
-            let pValue;
-            if (chiSquare > chiCritical * 2) pValue = 0.001;
-            else if (chiSquare > chiCritical * 1.5) pValue = 0.01;
-            else if (chiSquare > chiCritical) pValue = 0.05;
-            else if (chiSquare > chiCritical * 0.7) pValue = 0.10;
-            else pValue = 0.20;
-            
-            // Decision
-            const decision = chiSquare > chiCritical ? 'reject' : 'fail';
-            const interpretation = decision === 'reject' ? 'relationship' : 'no-relationship';
-            
-            correctAnswers = {
-                observedFreq: observedFreq,
-                expectedFreq: expectedFreq,
-                rowTotals: rowTotals,
-                colTotals: colTotals,
-                chiSquare: chiSquare,
-                degreesOfFreedom: df,
-                chiCritical: chiCritical,
-                pValue: pValue,
-                decision: decision,
-                interpretation: interpretation
-            };
+    },
+    'investment-age': {
+        title: '💰 Investment Type vs Age Group',
+        context: 'Testing if investment preferences are independent of age groups among Canadians.',
+        description: 'The Canada Pension Plan Investment Board studies whether investment choices vary by age demographics.',
+        variables: ['Investment Type', 'Age Group'],
+        categories: {
+            rows: ['Stocks', 'Bonds', 'Real Estate', 'GICs'],
+            cols: ['18-35', '36-50', '51-65']
         }
-
-        function updateDisplay() {
-            document.getElementById('scenarioDescription').innerHTML = 
-                `<strong>${testData.scenario}</strong><br>${testData.description}`;
-            
-            document.getElementById('testTypeDisplay').textContent = testData.testType;
-            document.getElementById('testExplanation').textContent = testData.explanation;
-            document.getElementById('h0Display').innerHTML = `<strong>H₀:</strong> ${testData.h0}`;
-            document.getElementById('h1Display').innerHTML = `<strong>H₁:</strong> ${testData.h1}`;
-            document.getElementById('degreesOfFreedom').textContent = `df = (${testData.rows}-1) × (${testData.cols}-1) = ${correctAnswers.degreesOfFreedom}`;
-            document.getElementById('totalSample').textContent = testData.totalSample;
-            
-            updateObservedTable();
-            updateExpectedCalculations();
-            updateExpectedTable();
+    },
+    'spending-income': {
+        title: '🛒 Spending Category vs Income Level',
+        context: 'Testing if spending patterns are independent of income levels in Canadian households.',
+        description: 'Statistics Canada examines whether consumption patterns differ significantly across income brackets.',
+        variables: ['Spending Category', 'Income Level'],
+        categories: {
+            rows: ['Housing', 'Food', 'Transportation', 'Recreation'],
+            cols: ['Low Income', 'Middle Income', 'High Income']
         }
+    }
+};
 
-        function updateObservedTable() {
-            const container = document.getElementById('observedTable');
-            const { variables, observedFreq, rows, cols } = testData;
-            const { rowTotals, colTotals } = correctAnswers;
-            
-            let tableHTML = `
-                <table class="chi-table">
-                    <thead>
-                        <tr>
-                            <th>${variables.row.name} \\ ${variables.col.name}</th>
+const goodnessScenarios = {
+    'gdp-distribution': {
+        title: '📊 Provincial GDP Distribution',
+        context: 'Testing if actual provincial GDP distribution matches expected federal transfer formula.',
+        description: 'Finance Canada tests whether provincial economic output aligns with federal equalization assumptions.',
+        variable: 'Provincial GDP Share',
+        categories: ['Ontario', 'Quebec', 'BC', 'Alberta', 'Other Provinces']
+    },
+    'employment-education': {
+        title: '🎓 Employment by Education Level',
+        context: 'Testing if employment distribution matches workforce development projections.',
+        description: 'Employment and Social Development Canada evaluates if actual employment patterns match education policy goals.',
+        variable: 'Education Level',
+        categories: ['High School', 'College/Trade', 'University', 'Graduate']
+    },
+    'housing-market': {
+        title: '🏠 Housing Market Price Distribution',
+        context: 'Testing if housing prices match expected affordability framework.',
+        description: 'Canada Mortgage and Housing Corporation examines if regional housing markets align with affordability targets.',
+        variable: 'Housing Price Category',
+        categories: ['Under $300K', '$300K-$500K', '$500K-$750K', 'Over $750K']
+    },
+    'retail-sales': {
+        title: '🛒 Retail Sales by Category',
+        context: 'Testing if consumer spending matches economic forecasting models.',
+        description: 'Statistics Canada evaluates whether retail patterns align with consumer expenditure projections.',
+        variable: 'Retail Category',
+        categories: ['Food & Beverage', 'Clothing', 'Electronics', 'Home & Garden', 'Other']
+    },
+    'tax-revenue': {
+        title: '💰 Government Tax Revenue Sources',
+        context: 'Testing if tax revenue composition matches budget projections.',
+        description: 'Finance Canada analyzes whether actual revenue sources align with fiscal planning assumptions.',
+        variable: 'Tax Revenue Source',
+        categories: ['Income Tax', 'Corporate Tax', 'GST/HST', 'Other Taxes']
+    },
+    'banking-assets': {
+        title: '🏦 Banking Sector Asset Distribution',
+        context: 'Testing if bank portfolio composition matches regulatory guidelines.',
+        description: 'Office of the Superintendent of Financial Institutions examines if bank asset allocation meets regulatory expectations.',
+        variable: 'Asset Category',
+        categories: ['Residential Mortgages', 'Commercial Loans', 'Government Securities', 'Other Assets']
+    }
+};
+
+function selectTestType(type, clickedButton) {
+    currentTestType = type;
+    
+    // Update button states
+    document.querySelectorAll('.test-type-btn').forEach(btn => btn.classList.remove('active'));
+    clickedButton.classList.add('active');
+    
+    // Show/hide scenario selectors
+    if (type === 'independence') {
+        document.getElementById('independence-scenarios').classList.remove('hidden');
+        document.getElementById('goodness-scenarios').classList.add('hidden');
+    } else {
+        document.getElementById('independence-scenarios').classList.add('hidden');
+        document.getElementById('goodness-scenarios').classList.remove('hidden');
+    }
+    
+    // Hide other sections
+    hideAllSections();
+}
+
+function generateScenario(scenario, clickedButton) {
+    currentScenario = scenario;
+    
+    // Update button states
+    document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+    clickedButton.classList.add('active');
+    
+    if (currentTestType === 'independence') {
+        generateIndependenceData(scenario);
+    } else {
+        generateGoodnessData(scenario);
+    }
+    
+    updateDisplay();
+    hideCalculationsAndAnswers();
+}
+
+function generateIndependenceData(scenario) {
+    const scenarioData = independenceScenarios[scenario];
+    const rows = scenarioData.categories.rows.length;
+    const cols = scenarioData.categories.cols.length;
+    
+    // Generate random observed frequencies
+    let observedFreq = [];
+    for (let i = 0; i < rows; i++) {
+        observedFreq[i] = [];
+        for (let j = 0; j < cols; j++) {
+            observedFreq[i][j] = Math.floor(Math.random() * 50) + 20; // 20-69
+        }
+    }
+    
+    // Calculate totals
+    let rowTotals = [];
+    let colTotals = [];
+    let totalSample = 0;
+    
+    for (let i = 0; i < rows; i++) {
+        rowTotals[i] = observedFreq[i].reduce((a, b) => a + b, 0);
+        totalSample += rowTotals[i];
+    }
+    
+    for (let j = 0; j < cols; j++) {
+        colTotals[j] = 0;
+        for (let i = 0; i < rows; i++) {
+            colTotals[j] += observedFreq[i][j];
+        }
+    }
+    
+    // Calculate expected frequencies
+    let expectedFreq = [];
+    for (let i = 0; i < rows; i++) {
+        expectedFreq[i] = [];
+        for (let j = 0; j < cols; j++) {
+            expectedFreq[i][j] = (rowTotals[i] * colTotals[j]) / totalSample;
+        }
+    }
+    
+    testData = {
+        type: 'independence',
+        scenario: scenarioData,
+        observedFreq: observedFreq,
+        expectedFreq: expectedFreq,
+        rowTotals: rowTotals,
+        colTotals: colTotals,
+        totalSample: totalSample,
+        rows: rows,
+        cols: cols
+    };
+    
+    calculateIndependenceAnswers();
+}
+
+function generateGoodnessData(scenario) {
+    const scenarioData = goodnessScenarios[scenario];
+    const numCategories = scenarioData.categories.length;
+    
+    // Generate expected frequencies (theoretical distribution)
+    let expectedFreq = [];
+    const totalSample = Math.floor(Math.random() * 400) + 600; // 600-999
+    
+    // Generate expected proportions that sum to 1
+    let expectedProps = [];
+    let sum = 0;
+    for (let i = 0; i < numCategories; i++) {
+        expectedProps[i] = Math.random() * 0.3 + 0.1; // 0.1 to 0.4
+        sum += expectedProps[i];
+    }
+    // Normalize to sum to 1
+    for (let i = 0; i < numCategories; i++) {
+        expectedProps[i] = expectedProps[i] / sum;
+        expectedFreq[i] = Math.round(expectedProps[i] * totalSample);
+    }
+    
+    // Generate observed frequencies (add some deviation)
+    let observedFreq = [];
+    for (let i = 0; i < numCategories; i++) {
+        let deviation = (Math.random() - 0.5) * 0.3; // -15% to +15% deviation
+        observedFreq[i] = Math.max(5, Math.round(expectedFreq[i] * (1 + deviation)));
+    }
+    
+    testData = {
+        type: 'goodness',
+        scenario: scenarioData,
+        observedFreq: observedFreq,
+        expectedFreq: expectedFreq,
+        numCategories: numCategories,
+        totalSample: observedFreq.reduce((a, b) => a + b, 0)
+    };
+    
+    calculateGoodnessAnswers();
+}
+
+function calculateIndependenceAnswers() {
+    const { observedFreq, expectedFreq, rows, cols } = testData;
+    
+    // Calculate chi-square statistic
+    let chiSquare = 0;
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            let o = observedFreq[i][j];
+            let e = expectedFreq[i][j];
+            chiSquare += Math.pow(o - e, 2) / e;
+        }
+    }
+    
+    // Degrees of freedom
+    const df = (rows - 1) * (cols - 1);
+    
+    const { chiCritical, pValue, decision, interpretation } = calculateCommonAnswers(chiSquare, df);
+    
+    correctAnswers = {
+        observedFreq: observedFreq,
+        expectedFreq: expectedFreq,
+        chiSquare: chiSquare,
+        degreesOfFreedom: df,
+        chiCritical: chiCritical,
+        pValue: pValue,
+        decision: decision,
+        interpretation: interpretation
+    };
+}
+
+function calculateGoodnessAnswers() {
+    const { observedFreq, expectedFreq, numCategories } = testData;
+    
+    // Calculate chi-square statistic
+    let chiSquare = 0;
+    for (let i = 0; i < numCategories; i++) {
+        let o = observedFreq[i];
+        let e = expectedFreq[i];
+        chiSquare += Math.pow(o - e, 2) / e;
+    }
+    
+    // Degrees of freedom for goodness of fit
+    const df = numCategories - 1;
+    
+    const { chiCritical, pValue, decision, interpretation } = calculateCommonAnswers(chiSquare, df);
+    
+    correctAnswers = {
+        observedFreq: observedFreq,
+        expectedFreq: expectedFreq,
+        chiSquare: chiSquare,
+        degreesOfFreedom: df,
+        chiCritical: chiCritical,
+        pValue: pValue,
+        decision: decision,
+        interpretation: interpretation
+    };
+}
+
+function calculateCommonAnswers(chiSquare, df) {
+    // Chi-square critical value (approximate for α = 0.05)
+    let chiCritical;
+    if (df === 1) chiCritical = 3.841;
+    else if (df === 2) chiCritical = 5.991;
+    else if (df === 3) chiCritical = 7.815;
+    else if (df === 4) chiCritical = 9.488;
+    else if (df === 5) chiCritical = 11.071;
+    else if (df === 6) chiCritical = 12.592;
+    else chiCritical = 3.841 + df * 2; // Rough approximation for larger df
+    
+    // P-value approximation
+    let pValue;
+    if (chiSquare > chiCritical * 2) pValue = 0.001;
+    else if (chiSquare > chiCritical * 1.5) pValue = 0.01;
+    else if (chiSquare > chiCritical) pValue = 0.05;
+    else if (chiSquare > chiCritical * 0.7) pValue = 0.10;
+    else pValue = 0.20;
+    
+    // Decision
+    const decision = chiSquare > chiCritical ? 'reject' : 'fail';
+    const interpretation = decision === 'reject' ? 
+        'There is sufficient evidence of a significant relationship' : 
+        'There is insufficient evidence of a significant relationship';
+    
+    return { chiCritical, pValue, decision, interpretation };
+}
+
+function updateDisplay() {
+    updateEconomicContext();
+    updateHypothesisDisplay();
+    updateDataDisplay();
+    
+    // Show relevant sections
+    document.getElementById('economic-context').classList.remove('hidden');
+    document.getElementById('hypothesis-section').classList.remove('hidden');
+    document.getElementById('data-section').classList.remove('hidden');
+}
+
+function updateEconomicContext() {
+    const scenario = testData.scenario;
+    let contextHTML = `
+        <h4>🇨🇦 ${scenario.title}</h4>
+        <p><strong>Context:</strong> ${scenario.context}</p>
+        <p><strong>Research Question:</strong> ${scenario.description}</p>
+    `;
+    
+    if (testData.type === 'independence') {
+        contextHTML += `<p><strong>Variables:</strong> ${scenario.variables[0]} and ${scenario.variables[1]}</p>`;
+    } else {
+        contextHTML += `<p><strong>Variable:</strong> ${scenario.variable}</p>`;
+    }
+    
+    document.getElementById('economic-context').innerHTML = contextHTML;
+}
+
+function updateHypothesisDisplay() {
+    const scenario = testData.scenario;
+    let hypothesisHTML;
+    
+    if (testData.type === 'independence') {
+        hypothesisHTML = `
+            <h4>🔗 Test of Independence Hypotheses</h4>
+            <p><strong>H₀ (Null Hypothesis):</strong> ${scenario.variables[0]} and ${scenario.variables[1]} are independent</p>
+            <p><strong>H₁ (Alternative Hypothesis):</strong> ${scenario.variables[0]} and ${scenario.variables[1]} are not independent (dependent)</p>
+            <p><strong>Test Type:</strong> Two-way chi-square test of independence</p>
+            <p><strong>Significance Level:</strong> α = 0.05</p>
+        `;
+    } else {
+        hypothesisHTML = `
+            <h4>📈 Goodness of Fit Test Hypotheses</h4>
+            <p><strong>H₀ (Null Hypothesis):</strong> The observed ${scenario.variable} distribution matches the expected distribution</p>
+            <p><strong>H₁ (Alternative Hypothesis):</strong> The observed ${scenario.variable} distribution does not match the expected distribution</p>
+            <p><strong>Test Type:</strong> One-way chi-square goodness of fit test</p>
+            <p><strong>Significance Level:</strong> α = 0.05</p>
+        `;
+    }
+    
+    document.getElementById('hypothesis-display').innerHTML = hypothesisHTML;
+}
+
+function updateDataDisplay() {
+    let dataHTML;
+    
+    if (testData.type === 'independence') {
+        dataHTML = createIndependenceTable();
+    } else {
+        dataHTML = createGoodnessTable();
+    }
+    
+    document.getElementById('data-display').innerHTML = dataHTML;
+}
+
+function createIndependenceTable() {
+    const { observedFreq, rowTotals, colTotals, totalSample, scenario } = testData;
+    const rows = scenario.categories.rows;
+    const cols = scenario.categories.cols;
+    
+    let tableHTML = `
+        <h4>📊 Contingency Table (Observed Frequencies)</h4>
+        <table class="data-table">
+            <tr>
+                <th>${scenario.variables[0]} \\ ${scenario.variables[1]}</th>
+    `;
+    
+    // Column headers
+    cols.forEach(col => {
+        tableHTML += `<th>${col}</th>`;
+    });
+    tableHTML += '<th>Row Total</th></tr>';
+    
+    // Data rows
+    for (let i = 0; i < rows.length; i++) {
+        tableHTML += `<tr><th>${rows[i]}</th>`;
+        for (let j = 0; j < cols.length; j++) {
+            tableHTML += `<td>${observedFreq[i][j]}</td>`;
+        }
+        tableHTML += `<td><strong>${rowTotals[i]}</strong></td></tr>`;
+    }
+    
+    // Column totals
+    tableHTML += '<tr><th>Column Total</th>';
+    colTotals.forEach(total => {
+        tableHTML += `<td><strong>${total}</strong></td>`;
+    });
+    tableHTML += `<td><strong>${totalSample}</strong></td></tr></table>`;
+    
+    return tableHTML;
+}
+
+function createGoodnessTable() {
+    const { observedFreq, expectedFreq, scenario } = testData;
+    
+    let tableHTML = `
+        <h4>📊 Observed vs Expected Frequencies</h4>
+        <table class="data-table">
+            <tr>
+                <th>${scenario.variable}</th>
+                <th>Observed</th>
+                <th>Expected</th>
+                <th>Difference</th>
+            </tr>
+    `;
+    
+    for (let i = 0; i < scenario.categories.length; i++) {
+        const diff = observedFreq[i] - expectedFreq[i];
+        tableHTML += `
+            <tr>
+                <th>${scenario.categories[i]}</th>
+                <td>${observedFreq[i]}</td>
+                <td>${expectedFreq[i].toFixed(1)}</td>
+                <td>${diff > 0 ? '+' : ''}${diff.toFixed(1)}</td>
+            </tr>
+        `;
+    }
+    
+    const totalObs = observedFreq.reduce((a, b) => a + b, 0);
+    const totalExp = expectedFreq.reduce((a, b) => a + b, 0);
+    
+    tableHTML += `
+        <tr style="border-top: 3px solid #333;">
+            <th>Total</th>
+            <td><strong>${totalObs}</strong></td>
+            <td><strong>${totalExp.toFixed(1)}</strong></td>
+            <td><strong>${(totalObs - totalExp).toFixed(1)}</strong></td>
+        </tr>
+        </table>
+    `;
+    
+    return tableHTML;
+}
+
+function showCalculations() {
+    let calculationHTML;
+    
+    if (testData.type === 'independence') {
+        calculationHTML = createIndependenceCalculations();
+    } else {
+        calculationHTML = createGoodnessCalculations();
+    }
+    
+    document.getElementById('calculation-display').innerHTML = calculationHTML;
+    document.getElementById('calculation-section').classList.remove('hidden');
+}
+
+function createIndependenceCalculations() {
+    const { observedFreq, expectedFreq, rowTotals, colTotals, totalSample, scenario } = testData;
+    const { chiSquare, degreesOfFreedom } = correctAnswers;
+    
+    let calcHTML = `
+        <div class="calculation-step">
+            <h4>🧮 Step 1: Expected Frequencies</h4>
+            <p><strong>Formula:</strong> E<sub>ij</sub> = (Row<sub>i</sub> Total × Column<sub>j</sub> Total) ÷ Grand Total</p>
+            <table class="data-table">
+                <tr><th>Cell</th><th>Calculation</th><th>Expected</th></tr>
+    `;
+    
+    const rows = scenario.categories.rows;
+    const cols = scenario.categories.cols;
+    
+    for (let i = 0; i < rows.length; i++) {
+        for (let j = 0; j < cols.length; j++) {
+            calcHTML += `
+                <tr>
+                    <td>${rows[i]} × ${cols[j]}</td>
+                    <td>(${rowTotals[i]} × ${colTotals[j]}) ÷ ${totalSample}</td>
+                    <td>${expectedFreq[i][j].toFixed(2)}</td>
+                </tr>
             `;
-            
-            for (let j = 0; j < cols; j++) {
-                tableHTML += `<th>${variables.col.categories[j]}</th>`;
-            }
-            tableHTML += `<th>Row Total</th></tr></thead><tbody>`;
-            
-            for (let i = 0; i < rows; i++) {
-                tableHTML += `<tr><th>${variables.row.categories[i]}</th>`;
-                for (let j = 0; j < cols; j++) {
-                    tableHTML += `<td class="observed-cell">${observedFreq[i][j]}</td>`;
-                }
-                tableHTML += `<td><strong>${rowTotals[i]}</strong></td></tr>`;
-            }
-            
-            tableHTML += `<tr><th>Col Total</th>`;
-            for (let j = 0; j < cols; j++) {
-                tableHTML += `<td><strong>${colTotals[j]}</strong></td>`;
-            }
-            tableHTML += `<td><strong>${testData.totalSample}</strong></td></tr></tbody></table>`;
-            
-            container.innerHTML = tableHTML;
         }
-
-        function updateExpectedCalculations() {
-            const container = document.getElementById('expectedCalculations');
-            const { variables, rows, cols } = testData;
-            const { expectedFreq, rowTotals, colTotals } = correctAnswers;
+    }
+    
+    calcHTML += `</table></div>
+        <div class="calculation-step">
+            <h4>📊 Step 2: Chi-Square Test Statistic</h4>
+            <p><strong>Formula:</strong> χ² = Σ[(O<sub>ij</sub> - E<sub>ij</sub>)² ÷ E<sub>ij</sub>]</p>
+            <table class="data-table">
+                <tr><th>Cell</th><th>O</th><th>E</th><th>O-E</th><th>(O-E)²</th><th>(O-E)²/E</th></tr>
+    `;
+    
+    let totalChi = 0;
+    for (let i = 0; i < rows.length; i++) {
+        for (let j = 0; j < cols.length; j++) {
+            const o = observedFreq[i][j];
+            const e = expectedFreq[i][j];
+            const diff = o - e;
+            const diffSq = diff * diff;
+            const component = diffSq / e;
+            totalChi += component;
             
-            let calcHTML = `<div class="expected-calc-grid">`;
-            
-            for (let i = 0; i < rows; i++) {
-                for (let j = 0; j < cols; j++) {
-                    calcHTML += `
-                        <div class="expected-cell-calc">
-                            <strong>${variables.row.categories[i]} × ${variables.col.categories[j]}:</strong><br>
-                            E = (${rowTotals[i]} × ${colTotals[j]}) / ${testData.totalSample}<br>
-                            E = ${expectedFreq[i][j].toFixed(1)}
-                        </div>
-                    `;
-                }
-            }
-            
-            calcHTML += `</div>`;
-            container.innerHTML = calcHTML;
-        }
-
-        function updateExpectedTable() {
-            const container = document.getElementById('expectedTable');
-            const { variables, rows, cols } = testData;
-            const { expectedFreq, rowTotals, colTotals } = correctAnswers;
-            
-            let tableHTML = `
-                <table class="chi-table">
-                    <thead>
-                        <tr>
-                            <th>Expected Frequencies</th>
+            calcHTML += `
+                <tr>
+                    <td>${rows[i]} × ${cols[j]}</td>
+                    <td>${o}</td>
+                    <td>${e.toFixed(2)}</td>
+                    <td>${diff.toFixed(2)}</td>
+                    <td>${diffSq.toFixed(2)}</td>
+                    <td>${component.toFixed(3)}</td>
+                </tr>
             `;
-            
-            for (let j = 0; j < cols; j++) {
-                tableHTML += `<th>${variables.col.categories[j]}</th>`;
-            }
-            tableHTML += `<th>Row Total</th></tr></thead><tbody>`;
-            
-            for (let i = 0; i < rows; i++) {
-                tableHTML += `<tr><th>${variables.row.categories[i]}</th>`;
-                for (let j = 0; j < cols; j++) {
-                    tableHTML += `<td class="expected-cell">${expectedFreq[i][j].toFixed(1)}</td>`;
-                }
-                tableHTML += `<td><strong>${rowTotals[i]}</strong></td></tr>`;
-            }
-            
-            tableHTML += `<tr><th>Col Total</th>`;
-            for (let j = 0; j < cols; j++) {
-                tableHTML += `<td><strong>${colTotals[j]}</strong></td>`;
-            }
-            tableHTML += `<td><strong>${testData.totalSample}</strong></td></tr></tbody></table>`;
-            
-            container.innerHTML = tableHTML;
         }
+    }
+    
+    calcHTML += `
+                <tr style="border-top: 3px solid #333;">
+                    <td colspan="5"><strong>χ² = </strong></td>
+                    <td><strong>${chiSquare.toFixed(3)}</strong></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🎯 Step 3: Degrees of Freedom</h4>
+            <p><strong>Formula:</strong> df = (rows - 1) × (columns - 1)</p>
+            <p>df = (${rows.length} - 1) × (${cols.length} - 1) = ${degreesOfFreedom}</p>
+        </div>
+    `;
+    
+    return calcHTML;
+}
 
-        function checkAnswer(inputId, correctValue, tolerance = 0.1) {
-            const input = document.getElementById(inputId);
-            const userAnswer = parseFloat(input.value);
-            
-            if (isNaN(userAnswer)) {
-                input.className = '';
-                return false;
-            }
-            
-            const isCorrect = Math.abs(userAnswer - correctValue) <= tolerance;
-            input.className = isCorrect ? 'correct' : 'incorrect';
-            return isCorrect;
-        }
+function createGoodnessCalculations() {
+    const { observedFreq, expectedFreq, scenario } = testData;
+    const { chiSquare, degreesOfFreedom } = correctAnswers;
+    
+    let calcHTML = `
+        <div class="calculation-step">
+            <h4>📊 Step 1: Chi-Square Components</h4>
+            <p><strong>Formula:</strong> χ² = Σ[(O<sub>i</sub> - E<sub>i</sub>)² ÷ E<sub>i</sub>]</p>
+            <table class="data-table">
+                <tr><th>Category</th><th>O</th><th>E</th><th>O-E</th><th>(O-E)²</th><th>(O-E)²/E</th></tr>
+    `;
+    
+    let totalChi = 0;
+    for (let i = 0; i < scenario.categories.length; i++) {
+        const o = observedFreq[i];
+        const e = expectedFreq[i];
+        const diff = o - e;
+        const diffSq = diff * diff;
+        const component = diffSq / e;
+        totalChi += component;
+        
+        calcHTML += `
+            <tr>
+                <td>${scenario.categories[i]}</td>
+                <td>${o}</td>
+                <td>${e.toFixed(2)}</td>
+                <td>${diff.toFixed(2)}</td>
+                <td>${diffSq.toFixed(2)}</td>
+                <td>${component.toFixed(3)}</td>
+            </tr>
+        `;
+    }
+    
+    calcHTML += `
+            <tr style="border-top: 3px solid #333;">
+                <td><strong>χ² = </strong></td>
+                <td colspan="4"></td>
+                <td><strong>${chiSquare.toFixed(3)}</strong></td>
+            </tr>
+        </table>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🎯 Step 2: Degrees of Freedom</h4>
+            <p><strong>Formula:</strong> df = categories - 1</p>
+            <p>df = ${scenario.categories.length} - 1 = ${degreesOfFreedom}</p>
+        </div>
+    `;
+    
+    return calcHTML;
+}
 
-        function checkChiSquare() {
-            return checkAnswer('chiSquareCalc', correctAnswers.chiSquare, 0.5);
+function showAnswer() {
+    const { chiSquare, degreesOfFreedom, chiCritical, pValue, decision, interpretation } = correctAnswers;
+    const scenario = testData.scenario;
+    
+    let answerHTML = `
+        <div class="calculation-step">
+            <h4>📊 Test Statistics Summary</h4>
+            <p><strong>Calculated χ²:</strong> ${chiSquare.toFixed(3)}</p>
+            <p><strong>Degrees of Freedom:</strong> ${degreesOfFreedom}</p>
+            <p><strong>Critical Value (α = 0.05):</strong> ${chiCritical.toFixed(3)}</p>
+            <p><strong>Estimated P-value:</strong> ${pValue.toFixed(3)}</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🎯 Statistical Decision</h4>
+            <p><strong>Decision Rule:</strong> If χ² > χ²<sub>critical</sub>, reject H₀</p>
+            <p><strong>Comparison:</strong> ${chiSquare.toFixed(3)} ${chiSquare > chiCritical ? '>' : '≤'} ${chiCritical.toFixed(3)}</p>
+            <p><strong>Decision:</strong> <span style="color: ${decision === 'reject' ? '#dc3545' : '#28a745'}; font-weight: bold;">
+                ${decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}</span></p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🇨🇦 Economic Interpretation</h4>
+            <p><strong>Statistical Result:</strong> ${interpretation}</p>
+    `;
+    
+    if (testData.type === 'independence') {
+        if (decision === 'reject') {
+            answerHTML += `<p><strong>Economic Meaning:</strong> ${scenario.variables[0]} and ${scenario.variables[1]} are significantly related. Policy makers should consider these dependencies in economic planning.</p>`;
+            answerHTML += `<p><strong>Policy Implication:</strong> Targeted interventions may be needed as patterns vary significantly across categories.</p>`;
+        } else {
+            answerHTML += `<p><strong>Economic Meaning:</strong> ${scenario.variables[0]} and ${scenario.variables[1]} appear to be independent. Uniform policies may be appropriate.</p>`;
+            answerHTML += `<p><strong>Policy Implication:</strong> No evidence of systematic differences; general policies should be equally effective across categories.</p>`;
         }
+    } else {
+        if (decision === 'reject') {
+            answerHTML += `<p><strong>Economic Meaning:</strong> The observed ${scenario.variable} distribution significantly differs from the expected model. Current forecasting assumptions may need revision.</p>`;
+            answerHTML += `<p><strong>Policy Implication:</strong> Economic models and targets should be reassessed based on actual observed patterns.</p>`;
+        } else {
+            answerHTML += `<p><strong>Economic Meaning:</strong> The observed ${scenario.variable} distribution is consistent with expected patterns. Current models appear valid.</p>`;
+            answerHTML += `<p><strong>Policy Implication:</strong> Continue with current economic assumptions and policy frameworks.</p>`;
+        }
+    }
+    
+    answerHTML += '</div>';
+    
+    document.getElementById('answer-display').innerHTML = answerHTML;
+    document.getElementById('answer-section').classList.remove('hidden');
+}
 
-        function checkDegreesOfFreedom() {
-            return checkAnswer('degreesOfFreedomCalc', correctAnswers.degreesOfFreedom, 0);
-        }
+function showTutorial() {
+    let tutorialHTML = `
+        <h4>📚 Understanding Chi-Square Testing</h4>
+        
+        <div class="calculation-step">
+            <h4>🔗 Test of Independence</h4>
+            <p><strong>Purpose:</strong> Determines if two categorical variables are independent or related.</p>
+            <p><strong>Example:</strong> Is employment status related to province?</p>
+            <p><strong>Data Structure:</strong> Contingency table (rows × columns)</p>
+            <p><strong>Degrees of Freedom:</strong> df = (rows - 1) × (columns - 1)</p>
+            <p><strong>Interpretation:</strong> If variables are independent, knowing one doesn't help predict the other.</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>📈 Goodness of Fit Test</h4>
+            <p><strong>Purpose:</strong> Determines if observed distribution matches an expected theoretical distribution.</p>
+            <p><strong>Example:</strong> Does actual provincial GDP match expected federal transfer formula?</p>
+            <p><strong>Data Structure:</strong> One variable with multiple categories</p>
+            <p><strong>Degrees of Freedom:</strong> df = categories - 1</p>
+            <p><strong>Interpretation:</strong> Tests if reality matches our theoretical expectations or models.</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🧮 Chi-Square Formula</h4>
+            <p><strong>χ² = Σ[(Observed - Expected)² ÷ Expected]</strong></p>
+            <p>• Larger differences between observed and expected lead to larger χ² values</p>
+            <p>• Larger χ² values provide stronger evidence against the null hypothesis</p>
+            <p>• Compare calculated χ² to critical value to make decision</p>
+        </div>
+        
+        <div class="calculation-step">
+            <h4>🎯 Decision Making</h4>
+            <p><strong>If χ² > Critical Value:</strong> Reject H₀ (significant relationship/difference)</p>
+            <p><strong>If χ² ≤ Critical Value:</strong> Fail to reject H₀ (no significant relationship/difference)</p>
+            <p><strong>P-value approach:</strong> If p < 0.05, reject H₀</p>
+        </div>
+    `;
+    
+    document.getElementById('tutorial-content').innerHTML = tutorialHTML;
+    document.getElementById('tutorial-section').classList.remove('hidden');
+}
 
-        function checkChiCritical() {
-            return checkAnswer('chiCritical', correctAnswers.chiCritical, 0.1);
-        }
+function generateNewScenario() {
+    if (currentScenario) {
+        generateScenario(currentScenario);
+    }
+}
 
-        function checkPValue() {
-            return checkAnswer('pValue', correctAnswers.pValue, 0.02);
-        }
+function hideAllSections() {
+    document.getElementById('economic-context').classList.add('hidden');
+    document.getElementById('hypothesis-section').classList.add('hidden');
+    document.getElementById('data-section').classList.add('hidden');
+    document.getElementById('calculation-section').classList.add('hidden');
+    document.getElementById('answer-section').classList.add('hidden');
+    document.getElementById('tutorial-section').classList.add('hidden');
+}
 
-        function checkDecision() {
-            const select = document.getElementById('decision');
-            const userAnswer = select.value;
-            const isCorrect = userAnswer === correctAnswers.decision;
-            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
-            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
-            return isCorrect;
-        }
+function hideCalculationsAndAnswers() {
+    document.getElementById('calculation-section').classList.add('hidden');
+    document.getElementById('answer-section').classList.add('hidden');
+    document.getElementById('tutorial-section').classList.add('hidden');
+}
 
-        function checkInterpretation() {
-            const select = document.getElementById('interpretation');
-            const userAnswer = select.value;
-            const isCorrect = userAnswer === correctAnswers.interpretation;
-            select.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
-            select.style.borderColor = isCorrect ? '#c3e6cb' : '#f5c6cb';
-            return isCorrect;
-        }
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    const firstButton = document.querySelector('.test-type-btn');
+    selectTestType('independence', firstButton);
+});
 
-        function showAnswer(inputId) {
-            const answerDiv = document.getElementById(inputId + '-answer');
-            
-            switch(inputId) {
-                case 'chiSquareCalc':
-                    answerDiv.innerHTML = `✅ χ² = ${correctAnswers.chiSquare.toFixed(3)}`;
-                    break;
-                case 'degreesOfFreedomCalc':
-                    answerDiv.innerHTML = `✅ df = ${correctAnswers.degreesOfFreedom}`;
-                    break;
-                case 'chiCritical':
-                    answerDiv.innerHTML = `✅ χ²-critical = ${correctAnswers.chiCritical.toFixed(3)}`;
-                    break;
-                case 'pValue':
-                    answerDiv.innerHTML = `✅ P-value ≈ ${correctAnswers.pValue.toFixed(3)}`;
-                    break;
-                case 'decision':
-                    const decisionText = correctAnswers.decision === 'reject' ? 'Reject H₀ (Variables are dependent)' : 'Fail to Reject H₀ (Variables are independent)';
-                    answerDiv.innerHTML = `✅ ${decisionText}`;
-                    break;
-                case 'interpretation':
-                    const interpText = correctAnswers.interpretation === 'relationship' ? 'Significant relationship exists' : 'No significant relationship';
-                    answerDiv.innerHTML = `✅ ${interpText}`;
-                    break;
-            }
-            
-            answerDiv.style.display = 'block';
-        }
+</script>
 
-        function showSteps(stepType) {
-            const tutorialDiv = document.getElementById(stepType + '-tutorial');
-            
-            if (stepType === 'chi-square-calc') {
-                let calcSteps = '';
-                for (let i = 0; i < testData.rows; i++) {
-                    for (let j = 0; j < testData.cols; j++) {
-                        const o = testData.observedFreq[i][j];
-                        const e = correctAnswers.expectedFreq[i][j];
-                        const contrib = Math.pow(o - e, 2) / e;
-                        calcSteps += `${testData.variables.row.categories[i]}-${testData.variables.col.categories[j]}: (${o}-${e.toFixed(1)})²/${e.toFixed(1)} = ${contrib.toFixed(3)}<br>`;
-                    }
-                }
-                
-                tutorialDiv.innerHTML = `
-                    <h4>📚 How to Calculate Chi-Square Test Statistic:</h4>
-                    <div class="tutorial-step">
-                        <strong>Formula:</strong> χ² = Σ[(O-E)²/E]<br><br>
-                        <strong>Calculate for each cell:</strong><br>
-                        ${calcSteps}<br>
-                        <strong>Sum all contributions:</strong><br>
-                        χ² = ${correctAnswers.chiSquare.toFixed(3)}<br><br>
-                        <strong>This measures:</strong> How much the observed frequencies deviate from what we'd expect if the variables were independent.
-                    </div>
-                `;
-            } else if (stepType === 'degrees-freedom') {
-                tutorialDiv.innerHTML = `
-                    <h4>📚 How to Calculate Degrees of Freedom:</h4>
-                    <div class="tutorial-step">
-                        <strong>Formula:</strong> df = (rows - 1) × (columns - 1)<br><br>
-                        <strong>Our Data:</strong><br>
-                        Rows (${testData.variables.row.name}): ${testData.rows} categories<br>
-                        Columns (${testData.variables.col.name}): ${testData.cols} categories<br><br>
-                        <strong>Calculation:</strong><br>
-                        df = (${testData.rows} - 1) × (${testData.cols} - 1)<br>
-                        df = ${testData.rows - 1} × ${testData.cols - 1}<br>
-                        df = ${correctAnswers.degreesOfFreedom}<br><br>
-                        <strong>Meaning:</strong> Number of independent pieces of information after fixing marginal totals.
-                    </div>
-                `;
-            } else if (stepType === 'chi-critical') {
-                tutorialDiv.innerHTML = `
-                    <h4>📚 How to Find Chi-Square Critical Value:</h4>
-                    <div class="tutorial-step">
-                        <strong>Parameters:</strong><br>
-                        α = ${testData.alpha}<br>
-                        df = ${correctAnswers.degreesOfFreedom}<br><br>
-                        <strong>From χ²-table:</strong><br>
-                        χ²₀.₀₅(${correctAnswers.degreesOfFreedom}) = ${correctAnswers.chiCritical.toFixed(3)}<br><br>
-                        <strong>Decision Rule:</strong><br>
-                        If χ² > ${correctAnswers.chiCritical.toFixed(3)} → Reject H₀<br>
-                        If χ² ≤ ${correctAnswers.chiCritical.toFixed(3)} → Fail to reject H₀<br><br>
-                        <strong>Note:</strong> Chi-square tests are always right-tailed.
-                    </div>
-                `;
-            } else if (stepType === 'final-decision') {
-                tutorialDiv.innerHTML = `
-                    <h4>📚 Final Decision - Statistical Methods:</h4>
-                    <div class="tutorial-step">
-                        <strong>Method 1 (Critical Value):</strong><br>
-                        χ² = ${correctAnswers.chiSquare.toFixed(3)} ${correctAnswers.chiSquare > correctAnswers.chiCritical ? '>' : '≤'} χ²-critical = ${correctAnswers.chiCritical.toFixed(3)}<br>
-                        Decision: ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
-                        <strong>Method 2 (P-value):</strong><br>
-                        p = ${correctAnswers.pValue.toFixed(3)} ${correctAnswers.pValue <= testData.alpha ? '≤' : '>'} α = ${testData.alpha}<br>
-                        Decision: ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}<br><br>
-                        <strong>Both methods agree!</strong><br><br>
-                        <strong>Conclusion:</strong> ${correctAnswers.decision === 'reject' ? 
-                          `The variables ${testData.variables.row.name} and ${testData.variables.col.name} are NOT independent - there is a significant relationship.` :
-                          `The variables ${testData.variables.row.name} and ${testData.variables.col.name} are independent - no significant relationship detected.`}
-                    </div>
-                `;
-            } else if (stepType === 'economic-interpretation') {
-                const meaning = correctAnswers.decision === 'reject' ? testData.meaning.reject : testData.meaning.fail;
-                tutorialDiv.innerHTML = `
-                    <h4>📚 Economic Interpretation:</h4>
-                    <div class="tutorial-step">
-                        <strong>Statistical Result:</strong><br>
-                        ${correctAnswers.decision === 'reject' ? 
-                          'Variables are significantly dependent (related)' : 
-                          'Variables are independent (not related)'}<br><br>
-                        <strong>Economic Meaning:</strong><br>
-                        ${meaning}<br><br>
-                        <strong>Policy Implications for ${testData.context}:</strong><br>
-                        ${correctAnswers.decision === 'reject' ? 
-                          'Differentiated approaches may be needed across categories.' : 
-                          'Uniform policies are likely appropriate across categories.'}<br><br>
-                        <strong>Strength of Evidence:</strong><br>
-                        χ² = ${correctAnswers.chiSquare.toFixed(3)}, p ≈ ${correctAnswers.pValue.toFixed(3)}
-                    </div>
-                `;
-            }
-            
-            tutorialDiv.style.display = tutorialDiv.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function checkAllAnswers() {
-            const results = [
-                checkChiSquare(),
-                checkDegreesOfFreedom(),
-                checkChiCritical(),
-                checkPValue(),
-                checkDecision(),
-                checkInterpretation()
-            ];
-            
-            const correct = results.filter(r => r).length;
-            const total = results.length;
-            
-            alert(`You got ${correct}/${total} calculations correct!\n\n${correct === total ? 'Perfect chi-square analysis! 🎉' : 'Review the incorrect calculations using the Steps buttons.'}`);
-        }
-
-        function generateNewProblem() {
-            if (currentScenario) {
-                generateTestData(currentScenario);
-                clearAllInputs();
-            } else {
-                alert('Please select a scenario first.');
-            }
-        }
-
-        function clearAllInputs() {
-            const inputs = ['chiSquareCalc', 'degreesOfFreedomCalc', 'chiCritical', 'pValue'];
-            inputs.forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.value = '';
-                    input.className = '';
-                }
-                
-                const answerDiv = document.getElementById(id + '-answer');
-                if (answerDiv) answerDiv.style.display = 'none';
-            });
-            
-            const selects = ['decision', 'interpretation'];
-            selects.forEach(id => {
-                const select = document.getElementById(id);
-                if (select) {
-                    select.value = '';
-                    select.style.backgroundColor = '';
-                    select.style.borderColor = '';
-                }
-            });
-        }
-
-        function showCompleteAnalysis() {
-            if (!currentScenario) {
-                alert('Please select a scenario first.');
-                return;
-            }
-            
-            const meaning = correctAnswers.decision === 'reject' ? testData.meaning.reject : testData.meaning.fail;
-            
-            alert(`Complete Chi-Square Analysis:\n\nScenario: ${testData.scenario}\n\nHypotheses:\nH₀: ${testData.h0}\nH₁: ${testData.h1}\n\nTest Statistics:\n• χ² = ${correctAnswers.chiSquare.toFixed(3)}\n• df = ${correctAnswers.degreesOfFreedom}\n• χ²-critical = ${correctAnswers.chiCritical.toFixed(3)}\n• p-value ≈ ${correctAnswers.pValue.toFixed(3)}\n\nDecision: ${correctAnswers.decision === 'reject' ? 'Reject H₀' : 'Fail to Reject H₀'}\n\nEconomic Interpretation:\n${meaning}\n\nPolicy Context: ${testData.context}`);
-        }
-    </script>
 </body>
 </html>
