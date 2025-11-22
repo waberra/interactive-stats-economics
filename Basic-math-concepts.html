@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Mathematical Concepts in Economics & Finance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #a71e2a;
+        }
+
+        .red-title h1 {
+            font-size: 2.3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 25px;
+        }
+
+        .blue-concepts h3 {
+            font-size: 1.7em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .measures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .measure-card {
+            padding: 18px;
+            border-radius: 15px;
+            border: 3px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .percent-card   { background: linear-gradient(135deg, #28a745, #20c997); border-color:#1e7e34; color:white; }
+        .pctchange-card { background: linear-gradient(135deg, #fd7e14, #e55353); border-color:#d63384; color:white; }
+        .pctpoints-card { background: linear-gradient(135deg, #6f42c1, #8e44ad); border-color:#563d7c; color:white; }
+        .prop-card      { background: linear-gradient(135deg, #17a2b8, #138496); border-color:#117a8b; color:white; }
+        .ratio-card     { background: linear-gradient(135deg, #ffc107, #ff8800); border-color:#d39e00; color:#212529; }
+        .index-card     { background: linear-gradient(135deg, #20c997, #0f9d58); border-color:#0b7b43; color:white; }
+        .bps-card       { background: linear-gradient(135deg, #e83e8c, #d91a72); border-color:#c7185d; color:white; }
+
+        .measure-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .measure-card .formula {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.85em;
+        }
+
+        .measure-card .description { margin-bottom: 10px; font-size:0.9em; }
+        .measure-card .use-cases   { margin-bottom: 10px; font-style: italic; font-size:0.85em; }
+        .measure-card .examples    { font-size:0.8em; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px; }
+
+        .interactive-section {
+            padding: 25px;
+            background: #f8f9fa;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+
+        .scenario-display,
+        .calculation-area {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .scenario-display { border-left: 5px solid #28a745; }
+        .calculation-area { border-left: 5px solid #ffc107; }
+
+        .btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 6px 4px;
+            box-shadow: 0 4px 10px rgba(40,167,69,0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 10px rgba(108,117,125,0.3);
+        }
+
+        .data-block {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            margin: 10px 0 0 0;
+        }
+
+        .data-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap:8px;
+            text-align:center;
+        }
+
+        .data-item {
+            background:#f8f9fa;
+            padding:8px;
+            border-radius:5px;
+            border:1px solid #dee2e6;
+            font-size:0.9em;
+        }
+
+        .options-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+            gap:10px;
+            margin-top:10px;
+        }
+
+        .option-checkbox {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            border-radius: 10px;
+            padding: 8px 10px;
+            border: 2px solid #ced4da;
+            display:flex;
+            gap:8px;
+            align-items:flex-start;
+            font-size:0.85em;
+        }
+
+        .question-card {
+            background:#f8f9fa;
+            border-radius:10px;
+            border:2px solid #dee2e6;
+            padding:12px;
+            margin:10px 0;
+            font-size:0.9em;
+        }
+
+        .question-card h5 {
+            margin-bottom:6px;
+            color:#007bff;
+            font-size:0.95em;
+        }
+
+        .question-input {
+            margin-top:6px;
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            gap:6px;
+        }
+
+        .question-input input {
+            padding:6px 8px;
+            border-radius:6px;
+            border:1px solid #ced4da;
+            min-width:120px;
+        }
+
+        .feedback {
+            margin-top:4px;
+            font-size:0.85em;
+        }
+
+        .feedback.correct {
+            color:#155724;
+        }
+
+        .feedback.incorrect {
+            color:#721c24;
+        }
+
+        .step-explanation {
+            margin-top:6px;
+            font-size:0.85em;
+            background:white;
+            border-radius:6px;
+            padding:8px;
+            border-left:3px solid #17a2b8;
+        }
+
+        .interpretation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding:15px;
+            border-radius:10px;
+            margin:15px 0;
+            border:2px solid #2196f3;
+            font-size:0.9em;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color:white;
+            padding:15px;
+            text-align:center;
+            border-radius:12px;
+            margin:10px 0 20px 0;
+            border:3px solid #c7185d;
+            box-shadow:0 4px 15px rgba(232,62,140,0.3);
+            font-size:0.9em;
+        }
+
+        @media (max-width:768px) {
+            .measures-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="red-title">
+        <h1>📐 Basic Mathematical Concepts in Economics & Finance</h1>
+        <p>Percentages, ratios, index numbers, basis points, and more – all in one interactive review tool</p>
+    </div>
+
+    <div class="blue-concepts">
+        <h3>📘 Core Concepts</h3>
+        <div class="measures-grid">
+            <div class="measure-card percent-card">
+                <h4>📊 Percentages</h4>
+                <div class="formula">
+                    Percentage = (Part / Whole) × 100%
+                </div>
+                <div class="description">
+                    Expresses a part as a fraction of 100. Very common in economics and everyday life.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Market share, tax rates, budget shares.
+                </div>
+                <div class="examples">
+                    <strong>Examples:</strong> 15% sales tax, 8% unemployment, 30% of spending on housing.
+                </div>
+            </div>
+
+            <div class="measure-card pctchange-card">
+                <h4>📈 Percentage Change</h4>
+                <div class="formula">
+                    % Change = (New − Old) / Old × 100%
+                </div>
+                <div class="description">
+                    Measures how much something has increased or decreased relative to its old value.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Growth rates, inflation, changes in GDP or income.
+                </div>
+                <div class="examples">
+                    <strong>Examples:</strong> GDP grew by 3%, prices rose by 2.5%.
+                </div>
+            </div>
+
+            <div class="measure-card pctpoints-card">
+                <h4>🎯 Percentage Points</h4>
+                <div class="formula">
+                    Percentage point change = New % − Old %
+                </div>
+                <div class="description">
+                    The simple difference between two percentage values (no division by the old value).
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Changes in unemployment rate, interest rate, voter turnout.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> Unemployment rises from 5% to 7% → 2 percentage points.
+                </div>
+            </div>
+
+            <div class="measure-card prop-card">
+                <h4>🔢 Proportions</h4>
+                <div class="formula">
+                    Proportion = Part / Whole
+                </div>
+                <div class="description">
+                    A fraction between 0 and 1 showing the share of the whole.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Probabilities, fractions of a population or budget.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> 0.4 of students live on campus.
+                </div>
+            </div>
+
+            <div class="measure-card ratio-card">
+                <h4>⚖️ Ratios</h4>
+                <div class="formula">
+                    Ratio a : b = a / b
+                </div>
+                <div class="description">
+                    Compares two quantities directly – how many units of one per unit of the other.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Student–teacher ratios, debt–income ratios, odds.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> 20 students per 1 teacher → 20:1.
+                </div>
+            </div>
+
+            <div class="measure-card index-card">
+                <h4>📑 Index Numbers</h4>
+                <div class="formula">
+                    Index = (Current / Base) × 100
+                </div>
+                <div class="description">
+                    Tracks how a value moves relative to a base period or base level set to 100.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> CPI, stock indices, real estate price indices.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> Price index rises from 100 to 112 (12% higher than base).
+                </div>
+            </div>
+
+            <div class="measure-card bps-card">
+                <h4>📌 Basis Points</h4>
+                <div class="formula">
+                    1 basis point = 0.01% = 0.0001 (in decimal)
+                </div>
+                <div class="description">
+                    Used to describe tiny changes in interest rates, yields, and other percentages.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Central bank rate moves, bond yields.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> From 1.25% to 1.75% → 0.50 percentage points = 50 basis points.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="interactive-section">
+        <div class="control-panel">
+            <h3>🎮 Interactive Practice</h3>
+            <p>Generate a realistic scenario and practice calculating percentages, percentage changes, percentage points, proportions, ratios, index numbers, and basis points.</p>
+            <button class="btn" onclick="generateScenario()">📊 Generate New Scenario</button>
+            <button class="btn btn-secondary" onclick="resetPractice()">🔄 Reset</button>
+        </div>
+
+        <div id="scenarioDisplay" class="scenario-display" style="display:none;">
+            <h3 id="scenarioTitle">📋 Scenario</h3>
+            <div id="scenarioDescription"></div>
+            <div id="dataDisplay"></div>
+
+            <div style="margin-top: 12px; padding: 12px; background:#f8f9fa; border-radius:10px; border-left:4px solid #6c757d;">
+                <h4>⚙️ Choose Concepts to Practice</h4>
+                <p style="font-size:0.85em;color:#555;">
+                    Only concepts that make sense for the current scenario will be turned into questions.
+                </p>
+                <div class="options-grid">
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkPercent" checked>
+                        <div><strong>📊 Percentages</strong><br>Part as a percentage of a whole.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkPctChange" checked>
+                        <div><strong>📈 Percentage change</strong><br>Growth/decline from old to new value.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkPctPoints" checked>
+                        <div><strong>🎯 Percentage points</strong><br>Difference between two percentages.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkProportion" checked>
+                        <div><strong>🔢 Proportions</strong><br>Part as a decimal share of the total.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkRatio" checked>
+                        <div><strong>⚖️ Ratios</strong><br>Direct comparison of two quantities.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkIndex" checked>
+                        <div><strong>📑 Index numbers</strong><br>Compare current values to a base of 100.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkBps" checked>
+                        <div><strong>📌 Basis points</strong><br>Very small changes in interest rates.</div>
+                    </label>
+                </div>
+
+                <button class="btn" onclick="generateQuestions()" style="margin-top:10px;">🧮 Generate Questions</button>
+            </div>
+        </div>
+
+        <div id="calculationArea" class="calculation-area" style="display:none;">
+            <h3>📝 Questions & Feedback</h3>
+            <div id="questionsContainer"></div>
+            <button class="btn" onclick="checkAnswers()">✅ Check Answers</button>
+            <div id="interpretationDisplay"></div>
+        </div>
+
+        <div class="score-display">
+            <h3>🎯 Practice Progress</h3>
+            <div>Scenarios Practiced: <span id="scenariosCompleted">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Basic mathematical concepts practice loaded.");
+
+    var currentScenario = null;
+    var scenariosCompleted = 0;
+    var currentQuestions = [];
+
+    // Scenarios with fields for different concepts
+    var scenarios = [
+        {
+            id: "coffeeMarket",
+            title: "Market Share of a Coffee Chain",
+            description: "A national coffee chain operates in a city where total coffee shop sales last month were $500,000. This chain recorded sales of $135,000.",
+            context: "An analyst wants to describe the chain's market share in different ways.",
+            data: {
+                part: 135000,
+                whole: 500000
+            }
+        },
+        {
+            id: "unemployment",
+            title: "Unemployment Rate in Ontario",
+            description: "Last year, the unemployment rate in Ontario was 5.4%. This year, it rose to 7.1%.",
+            context: "A labour economist wants to describe the change in unemployment.",
+            data: {
+                oldValue: 5.4,
+                newValue: 7.1
+            }
+        },
+        {
+            id: "interestRate",
+            title: "Bank of Canada Policy Rate",
+            description: "The Bank of Canada's policy interest rate increased from 1.25% to 2.10%.",
+            context: "A financial journalist wants to express the size of the rate hike.",
+            data: {
+                oldValue: 1.25,
+                newValue: 2.10
+            }
+        },
+        {
+            id: "cpi",
+            title: "Consumer Price Index (CPI)",
+            description: "In the base year, the cost of a typical consumer basket was $120. This year, the same basket costs $138.",
+            context: "An economist wants to report the price index relative to the base year.",
+            data: {
+                baseValue: 120,
+                currentValue: 138
+            }
+        },
+        {
+            id: "schoolRatio",
+            title: "Student–Teacher Ratio at a High School",
+            description: "A high school has 560 students and 28 full-time teachers.",
+            context: "The school board wants to summarize the student–teacher ratio.",
+            data: {
+                ratioA: 560,
+                ratioB: 28
+            }
+        },
+        {
+            id: "vaccination",
+            title: "Vaccination Coverage in a Community",
+            description: "In a community of 1,000 residents, 860 have received a vaccine.",
+            context: "Public health officials want to report coverage in several ways.",
+            data: {
+                part: 860,
+                whole: 1000
+            }
+        }
+    ];
+
+    function generateScenario() {
+        var idx = Math.floor(Math.random() * scenarios.length);
+        currentScenario = scenarios[idx];
+        console.log("Scenario:", currentScenario.id);
+
+        document.getElementById("scenarioDisplay").style.display = "block";
+        document.getElementById("calculationArea").style.display = "none";
+        document.getElementById("interpretationDisplay").innerHTML = "";
+        document.getElementById("questionsContainer").innerHTML = "";
+        currentQuestions = [];
+
+        document.getElementById("scenarioTitle").textContent = "📊 " + currentScenario.title;
+
+        var descHtml = "";
+        descHtml += '<div class="data-block">';
+        descHtml += '<h4>📋 Context:</h4>';
+        descHtml += '<p style="margin-top:8px;">' + currentScenario.description + '</p>';
+        descHtml += '<p style="margin-top:8px;font-style:italic;color:#6c757d;"><strong>Goal:</strong> ' +
+                    currentScenario.context + '</p>';
+        descHtml += '</div>';
+        document.getElementById("scenarioDescription").innerHTML = descHtml;
+
+        displayScenarioData(currentScenario);
+
+        // Reset concept checkboxes to checked
+        var ids = ["chkPercent","chkPctChange","chkPctPoints","chkProportion","chkRatio","chkIndex","chkBps"];
+        for (var i = 0; i < ids.length; i++) {
+            var el = document.getElementById(ids[i]);
+            if (el) el.checked = true;
+        }
+    }
+
+    function displayScenarioData(scenario) {
+        var d = scenario.data;
+        var html = "";
+        html += '<h4>📋 Key Numbers</h4>';
+        html += '<div class="data-block">';
+        html += '<div class="data-grid">';
+
+        // Show relevant data in a generic way
+        if (typeof d.part === "number" && typeof d.whole === "number") {
+            html += '<div class="data-item"><strong>Part:</strong><br>' + d.part + '</div>';
+            html += '<div class="data-item"><strong>Whole:</strong><br>' + d.whole + '</div>';
+        }
+        if (typeof d.oldValue === "number" && typeof d.newValue === "number") {
+            html += '<div class="data-item"><strong>Old value:</strong><br>' + d.oldValue + '</div>';
+            html += '<div class="data-item"><strong>New value:</strong><br>' + d.newValue + '</div>';
+        }
+        if (typeof d.baseValue === "number" && typeof d.currentValue === "number") {
+            html += '<div class="data-item"><strong>Base value:</strong><br>' + d.baseValue + '</div>';
+            html += '<div class="data-item"><strong>Current value:</strong><br>' + d.currentValue + '</div>';
+        }
+        if (typeof d.ratioA === "number" && typeof d.ratioB === "number") {
+            html += '<div class="data-item"><strong>Quantity A:</strong><br>' + d.ratioA + '</div>';
+            html += '<div class="data-item"><strong>Quantity B:</strong><br>' + d.ratioB + '</div>';
+        }
+
+        html += '</div>';
+        html += '</div>';
+        document.getElementById("dataDisplay").innerHTML = html;
+    }
+
+    // Check which concepts make sense for this scenario
+    function scenarioSupportsConcept(conceptId) {
+        if (!currentScenario) return false;
+        var d = currentScenario.data;
+
+        if (conceptId === "percent" || conceptId === "proportion") {
+            return typeof d.part === "number" && typeof d.whole === "number";
+        }
+        if (conceptId === "pctChange" || conceptId === "pctPoints") {
+            return typeof d.oldValue === "number" && typeof d.newValue === "number";
+        }
+        if (conceptId === "ratio") {
+            // only in the explicitly ratio scenario
+            return currentScenario.id === "schoolRatio";
+        }
+        if (conceptId === "index") {
+            return typeof d.baseValue === "number" && typeof d.currentValue === "number";
+        }
+        if (conceptId === "bps") {
+            // only where old/new represent interest rates
+            return currentScenario.id === "interestRate";
+        }
+        return false;
+    }
+
+    function generateQuestions() {
+        if (!currentScenario) {
+            alert("Please generate a scenario first.");
+            return;
+        }
+
+        currentQuestions = [];
+        var container = document.getElementById("questionsContainer");
+        container.innerHTML = "";
+
+        var chkPercent = document.getElementById("chkPercent").checked;
+        var chkPctChange = document.getElementById("chkPctChange").checked;
+        var chkPctPoints = document.getElementById("chkPctPoints").checked;
+        var chkProportion = document.getElementById("chkProportion").checked;
+        var chkRatio = document.getElementById("chkRatio").checked;
+        var chkIndex = document.getElementById("chkIndex").checked;
+        var chkBps = document.getElementById("chkBps").checked;
+
+        if (chkPercent && scenarioSupportsConcept("percent")) {
+            addPercentQuestion();
+        }
+        if (chkProportion && scenarioSupportsConcept("proportion")) {
+            addProportionQuestion();
+        }
+        if (chkPctChange && scenarioSupportsConcept("pctChange")) {
+            addPctChangeQuestion();
+        }
+        if (chkPctPoints && scenarioSupportsConcept("pctPoints")) {
+            addPctPointsQuestion();
+        }
+        if (chkRatio && scenarioSupportsConcept("ratio")) {
+            addRatioQuestion();
+        }
+        if (chkIndex && scenarioSupportsConcept("index")) {
+            addIndexQuestion();
+        }
+        if (chkBps && scenarioSupportsConcept("bps")) {
+            addBpsQuestion();
+        }
+
+        if (currentQuestions.length === 0) {
+            container.innerHTML = "<p>No compatible concepts for this scenario with the current selection. Try another scenario or select different concepts.</p>";
+            document.getElementById("calculationArea").style.display = "block";
+            return;
+        }
+
+        // Render question cards
+        var html = "";
+        for (var i = 0; i < currentQuestions.length; i++) {
+            var q = currentQuestions[i];
+            html += renderQuestionCard(q, i);
+        }
+        container.innerHTML = html;
+        document.getElementById("calculationArea").style.display = "block";
+        document.getElementById("interpretationDisplay").innerHTML = "";
+    }
+
+    function renderQuestionCard(q, index) {
+        var html = "";
+        html += '<div class="question-card">';
+        html += '<h5>' + q.title + '</h5>';
+        html += '<p>' + q.prompt + '</p>';
+        html += '<div class="question-input">';
+        html += '<label for="answer_' + index + '"><strong>Your answer:</strong></label>';
+        html += '<input type="number" id="answer_' + index + '" step="any">';
+        if (q.unitHint) {
+            html += '<span>' + q.unitHint + '</span>';
+        }
+        html += '</div>';
+        html += '<div id="feedback_' + index + '" class="feedback"></div>';
+        html += '<div id="explain_' + index + '" class="step-explanation" style="display:none;"></div>';
+        html += '</div>';
+        return html;
+    }
+
+    /* ---- Add specific questions per concept ---- */
+
+    function addPercentQuestion() {
+        var d = currentScenario.data;
+        var percentage = (d.part / d.whole) * 100;
+        var title = "📊 Percentage";
+        var prompt = "What percentage does the part represent of the whole? (Use the numbers shown in the scenario.)";
+        // Slight scenario-specific phrasing
+        if (currentScenario.id === "coffeeMarket") {
+            prompt = "What percentage of total coffee shop sales does this chain hold?";
+        } else if (currentScenario.id === "vaccination") {
+            prompt = "What percentage of the community is vaccinated?";
+        }
+
+        currentQuestions.push({
+            conceptId: "percent",
+            title: title,
+            prompt: prompt,
+            correctValue: percentage,
+            format: "percent",
+            unitHint: "% (approx.)"
+        });
+    }
+
+    function addProportionQuestion() {
+        var d = currentScenario.data;
+        var prop = d.part / d.whole;
+        var title = "🔢 Proportion";
+        var prompt = "Express the part as a proportion (decimal between 0 and 1) of the whole.";
+        if (currentScenario.id === "vaccination") {
+            prompt = "Express the vaccinated share as a proportion of the total population.";
+        }
+        currentQuestions.push({
+            conceptId: "proportion",
+            title: title,
+            prompt: prompt,
+            correctValue: prop,
+            format: "decimal",
+            unitHint: "(decimal)"
+        });
+    }
+
+    function addPctChangeQuestion() {
+        var d = currentScenario.data;
+        var pctChange = ((d.newValue - d.oldValue) / d.oldValue) * 100;
+        var title = "📈 Percentage Change";
+        var prompt = "What is the percentage change from the old value to the new value?";
+        if (currentScenario.id === "unemployment") {
+            prompt = "By what percentage has the unemployment rate changed from last year to this year?";
+        } else if (currentScenario.id === "interestRate") {
+            prompt = "By what percentage has the policy interest rate changed from the old rate to the new rate?";
+        }
+        currentQuestions.push({
+            conceptId: "pctChange",
+            title: title,
+            prompt: prompt,
+            correctValue: pctChange,
+            format: "percent",
+            unitHint: "% (approx.)"
+        });
+    }
+
+    function addPctPointsQuestion() {
+        var d = currentScenario.data;
+        var diff = d.newValue - d.oldValue;
+        var title = "🎯 Percentage Points";
+        var prompt = "What is the change in percentage points between the old percentage and the new percentage?";
+        if (currentScenario.id === "unemployment") {
+            prompt = "By how many percentage points did the unemployment rate change (new − old)?";
+        } else if (currentScenario.id === "interestRate") {
+            prompt = "By how many percentage points did the policy rate change (new − old)?";
+        }
+        currentQuestions.push({
+            conceptId: "pctPoints",
+            title: title,
+            prompt: prompt,
+            correctValue: diff,
+            format: "points",
+            unitHint: "percentage points"
+        });
+    }
+
+    function addRatioQuestion() {
+        var d = currentScenario.data;
+        var ratio = d.ratioA / d.ratioB;
+        var title = "⚖️ Ratio";
+        var prompt = "What is the student–teacher ratio, expressed as the number of students per 1 teacher?";
+        currentQuestions.push({
+            conceptId: "ratio",
+            title: title,
+            prompt: prompt,
+            correctValue: ratio,
+            format: "ratioPer1",
+            unitHint: "students per 1 teacher"
+        });
+    }
+
+    function addIndexQuestion() {
+        var d = currentScenario.data;
+        var idx = (d.currentValue / d.baseValue) * 100;
+        var title = "📑 Index Number";
+        var prompt = "If the base period is set to 100, what is the index value for the current period?";
+        if (currentScenario.id === "cpi") {
+            prompt = "If the base year CPI is 100, what is the CPI index for the current year?";
+        }
+        currentQuestions.push({
+            conceptId: "index",
+            title: title,
+            prompt: prompt,
+            correctValue: idx,
+            format: "index",
+            unitHint: "(index, base = 100)"
+        });
+    }
+
+    function addBpsQuestion() {
+        var d = currentScenario.data;
+        var diff = d.newValue - d.oldValue; // difference in percentage points
+        var bps = diff * 100;              // 1 percentage point = 100 bps
+        var title = "📌 Basis Points";
+        var prompt = "By how many basis points did the policy interest rate change (new − old)?";
+        currentQuestions.push({
+            conceptId: "bps",
+            title: title,
+            prompt: prompt,
+            correctValue: bps,
+            format: "bps",
+            unitHint: "basis points"
+        });
+    }
+
+    /* ---- Answer checking ---- */
+
+    function checkAnswers() {
+        if (currentQuestions.length === 0) {
+            alert("No questions to check. Generate questions first.");
+            return;
+        }
+
+        var numCorrect = 0;
+
+        for (var i = 0; i < currentQuestions.length; i++) {
+            var q = currentQuestions[i];
+            var ansInput = document.getElementById("answer_" + i);
+            var feedbackEl = document.getElementById("feedback_" + i);
+            var explainEl = document.getElementById("explain_" + i);
+
+            if (!ansInput) continue;
+
+            var valStr = ansInput.value;
+            if (valStr === "") {
+                feedbackEl.textContent = "Please enter an answer.";
+                feedbackEl.className = "feedback";
+                explainEl.style.display = "none";
+                continue;
+            }
+
+            var userVal = parseFloat(valStr);
+            if (isNaN(userVal)) {
+                feedbackEl.textContent = "Please enter a numeric answer.";
+                feedbackEl.className = "feedback";
+                explainEl.style.display = "none";
+                continue;
+            }
+
+            var correct = q.correctValue;
+            var ok = isClose(userVal, correct, q.format);
+
+            if (ok) {
+                numCorrect++;
+                feedbackEl.textContent = "✅ Correct (expected about " + formatValue(correct, q.format) + ").";
+                feedbackEl.className = "feedback correct";
+            } else {
+                feedbackEl.textContent = "❌ Not quite. A good answer is about " + formatValue(correct, q.format) + ".";
+                feedbackEl.className = "feedback incorrect";
+            }
+
+            explainEl.innerHTML = getExplanationHtml(q);
+            explainEl.style.display = "block";
+        }
+
+        var interpLines = [];
+        interpLines.push("• You answered " + numCorrect + " out of " + currentQuestions.length + " questions correctly (within a small tolerance).");
+        interpLines.push("• Review the step-by-step explanations under each question to reinforce the formulas and interpretation.");
+        document.getElementById("interpretationDisplay").innerHTML =
+            '<div class="interpretation-box"><h4>🧠 Summary of This Practice Round</h4>' +
+            interpLines.join("<br>") + '</div>';
+
+        scenariosCompleted++;
+        document.getElementById("scenariosCompleted").textContent = String(scenariosCompleted);
+    }
+
+    function isClose(userVal, correctVal, format) {
+        var diff = Math.abs(userVal - correctVal);
+        var tolerance;
+        if (format === "percent" || format === "index" || format === "bps" || format === "points") {
+            tolerance = 0.5; // absolute tolerance (e.g. ±0.5%)
+        } else if (format === "ratioPer1") {
+            tolerance = Math.max(0.1, Math.abs(correctVal) * 0.05);
+        } else {
+            tolerance = Math.max(0.01, Math.abs(correctVal) * 0.02);
+        }
+        return diff <= tolerance;
+    }
+
+    function formatValue(val, format) {
+        var v = val;
+        if (format === "percent" || format === "index") {
+            return v.toFixed(2);
+        }
+        if (format === "bps") {
+            return v.toFixed(0);
+        }
+        if (format === "points") {
+            return v.toFixed(2);
+        }
+        if (format === "ratioPer1") {
+            return v.toFixed(2);
+        }
+        if (format === "decimal") {
+            return v.toFixed(3);
+        }
+        return v.toFixed(3);
+    }
+
+    function getExplanationHtml(q) {
+        var html = "";
+        html += "<strong>How to compute this:</strong><br>";
+
+        if (q.conceptId === "percent") {
+            html += "1. Use the formula: Percentage = (Part / Whole) × 100%.<br>";
+            html += "2. Substitute the numbers from the scenario.<br>";
+            html += "3. Multiply the fraction by 100 to convert to a percentage.";
+        } else if (q.conceptId === "proportion") {
+            html += "1. Use the formula: Proportion = Part / Whole.<br>";
+            html += "2. Divide the part by the whole to get a decimal between 0 and 1.<br>";
+            html += "3. This decimal can also be converted to a percentage by multiplying by 100.";
+        } else if (q.conceptId === "pctChange") {
+            html += "1. Use the formula: % change = (New − Old) / Old × 100%.<br>";
+            html += "2. Subtract the old value from the new value.<br>";
+            html += "3. Divide by the old value.<br>";
+            html += "4. Multiply by 100 to express as a percentage.";
+        } else if (q.conceptId === "pctPoints") {
+            html += "1. Percentage points are the simple difference between two percentages.<br>";
+            html += "2. Compute: New % − Old %.<br>";
+            html += "3. Do not divide by the old value for percentage points.";
+        } else if (q.conceptId === "ratio") {
+            html += "1. Ratios compare two quantities directly.<br>";
+            html += "2. Here we take A / B to get 'A per 1 B'.<br>";
+            html += "3. For example, students per teacher = number of students ÷ number of teachers.";
+        } else if (q.conceptId === "index") {
+            html += "1. Index numbers compare the current value to a base period set to 100.<br>";
+            html += "2. Use: Index = (Current / Base) × 100.<br>";
+            html += "3. An index of 112 means the current value is 12% higher than the base.";
+        } else if (q.conceptId === "bps") {
+            html += "1. First find the change in the rate in percentage points: New % − Old %.<br>";
+            html += "2. Each percentage point is 100 basis points.<br>";
+            html += "3. Multiply the percentage point change by 100 to get basis points.";
+        } else {
+            html += "Review the formula and substitute the numbers from the scenario carefully.";
+        }
+        return html;
+    }
+
+    function resetPractice() {
+        currentScenario = null;
+        currentQuestions = [];
+        scenariosCompleted = 0;
+        document.getElementById("scenariosCompleted").textContent = "0";
+        document.getElementById("scenarioDisplay").style.display = "none";
+        document.getElementById("calculationArea").style.display = "none";
+        document.getElementById("questionsContainer").innerHTML = "";
+        document.getElementById("interpretationDisplay").innerHTML = "";
+        document.getElementById("dataDisplay").innerHTML = "";
+        document.getElementById("scenarioDescription").innerHTML = "";
+        console.log("Practice reset.");
+    }
+
+    document.getElementById("scenariosCompleted").textContent = "0";
+</script>
+</body>
+</html>
