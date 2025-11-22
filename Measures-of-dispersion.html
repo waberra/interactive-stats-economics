@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Measures of Dispersion - Interactive Statistics Tool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #a71e2a;
+        }
+
+        .red-title h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 25px;
+        }
+
+        .blue-concepts h3 {
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .measures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .measure-card {
+            padding: 18px;
+            border-radius: 15px;
+            border: 3px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .range-card { background: linear-gradient(135deg, #28a745, #20c997); border-color:#1e7e34; color:white; }
+        .iqr-card   { background: linear-gradient(135deg, #17a2b8, #138496); border-color:#117a8b; color:white; }
+        .variance-card { background: linear-gradient(135deg, #fd7e14, #e55353); border-color:#d63384; color:white; }
+        .stddev-card { background: linear-gradient(135deg, #6f42c1, #8e44ad); border-color:#563d7c; color:white; }
+        .mad-card { background: linear-gradient(135deg, #ffc107, #ff8800); border-color:#d39e00; color:#212529; }
+        .cv-card { background: linear-gradient(135deg, #e83e8c, #d91a72); border-color:#c7185d; color:white; }
+
+        .measure-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .measure-card .formula {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .measure-card .description { margin-bottom: 10px; font-size:0.9em; }
+        .measure-card .use-cases { margin-bottom: 10px; font-style: italic; font-size:0.85em; }
+        .measure-card .examples { font-size:0.8em; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px; }
+
+        .interactive-section {
+            padding: 25px;
+            background: #f8f9fa;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+
+        .scenario-display,
+        .calculation-area {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .scenario-display { border-left: 5px solid #28a745; }
+        .calculation-area { border-left: 5px solid #ffc107; }
+
+        .btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 6px 4px;
+            box-shadow: 0 4px 10px rgba(40,167,69,0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 10px rgba(108,117,125,0.3);
+        }
+
+        .data-block {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            margin: 10px 0 0 0;
+        }
+
+        .data-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap:8px;
+            text-align:center;
+        }
+
+        .data-item {
+            background:#f8f9fa;
+            padding:8px;
+            border-radius:5px;
+            border:1px solid #dee2e6;
+            font-size:0.9em;
+        }
+
+        .options-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+            gap:10px;
+            margin-top:10px;
+        }
+
+        .option-checkbox {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            border-radius: 10px;
+            padding: 8px 10px;
+            border: 2px solid #ced4da;
+            display:flex;
+            gap:8px;
+            align-items:flex-start;
+            font-size:0.85em;
+        }
+
+        .measure-result {
+            background: #e9f7ef;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            font-size:0.9em;
+        }
+
+        .step-by-step {
+            background:#f8f9fa;
+            border:2px solid #dee2e6;
+            border-radius:10px;
+            padding:15px;
+            margin: 10px 0;
+            font-size:0.9em;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding:10px;
+            border-left:4px solid #007bff;
+            background:white;
+            border-radius:5px;
+        }
+
+        .step h5 {
+            color:#007bff;
+            font-size:0.95em;
+            margin-bottom:5px;
+        }
+
+        .interpretation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding:15px;
+            border-radius:10px;
+            margin:15px 0;
+            border:2px solid #2196f3;
+            font-size:0.9em;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color:white;
+            padding:15px;
+            text-align:center;
+            border-radius:12px;
+            margin:10px 0 20px 0;
+            border:3px solid #c7185d;
+            box-shadow:0 4px 15px rgba(232,62,140,0.3);
+            font-size:0.9em;
+        }
+
+        @media (max-width:768px) {
+            .measures-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="red-title">
+        <h1>📊 Measures of Dispersion (Variability)</h1>
+        <p>Explore how spread out data are around the center using real-world scenarios</p>
+    </div>
+
+    <div class="blue-concepts">
+        <h3>📏 Key Measures of Dispersion</h3>
+        <div class="measures-grid">
+            <div class="measure-card range-card">
+                <h4>📏 Range</h4>
+                <div class="formula">Range = Max − Min</div>
+                <div class="description">Quick snapshot of total spread.</div>
+                <div class="use-cases"><strong>Use:</strong> First check of variability.</div>
+                <div class="examples"><strong>Examples:</strong> Temperature range, salary range.</div>
+            </div>
+
+            <div class="measure-card iqr-card">
+                <h4>📦 Interquartile Range (IQR)</h4>
+                <div class="formula">IQR = Q₃ − Q₁</div>
+                <div class="description">Spread of the middle 50% of values.</div>
+                <div class="use-cases"><strong>Use:</strong> Skewed data, outliers.</div>
+                <div class="examples"><strong>Examples:</strong> Typical house price spread.</div>
+            </div>
+
+            <div class="measure-card variance-card">
+                <h4>📐 Population vs Sample Variance</h4>
+                <div class="formula">σ² = Σ(x−μ)² / N<br>s² = Σ(x−x̄)² / (n−1)</div>
+                <div class="description">Average squared distance from the mean.</div>
+                <div class="use-cases"><strong>Use:</strong> Modelling, ANOVA, risk.</div>
+                <div class="examples"><strong>Examples:</strong> Variance of scores or returns.</div>
+            </div>
+
+            <div class="measure-card stddev-card">
+                <h4>📊 Population vs Sample SD</h4>
+                <div class="formula">σ = √σ² &nbsp; s = √s²</div>
+                <div class="description">Typical distance from the mean (same units).</div>
+                <div class="use-cases"><strong>Use:</strong> Communicating variability.</div>
+                <div class="examples"><strong>Examples:</strong> Volatility, QC spread.</div>
+            </div>
+
+            <div class="measure-card mad-card">
+                <h4>❤️ Median Absolute Deviation (MAD)</h4>
+                <div class="formula">MAD = median(|x − median(x)|)</div>
+                <div class="description">Robust spread around the median.</div>
+                <div class="use-cases"><strong>Use:</strong> Skewed data, outliers.</div>
+                <div class="examples"><strong>Examples:</strong> Travel times with delays.</div>
+            </div>
+
+            <div class="measure-card cv-card">
+                <h4>⚖️ Coefficient of Variation (CV)</h4>
+                <div class="formula">CV = (s / x̄) × 100%</div>
+                <div class="description">Spread relative to the mean (unit-free).</div>
+                <div class="use-cases"><strong>Use:</strong> Compare variability across scales.</div>
+                <div class="examples"><strong>Examples:</strong> Two investments, two machines.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="interactive-section">
+        <div class="control-panel">
+            <h3>🎮 Interactive Calculations</h3>
+            <p>Choose a scenario, then calculate and interpret different measures of dispersion.</p>
+            <button class="btn" onclick="generateScenario()">📊 Generate New Scenario</button>
+            <button class="btn btn-secondary" onclick="resetCalculator()">🔄 Reset</button>
+        </div>
+
+        <div id="scenarioDisplay" class="scenario-display" style="display:none;">
+            <h3 id="scenarioTitle">📋 Scenario</h3>
+            <div id="scenarioDescription"></div>
+            <div id="dataDisplay"></div>
+
+            <div style="margin-top: 10px; padding: 12px; background:#f8f9fa; border-radius:10px; border-left:4px solid #6c757d;">
+                <h4>⚙️ Select Measures to Calculate</h4>
+                <p style="font-size:0.85em;color:#555;">CV uses sample SD and only makes sense when the mean ≠ 0.</p>
+                <div class="options-grid">
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkRange" checked>
+                        <div><strong>📏 Range</strong><br>Total spread (max − min).</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkIQR" checked>
+                        <div><strong>📦 IQR</strong><br>Spread of middle 50%.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkPopVar" checked>
+                        <div><strong>📐 Population Variance (σ²)</strong></div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkSampVar" checked>
+                        <div><strong>📐 Sample Variance (s²)</strong></div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkPopSD" checked>
+                        <div><strong>📊 Population SD (σ)</strong></div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkSampSD" checked>
+                        <div><strong>📊 Sample SD (s)</strong></div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkMAD" checked>
+                        <div><strong>❤️ MAD</strong></div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkCV" checked>
+                        <div><strong>⚖️ CV</strong></div>
+                    </label>
+                </div>
+
+                <button class="btn" onclick="calculateMeasures()" style="margin-top:10px;">🧮 Calculate Selected Measures</button>
+            </div>
+        </div>
+
+        <div id="calculationArea" class="calculation-area" style="display:none;">
+            <h3>📝 Calculations & Results</h3>
+            <div id="calculationSteps"></div>
+            <div id="resultsDisplay"></div>
+            <div id="interpretationDisplay"></div>
+            <button class="btn" onclick="generateScenario()">➡️ Try Another Scenario</button>
+        </div>
+
+        <div class="score-display">
+            <h3>🎯 Practice Progress</h3>
+            <div>Scenarios Explored: <span id="scenariosCompleted">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // simple console check so you can see if JS runs at all
+    console.log("Measures of dispersion script loaded.");
+
+    var currentScenario = null;
+    var scenariosCompleted = 0;
+
+    var scenarios = [
+        {
+            title: "Canadian Tech Startup Salaries",
+            description: "Annual salaries (in CAD) for developers at a Toronto startup.",
+            context: "HR wants to summarize how unequal salaries are within the team.",
+            data: [65000, 68000, 72000, 75000, 78000, 82000, 85000, 88000, 165000]
+        },
+        {
+            title: "Customer Waiting Times at a Montreal Bank",
+            description: "Customer waiting times (in minutes) during peak hours.",
+            context: "Operations wants to see how consistent service times are.",
+            data: [3, 4, 5, 6, 7, 8, 9, 25, 30]
+        },
+        {
+            title: "Daily CAD/USD Exchange Rates",
+            description: "Daily CAD/USD exchange rates over a trading week.",
+            context: "A bank analyst wants to describe exchange rate volatility.",
+            data: [0.725, 0.731, 0.718, 0.742, 0.728, 0.735, 0.721]
+        },
+        {
+            title: "Quality Control in an Ontario Factory",
+            description: "Rod lengths (mm) with target length 100 mm.",
+            context: "Engineers want to monitor variation around the target.",
+            data: [99.6, 100.3, 100.1, 99.8, 100.4, 99.9, 100.2, 100.0, 99.7]
+        },
+        {
+            title: "House Prices in a Mixed Neighbourhood",
+            description: "Home sale prices (CAD) in a Canadian city.",
+            context: "A planner wants to summarize typical and extreme variability.",
+            data: [420000, 450000, 480000, 520000, 560000, 600000, 1350000]
+        }
+    ];
+
+    function generateScenario() {
+        var index = Math.floor(Math.random() * scenarios.length);
+        currentScenario = scenarios[index];
+        console.log("Generated scenario:", currentScenario.title);
+
+        var scenarioDisplay = document.getElementById("scenarioDisplay");
+        scenarioDisplay.style.display = "block";
+
+        document.getElementById("calculationArea").style.display = "none";
+
+        document.getElementById("scenarioTitle").textContent = "📊 " + currentScenario.title;
+        document.getElementById("scenarioDescription").innerHTML =
+            '<div class="data-block">' +
+            '<h4>📋 Context:</h4>' +
+            '<p style="margin-top:8px;">' + currentScenario.description + '</p>' +
+            '<p style="margin-top:8px;font-style:italic;color:#6c757d;"><strong>Goal:</strong> ' +
+            currentScenario.context + '</p></div>';
+
+        displayData(currentScenario.data);
+
+        // reset checkboxes
+        var ids = ["chkRange","chkIQR","chkPopVar","chkSampVar","chkPopSD","chkSampSD","chkMAD","chkCV"];
+        for (var i = 0; i < ids.length; i++) {
+            var el = document.getElementById(ids[i]);
+            if (el) { el.checked = true; }
+        }
+    }
+
+    function displayData(data) {
+        var html = '<h4>📋 Numerical Data</h4>' +
+            '<div class="data-block">' +
+            '<div class="data-grid">';
+        for (var i = 0; i < data.length; i++) {
+            html += '<div class="data-item"><strong>' + data[i] + '</strong></div>';
+        }
+        html += '</div><p style="margin-top:10px;color:#6c757d;text-align:center;">n = ' +
+                data.length + ' observations</p></div>';
+        document.getElementById("dataDisplay").innerHTML = html;
+    }
+
+    function calculateMeasures() {
+        if (!currentScenario) {
+            alert("Please generate a scenario first.");
+            return;
+        }
+
+        var data = currentScenario.data.slice();
+        var n = data.length;
+        if (n < 2) {
+            alert("Need at least 2 observations.");
+            return;
+        }
+
+        var mean = calculateMean(data);
+        var median = calculateMedian(data.slice());
+        var sorted = data.slice().sort(function(a,b){ return a-b; });
+
+        var results = {};
+        var steps = "";
+
+        if (document.getElementById("chkRange").checked) {
+            var r = calculateRange(sorted);
+            results.range = r;
+            steps += rangeSteps(sorted, r);
+        }
+
+        if (document.getElementById("chkIQR").checked) {
+            var q = calculateQuartiles(sorted);
+            results.iqr = q.iqr;
+            steps += iqrSteps(sorted, q);
+        }
+
+        var needPop = document.getElementById("chkPopVar").checked ||
+                       document.getElementById("chkPopSD").checked;
+        var needSamp = document.getElementById("chkSampVar").checked ||
+                        document.getElementById("chkSampSD").checked ||
+                        document.getElementById("chkCV").checked;
+
+        var popVar = null, popSD = null, sampVar = null, sampSD = null;
+
+        if (needPop) {
+            popVar = populationVariance(data, mean);
+            popSD = Math.sqrt(popVar);
+        }
+        if (needSamp) {
+            sampVar = sampleVariance(data, mean);
+            sampSD = Math.sqrt(sampVar);
+        }
+
+        if (document.getElementById("chkPopVar").checked) {
+            results.popVar = popVar;
+            steps += popVarSteps(data, mean, popVar);
+        }
+        if (document.getElementById("chkPopSD").checked) {
+            results.popSD = popSD;
+            steps += popSdSteps(popVar, popSD);
+        }
+        if (document.getElementById("chkSampVar").checked) {
+            results.sampVar = sampVar;
+            steps += sampVarSteps(data, mean, sampVar);
+        }
+        if (document.getElementById("chkSampSD").checked) {
+            results.sampSD = sampSD;
+            steps += sampSdSteps(sampVar, sampSD);
+        }
+
+        if (document.getElementById("chkMAD").checked) {
+            var madVal = mad(data, median);
+            results.mad = madVal;
+            steps += madSteps(data, median, madVal);
+        }
+
+        if (document.getElementById("chkCV").checked) {
+            if (mean === 0) {
+                steps += cvMeanZeroSteps();
+            } else {
+                if (sampSD == null) {
+                    sampVar = sampleVariance(data, mean);
+                    sampSD = Math.sqrt(sampVar);
+                }
+                var cvVal = (sampSD / mean) * 100;
+                results.cv = cvVal;
+                steps += cvSteps(mean, sampSD, cvVal);
+            }
+        }
+
+        document.getElementById("calculationArea").style.display = "block";
+        document.getElementById("calculationSteps").innerHTML =
+            '<div class="step-by-step">' + steps + '</div>';
+
+        showResults(results);
+        showInterpretation(results, mean, median);
+
+        scenariosCompleted++;
+        document.getElementById("scenariosCompleted").textContent = String(scenariosCompleted);
+        document.getElementById("calculationArea").scrollIntoView({behavior:"smooth"});
+    }
+
+    // --- basic stats helpers ---
+
+    function calculateMean(data) {
+        var sum = 0;
+        for (var i=0;i<data.length;i++){ sum += data[i]; }
+        return sum / data.length;
+    }
+
+    function calculateMedian(data) {
+        data.sort(function(a,b){ return a-b; });
+        var n = data.length;
+        if (n % 2 === 0) {
+            return (data[n/2 - 1] + data[n/2]) / 2;
+        } else {
+            return data[(n-1)/2];
+        }
+    }
+
+    function calculateRange(sorted) {
+        return sorted[sorted.length-1] - sorted[0];
+    }
+
+    function calculateQuartiles(sorted) {
+        var n = sorted.length;
+        var mid = Math.floor(n/2);
+        var lower, upper;
+        if (n % 2 === 0) {
+            lower = sorted.slice(0, mid);
+            upper = sorted.slice(mid);
+        } else {
+            lower = sorted.slice(0, mid);
+            upper = sorted.slice(mid+1);
+        }
+        var q1 = calculateMedian(lower);
+        var q3 = calculateMedian(upper);
+        return { q1:q1, q3:q3, iqr:(q3-q1) };
+    }
+
+    function populationVariance(data, mean) {
+        var n = data.length;
+        var sumSq = 0;
+        for (var i=0;i<n;i++){
+            var d = data[i] - mean;
+            sumSq += d*d;
+        }
+        return sumSq / n;
+    }
+
+    function sampleVariance(data, mean) {
+        var n = data.length;
+        var sumSq = 0;
+        for (var i=0;i<n;i++){
+            var d = data[i] - mean;
+            sumSq += d*d;
+        }
+        return sumSq / (n-1);
+    }
+
+    function mad(data, med) {
+        var absDevs = [];
+        for (var i=0;i<data.length;i++){
+            absDevs.push(Math.abs(data[i]-med));
+        }
+        return calculateMedian(absDevs);
+    }
+
+    // --- step text blocks ---
+
+    function rangeSteps(sorted, r) {
+        return '<div class="step">' +
+            '<h5>📏 Range</h5>' +
+            '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>' +
+            '<p>Range = max − min = ' + r.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function iqrSteps(sorted, q) {
+        return '<div class="step">' +
+            '<h5>📦 Interquartile Range (IQR)</h5>' +
+            '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>' +
+            '<p>Q₁ = ' + q.q1.toFixed(3) + ', Q₃ = ' + q.q3.toFixed(3) + '</p>' +
+            '<p>IQR = Q₃ − Q₁ = ' + q.iqr.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function popVarSteps(data, mean, v) {
+        var devs = [], sq = [];
+        for (var i=0;i<data.length;i++){
+            var d = data[i]-mean;
+            devs.push(d);
+            sq.push(d*d);
+        }
+        return '<div class="step">' +
+            '<h5>📐 Population Variance (σ²)</h5>' +
+            '<p>σ² = Σ(x−μ)² / N</p>' +
+            '<p>μ = ' + mean.toFixed(3) + '</p>' +
+            '<p>Deviations: ' + devs.map(function(d){return d.toFixed(3);}).join(', ') + '</p>' +
+            '<p>Squared deviations: ' + sq.map(function(s){return s.toFixed(3);}).join(', ') + '</p>' +
+            '<p>σ² = ' + v.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function popSdSteps(v, sd) {
+        return '<div class="step">' +
+            '<h5>📊 Population SD (σ)</h5>' +
+            '<p>σ = √σ² = √' + v.toFixed(3) + ' = ' + sd.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function sampVarSteps(data, mean, v) {
+        var devs = [], sq=[];
+        for (var i=0;i<data.length;i++){
+            var d = data[i]-mean;
+            devs.push(d);
+            sq.push(d*d);
+        }
+        return '<div class="step">' +
+            '<h5>📐 Sample Variance (s²)</h5>' +
+            '<p>s² = Σ(x−x̄)² / (n−1)</p>' +
+            '<p>x̄ = ' + mean.toFixed(3) + '</p>' +
+            '<p>Deviations: ' + devs.map(function(d){return d.toFixed(3);}).join(', ') + '</p>' +
+            '<p>Squared deviations: ' + sq.map(function(s){return s.toFixed(3);}).join(', ') + '</p>' +
+            '<p>s² = ' + v.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function sampSdSteps(v, sd) {
+        return '<div class="step">' +
+            '<h5>📊 Sample SD (s)</h5>' +
+            '<p>s = √s² = √' + v.toFixed(3) + ' = ' + sd.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function madSteps(data, med, m) {
+        var absDevs = [];
+        for (var i=0;i<data.length;i++){
+            absDevs.push(Math.abs(data[i]-med));
+        }
+        return '<div class="step">' +
+            '<h5>❤️ Median Absolute Deviation (MAD)</h5>' +
+            '<p>Median = ' + med.toFixed(3) + '</p>' +
+            '<p>|x − median|: ' + absDevs.map(function(d){return d.toFixed(3);}).join(', ') + '</p>' +
+            '<p>MAD = ' + m.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function cvSteps(mean, sd, cv) {
+        return '<div class="step">' +
+            '<h5>⚖️ Coefficient of Variation (CV)</h5>' +
+            '<p>CV = (s / x̄) × 100%</p>' +
+            '<p>x̄ = ' + mean.toFixed(3) + ', s = ' + sd.toFixed(3) + '</p>' +
+            '<p>CV ≈ ' + cv.toFixed(2) + '%</p>' +
+            '</div>';
+    }
+
+    function cvMeanZeroSteps() {
+        return '<div class="step">' +
+            '<h5>⚖️ Coefficient of Variation (CV)</h5>' +
+            '<p>The mean is 0, so CV is not defined (division by 0).</p>' +
+            '</div>';
+    }
+
+    function showResults(results) {
+        var names = {
+            range: "📏 Range",
+            iqr: "📦 IQR",
+            popVar: "📐 Population Variance (σ²)",
+            sampVar: "📐 Sample Variance (s²)",
+            popSD: "📊 Population SD (σ)",
+            sampSD: "📊 Sample SD (s)",
+            mad: "❤️ MAD",
+            cv: "⚖️ CV"
+        };
+        var html = "<h4>📊 Numerical Results</h4>";
+        var keys = Object.keys(results);
+        if (keys.length === 0) {
+            html += "<p>No measures selected.</p>";
+        } else {
+            for (var i=0;i<keys.length;i++){
+                var k = keys[i];
+                var v = results[k];
+                var display = (k === "cv") ? v.toFixed(2) + " %" : v.toFixed(3);
+                html += '<div class="measure-result">' +
+                        '<span><strong>' + names[k] + ':</strong></span>' +
+                        '<span>' + display + '</span></div>';
+            }
+        }
+        document.getElementById("resultsDisplay").innerHTML = html;
+    }
+
+    function showInterpretation(results, mean, median) {
+        var lines = [];
+        if (results.range !== undefined) {
+            lines.push("• The <strong>range</strong> shows the total gap between smallest and largest values.");
+        }
+        if (results.iqr !== undefined) {
+            lines.push("• The <strong>IQR</strong> describes how spread out the middle 50% of observations are, ignoring extremes.");
+        }
+        if (results.sampSD !== undefined || results.popSD !== undefined) {
+            var sd = results.sampSD || results.popSD;
+            lines.push("• The <strong>standard deviation</strong> (~" + sd.toFixed(3) + ") is the typical distance from the mean.");
+        }
+        if (results.mad !== undefined) {
+            lines.push("• The <strong>MAD</strong> (~" + results.mad.toFixed(3) + ") is a robust spread around the median (" + median.toFixed(3) + ").");
+        }
+        if (results.cv !== undefined && mean !== 0) {
+            lines.push("• The <strong>CV</strong> (" + results.cv.toFixed(2) + "%) measures variability relative to the mean (" + mean.toFixed(3) + ").");
+        }
+        if (lines.length === 0) {
+            lines.push("• Select at least one measure to see an interpretation.");
+        }
+        document.getElementById("interpretationDisplay").innerHTML =
+            '<div class="interpretation-box"><h4>🧠 Interpreting the Spread</h4>' +
+            lines.join("<br>") + '</div>';
+    }
+
+    function resetCalculator() {
+        currentScenario = null;
+        scenariosCompleted = 0;
+        document.getElementById("scenariosCompleted").textContent = "0";
+        document.getElementById("scenarioDisplay").style.display = "none";
+        document.getElementById("calculationArea").style.display = "none";
+        console.log("Reset complete.");
+    }
+
+    // initialize counter
+    document.getElementById("scenariosCompleted").textContent = "0";
+</script>
+</body>
+</html>
