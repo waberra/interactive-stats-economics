@@ -681,4 +681,251 @@
         var L = (p / 100) * (n + 1);
 
         if (L <= 1) return sortedData[0];
-        if (L >= n) return sor
+        if (L >= n) return sortedData[n - 1];
+
+        var k = Math.floor(L);
+        var d = L - k;
+
+        if (d === 0) {
+            return sortedData[k - 1];
+        } else {
+            var lower = sortedData[k - 1];
+            var upper = sortedData[k];
+            return lower + d * (upper - lower);
+        }
+    }
+
+    /* ---- Step text ---- */
+
+    function medianSteps(sorted, median) {
+        var html = "";
+        html += '<div class="step">';
+        html += '<h5>📌 Median (Q2)</h5>';
+        html += '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>';
+        html += '<p>The median is the middle value when the data are ordered.</p>';
+        html += '<p><strong>Median (Q2):</strong> ' + median.toFixed(3) + '</p>';
+        html += '</div>';
+        return html;
+    }
+
+    function q1Steps(sorted, quarts) {
+        var html = "";
+        html += '<div class="step">';
+        html += '<h5>📦 First Quartile (Q1)</h5>';
+        html += '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>';
+        html += '<p>We split the data into a lower and upper half <strong>excluding the median (Q2)</strong> when n is odd.</p>';
+        html += '<p><strong>Lower half:</strong> [' + quarts.lowerHalf.join(', ') + ']</p>';
+        html += '<p>Q1 is the median of this lower half.</p>';
+        html += '<p><strong>Q1:</strong> ' + quarts.q1.toFixed(3) + '</p>';
+        html += '</div>';
+        return html;
+    }
+
+    function q3Steps(sorted, quarts) {
+        var html = "";
+        html += '<div class="step">';
+        html += '<h5>📦 Third Quartile (Q3)</h5>';
+        html += '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>';
+        html += '<p>Upper half (again excluding the median when n is odd):</p>';
+        html += '<p><strong>Upper half:</strong> [' + quarts.upperHalf.join(', ') + ']</p>';
+        html += '<p>Q3 is the median of this upper half.</p>';
+        html += '<p><strong>Q3:</strong> ' + quarts.q3.toFixed(3) + '</p>';
+        html += '</div>';
+        return html;
+    }
+
+    function fiveNumSteps(sorted, five) {
+        var html = "";
+        html += '<div class="step">';
+        html += '<h5>🖐️ Five-Number Summary</h5>';
+        html += '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>';
+        html += '<p>Min = ' + five.min.toFixed(3) +
+                ', Q1 = ' + five.q1.toFixed(3) +
+                ', Median = ' + five.median.toFixed(3) +
+                ', Q3 = ' + five.q3.toFixed(3) +
+                ', Max = ' + five.max.toFixed(3) + '</p>';
+        html += '</div>';
+        return html;
+    }
+
+    function percentileSteps(sorted, percList, percResults) {
+        var html = "";
+        html += '<div class="step">';
+        html += '<h5>🎯 Percentiles using L = (p/100)(n + 1)</h5>';
+        html += '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>';
+        var n = sorted.length;
+        html += '<p><strong>n = ' + n + '</strong></p>';
+
+        for (var i = 0; i < percList.length; i++) {
+            var p = percList[i];
+            var L = (p / 100) * (n + 1);
+            var value = percentileValue(sorted, p);
+            percResults[p] = value;
+
+            html += '<p><strong>p = ' + p + '%:</strong> ';
+            html += 'L = (p/100)(n + 1) = (' + p + '/100) × (' + n + ' + 1) = ';
+            html += L.toFixed(3) + '. ';
+            html += 'Approximate P' + p + ' ≈ ' + value.toFixed(3) + '.</p>';
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    /* ---- Boxplot rendering ---- */
+
+    function renderBoxplot(fiveNum) {
+        var container = document.getElementById("boxplotDisplay");
+        if (!container) return;
+
+        if (!fiveNum) {
+            container.innerHTML = "";
+            return;
+        }
+
+        var min = fiveNum.min;
+        var q1 = fiveNum.q1;
+        var med = fiveNum.median;
+        var q3 = fiveNum.q3;
+        var max = fiveNum.max;
+
+        var range = max - min;
+        if (range <= 0) range = 1;
+
+        function pct(v) {
+            return ((v - min) / range) * 100;
+        }
+
+        var leftMin = pct(min);
+        var leftQ1 = pct(q1);
+        var leftMed = pct(med);
+        var leftQ3 = pct(q3);
+        var leftMax = pct(max);
+
+        var html = "";
+        html += '<div class="boxplot-container">';
+        html += '<div class="boxplot-title">📦 Box-and-Whisker Plot (Min, Q1, Median, Q3, Max)</div>';
+        html += '<div class="boxplot-bar">';
+
+        html += '<div class="box-whisker-line" style="left:' + leftMin + '%; width:' + (leftMax - leftMin) + '%;"></div>';
+
+        html += '<div class="box-whisker-cap" style="left:' + leftMin + '%;"></div>';
+        html += '<div class="box-whisker-cap" style="left:' + leftMax + '%;"></div>';
+
+        html += '<div class="box-box" style="left:' + leftQ1 + '%; width:' + (leftQ3 - leftQ1) + '%;"></div>';
+
+        html += '<div class="box-median" style="left:' + leftMed + '%;"></div>';
+
+        html += '</div>';
+        html += '<div class="boxplot-caption">';
+        html += 'Box shows the middle 50% (Q1 to Q3). The vertical line is the median (Q2). ';
+        html += 'Whiskers extend to Min and Max.';
+        html += '</div>';
+        html += '</div>';
+
+        container.innerHTML = html;
+    }
+
+    /* ---- Results & interpretation ---- */
+
+    function showLocationResults(results) {
+        var names = {
+            median: "📌 Median (Q2)",
+            q1: "📦 First Quartile (Q1)",
+            q3: "📦 Third Quartile (Q3)",
+            fiveNum: "🖐️ Five-Number Summary",
+            percentiles: "🎯 Standard Percentiles (10, 25, 50, 75, 90)"
+        };
+
+        var html = "<h4>📊 Location Results</h4>";
+        var keys = [];
+        for (var k in results) {
+            if (results.hasOwnProperty(k)) keys.push(k);
+        }
+
+        if (keys.length === 0) {
+            html += "<p>No measures selected.</p>";
+        } else {
+            for (var i=0; i<keys.length; i++) {
+                var key = keys[i];
+                var v = results[key];
+                if (key === "fiveNum") {
+                    html += '<div class="measure-result">';
+                    html += '<span><strong>' + names[key] + ':</strong></span>';
+                    html += '<span>Min = ' + v.min.toFixed(3) +
+                            ', Q1 = ' + v.q1.toFixed(3) +
+                            ', Median = ' + v.median.toFixed(3) +
+                            ', Q3 = ' + v.q3.toFixed(3) +
+                            ', Max = ' + v.max.toFixed(3) + '</span>';
+                    html += '</div>';
+                } else if (key === "percentiles") {
+                    var parts = [];
+                    for (var p in v) {
+                        if (v.hasOwnProperty(p)) {
+                            parts.push('P' + p + ' ≈ ' + v[p].toFixed(3));
+                        }
+                    }
+                    html += '<div class="measure-result">';
+                    html += '<span><strong>' + names[key] + ':</strong></span>';
+                    html += '<span>' + parts.join('; ') + '</span>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="measure-result">';
+                    html += '<span><strong>' + names[key] + ':</strong></span>';
+                    html += '<span>' + v.toFixed(3) + '</span>';
+                    html += '</div>';
+                }
+            }
+        }
+
+        document.getElementById("resultsDisplay").innerHTML = html;
+    }
+
+    function showLocationInterpretation(results, median) {
+        var lines = [];
+
+        if (results.median !== undefined) {
+            lines.push("• The <strong>median (Q2)</strong> of approximately " +
+                results.median.toFixed(3) +
+                " splits the data so that about half of the observations lie below and half above.");
+        }
+        if (results.q1 !== undefined) {
+            lines.push("• The <strong>first quartile (Q1)</strong> is the location where roughly 25% of the data lie below.");
+        }
+        if (results.q3 !== undefined) {
+            lines.push("• The <strong>third quartile (Q3)</strong> is the location where roughly 75% of the data lie below.");
+        }
+        if (results.fiveNum !== undefined) {
+            lines.push("• The <strong>five-number summary</strong> shows the extremes (Min, Max) and the middle 50% (from Q1 to Q3).");
+        }
+        if (results.percentiles !== undefined) {
+            lines.push("• The <strong>percentiles</strong> locate specific positions in the ordered data (e.g., 10th, 25th, 50th, 75th, 90th).");
+            lines.push("• The simple rank formula <strong>L = (p/100)(n + 1)</strong> gives the position in the ordered list; if L is not an integer, we interpolate between neighbours.");
+        }
+        if (lines.length === 0) {
+            lines.push("• Select at least one measure to see an interpretation.");
+        }
+
+        var html = "";
+        html += '<div class="interpretation-box">';
+        html += '<h4>🧠 Interpreting Location</h4>';
+        html += lines.join("<br>");
+        html += '</div>';
+
+        document.getElementById("interpretationDisplay").innerHTML = html;
+    }
+
+    function resetCalculator() {
+        currentScenario = null;
+        scenariosCompleted = 0;
+        document.getElementById("scenariosCompleted").textContent = "0";
+        document.getElementById("scenarioDisplay").style.display = "none";
+        document.getElementById("calculationArea").style.display = "none";
+        document.getElementById("boxplotDisplay").innerHTML = "";
+        console.log("Location tool reset.");
+    }
+
+    document.getElementById("scenariosCompleted").textContent = "0";
+</script>
+</body>
+</html>
