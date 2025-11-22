@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Measures of Location - Interactive Statistics Tool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #a71e2a;
+        }
+
+        .red-title h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 25px;
+        }
+
+        .blue-concepts h3 {
+            font-size: 1.7em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .measures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .measure-card {
+            padding: 18px;
+            border-radius: 15px;
+            border: 3px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .median-card   { background: linear-gradient(135deg, #28a745, #20c997); border-color:#1e7e34; color:white; }
+        .quartile-card { background: linear-gradient(135deg, #17a2b8, #138496); border-color:#117a8b; color:white; }
+        .five-card     { background: linear-gradient(135deg, #fd7e14, #e55353); border-color:#d63384; color:white; }
+        .percentile-card { background: linear-gradient(135deg, #6f42c1, #8e44ad); border-color:#563d7c; color:white; }
+        .zscore-card   { background: linear-gradient(135deg, #ffc107, #ff8800); border-color:#d39e00; color:#212529; }
+
+        .measure-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .measure-card .formula {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .measure-card .description { margin-bottom: 10px; font-size:0.9em; }
+        .measure-card .use-cases   { margin-bottom: 10px; font-style: italic; font-size:0.85em; }
+        .measure-card .examples    { font-size:0.8em; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px; }
+
+        .interactive-section {
+            padding: 25px;
+            background: #f8f9fa;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+
+        .scenario-display,
+        .calculation-area {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .scenario-display { border-left: 5px solid #28a745; }
+        .calculation-area { border-left: 5px solid #ffc107; }
+
+        .btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 6px 4px;
+            box-shadow: 0 4px 10px rgba(40,167,69,0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 10px rgba(108,117,125,0.3);
+        }
+
+        .data-block {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            margin: 10px 0 0 0;
+        }
+
+        .data-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap:8px;
+            text-align:center;
+        }
+
+        .data-item {
+            background:#f8f9fa;
+            padding:8px;
+            border-radius:5px;
+            border:1px solid #dee2e6;
+            font-size:0.9em;
+        }
+
+        .options-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+            gap:10px;
+            margin-top:10px;
+        }
+
+        .option-checkbox {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            border-radius: 10px;
+            padding: 8px 10px;
+            border: 2px solid #ced4da;
+            display:flex;
+            gap:8px;
+            align-items:flex-start;
+            font-size:0.85em;
+        }
+
+        .measure-result {
+            background: #e9f7ef;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            font-size:0.9em;
+        }
+
+        .step-by-step {
+            background:#f8f9fa;
+            border:2px solid #dee2e6;
+            border-radius:10px;
+            padding:15px;
+            margin: 10px 0;
+            font-size:0.9em;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding:10px;
+            border-left:4px solid #007bff;
+            background:white;
+            border-radius:5px;
+        }
+
+        .step h5 {
+            color:#007bff;
+            font-size:0.95em;
+            margin-bottom:5px;
+        }
+
+        .interpretation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding:15px;
+            border-radius:10px;
+            margin:15px 0;
+            border:2px solid #2196f3;
+            font-size:0.9em;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color:white;
+            padding:15px;
+            text-align:center;
+            border-radius:12px;
+            margin:10px 0 20px 0;
+            border:3px solid #c7185d;
+            box-shadow:0 4px 15px rgba(232,62,140,0.3);
+            font-size:0.9em;
+        }
+
+        @media (max-width:768px) {
+            .measures-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="red-title">
+        <h1>📍 Measures of Location (Median, Quartiles & Percentiles)</h1>
+        <p>Explore medians, quartiles, percentiles, and five-number summaries using real data</p>
+    </div>
+
+    <div class="blue-concepts">
+        <h3>📏 Key Measures of Location</h3>
+        <div class="measures-grid">
+            <div class="measure-card median-card">
+                <h4>📌 Median (Q2)</h4>
+                <div class="formula">Middle value when ordered</div>
+                <div class="description">
+                    The median (Q2) splits ordered data so that 50% of values are below
+                    and 50% are above.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Skewed data, incomes, house prices, wait times.
+                </div>
+                <div class="examples">
+                    <strong>Examples:</strong> Median household income, median house price.
+                </div>
+            </div>
+
+            <div class="measure-card quartile-card">
+                <h4>📦 Quartiles (Q1 & Q3)</h4>
+                <div class="formula">
+                    Q1 = median of lower half<br>
+                    Q3 = median of upper half
+                </div>
+                <div class="description">
+                    Q1 locates the point where about 25% of values lie below; Q3 locates the point
+                    where about 75% lie below.
+                </div>
+                <div class="use-cases">
+                    <strong>Important:</strong> Here Q1 and Q3 are defined by
+                    <strong>excluding Q2</strong> (the median) when the data size is odd.
+                </div>
+                <div class="examples">
+                    <strong>Examples:</strong> Lower and upper quartiles in boxplots.
+                </div>
+            </div>
+
+            <div class="measure-card five-card">
+                <h4>🖐️ Five-Number Summary</h4>
+                <div class="formula">Min, Q1, Median, Q3, Max</div>
+                <div class="description">
+                    A compact summary of location using the minimum, lower quartile, median,
+                    upper quartile, and maximum.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Describing distributions, constructing boxplots.
+                </div>
+                <div class="examples">
+                    <strong>Examples:</strong> Comparing exam score distributions across classes.
+                </div>
+            </div>
+
+            <div class="measure-card percentile-card">
+                <h4>🎯 Percentiles</h4>
+                <div class="formula">
+                    p-th percentile: value with ≈ p% below it<br>
+                    <span style="font-size:0.85em;">
+                        Rank formula: L = (p/100) × (n + 1)
+                    </span>
+                </div>
+                <div class="description">
+                    Percentiles locate positions such as the 10th, 25th, 50th, 75th, or 90th percentile.
+                    Quartiles are just special percentiles: 25th (Q1), 50th (Q2), 75th (Q3).
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Test scores, growth charts, benchmarks.
+                </div>
+                <div class="examples">
+                    <strong>Examples:</strong> “You scored in the 85th percentile on the test.”
+                </div>
+            </div>
+
+            <div class="measure-card zscore-card">
+                <h4>📊 Relative Location (z-score)</h4>
+                <div class="formula">z = (x − x̄) / s</div>
+                <div class="description">
+                    z-scores measure how many standard deviations above or below the mean a value lies.
+                    (Not computed here, but they are another way to describe location.)
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Standardizing scores, comparing across scales.
+                </div>
+                <div class="examples">
+                    <strong>Examples:</strong> Comparing test results from different exams.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="interactive-section">
+        <div class="control-panel">
+            <h3>🎮 Interactive Measures of Location</h3>
+            <p>Choose a real-world scenario, then calculate and interpret median, quartiles, percentiles, and the five-number summary.</p>
+            <button class="btn" onclick="generateScenario()">📊 Generate New Scenario</button>
+            <button class="btn btn-secondary" onclick="resetCalculator()">🔄 Reset</button>
+        </div>
+
+        <div id="scenarioDisplay" class="scenario-display" style="display:none;">
+            <h3 id="scenarioTitle">📋 Scenario</h3>
+            <div id="scenarioDescription"></div>
+            <div id="dataDisplay"></div>
+
+            <div style="margin-top: 10px; padding: 12px; background:#f8f9fa; border-radius:10px; border-left:4px solid #6c757d;">
+                <h4>⚙️ Select Measures to Calculate</h4>
+                <p style="font-size:0.85em;color:#555;">
+                    Quartiles are computed by <strong>excluding the median (Q2)</strong> from both halves when n is odd.
+                    Percentiles use the simple rank formula <strong>L = (p/100)(n + 1)</strong>.
+                </p>
+                <div class="options-grid">
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkMedian" checked>
+                        <div><strong>📌 Median (Q2)</strong><br>Middle value when the data are ordered.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkQ1" checked>
+                        <div><strong>📦 First Quartile (Q1)</strong><br>Median of the lower half (excluding Q2 when n is odd).</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkQ3" checked>
+                        <div><strong>📦 Third Quartile (Q3)</strong><br>Median of the upper half (excluding Q2 when n is odd).</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkFiveNum" checked>
+                        <div><strong>🖐️ Five-Number Summary</strong><br>Min, Q1, Median, Q3, Max.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkPercentiles" checked>
+                        <div>
+                            <strong>🎯 Standard Percentiles</strong><br>
+                            10th, 25th, 50th, 75th, and 90th percentiles using<br>
+                            <span style="font-family:'Courier New',monospace;">L = (p/100) × (n + 1)</span>.
+                        </div>
+                    </label>
+                </div>
+
+                <button class="btn" onclick="calculateLocationMeasures()" style="margin-top:10px;">🧮 Calculate Selected Measures</button>
+            </div>
+        </div>
+
+        <div id="calculationArea" class="calculation-area" style="display:none;">
+            <h3>📝 Calculations & Results</h3>
+            <div id="calculationSteps"></div>
+            <div id="resultsDisplay"></div>
+            <div id="interpretationDisplay"></div>
+            <button class="btn" onclick="generateScenario()">➡️ Try Another Scenario</button>
+        </div>
+
+        <div class="score-display">
+            <h3>🎯 Practice Progress</h3>
+            <div>Scenarios Explored: <span id="scenariosCompleted">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Measures of location script with percentiles loaded.");
+
+    var currentScenario = null;
+    var scenariosCompleted = 0;
+
+    // Scenarios focusing on location (medians & quartiles)
+    var scenarios = [
+        {
+            title: "Weekly Hours Worked by Canadian Employees",
+            description: "Number of hours worked last week by a sample of employees in a Toronto office.",
+            context: "HR wants to understand typical and lower/upper work hours.",
+            data: [32, 35, 37, 38, 40, 40, 41, 42, 45, 50]
+        },
+        {
+            title: "Household Incomes in a Vancouver Neighbourhood (in $1000s)",
+            description: "Approximate household incomes (in thousands of CAD) in a mixed-income area.",
+            context: "A policy analyst wants to describe typical and high-income households.",
+            data: [40, 45, 48, 52, 55, 60, 65, 80, 120, 200]
+        },
+        {
+            title: "Exam Scores in a Statistics Course (out of 100)",
+            description: "Final exam scores for one section of a university statistics course.",
+            context: "The instructor wants to summarize central student performance.",
+            data: [42, 55, 61, 67, 70, 74, 78, 82, 88, 93, 96]
+        },
+        {
+            title: "Daily Commute Times in Montreal (minutes)",
+            description: "Commute times for a sample of workers traveling to downtown Montreal.",
+            context: "HR wants to see the typical commute and whether some commutes are much longer.",
+            data: [18, 22, 25, 30, 33, 35, 40, 45, 55, 60]
+        },
+        {
+            title: "Retail Purchase Amounts (in $) at a Coffee Shop",
+            description: "Spending per customer during a busy morning.",
+            context: "The owner wants to understand typical spending and high-spending customers.",
+            data: [3.5, 4.0, 4.0, 4.5, 5.0, 5.0, 5.5, 6.0, 7.5, 9.0]
+        },
+        {
+            title: "Apartment Rents in a Mid-sized Canadian City (per month in $)",
+            description: "Monthly rent for a sample of one-bedroom apartments.",
+            context: "A renter wants to know what counts as a typical vs. high rent.",
+            data: [900, 950, 1000, 1050, 1100, 1150, 1200, 1300, 1500, 1800]
+        }
+    ];
+
+    function generateScenario() {
+        var index = Math.floor(Math.random() * scenarios.length);
+        currentScenario = scenarios[index];
+        console.log("Generated scenario:", currentScenario.title);
+
+        document.getElementById("scenarioDisplay").style.display = "block";
+        document.getElementById("calculationArea").style.display = "none";
+
+        document.getElementById("scenarioTitle").textContent = "📊 " + currentScenario.title;
+        document.getElementById("scenarioDescription").innerHTML =
+            '<div class="data-block">' +
+            '<h4>📋 Context:</h4>' +
+            '<p style="margin-top:8px;">' + currentScenario.description + '</p>' +
+            '<p style="margin-top:8px;font-style:italic;color:#6c757d;"><strong>Goal:</strong> ' +
+            currentScenario.context + '</p></div>';
+
+        displayData(currentScenario.data);
+
+        // reset checkboxes
+        var ids = ["chkMedian","chkQ1","chkQ3","chkFiveNum","chkPercentiles"];
+        for (var i = 0; i < ids.length; i++) {
+            var el = document.getElementById(ids[i]);
+            if (el) { el.checked = true; }
+        }
+    }
+
+    function displayData(data) {
+        var html = '<h4>📋 Numerical Data</h4>' +
+            '<div class="data-block">' +
+            '<div class="data-grid">';
+        for (var i = 0; i < data.length; i++) {
+            html += '<div class="data-item"><strong>' + data[i] + '</strong></div>';
+        }
+        html += '</div><p style="margin-top:10px;color:#6c757d;text-align:center;">n = ' +
+                data.length + ' observations</p></div>';
+        document.getElementById("dataDisplay").innerHTML = html;
+    }
+
+    function calculateLocationMeasures() {
+        if (!currentScenario) {
+            alert("Please generate a scenario first.");
+            return;
+        }
+
+        var data = currentScenario.data.slice();
+        var n = data.length;
+        if (n === 0) {
+            alert("No data in this scenario.");
+            return;
+        }
+
+        var sorted = data.slice().sort(function(a,b){ return a-b; });
+        var median = calculateMedian(sorted.slice()); // Q2
+        var quarts = calculateQuartilesExcludingMedian(sorted.slice()); // Q1 & Q3 using your rule
+
+        var results = {};
+        var steps = "";
+
+        if (document.getElementById("chkMedian").checked) {
+            results.median = median;
+            steps += medianSteps(sorted, median);
+        }
+        if (document.getElementById("chkQ1").checked) {
+            results.q1 = quarts.q1;
+            steps += q1Steps(sorted, quarts);
+        }
+        if (document.getElementById("chkQ3").checked) {
+            results.q3 = quarts.q3;
+            steps += q3Steps(sorted, quarts);
+        }
+        if (document.getElementById("chkFiveNum").checked) {
+            results.fiveNum = {
+                min: sorted[0],
+                q1: quarts.q1,
+                median: median,
+                q3: quarts.q3,
+                max: sorted[sorted.length-1]
+            };
+            steps += fiveNumSteps(sorted, results.fiveNum);
+        }
+
+        if (document.getElementById("chkPercentiles").checked) {
+            var percList = [10, 25, 50, 75, 90];
+            var percResults = {};
+            var percStepsStr = percentileSteps(sorted, percList, percResults);
+            results.percentiles = percResults;
+            steps += percStepsStr;
+        }
+
+        document.getElementById("calculationArea").style.display = "block";
+        document.getElementById("calculationSteps").innerHTML =
+            '<div class="step-by-step">' + steps + '</div>';
+
+        showLocationResults(results);
+        showLocationInterpretation(results, median);
+
+        scenariosCompleted++;
+        document.getElementById("scenariosCompleted").textContent = String(scenariosCompleted);
+        document.getElementById("calculationArea").scrollIntoView({behavior:"smooth"});
+    }
+
+    // ---- Core location helpers ----
+
+    function calculateMedian(sortedData) {
+        var n = sortedData.length;
+        if (n % 2 === 0) {
+            return (sortedData[n/2 - 1] + sortedData[n/2]) / 2;
+        } else {
+            return sortedData[(n-1)/2];
+        }
+    }
+
+    // Q1 and Q3 defined by EXCLUDING Q2 (median) when n is odd
+    function calculateQuartilesExcludingMedian(sortedData) {
+        var n = sortedData.length;
+        var midIndex = Math.floor(n / 2);
+
+        var lowerHalf, upperHalf;
+
+        if (n % 2 === 0) {
+            // even n: split into equal halves
+            lowerHalf = sortedData.slice(0, midIndex);
+            upperHalf = sortedData.slice(midIndex);
+        } else {
+            // odd n: exclude the median (Q2)
+            lowerHalf = sortedData.slice(0, midIndex);        // elements before median
+            upperHalf = sortedData.slice(midIndex + 1);       // elements after median
+        }
+
+        var q1 = calculateMedian(lowerHalf);
+        var q3 = calculateMedian(upperHalf);
+
+        return {
+            q1: q1,
+            q3: q3,
+            lowerHalf: lowerHalf,
+            upperHalf: upperHalf
+        };
+    }
+
+    // percentile with rank formula L = (p/100)(n + 1)
+    function percentileValue(sortedData, p) {
+        var n = sortedData.length;
+        var L = (p / 100) * (n + 1);  // rank position (can be non-integer)
+
+        if (L <= 1) {
+            return sortedData[0];
+        }
+        if (L >= n) {
+            return sortedData[n - 1];
+        }
+
+        var k = Math.floor(L);     // integer part
+        var d = L - k;             // fractional part
+
+        if (d === 0) {
+            // exact integer rank
+            return sortedData[k - 1]; // 1-based to 0-based
+        } else {
+            // linear interpolation between positions k and k+1 (1-based)
+            var lower = sortedData[k - 1];
+            var upper = sortedData[k];
+            return lower + d * (upper - lower);
+        }
+    }
+
+    // ---- Step text generators ----
+
+    function medianSteps(sorted, median) {
+        return '<div class="step">' +
+            '<h5>📌 Median (Q2)</h5>' +
+            '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>' +
+            '<p>The median is the middle value when the data are ordered.</p>' +
+            '<p><strong>Median (Q2):</strong> ' + median.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function q1Steps(sorted, quarts) {
+        return '<div class="step">' +
+            '<h5>📦 First Quartile (Q1)</h5>' +
+            '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>' +
+            '<p>We split the data into a lower and upper half ' +
+            '<strong>excluding the median (Q2)</strong> when n is odd.</p>' +
+            '<p><strong>Lower half:</strong> [' + quarts.lowerHalf.join(', ') + ']</p>' +
+            '<p>Q1 is the median of this lower half.</p>' +
+            '<p><strong>Q1:</strong> ' + quarts.q1.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function q3Steps(sorted, quarts) {
+        return '<div class="step">' +
+            '<h5>📦 Third Quartile (Q3)</h5>' +
+            '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>' +
+            '<p>Upper half (again excluding the median when n is odd):</p>' +
+            '<p><strong>Upper half:</strong> [' + quarts.upperHalf.join(', ') + ']</p>' +
+            '<p>Q3 is the median of this upper half.</p>' +
+            '<p><strong>Q3:</strong> ' + quarts.q3.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function fiveNumSteps(sorted, five) {
+        return '<div class="step">' +
+            '<h5>🖐️ Five-Number Summary</h5>' +
+            '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>' +
+            '<p>Min = ' + five.min.toFixed(3) +
+            ', Q1 = ' + five.q1.toFixed(3) +
+            ', Median = ' + five.median.toFixed(3) +
+            ', Q3 = ' + five.q3.toFixed(3) +
+            ', Max = ' + five.max.toFixed(3) + '</p>' +
+            '</div>';
+    }
+
+    function percentileSteps(sorted, percList, percResults) {
+        var html = '<div class="step">' +
+            '<h5>🎯 Percentiles using L = (p/100)(n + 1)</h5>' +
+            '<p><strong>Ordered data:</strong> [' + sorted.join(', ') + ']</p>';
+
+        var n = sorted.length;
+        html += '<p><strong>n = ' + n + '</strong></p>';
+
+        for (var i = 0; i < percList.length; i++) {
+            var p = percList[i];
+            var L = (p / 100) * (n + 1);
+            var value = percentileValue(sorted, p);
+            percResults[p] = value;
+
+            html += '<p><strong>p = ' + p + '%:</strong> ' +
+                'L = (p/100)(n + 1) = (' + p + '/100) × (' + n + ' + 1) = ' +
+                L.toFixed(3) + '. ' +
+                'Approximate P' + p + ' ≈ ' + value.toFixed(3) + '.</p>';
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    // ---- Results & interpretation ----
+
+    function showLocationResults(results) {
+        var names = {
+            median: "📌 Median (Q2)",
+            q1: "📦 First Quartile (Q1)",
+            q3: "📦 Third Quartile (Q3)",
+            fiveNum: "🖐️ Five-Number Summary",
+            percentiles: "🎯 Standard Percentiles (10, 25, 50, 75, 90)"
+        };
+
+        var html = "<h4>📊 Location Results</h4>";
+        var keys = Object.keys(results);
+
+        if (keys.length === 0) {
+            html += "<p>No measures selected.</p>";
+        } else {
+            for (var i=0;i<keys.length;i++){
+                var k = keys[i];
+                var v = results[k];
+                if (k === "fiveNum") {
+                    html += '<div class="measure-result">' +
+                        '<span><strong>' + names[k] + ':</strong></span>' +
+                        '<span>Min = ' + v.min.toFixed(3) +
+                        ', Q1 = ' + v.q1.toFixed(3) +
+                        ', Median = ' + v.median.toFixed(3) +
+                        ', Q3 = ' + v.q3.toFixed(3) +
+                        ', Max = ' + v.max.toFixed(3) +
+                        '</span></div>';
+                } else if (k === "percentiles") {
+                    var parts = [];
+                    for (var p in v) {
+                        if (v.hasOwnProperty(p)) {
+                            parts.push('P' + p + ' ≈ ' + v[p].toFixed(3));
+                        }
+                    }
+                    html += '<div class="measure-result">' +
+                        '<span><strong>' + names[k] + ':</strong></span>' +
+                        '<span>' + parts.join('; ') + '</span></div>';
+                } else {
+                    html += '<div class="measure-result">' +
+                        '<span><strong>' + names[k] + ':</strong></span>' +
+                        '<span>' + v.toFixed(3) + '</span></div>';
+                }
+            }
+        }
+
+        document.getElementById("resultsDisplay").innerHTML = html;
+    }
+
+    function showLocationInterpretation(results, median) {
+        var lines = [];
+
+        if (results.median !== undefined) {
+            lines.push("• The <strong>median (Q2)</strong> of approximately " +
+                results.median.toFixed(3) +
+                " splits the data so that about half of the observations lie below and half above.");
+        }
+        if (results.q1 !== undefined) {
+            lines.push("• The <strong>first quartile (Q1)</strong> is the location where roughly 25% of the data lie below.");
+        }
+        if (results.q3 !== undefined) {
+            lines.push("• The <strong>third quartile (Q3)</strong> is the location where roughly 75% of the data lie below.");
+        }
+        if (results.fiveNum !== undefined) {
+            lines.push("• The <strong>five-number summary</strong> shows the extremes (Min, Max) and the middle 50% (from Q1 to Q3).");
+        }
+        if (results.percentiles !== undefined) {
+            lines.push("• The <strong>percentiles</strong> locate specific positions in the ordered data (e.g., 10th, 25th, 50th, 75th, 90th).");
+            lines.push("• The simple rank formula <strong>L = (p/100)(n + 1)</strong> gives the position in the ordered list; if L is not an integer, we interpolate between neighbouring values.");
+        }
+
+        if (lines.length === 0) {
+            lines.push("• Select at least one measure to see an interpretation.");
+        }
+
+        document.getElementById("interpretationDisplay").innerHTML =
+            '<div class="interpretation-box"><h4>🧠 Interpreting Location</h4>' +
+            lines.join("<br>") + '</div>';
+    }
+
+    function resetCalculator() {
+        currentScenario = null;
+        scenariosCompleted = 0;
+        document.getElementById("scenariosCompleted").textContent = "0";
+        document.getElementById("scenarioDisplay").style.display = "none";
+        document.getElementById("calculationArea").style.display = "none";
+        console.log("Location tool reset.");
+    }
+
+    // initialize counter
+    document.getElementById("scenariosCompleted").textContent = "0";
+</script>
+</body>
+</html>
