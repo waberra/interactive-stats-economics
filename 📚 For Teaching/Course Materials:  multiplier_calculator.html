@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economic Multiplier Calculator & Quiz System</title>
+    
+    <style>
+        /* Economic Multiplier Theme */
+        :root {
+            --primary-multiplier: #059669;
+            --secondary-fiscal: #0d9488;
+            --accent-government: #10b981;
+            --accent-taxation: #34d399;
+            --status-positive: #059669;
+            --status-negative: #dc2626;
+            --status-neutral: #6366f1;
+            --warning-deficit: #f59e0b;
+            --tech-50: #f0fdfa;
+            --tech-100: #ccfbf1;
+            --tech-200: #99f6e4;
+            --tech-300: #5eead4;
+            --tech-600: #0d9488;
+            --tech-700: #0f766e;
+            --tech-800: #115e59;
+            --tech-900: #134e4a;
+            
+            /* Economic indicator colors */
+            --gdp-growth: #059669;
+            --government-spending: #3b82f6;
+            --tax-reduction: #f59e0b;
+            --consumption: #8b5cf6;
+            --investment: #06b6d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--tech-800);
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 50%, #99f6e4 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary-multiplier), var(--secondary-fiscal));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="30" r="8" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="70" r="12" fill="rgba(255,255,255,0.08)"/><rect x="45" y="20" width="4" height="15" fill="rgba(255,255,255,0.06)"/><rect x="30" y="60" width="12" height="4" fill="rgba(255,255,255,0.06)"/></svg>');
+            opacity: 0.4;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .page-description {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-multiplier);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(5, 150, 105, 0.03) 0%, transparent 70%);
+        }
+
+        .section-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            color: var(--primary-multiplier);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--tech-200);
+        }
+
+        /* Calculator Widget */
+        .calculator-widget {
+            background: linear-gradient(135deg, var(--tech-50), white);
+            border: 2px solid var(--tech-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-widget:hover {
+            border-color: var(--accent-government);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .widget-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--tech-200);
+        }
+
+        .widget-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-government), var(--primary-multiplier));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
+        }
+
+        .widget-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-multiplier);
+        }
+
+        .widget-description {
+            color: var(--tech-600);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Controls */
+        .control-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-weight: 500;
+            color: var(--primary-multiplier);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .control-input, .control-select {
+            padding: 0.75rem;
+            border: 2px solid var(--tech-200);
+            border-radius: 6px;
+            background: white;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .control-input:focus, .control-select:focus {
+            outline: none;
+            border-color: var(--accent-government);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, var(--accent-government), var(--primary-multiplier));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem auto;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Results */
+        .results-panel {
+            background: linear-gradient(135deg, var(--tech-50), white);
+            border: 1px solid var(--tech-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        .results-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-government), var(--primary-multiplier));
+            border-radius: 8px 8px 0 0;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid var(--accent-government);
+        }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--tech-700);
+        }
+
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--primary-multiplier);
+            font-size: 1.1rem;
+        }
+
+        .steps-panel {
+            background: var(--tech-50);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--secondary-fiscal);
+        }
+
+        .step-item {
+            margin: 0.75rem 0;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--tech-700);
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            background: linear-gradient(135deg, var(--tech-50), white);
+            border: 2px solid var(--tech-200);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            grid-column: 1 / -1;
+        }
+
+        .quiz-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(5, 150, 105, 0.02) 0%, transparent 70%);
+        }
+
+        .quiz-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .quiz-question {
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--tech-200);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            color: var(--primary-multiplier);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .question-scenario {
+            background: var(--tech-50);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--accent-government);
+        }
+
+        .answer-input {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .answer-field {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--tech-200);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .check-button {
+            background: var(--primary-multiplier);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .check-button:hover {
+            background: var(--secondary-fiscal);
+            transform: translateY(-1px);
+        }
+
+        .feedback-panel {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .feedback-panel.correct {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--status-positive);
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+
+        .feedback-panel.incorrect {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--status-negative);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        /* Formula styling */
+        .formula {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 2px solid var(--accent-government);
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: 600;
+            color: var(--tech-800);
+            font-size: 1.1rem;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(5, 150, 105, 0.02));
+            border-left: 4px solid var(--primary-multiplier);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--tech-800);
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <div class="page-header-content">
+                <h1 class="page-title">Economic Multiplier Calculator & Quiz System 💰</h1>
+                <p class="page-subtitle">Interactive Fiscal Policy Analysis & Dynamic Problem Generator</p>
+                <p class="page-description">
+                    Master multiplier effects, government spending impacts, tax policy consequences, 
+                    and comprehensive fiscal policy analysis with step-by-step calculations.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            
+            <!-- Multiplier Calculator Section -->
+            <section class="section fade-in">
+                <div class="section-content">
+                    <h2 class="section-title">💰 Multiplier Calculator</h2>
+                    
+                    <div class="concept-box">
+                        <div class="concept-title">📚 Multiplier Framework</div>
+                        <p><strong>Government Spending Multiplier:</strong> ΔGDP = ΔG × K<br>
+                        <strong>Tax Multiplier:</strong> ΔGDP = ΔT × c × K<br>
+                        <strong>Where:</strong> K = multiplier, c = marginal propensity to consume from tax changes</p>
+                        <div class="formula">
+                            K = 1/(1-MPC) or given directly
+                        </div>
+                    </div>
+
+                    <div class="calculator-widget">
+                        <div class="widget-header">
+                            <div class="widget-icon">🧮</div>
+                            <div>
+                                <h3 class="widget-title">Fiscal Policy Impact Calculator</h3>
+                                <p class="widget-description">Calculate GDP changes from government spending and tax policies</p>
+                            </div>
+                        </div>
+
+                        <div class="control-grid">
+                            <div class="control-group">
+                                <label class="control-label">Multiplier (K)</label>
+                                <input type="number" class="control-input" id="multiplier" value="2" step="0.1">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label class="control-label">Tax MPC (c)</label>
+                                <input type="number" class="control-input" id="taxMPC" value="0.5" step="0.1" max="1">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label class="control-label">Change in Govt Spending (ΔG)</label>
+                                <input type="number" class="control-input" id="deltaG" value="0" step="10">
+                            </div>
+                            
+                            <div class="control-group">
+                                <label class="control-label">Change in Taxes (ΔT)</label>
+                                <input type="number" class="control-input" id="deltaT" value="0" step="10">
+                            </div>
+                        </div>
+
+                        <button class="action-button" onclick="calculateMultiplier()">Calculate GDP Impact</button>
+
+                        <div class="results-panel" id="calculatorResults" style="display: none;">
+                            <div id="resultsContainer"></div>
+                            <div class="steps-panel">
+                                <h4 style="color: var(--primary-multiplier); margin-bottom: 1rem;">📝 Step-by-Step Solution:</h4>
+                                <div id="stepsContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Example Problems Section -->
+            <section class="section fade-in delay-1">
+                <div class="section-content">
+                    <h2 class="section-title">📚 Sabaland Examples</h2>
+                    
+                    <p style="margin-bottom: 1.5rem; color: var(--tech-600);">
+                        Based on your Sabaland economy example with K = 2 and c = 0.5:
+                    </p>
+
+                    <div style="background: var(--tech-50); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <h4 style="color: var(--primary-multiplier); margin-bottom: 1rem;">Key Parameters:</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary-multiplier);">2</div>
+                                <div style="font-size: 0.8rem; color: var(--tech-600);">Multiplier (K)</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                                <div style="font-size: 1.5rem; font-weight: bold; color: var(--secondary-fiscal);">0.5</div>
+                                <div style="font-size: 0.8rem; color: var(--tech-600);">Tax MPC (c)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calculator-widget">
+                        <div class="widget-header">
+                            <div class="widget-icon">📋</div>
+                            <div>
+                                <h3 class="widget-title">Quick Examples</h3>
+                                <p class="widget-description">Test the classic Sabaland scenarios</p>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; gap: 1rem;">
+                            <button onclick="loadExample('spending_increase')" class="action-button" style="margin: 0.5rem 0;">
+                                Example A: +$200M Government Spending
+                            </button>
+                            <button onclick="loadExample('tax_reduction')" class="action-button" style="margin: 0.5rem 0;">
+                                Example B: -$200M Tax Reduction
+                            </button>
+                            <button onclick="loadExample('gdp_target')" class="action-button" style="margin: 0.5rem 0;">
+                                Example C: Target +$600M GDP Growth
+                            </button>
+                            <button onclick="loadExample('balanced_budget')" class="action-button" style="margin: 0.5rem 0;">
+                                Example E: +$100M Both G and T
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dynamic Quiz Section -->
+        <section class="quiz-section fade-in delay-2">
+            <div class="quiz-content">
+                <h3 style="text-align: center; margin-bottom: 1rem; color: var(--primary-multiplier);">
+                    💰 Dynamic Multiplier Quiz System
+                </h3>
+                <p style="text-align: center; color: var(--tech-600); margin-bottom: 1rem;">
+                    Practice with randomly generated multiplier problems
+                </p>
+                
+                <!-- Regenerate Button -->
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <button onclick="regenerateQuiz()" class="action-button" style="margin: 0; padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                        🔄 Generate New Problems
+                    </button>
+                    <p style="font-size: 0.8rem; color: var(--tech-600); margin-top: 0.5rem;">
+                        Click to get a fresh set of randomly generated multiplier problems
+                    </p>
+                </div>
+                
+                <div id="quizContainer">
+                    <!-- Questions will be dynamically generated here -->
+                </div>
+                
+                <!-- Quiz Results Summary -->
+                <div id="quizSummary" style="display: none; margin-top: 2rem; padding: 1.5rem; background: var(--tech-50); border-radius: 8px; border-left: 4px solid var(--primary-multiplier);">
+                    <h4 style="color: var(--primary-multiplier); margin-bottom: 1rem;">📊 Quiz Results</h4>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1rem;">
+                        <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                            <div id="correctCount" style="font-size: 1.5rem; font-weight: bold; color: var(--status-positive);">-</div>
+                            <div style="font-size: 0.8rem; color: var(--tech-600);">Correct</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                            <div id="totalQuestions" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-multiplier);">-</div>
+                            <div style="font-size: 0.8rem; color: var(--tech-600);">Total</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: white; border-radius: 6px;">
+                            <div id="quizScore" style="font-size: 1.5rem; font-weight: bold; color: var(--accent-government);">-</div>
+                            <div style="font-size: 0.8rem; color: var(--tech-600);">Score</div>
+                        </div>
+                    </div>
+                    <div id="quizFeedback" style="color: var(--tech-700); line-height: 1.6;"></div>
+                    <button onclick="regenerateQuiz()" class="action-button" style="margin-top: 1rem; padding: 0.75rem 1.5rem; font-size: 0.9rem;">
+                        Try Again with New Problems
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // ========================================
+        // GLOBAL VARIABLES
+        // ========================================
+        
+        let currentQuestions = [];
+        let answeredQuestions = {};
+
+        // ========================================
+        // MULTIPLIER CALCULATOR
+        // ========================================
+        
+        function calculateMultiplier() {
+            const K = parseFloat(document.getElementById('multiplier').value) || 0;
+            const c = parseFloat(document.getElementById('taxMPC').value) || 0;
+            const deltaG = parseFloat(document.getElementById('deltaG').value) || 0;
+            const deltaT = parseFloat(document.getElementById('deltaT').value) || 0;
+            
+            // Calculate effects
+            const gdpFromG = deltaG * K;
+            const deltaC = deltaT * c;
+            const gdpFromT = deltaC * K;
+            const totalGDP = gdpFromG + gdpFromT;
+            
+            // Display results
+            displayCalculatorResults(K, c, deltaG, deltaT, gdpFromG, gdpFromT, deltaC, totalGDP);
+        }
+        
+        function displayCalculatorResults(K, c, deltaG, deltaT, gdpFromG, gdpFromT, deltaC, totalGDP) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const stepsContainer = document.getElementById('stepsContainer');
+            
+            // Results display
+            resultsContainer.innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">GDP Change from Government Spending:</span>
+                    <span class="result-value">$${gdpFromG.toFixed(0)} million</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">GDP Change from Tax Policy:</span>
+                    <span class="result-value">$${gdpFromT.toFixed(0)} million</span>
+                </div>
+                <div class="result-item" style="border-left-color: var(--accent-government); background: var(--tech-100);">
+                    <span class="result-label"><strong>Total GDP Change:</strong></span>
+                    <span class="result-value" style="font-size: 1.3rem;"><strong>$${totalGDP.toFixed(0)} million</strong></span>
+                </div>
+            `;
+            
+            // Steps display
+            let steps = '';
+            
+            if (deltaG !== 0) {
+                steps += `
+                    <div class="step-item">
+                        <strong>Government Spending Effect:</strong><br>
+                        ΔGDP = ΔG × K = ${deltaG} × ${K} = $${gdpFromG.toFixed(0)} million
+                    </div>
+                `;
+            }
+            
+            if (deltaT !== 0) {
+                steps += `
+                    <div class="step-item">
+                        <strong>Tax Change Effect:</strong><br>
+                        Step 1: ΔC = ΔT × c = ${deltaT} × ${c} = $${deltaC.toFixed(0)} million<br>
+                        Step 2: ΔGDP = ΔC × K = ${deltaC.toFixed(0)} × ${K} = $${gdpFromT.toFixed(0)} million
+                    </div>
+                `;
+            }
+            
+            if (deltaG !== 0 && deltaT !== 0) {
+                steps += `
+                    <div class="step-item">
+                        <strong>Combined Effect:</strong><br>
+                        Total ΔGDP = ${gdpFromG.toFixed(0)} + (${gdpFromT.toFixed(0)}) = $${totalGDP.toFixed(0)} million
+                    </div>
+                `;
+            }
+            
+            stepsContainer.innerHTML = steps;
+            document.getElementById('calculatorResults').style.display = 'block';
+        }
+        
+        function loadExample(exampleType) {
+            // Set Sabaland parameters
+            document.getElementById('multiplier').value = '2';
+            document.getElementById('taxMPC').value = '0.5';
+            
+            switch(exampleType) {
+                case 'spending_increase':
+                    document.getElementById('deltaG').value = '200';
+                    document.getElementById('deltaT').value = '0';
+                    break;
+                case 'tax_reduction':
+                    document.getElementById('deltaG').value = '0';
+                    document.getElementById('deltaT').value = '-200';
+                    break;
+                case 'gdp_target':
+                    document.getElementById('deltaG').value = '300';
+                    document.getElementById('deltaT').value = '0';
+                    break;
+                case 'balanced_budget':
+                    document.getElementById('deltaG').value = '100';
+                    document.getElementById('deltaT').value = '100';
+                    break;
+            }
+            
+            calculateMultiplier();
+        }
+
+        // ========================================
+        // DYNAMIC QUIZ SYSTEM
+        // ========================================
+        
+        const problemTypes = {
+            government_spending: [
+                {
+                    scenario: "Country A has a multiplier K = {k}. Government spending increases by ${delta} million.",
+                    question: "Calculate the change in GDP.",
+                    formula: "ΔGDP = ΔG × K",
+                    solution: (params) => params.delta * params.k,
+                    steps: (params) => [
+                        `Given: K = ${params.k}, ΔG = $${params.delta} million`,
+                        `Formula: ΔGDP = ΔG × K`,
+                        `Calculation: ΔGDP = ${params.delta} × ${params.k} = $${params.delta * params.k} million`
+                    ]
+                },
+                {
+                    scenario: "Economy B has multiplier K = {k}. To increase GDP by ${target} million, how much should government spending change?",
+                    question: "Calculate the required change in government spending.",
+                    formula: "ΔG = ΔGDP / K",
+                    solution: (params) => params.target / params.k,
+                    steps: (params) => [
+                        `Given: K = ${params.k}, Target ΔGDP = $${params.target} million`,
+                        `Formula: ΔG = ΔGDP / K`,
+                        `Calculation: ΔG = ${params.target} / ${params.k} = $${params.target / params.k} million`
+                    ]
+                }
+            ],
+            tax_policy: [
+                {
+                    scenario: "Country C has multiplier K = {k} and tax MPC c = {c}. Taxes are reduced by ${delta} million.",
+                    question: "Calculate the change in GDP.",
+                    formula: "ΔGDP = ΔT × c × K",
+                    solution: (params) => -params.delta * params.c * params.k,
+                    steps: (params) => [
+                        `Given: K = ${params.k}, c = ${params.c}, ΔT = -$${params.delta} million`,
+                        `Step 1: ΔC = ΔT × c = (-${params.delta}) × ${params.c} = $${-params.delta * params.c} million`,
+                        `Step 2: ΔGDP = ΔC × K = ${-params.delta * params.c} × ${params.k} = $${-params.delta * params.c * params.k} million`
+                    ]
+                },
+                {
+                    scenario: "Economy D has K = {k} and c = {c}. To increase GDP by ${target} million through tax cuts, how much should taxes be reduced?",
+                    question: "Calculate the required tax reduction.",
+                    formula: "ΔT = ΔGDP / (c × K)",
+                    solution: (params) => -params.target / (params.c * params.k),
+                    steps: (params) => [
+                        `Given: K = ${params.k}, c = ${params.c}, Target ΔGDP = $${params.target} million`,
+                        `Formula: ΔT = ΔGDP / (c × K)`,
+                        `Calculation: ΔT = ${params.target} / (${params.c} × ${params.k}) = $${params.target / (params.c * params.k)} million`,
+                        `Tax reduction needed = $${Math.abs(params.target / (params.c * params.k))} million`
+                    ]
+                }
+            ],
+            combined_policy: [
+                {
+                    scenario: "Country E has K = {k} and c = {c}. Government spending increases by ${deltaG} million and taxes increase by ${deltaT} million.",
+                    question: "Calculate the net change in GDP.",
+                    formula: "ΔGDP = ΔG × K + ΔT × c × K",
+                    solution: (params) => params.deltaG * params.k + params.deltaT * params.c * params.k,
+                    steps: (params) => [
+                        `Given: K = ${params.k}, c = ${params.c}, ΔG = $${params.deltaG}M, ΔT = $${params.deltaT}M`,
+                        `Effect from ΔG: ΔGDP₁ = ΔG × K = ${params.deltaG} × ${params.k} = $${params.deltaG * params.k}M`,
+                        `Effect from ΔT: ΔC = ΔT × c = ${params.deltaT} × ${params.c} = $${params.deltaT * params.c}M`,
+                        `ΔGDP₂ = ΔC × K = ${params.deltaT * params.c} × ${params.k} = $${params.deltaT * params.c * params.k}M`,
+                        `Net effect: ΔGDP = ${params.deltaG * params.k} + (${params.deltaT * params.c * params.k}) = $${params.deltaG * params.k + params.deltaT * params.c * params.k}M`
+                    ]
+                }
+            ],
+            balanced_budget: [
+                {
+                    scenario: "Economy F has K = {k} and c = {c}. Both government spending and taxes increase by ${amount} million (balanced budget).",
+                    question: "Calculate the change in GDP.",
+                    formula: "ΔGDP = Amount × (K - c × K)",
+                    solution: (params) => params.amount * (params.k - params.c * params.k),
+                    steps: (params) => [
+                        `Given: K = ${params.k}, c = ${params.c}, ΔG = ΔT = $${params.amount} million`,
+                        `Effect from ΔG: ΔGDP₁ = ${params.amount} × ${params.k} = $${params.amount * params.k}M`,
+                        `Effect from ΔT: ΔC = ${params.amount} × ${params.c} = $${params.amount * params.c}M`,
+                        `ΔGDP₂ = ${params.amount * params.c} × ${params.k} = $${params.amount * params.c * params.k}M`,
+                        `Net effect: ΔGDP = ${params.amount * params.k} - ${params.amount * params.c * params.k} = $${params.amount * (params.k - params.c * params.k)}M`
+                    ]
+                }
+            ]
+        };
+        
+        function regenerateQuiz() {
+            // Clear previous state
+            answeredQuestions = {};
+            currentQuestions = [];
+            
+            // Generate 4 random problems
+            const problemCategories = Object.keys(problemTypes);
+            
+            for (let i = 0; i < 4; i++) {
+                const category = problemCategories[Math.floor(Math.random() * problemCategories.length)];
+                const templates = problemTypes[category];
+                const template = templates[Math.floor(Math.random() * templates.length)];
+                
+                // Generate random parameters
+                const params = generateRandomParameters(category);
+                
+                // Create question
+                const question = {
+                    id: `q${i + 1}`,
+                    category: category,
+                    scenario: template.scenario.replace(/\{(\w+)\}/g, (match, key) => params[key]),
+                    question: template.question,
+                    formula: template.formula,
+                    params: params,
+                    correctAnswer: template.solution(params),
+                    steps: template.steps(params)
+                };
+                
+                currentQuestions.push(question);
+            }
+            
+            // Render the quiz
+            renderQuiz();
+            
+            // Hide summary
+            document.getElementById('quizSummary').style.display = 'none';
+        }
+        
+        function generateRandomParameters(category) {
+            const multipliers = [1.5, 2, 2.5, 3, 3.5, 4];
+            const mpcValues = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8];
+            const amounts = [100, 150, 200, 250, 300, 350, 400, 450, 500];
+            const targets = [300, 400, 500, 600, 750, 800, 900, 1000, 1200];
+            
+            const params = {
+                k: multipliers[Math.floor(Math.random() * multipliers.length)],
+                c: mpcValues[Math.floor(Math.random() * mpcValues.length)]
+            };
+            
+            switch(category) {
+                case 'government_spending':
+                    params.delta = amounts[Math.floor(Math.random() * amounts.length)];
+                    params.target = targets[Math.floor(Math.random() * targets.length)];
+                    break;
+                case 'tax_policy':
+                    params.delta = amounts[Math.floor(Math.random() * amounts.length)];
+                    params.target = targets[Math.floor(Math.random() * targets.length)];
+                    break;
+                case 'combined_policy':
+                    params.deltaG = amounts[Math.floor(Math.random() * amounts.length)];
+                    params.deltaT = amounts[Math.floor(Math.random() * amounts.length)];
+                    break;
+                case 'balanced_budget':
+                    params.amount = amounts[Math.floor(Math.random() * amounts.length)];
+                    break;
+            }
+            
+            return params;
+        }
+        
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            
+            let html = '';
+            currentQuestions.forEach((question, index) => {
+                html += `
+                    <div class="quiz-question">
+                        <div class="question-header">Problem ${index + 1}: ${question.question}</div>
+                        <div class="question-scenario">${question.scenario}</div>
+                        <div style="margin: 1rem 0; color: var(--tech-600); font-style: italic;">
+                            Formula: ${question.formula}
+                        </div>
+                        <div class="answer-input">
+                            <input type="number" class="answer-field" id="answer${question.id}" placeholder="Enter your answer" step="0.01">
+                            <span style="color: var(--tech-600);">million</span>
+                            <button class="check-button" onclick="checkAnswer('${question.id}')">Check Answer</button>
+                        </div>
+                        <div id="feedback${question.id}" class="feedback-panel"></div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function checkAnswer(questionId) {
+            const question = currentQuestions.find(q => q.id === questionId);
+            if (!question) return;
+            
+            const userAnswer = parseFloat(document.getElementById(`answer${questionId}`).value);
+            const correctAnswer = question.correctAnswer;
+            const tolerance = Math.abs(correctAnswer) * 0.01 + 1; // 1% tolerance plus 1 for small numbers
+            
+            const isCorrect = Math.abs(userAnswer - correctAnswer) <= tolerance;
+            
+            answeredQuestions[questionId] = {
+                question: question,
+                userAnswer: userAnswer,
+                correctAnswer: correctAnswer,
+                isCorrect: isCorrect
+            };
+            
+            // Show feedback
+            const feedbackEl = document.getElementById(`feedback${questionId}`);
+            feedbackEl.className = `feedback-panel ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackEl.style.display = 'block';
+            
+            if (isCorrect) {
+                feedbackEl.innerHTML = `
+                    <strong>✅ Correct!</strong> The answer is $${correctAnswer.toFixed(0)} million.
+                    <div style="margin-top: 1rem;">
+                        <strong>Solution Steps:</strong>
+                        ${question.steps.map(step => `<div style="margin: 0.5rem 0;">${step}</div>`).join('')}
+                    </div>
+                `;
+            } else {
+                feedbackEl.innerHTML = `
+                    <strong>❌ Incorrect.</strong> Your answer: $${userAnswer.toFixed(0)} million. Correct answer: $${correctAnswer.toFixed(0)} million.
+                    <div style="margin-top: 1rem;">
+                        <strong>Solution Steps:</strong>
+                        ${question.steps.map(step => `<div style="margin: 0.5rem 0;">${step}</div>`).join('')}
+                    </div>
+                `;
+            }
+            
+            // Check if all questions are answered
+            if (Object.keys(answeredQuestions).length === currentQuestions.length) {
+                setTimeout(() => showQuizSummary(), 1000);
+            }
+        }
+        
+        function showQuizSummary() {
+            const totalQuestions = currentQuestions.length;
+            const correctAnswers = Object.values(answeredQuestions).filter(a => a.isCorrect).length;
+            const score = Math.round((correctAnswers / totalQuestions) * 100);
+            
+            // Update summary display
+            document.getElementById('correctCount').textContent = correctAnswers;
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+            document.getElementById('quizScore').textContent = score + '%';
+            
+            // Generate feedback
+            let feedback = '';
+            if (score >= 90) {
+                feedback = '🌟 Excellent! You have mastered multiplier calculations. You understand fiscal policy impacts and can solve complex problems with confidence.';
+            } else if (score >= 75) {
+                feedback = '👍 Great work! You have a solid grasp of multiplier effects. Review tax multiplier calculations and combined policy scenarios for even stronger mastery.';
+            } else if (score >= 60) {
+                feedback = '✨ Good effort! You understand the basic concepts. Focus on distinguishing between government spending and tax multipliers, and practice the step-by-step approaches.';
+            } else {
+                feedback = '🔄 Keep practicing! Multipliers can be tricky. Review the formulas: ΔGDP = ΔG × K for spending, and ΔGDP = ΔT × c × K for taxes. Remember that tax cuts have negative ΔT values.';
+            }
+            
+            // Add specific recommendations based on problem types missed
+            const missedCategories = [];
+            Object.values(answeredQuestions).forEach(answer => {
+                if (!answer.isCorrect) {
+                    missedCategories.push(answer.question.category);
+                }
+            });
+            
+            const categoryAdvice = {
+                'government_spending': 'Review government spending multiplier: ΔGDP = ΔG × K',
+                'tax_policy': 'Practice tax multiplier calculations: ΔGDP = ΔT × c × K (remember tax cuts are negative)',
+                'combined_policy': 'Work on combined fiscal policy problems - calculate each effect separately then add',
+                'balanced_budget': 'Study balanced budget multiplier: net effect is typically positive but smaller than pure spending increases'
+            };
+            
+            if (missedCategories.length > 0) {
+                const uniqueMissed = [...new Set(missedCategories)];
+                feedback += '\n\nSpecific areas to review:\n';
+                uniqueMissed.forEach(category => {
+                    feedback += `• ${categoryAdvice[category]}\n`;
+                });
+            }
+            
+            document.getElementById('quizFeedback').textContent = feedback;
+            document.getElementById('quizSummary').style.display = 'block';
+            
+            // Smooth scroll to summary
+            document.getElementById('quizSummary').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+        
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Economic Multiplier Calculator & Quiz System loaded!');
+            
+            // Set up fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all animated elements
+            document.querySelectorAll('.fade-in, .slide-up').forEach(el => {
+                observer.observe(el);
+            });
+            
+            // Initialize quiz system
+            setTimeout(() => {
+                regenerateQuiz();
+            }, 1000);
+            
+            // Load default Sabaland example
+            loadExample('spending_increase');
+        });
+    </script>
+
+</body>
+</html>
