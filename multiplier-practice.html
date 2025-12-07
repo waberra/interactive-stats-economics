@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multiplier – Interactive Macroeconomics Practice</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .red-title {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid #a71e2a;
+        }
+
+        .red-title h1 {
+            font-size: 2.3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .red-title p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .blue-concepts {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 25px;
+        }
+
+        .blue-concepts h3 {
+            font-size: 1.7em;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .measures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .measure-card {
+            padding: 18px;
+            border-radius: 15px;
+            border: 3px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .k-card       { background: linear-gradient(135deg, #28a745, #20c997); border-color:#1e7e34; color:white; }
+        .kgdp-card    { background: linear-gradient(135deg, #fd7e14, #e55353); border-color:#d63384; color:white; }
+        .tax-card     { background: linear-gradient(135deg, #6f42c1, #8e44ad); border-color:#563d7c; color:white; }
+        .combo-card   { background: linear-gradient(135deg, #17a2b8, #138496); border-color:#117a8b; color:white; }
+
+        .measure-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .measure-card .formula {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 8px;
+            margin: 8px 0;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.85em;
+        }
+
+        .measure-card .description { margin-bottom: 10px; font-size:0.9em; }
+        .measure-card .use-cases   { margin-bottom: 10px; font-style: italic; font-size:0.85em; }
+        .measure-card .examples    { font-size:0.8em; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 8px; }
+
+        .interactive-section {
+            padding: 25px;
+            background: #f8f9fa;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #007bff;
+        }
+
+        .scenario-display,
+        .calculation-area {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .scenario-display { border-left: 5px solid #28a745; }
+        .calculation-area { border-left: 5px solid #ffc107; }
+
+        .btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin: 6px 4px;
+            box-shadow: 0 4px 10px rgba(40,167,69,0.3);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #20c997, #28a745);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 10px rgba(108,117,125,0.3);
+        }
+
+        .data-block {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            margin: 10px 0 0 0;
+        }
+
+        .data-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap:8px;
+            text-align:center;
+        }
+
+        .data-item {
+            background:#f8f9fa;
+            padding:8px;
+            border-radius:5px;
+            border:1px solid #dee2e6;
+            font-size:0.9em;
+        }
+
+        .options-grid {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
+            gap:10px;
+            margin-top:10px;
+        }
+
+        .option-checkbox {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            border-radius: 10px;
+            padding: 8px 10px;
+            border: 2px solid #ced4da;
+            display:flex;
+            gap:8px;
+            align-items:flex-start;
+            font-size:0.85em;
+        }
+
+        .question-card {
+            background:#f8f9fa;
+            border-radius:10px;
+            border:2px solid #dee2e6;
+            padding:12px;
+            margin:10px 0;
+            font-size:0.9em;
+        }
+
+        .question-card h5 {
+            margin-bottom:6px;
+            color:#007bff;
+            font-size:0.95em;
+        }
+
+        .question-input {
+            margin-top:6px;
+            display:flex;
+            flex-wrap:wrap;
+            align-items:center;
+            gap:6px;
+        }
+
+        .question-input input {
+            padding:6px 8px;
+            border-radius:6px;
+            border:1px solid #ced4da;
+            min-width:120px;
+        }
+
+        .feedback {
+            margin-top:4px;
+            font-size:0.85em;
+        }
+
+        .feedback.correct {
+            color:#155724;
+        }
+
+        .feedback.incorrect {
+            color:#721c24;
+        }
+
+        .step-explanation {
+            margin-top:6px;
+            font-size:0.85em;
+            background:white;
+            border-radius:6px;
+            padding:8px;
+            border-left:3px solid #17a2b8;
+        }
+
+        .interpretation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding:15px;
+            border-radius:10px;
+            margin:15px 0;
+            border:2px solid #2196f3;
+            font-size:0.9em;
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #e83e8c, #d91a72);
+            color:white;
+            padding:15px;
+            text-align:center;
+            border-radius:12px;
+            margin:10px 0 20px 0;
+            border:3px solid #c7185d;
+            box-shadow:0 4px 15px rgba(232,62,140,0.3);
+            font-size:0.9em;
+        }
+
+        @media (max-width:768px) {
+            .measures-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="red-title">
+        <h1>💥 The Multiplier in Macroeconomics</h1>
+        <p>Practice the spending multiplier, tax multiplier, and total change in GDP with realistic fiscal policy scenarios.</p>
+    </div>
+
+    <div class="blue-concepts">
+        <h3>📘 Core Multiplier Concepts</h3>
+        <div class="measures-grid">
+            <div class="measure-card k-card">
+                <h4>📈 Simple Spending Multiplier</h4>
+                <div class="formula">
+                    k<sub>G</sub> = 1 / (1 − MPC) = 1 / MPS
+                </div>
+                <div class="description">
+                    Shows how a change in autonomous spending (like government purchases) is amplified into a larger change in equilibrium GDP.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Predicting the impact of stimulus spending on output.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> MPC = 0.8 → k<sub>G</sub> = 1 / (1 − 0.8) = 5.
+                </div>
+            </div>
+
+            <div class="measure-card kgdp-card">
+                <h4>💰 GDP Change from Government Spending</h4>
+                <div class="formula">
+                    ΔY = k<sub>G</sub> × ΔG
+                </div>
+                <div class="description">
+                    Total change in GDP from a change in government purchases (ΔG), holding other things constant.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Evaluating the size of a spending package.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> k<sub>G</sub> = 5, ΔG = +$20 → ΔY = +$100.
+                </div>
+            </div>
+
+            <div class="measure-card tax-card">
+                <h4>🧾 Tax Multiplier</h4>
+                <div class="formula">
+                    k<sub>T</sub> = − MPC / (1 − MPC)
+                </div>
+                <div class="description">
+                    Shows how a change in taxes (ΔT) affects equilibrium GDP. Note: it is negative and smaller in absolute value than the spending multiplier.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Assessing tax cuts or tax increases.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> MPC = 0.8 → k<sub>T</sub> = −0.8 / 0.2 = −4.
+                </div>
+            </div>
+
+            <div class="measure-card combo-card">
+                <h4>⚖️ Combined Fiscal Policy</h4>
+                <div class="formula">
+                    ΔY = k<sub>G</sub>·ΔG + k<sub>T</sub>·ΔT
+                </div>
+                <div class="description">
+                    When government spending and taxes change together, the total effect on GDP is the sum of each channel.
+                </div>
+                <div class="use-cases">
+                    <strong>Use:</strong> Balanced-budget changes, multi-part stimulus packages.
+                </div>
+                <div class="examples">
+                    <strong>Example:</strong> ΔG = +20, ΔT = +20, MPC = 0.8 → ΔY = 5·20 + (−4)·20 = +20.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="interactive-section">
+        <div class="control-panel">
+            <h3>🎮 Interactive Multiplier Practice</h3>
+            <p>Generate a fiscal policy scenario and practice computing the multiplier, the total change in GDP, and the effect of tax changes.</p>
+            <button class="btn" onclick="generateScenario()">📊 Generate New Scenario</button>
+            <button class="btn btn-secondary" onclick="resetPractice()">🔄 Reset</button>
+        </div>
+
+        <div id="scenarioDisplay" class="scenario-display" style="display:none;">
+            <h3 id="scenarioTitle">📋 Scenario</h3>
+            <div id="scenarioDescription"></div>
+            <div id="dataDisplay"></div>
+
+            <div style="margin-top: 12px; padding: 12px; background:#f8f9fa; border-radius:10px; border-left:4px solid #6c757d;">
+                <h4>⚙️ Choose Concepts to Practice</h4>
+                <p style="font-size:0.85em;color:#555;">
+                    Only concepts that make sense for the current scenario will be turned into questions.
+                    Use positive numbers for increases and negative numbers for decreases.
+                </p>
+                <div class="options-grid">
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkKSimple" checked>
+                        <div><strong>📈 Simple spending multiplier</strong><br>k<sub>G</sub> = 1 / (1 − MPC).</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkDeltaYFromG" checked>
+                        <div><strong>💰 ΔY from government spending</strong><br>ΔY = k<sub>G</sub> × ΔG.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkTaxMultiplier" checked>
+                        <div><strong>🧾 Tax multiplier</strong><br>k<sub>T</sub> = −MPC / (1 − MPC).</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkDeltaYFromT" checked>
+                        <div><strong>📉 ΔY from tax change</strong><br>ΔY = k<sub>T</sub> × ΔT.</div>
+                    </label>
+                    <label class="option-checkbox">
+                        <input type="checkbox" id="chkCombined" checked>
+                        <div><strong>⚖️ Combined effect</strong><br>ΔY = k<sub>G</sub>·ΔG + k<sub>T</sub>·ΔT.</div>
+                    </label>
+                </div>
+
+                <button class="btn" onclick="generateQuestions()" style="margin-top:10px;">🧮 Generate Questions</button>
+            </div>
+        </div>
+
+        <div id="calculationArea" class="calculation-area" style="display:none;">
+            <h3>📝 Questions & Feedback</h3>
+            <div id="questionsContainer"></div>
+            <button class="btn" onclick="checkAnswers()">✅ Check Answers</button>
+            <div id="interpretationDisplay"></div>
+        </div>
+
+        <div class="score-display">
+            <h3>🎯 Practice Progress</h3>
+            <div>Scenarios Practiced: <span id="scenariosCompleted">0</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Multiplier practice loaded.");
+
+    var currentScenario = null;
+    var scenariosCompleted = 0;
+    var currentQuestions = [];
+
+    // Scenarios for multiplier practice
+    var scenarios = [
+        {
+            id: "infrastructure",
+            title: "Infrastructure Stimulus",
+            description: "The government launches an infrastructure program by raising its purchases (G) by $40 billion. The marginal propensity to consume (MPC) in the economy is 0.8.",
+            context: "An analyst wants to estimate the total impact of the spending program on equilibrium GDP.",
+            data: {
+                MPC: 0.8,
+                deltaG: 40,   // +$40
+                deltaT: 0
+            }
+        },
+        {
+            id: "taxcut",
+            title: "Income Tax Cut",
+            description: "The government introduces a permanent income tax cut of $30 billion (ΔT = −30). The marginal propensity to consume (MPC) is 0.75.",
+            context: "A policymaker wants to know how much GDP will rise due to the tax cut.",
+            data: {
+                MPC: 0.75,
+                deltaG: 0,
+                deltaT: -30   // tax cut
+            }
+        },
+        {
+            id: "balancedbudget",
+            title: "Balanced-Budget Expansion",
+            description: "The government increases spending on education by $25 billion and finances it by increasing taxes by $25 billion at the same time. The MPC is 0.8.",
+            context: "An economist wants to compute the net effect on equilibrium GDP of this balanced-budget change.",
+            data: {
+                MPC: 0.8,
+                deltaG: 25,
+                deltaT: 25    // tax increase
+            }
+        },
+        {
+            id: "mixedpackage",
+            title: "Mixed Fiscal Package",
+            description: "To fight a recession, the government raises spending by $50 billion and cuts taxes by $20 billion (ΔT = −20). The MPC is 0.85.",
+            context: "A journalist wants to summarize the overall effect of the package on GDP.",
+            data: {
+                MPC: 0.85,
+                deltaG: 50,
+                deltaT: -20
+            }
+        }
+    ];
+
+    function generateScenario() {
+        var idx = Math.floor(Math.random() * scenarios.length);
+        currentScenario = scenarios[idx];
+        console.log("Scenario:", currentScenario.id);
+
+        document.getElementById("scenarioDisplay").style.display = "block";
+        document.getElementById("calculationArea").style.display = "none";
+        document.getElementById("interpretationDisplay").innerHTML = "";
+        document.getElementById("questionsContainer").innerHTML = "";
+        currentQuestions = [];
+
+        document.getElementById("scenarioTitle").textContent = "📊 " + currentScenario.title;
+
+        var descHtml = "";
+        descHtml += '<div class="data-block">';
+        descHtml += '<h4>📋 Context:</h4>';
+        descHtml += '<p style="margin-top:8px;">' + currentScenario.description + '</p>';
+        descHtml += '<p style="margin-top:8px;font-style:italic;color:#6c757d;"><strong>Goal:</strong> ' +
+                    currentScenario.context + '</p>';
+        descHtml += '</div>';
+        document.getElementById("scenarioDescription").innerHTML = descHtml;
+
+        displayScenari
