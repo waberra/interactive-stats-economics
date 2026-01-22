@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structure Types Quiz - Canadian Economics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .instruction-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .question-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+            display: none;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #2196f3;
+            font-size: 1.1em;
+        }
+        
+        .options {
+            margin: 20px 0;
+        }
+        
+        .option-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+        
+        .option-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .option-btn.selected {
+            background-color: #28a745;
+        }
+        
+        .feedback-section {
+            background: linear-gradient(135deg, #fff3e0, #ffcc80);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff9800;
+            display: none;
+        }
+        
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .results-section {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+            display: none;
+        }
+        
+        .control-panel {
+            background: #343a40;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .control-btn {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background-color: #5a32a3;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #4caf50;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .score-display {
+            font-size: 1.2em;
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #9c27b0;
+        }
+        
+        .explanation-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4169e1;
+        }
+        
+        .category-header {
+            background: #17a2b8;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .example-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .definition-box {
+            background: linear-gradient(135deg, #fff8e1, #ffcc02);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #ff6f00;
+        }
+        
+        .data-structures-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; }
+            .option-btn { margin: 5px; padding: 10px 12px; font-size: 0.85em; min-width: 120px; }
+            .data-structures-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🇨🇦 Data Structure Types Quiz</h1>
+    
+    <div class="canada-header">
+        <h2>🍁 Canadian Economic Data Structures 🍁</h2>
+        <p><strong>Master Cross-Sectional, Time Series, and Panel Data classification!</strong></p>
+    </div>
+
+    <!-- Instructions Section -->
+    <div class="instruction-section">
+        <h3>📚 Learning Objectives</h3>
+        
+        <div class="data-structures-grid">
+            <div class="definition-box">
+                <h4>📊 Cross-Sectional</h4>
+                <p><strong>Definition:</strong> Data collected at one point in time across different entities</p>
+                <p><strong>Structure:</strong> Multiple units, single time period</p>
+                <p><strong>Example:</strong> Provincial GDP in 2023</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>📈 Time Series</h4>
+                <p><strong>Definition:</strong> Data for one entity collected over multiple time periods</p>
+                <p><strong>Structure:</strong> Single unit, multiple time periods</p>
+                <p><strong>Example:</strong> Canadian inflation 2010-2023</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>📋 Panel Data</h4>
+                <p><strong>Definition:</strong> Multiple entities observed over multiple time periods</p>
+                <p><strong>Structure:</strong> Multiple units AND multiple time periods</p>
+                <p><strong>Example:</strong> Provincial unemployment 2020-2023</p>
+            </div>
+        </div>
+        
+        <div class="explanation-box">
+            <h4>🎯 Key Questions for Classification:</h4>
+            <ul>
+                <li><strong>How many entities?</strong> One vs Many</li>
+                <li><strong>How many time periods?</strong> One vs Many</li>
+                <li><strong>Cross-Sectional:</strong> Many entities, One time → Snapshot across units</li>
+                <li><strong>Time Series:</strong> One entity, Many times → Track changes over time</li>
+                <li><strong>Panel Data:</strong> Many entities, Many times → Both dimensions</li>
+            </ul>
+            
+            <p><strong>Decision Matrix:</strong></p>
+            <ul>
+                <li>One entity + One time = Single observation (not a dataset)</li>
+                <li>Many entities + One time = Cross-sectional</li>
+                <li>One entity + Many times = Time series</li>
+                <li>Many entities + Many times = Panel data</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Question Section -->
+    <div id="question-section" class="question-section">
+        <div id="progress-display">
+            <p><strong>Question <span id="current-q">1</span> of <span id="total-q">18</span></strong></p>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div id="question-card" class="question-card">
+            <div id="question-text"></div>
+            <div id="question-context"></div>
+        </div>
+        
+        <div class="options">
+            <button class="option-btn" onclick="selectAnswer('crosssectional')">📊 Cross-Sectional</button>
+            <button class="option-btn" onclick="selectAnswer('timeseries')">📈 Time Series</button>
+            <button class="option-btn" onclick="selectAnswer('panel')">📋 Panel Data</button>
+        </div>
+        
+        <div id="feedback-section" class="feedback-section">
+            <div id="feedback-text"></div>
+            <div id="explanation-text"></div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-section" class="results-section">
+        <h3>📊 Quiz Results</h3>
+        <div id="score-display" class="score-display"></div>
+        <div id="detailed-results"></div>
+        <div id="performance-analysis"></div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" onclick="startQuiz()">🎯 Start Quiz</button>
+        <button class="control-btn" onclick="nextQuestion()" id="next-btn" style="display:none;">➡️ Next Question</button>
+        <button class="control-btn" onclick="showResults()" id="results-btn" style="display:none;">📊 Show Results</button>
+        <button class="control-btn" onclick="resetQuiz()">🔄 Reset Quiz</button>
+        <button class="control-btn" onclick="showExamples()">📋 Examples</button>
+    </div>
+
+    <!-- Examples Section -->
+    <div id="examples-section" style="display:none;">
+        <div class="instruction-section">
+            <h3>📋 Canadian Data Structure Examples</h3>
+            
+            <div class="category-header">📊 Cross-Sectional Data Examples</div>
+            <div class="example-item">
+                <strong>"GDP of all Canadian provinces in 2023: ON: $800B, QC: $450B, BC: $300B, AB: $350B..."</strong>
+                <br><em>→ Cross-sectional: Multiple provinces (entities) at one point in time (2023)</em>
+            </div>
+            <div class="example-item">
+                <strong>"University tuition fees across Canadian institutions in Fall 2023"</strong>
+                <br><em>→ Cross-sectional: Multiple universities observed at single time point</em>
+            </div>
+
+            <div class="category-header">📈 Time Series Data Examples</div>
+            <div class="example-item">
+                <strong>"Bank of Canada interest rates: 2020: 1.75%, 2021: 0.25%, 2022: 1.5%, 2023: 4.25%"</strong>
+                <br><em>→ Time series: One entity (Bank of Canada) over multiple time periods</em>
+            </div>
+            <div class="example-item">
+                <strong>"Toronto housing price index from 2010 to 2023"</strong>
+                <br><em>→ Time series: One location (Toronto) tracked over many years</em>
+            </div>
+
+            <div class="category-header">📋 Panel Data Examples</div>
+            <div class="example-item">
+                <strong>"Unemployment rates for all provinces from 2020-2023: ON 2020: 9.6%, ON 2021: 8.1%... QC 2020: 8.9%, QC 2021: 6.1%..."</strong>
+                <br><em>→ Panel data: Multiple provinces (entities) over multiple years (time periods)</em>
+            </div>
+            <div class="example-item">
+                <strong>"Annual revenues of all TSX-listed companies from 2018-2023"</strong>
+                <br><em>→ Panel data: Multiple companies tracked over multiple years</em>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Quiz data and state
+let currentQuestion = 0;
+let totalQuestions = 18;
+let userAnswers = [];
+let quizQuestions = [];
+let quizStarted = false;
+
+// Canadian-themed cross-sectional data scenarios
+const crossSectionalScenarios = [
+    {
+        text: "Statistics Canada collected GDP data for all Canadian provinces in 2023: Ontario $800B, Quebec $450B, British Columbia $300B, Alberta $350B",
+        context: "Provincial economic output comparison",
+        explanation: "This is CROSS-SECTIONAL data because it captures multiple entities (provinces) at a single point in time (2023). We're comparing different provinces at the same moment."
+    },
+    {
+        text: "A survey in March 2023 recorded average household income across Canadian cities: Toronto $85,000, Vancouver $78,000, Montreal $65,000, Calgary $82,000",
+        context: "Inter-city income comparison study",
+        explanation: "This is CROSS-SECTIONAL data because it examines multiple entities (cities) at one specific time (March 2023). It's a snapshot comparison across different locations."
+    },
+    {
+        text: "The 2023 Canadian university rankings showed tuition fees: UofT $14,180, McGill $8,940, UBC $11,760, University of Alberta $11,320",
+        context: "Post-secondary education cost analysis",
+        explanation: "This is CROSS-SECTIONAL data because it compares multiple entities (universities) at a single point in time (2023). It's examining different institutions simultaneously."
+    },
+    {
+        text: "Health Canada recorded hospital bed capacity across provinces in January 2023: Ontario 3,200, Quebec 2,100, BC 1,800, Alberta 1,500",
+        context: "Healthcare infrastructure assessment",
+        explanation: "This is CROSS-SECTIONAL data because it examines multiple entities (provinces) at one specific time period (January 2023). It's a snapshot of healthcare capacity."
+    },
+    {
+        text: "Elections Canada recorded voter turnout by riding in the 2021 federal election: 338 ridings with turnout ranging from 45% to 89%",
+        context: "Democratic participation analysis",
+        explanation: "This is CROSS-SECTIONAL data because it captures multiple entities (ridings) at a single event/time (2021 election). Each riding is observed once at the same time."
+    },
+    {
+        text: "Transport Canada measured traffic volumes on major highways on July 1, 2023: Highway 401: 420,000 vehicles, Trans-Canada: 85,000 vehicles",
+        context: "Canada Day traffic monitoring",
+        explanation: "This is CROSS-SECTIONAL data because it measures multiple entities (highways) at one specific day (July 1, 2023). It's a single-day snapshot across different routes."
+    }
+];
+
+// Canadian-themed time series data scenarios
+const timeSeriesScenarios = [
+    {
+        text: "The Bank of Canada's overnight rate from 2020-2023: 2020: 1.75%, 2021: 0.25%, 2022: 1.50%, 2023: 4.25%",
+        context: "Monetary policy tracking over time",
+        explanation: "This is TIME SERIES data because it follows one entity (Bank of Canada's rate) across multiple time periods (2020-2023). We track how one variable changes over time."
+    },
+    {
+        text: "Canada's annual inflation rate: 2019: 1.9%, 2020: 0.7%, 2021: 3.4%, 2022: 6.8%, 2023: 3.9%",
+        context: "National economic indicator monitoring",
+        explanation: "This is TIME SERIES data because it tracks one entity (Canada's inflation) over multiple time periods (2019-2023). It shows temporal changes in a single measure."
+    },
+    {
+        text: "Toronto housing price index monthly data: Jan 2023: 145.2, Feb 2023: 147.1, Mar 2023: 148.8, Apr 2023: 150.3",
+        context: "Real estate market trend analysis",
+        explanation: "This is TIME SERIES data because it follows one entity (Toronto housing market) across multiple time periods (monthly 2023). It tracks temporal changes in one location."
+    },
+    {
+        text: "Canadian dollar exchange rate vs US dollar daily closing rates throughout 2023: ranging from 1.24 to 1.38 CAD/USD",
+        context: "Currency market performance tracking",
+        explanation: "This is TIME SERIES data because it follows one entity (CAD/USD rate) over multiple time periods (daily in 2023). It's tracking one exchange rate over time."
+    },
+    {
+        text: "Statistics Canada's quarterly GDP growth for Canada: Q1 2022: 3.1%, Q2 2022: 3.3%, Q3 2022: 2.9%, Q4 2022: 2.1%",
+        context: "National economic performance monitoring",
+        explanation: "This is TIME SERIES data because it tracks one entity (Canada's GDP growth) across multiple time periods (quarterly). It shows how national growth changes over time."
+    },
+    {
+        text: "Environment Canada recorded monthly average temperatures in Vancouver: Jan: 6°C, Feb: 8°C, Mar: 11°C, Apr: 14°C, May: 18°C",
+        context: "Climate pattern documentation",
+        explanation: "This is TIME SERIES data because it follows one entity (Vancouver temperature) over multiple time periods (monthly). It tracks temporal changes in one location's climate."
+    }
+];
+
+// Canadian-themed panel data scenarios
+const panelScenarios = [
+    {
+        text: "Provincial unemployment rates tracked from 2020-2023: Ontario (2020: 9.6%, 2021: 8.1%, 2022: 5.1%, 2023: 5.7%), Quebec (2020: 8.9%, 2021: 6.1%, 2022: 4.3%, 2023: 4.8%)",
+        context: "Multi-provincial labor market analysis",
+        explanation: "This is PANEL DATA because it tracks multiple entities (provinces) over multiple time periods (2020-2023). We have both cross-sectional and time series dimensions."
+    },
+    {
+        text: "Annual revenue data for major Canadian banks 2019-2023: RBC ($47.4B, $45.2B, $49.1B, $52.8B, $55.3B), TD Bank ($40.3B, $38.9B, $42.1B, $45.7B, $48.2B)",
+        context: "Banking sector financial performance",
+        explanation: "This is PANEL DATA because it follows multiple entities (banks) across multiple time periods (2019-2023). Each bank is observed over several years."
+    },
+    {
+        text: "Student enrollment at Canadian universities 2018-2022: UofT (97K, 98K, 95K, 96K, 99K), McGill (41K, 42K, 40K, 41K, 42K), UBC (66K, 68K, 65K, 67K, 69K)",
+        context: "Post-secondary education capacity tracking",
+        explanation: "This is PANEL DATA because it tracks multiple entities (universities) over multiple time periods (2018-2022). We observe several institutions across several years."
+    },
+    {
+        text: "Healthcare spending per capita by province 2019-2022: Alberta ($4,156, $4,890, $5,234, $5,012), BC ($4,234, $4,567, $4,789, $4,901), Ontario ($4,345, $4,678, $4,912, $5,134)",
+        context: "Provincial healthcare expenditure analysis",
+        explanation: "This is PANEL DATA because it examines multiple entities (provinces) over multiple time periods (2019-2022). It has both provincial and temporal dimensions."
+    },
+    {
+        text: "Average home prices in major Canadian cities 2020-2023: Toronto ($929K, $1.1M, $1.3M, $1.2M), Vancouver ($1.4M, $1.6M, $1.8M, $1.7M), Montreal ($521K, $580K, $635K, $610K)",
+        context: "National housing market comparative analysis",
+        explanation: "This is PANEL DATA because it tracks multiple entities (cities) across multiple time periods (2020-2023). We follow several housing markets over time."
+    },
+    {
+        text: "Provincial carbon emissions (megatonnes) 2018-2022: Alberta (275, 260, 245, 250, 255), Ontario (150, 145, 140, 142, 144), Quebec (78, 76, 74, 75, 73)",
+        context: "Environmental policy impact assessment",
+        explanation: "This is PANEL DATA because it follows multiple entities (provinces) over multiple time periods (2018-2022). It tracks environmental performance across provinces and years."
+    }
+];
+
+function generateQuiz() {
+    quizQuestions = [];
+    
+    // Mix all three types of questions
+    const shuffledCrossSectional = [...crossSectionalScenarios].sort(() => Math.random() - 0.5);
+    const shuffledTimeSeries = [...timeSeriesScenarios].sort(() => Math.random() - 0.5);
+    const shuffledPanel = [...panelScenarios].sort(() => Math.random() - 0.5);
+    
+    // Take 6 from each category
+    const crossSectionalQuestions = shuffledCrossSectional.slice(0, 6).map(q => ({...q, correctAnswer: 'crosssectional'}));
+    const timeSeriesQuestions = shuffledTimeSeries.slice(0, 6).map(q => ({...q, correctAnswer: 'timeseries'}));
+    const panelQuestions = shuffledPanel.slice(0, 6).map(q => ({...q, correctAnswer: 'panel'}));
+    
+    // Combine and shuffle
+    quizQuestions = [...crossSectionalQuestions, ...timeSeriesQuestions, ...panelQuestions].sort(() => Math.random() - 0.5);
+    totalQuestions = quizQuestions.length;
+    
+    // Update display
+    document.getElementById('total-q').textContent = totalQuestions;
+}
+
+function startQuiz() {
+    generateQuiz();
+    currentQuestion = 0;
+    userAnswers = [];
+    quizStarted = true;
+    
+    document.getElementById('question-section').style.display = 'block';
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('examples-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('results-btn').style.display = 'none';
+    
+    displayQuestion();
+}
+
+function displayQuestion() {
+    if (currentQuestion >= totalQuestions) {
+        showResults();
+        return;
+    }
+    
+    const question = quizQuestions[currentQuestion];
+    
+    // Update progress
+    document.getElementById('current-q').textContent = currentQuestion + 1;
+    const progressPercent = ((currentQuestion + 1) / totalQuestions) * 100;
+    document.getElementById('progress-fill').style.width = progressPercent + '%';
+    
+    // Display question
+    document.getElementById('question-text').innerHTML = `<strong>${question.text}</strong>`;
+    document.getElementById('question-context').innerHTML = `<em>Context: ${question.context}</em>`;
+    
+    // Reset buttons
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    
+    // Hide feedback
+    document.getElementById('feedback-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    
+    if (currentQuestion === totalQuestions - 1) {
+        document.getElementById('results-btn').style.display = 'inline-block';
+    }
+}
+
+function selectAnswer(answer) {
+    if (currentQuestion >= totalQuestions) return;
+    
+    // Update user answers
+    userAnswers[currentQuestion] = answer;
+    
+    // Visual feedback on button
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    event.target.classList.add('selected');
+    
+    // Show immediate feedback
+    const question = quizQuestions[currentQuestion];
+    const isCorrect = answer === question.correctAnswer;
+    
+    const feedbackSection = document.getElementById('feedback-section');
+    const feedbackText = document.getElementById('feedback-text');
+    const explanationText = document.getElementById('explanation-text');
+    
+    const answerLabels = {
+        'crosssectional': 'cross-sectional',
+        'timeseries': 'time series',
+        'panel': 'panel data'
+    };
+    
+    feedbackText.innerHTML = isCorrect 
+        ? `<span class="correct">✅ Correct!</span> This is ${answerLabels[question.correctAnswer]} data.`
+        : `<span class="incorrect">❌ Incorrect.</span> This is ${answerLabels[question.correctAnswer]} data, not ${answerLabels[answer]}.`;
+    
+    explanationText.innerHTML = `<strong>Explanation:</strong> ${question.explanation}`;
+    
+    feedbackSection.style.display = 'block';
+    
+    // Show next button
+    if (currentQuestion < totalQuestions - 1) {
+        document.getElementById('next-btn').style.display = 'inline-block';
+    } else {
+        document.getElementById('results-btn').style.display = 'inline-block';
+    }
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    displayQuestion();
+}
+
+function showResults() {
+    // Calculate score
+    let correctCount = 0;
+    let crossSectionalCorrect = 0;
+    let timeSeriesCorrect = 0;
+    let panelCorrect = 0;
+    let crossSectionalTotal = 0;
+    let timeSeriesTotal = 0;
+    let panelTotal = 0;
+    
+    for (let i = 0; i < quizQuestions.length; i++) {
+        const question = quizQuestions[i];
+        const userAnswer = userAnswers[i];
+        
+        if (question.correctAnswer === 'crosssectional') {
+            crossSectionalTotal++;
+            if (userAnswer === 'crosssectional') crossSectionalCorrect++;
+        } else if (question.correctAnswer === 'timeseries') {
+            timeSeriesTotal++;
+            if (userAnswer === 'timeseries') timeSeriesCorrect++;
+        } else {
+            panelTotal++;
+            if (userAnswer === 'panel') panelCorrect++;
+        }
+        
+        if (userAnswer === question.correctAnswer) {
+            correctCount++;
+        }
+    }
+    
+    const percentage = Math.round((correctCount / totalQuestions) * 100);
+    
+    // Show results section
+    document.getElementById('question-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'block';
+    
+    // Display score
+    document.getElementById('score-display').innerHTML = `
+        <h3>Your Score: ${correctCount}/${totalQuestions} (${percentage}%)</h3>
+        <p>${getScoreMessage(percentage)}</p>
+    `;
+    
+    // Performance analysis
+    document.getElementById('performance-analysis').innerHTML = `
+        <div class="explanation-box">
+            <h4>📊 Performance Breakdown:</h4>
+            <p><strong>Cross-Sectional Data:</strong> ${crossSectionalCorrect}/${crossSectionalTotal} correct (${Math.round((crossSectionalCorrect/crossSectionalTotal)*100)}%)</p>
+            <p><strong>Time Series Data:</strong> ${timeSeriesCorrect}/${timeSeriesTotal} correct (${Math.round((timeSeriesCorrect/timeSeriesTotal)*100)}%)</p>
+            <p><strong>Panel Data:</strong> ${panelCorrect}/${panelTotal} correct (${Math.round((panelCorrect/panelTotal)*100)}%)</p>
+        </div>
+    `;
+    
+    // Detailed results
+    let detailedHTML = '<h4>📋 Question-by-Question Review:</h4>';
+    for (let i = 0; i < quizQuestions.length; i++) {
+        const question = quizQuestions[i];
+        const userAnswer = userAnswers[i] || 'No answer';
+        const isCorrect = userAnswer === question.correctAnswer;
+        
+        const answerLabels = {
+            'crosssectional': 'cross-sectional',
+            'timeseries': 'time series', 
+            'panel': 'panel data'
+        };
+        
+        detailedHTML += `
+            <div class="example-item">
+                <strong>Question ${i + 1}:</strong> ${question.text}<br>
+                <strong>Your Answer:</strong> <span class="${isCorrect ? 'correct' : 'incorrect'}">${answerLabels[userAnswer] || userAnswer}</span><br>
+                <strong>Correct Answer:</strong> ${answerLabels[question.correctAnswer]}<br>
+                <em>${question.explanation}</em>
+            </div>
+        `;
+    }
+    
+    document.getElementById('detailed-results').innerHTML = detailedHTML;
+}
+
+function getScoreMessage(percentage) {
+    if (percentage >= 90) return "🏆 Outstanding! You've mastered all three data structure types!";
+    else if (percentage >= 80) return "👏 Excellent! You clearly understand data structure classifications.";
+    else if (percentage >= 70) return "👍 Good progress! Focus on entities vs time periods for each type.";
+    else if (percentage >= 60) return "📚 Keep practicing! Remember: entities and time periods are the key dimensions.";
+    else return "📖 More study needed. Review the decision matrix: many entities + many times = panel data.";
+}
+
+function resetQuiz() {
+    currentQuestion = 0;
+    userAnswers = [];
+    quizStarted = false;
+    
+    document.getElementById('question-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('examples-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('results-btn').style.display = 'none';
+}
+
+function showExamples() {
+    const examplesSection = document.getElementById('examples-section');
+    if (examplesSection.style.display === 'none') {
+        examplesSection.style.display = 'block';
+        document.getElementById('question-section').style.display = 'none';
+        document.getElementById('results-section').style.display = 'none';
+    } else {
+        examplesSection.style.display = 'none';
+    }
+}
+
+</script>
+
+</body>
+</html>
