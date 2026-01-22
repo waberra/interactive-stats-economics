@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qualitative vs Quantitative Data Quiz - Canadian Statistics</title>
+    <title>Data Types Classification Quiz - Canadian Statistics</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -73,14 +73,14 @@
             background-color: #17a2b8;
             color: white;
             border: none;
-            padding: 12px 25px;
-            margin: 10px;
+            padding: 12px 20px;
+            margin: 8px;
             border-radius: 25px;
             cursor: pointer;
             font-size: 1em;
             font-weight: bold;
             transition: all 0.3s ease;
-            min-width: 150px;
+            min-width: 140px;
         }
         
         .option-btn:hover {
@@ -204,66 +204,72 @@
             border: 2px solid #ff6f00;
         }
         
-        .data-types {
+        .data-types-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
         }
         
         @media (max-width: 768px) {
             .container { padding: 15px; }
             h1 { font-size: 1.8em; }
-            .option-btn { margin: 5px; padding: 10px 20px; }
-            .data-types { grid-template-columns: 1fr; }
+            .option-btn { margin: 5px; padding: 10px 15px; font-size: 0.9em; min-width: 120px; }
+            .data-types-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🇨🇦 Qualitative vs Quantitative Data Quiz</h1>
+    <h1>🇨🇦 Data Types Classification Quiz</h1>
     
     <div class="canada-header">
         <h2>🍁 Canadian Data Classification Mastery 🍁</h2>
-        <p><strong>Master the fundamental distinction between qualitative and quantitative data types!</strong></p>
+        <p><strong>Master the complete classification: Qualitative, Discrete, and Continuous data!</strong></p>
     </div>
 
     <!-- Instructions Section -->
     <div class="instruction-section">
         <h3>📚 Learning Objectives</h3>
         
-        <div class="data-types">
+        <div class="data-types-grid">
             <div class="definition-box">
-                <h4>📝 Qualitative Data (Categorical)</h4>
-                <p><strong>Definition:</strong> Data that describes qualities, characteristics, or categories</p>
-                <p><strong>Key Features:</strong> Cannot be measured numerically in a meaningful way</p>
-                <p><strong>Types:</strong></p>
-                <ul>
-                    <li><strong>Nominal:</strong> Categories with no natural order (colors, names, brands)</li>
-                    <li><strong>Ordinal:</strong> Categories with natural order (ratings, grades, rankings)</li>
-                </ul>
+                <h4>🏷️ Qualitative Data</h4>
+                <p><strong>Nature:</strong> Describes qualities, characteristics, or categories</p>
+                <p><strong>Examples:</strong> Colors, provinces, gender, satisfaction ratings</p>
+                <p><strong>Test:</strong> Cannot do meaningful math operations</p>
             </div>
             
             <div class="definition-box">
-                <h4>🔢 Quantitative Data (Numerical)</h4>
-                <p><strong>Definition:</strong> Data that can be measured or counted using numbers</p>
-                <p><strong>Key Features:</strong> Mathematical operations make sense</p>
-                <p><strong>Types:</strong></p>
-                <ul>
-                    <li><strong>Discrete:</strong> Countable whole numbers (students, cars, goals)</li>
-                    <li><strong>Continuous:</strong> Measurable values (height, weight, time)</li>
-                </ul>
+                <h4>🔢 Discrete Data</h4>
+                <p><strong>Nature:</strong> Countable numbers, often whole numbers</p>
+                <p><strong>Examples:</strong> Number of students, goals scored, children</p>
+                <p><strong>Test:</strong> You can count it, usually has gaps between values</p>
+            </div>
+            
+            <div class="definition-box">
+                <h4>📏 Continuous Data</h4>
+                <p><strong>Nature:</strong> Measurable quantities, can have any value within a range</p>
+                <p><strong>Examples:</strong> Height, weight, temperature, time</p>
+                <p><strong>Test:</strong> You can measure it, can have decimal values</p>
             </div>
         </div>
         
         <div class="explanation-box">
-            <h4>🎯 Key Questions to Ask:</h4>
+            <h4>🎯 Classification Strategy:</h4>
             <ul>
-                <li><strong>Can you do math with it?</strong> If yes → Quantitative, If no → Qualitative</li>
-                <li><strong>Does it describe a quality/characteristic?</strong> If yes → Qualitative</li>
-                <li><strong>Can you measure or count it meaningfully?</strong> If yes → Quantitative</li>
-                <li><strong>Would averaging make sense?</strong> If yes → Quantitative, If no → Qualitative</li>
+                <li><strong>Step 1:</strong> Is it descriptive/categorical? → Qualitative</li>
+                <li><strong>Step 2:</strong> Is it numerical? Continue to step 3...</li>
+                <li><strong>Step 3:</strong> Can you count it (whole numbers)? → Discrete</li>
+                <li><strong>Step 4:</strong> Can you measure it (any value)? → Continuous</li>
+            </ul>
+            
+            <p><strong>Key Questions:</strong></p>
+            <ul>
+                <li>Can you do math with it? No → Qualitative</li>
+                <li>Can you count it in whole numbers? Yes → Discrete</li>
+                <li>Can it be any value within a range? Yes → Continuous</li>
             </ul>
         </div>
     </div>
@@ -271,7 +277,7 @@
     <!-- Question Section -->
     <div id="question-section" class="question-section">
         <div id="progress-display">
-            <p><strong>Question <span id="current-q">1</span> of <span id="total-q">15</span></strong></p>
+            <p><strong>Question <span id="current-q">1</span> of <span id="total-q">18</span></strong></p>
             <div class="progress-bar">
                 <div id="progress-fill" class="progress-fill"></div>
             </div>
@@ -283,8 +289,9 @@
         </div>
         
         <div class="options">
-            <button class="option-btn" onclick="selectAnswer('qualitative')">📝 Qualitative</button>
-            <button class="option-btn" onclick="selectAnswer('quantitative')">🔢 Quantitative</button>
+            <button class="option-btn" onclick="selectAnswer('qualitative')">🏷️ Qualitative</button>
+            <button class="option-btn" onclick="selectAnswer('discrete')">🔢 Discrete</button>
+            <button class="option-btn" onclick="selectAnswer('continuous')">📏 Continuous</button>
         </div>
         
         <div id="feedback-section" class="feedback-section">
@@ -313,42 +320,44 @@
     <!-- Examples Section -->
     <div id="examples-section" style="display:none;">
         <div class="instruction-section">
-            <h3>📋 Canadian Examples</h3>
+            <h3>📋 Canadian Data Classification Examples</h3>
             
-            <div class="category-header">📝 Qualitative Data Examples</div>
+            <div class="category-header">🏷️ Qualitative Data Examples</div>
             <div class="example-item">
-                <strong>"The preferred language of instruction (English, French, Mandarin)"</strong>
-                <br><em>→ Qualitative (Nominal): Categories with no natural order, describes language preference</em>
+                <strong>"Province of residence: Ontario, Quebec, BC, Alberta"</strong>
+                <br><em>→ Qualitative: Categories/labels that describe location, cannot calculate with province names</em>
             </div>
             <div class="example-item">
-                <strong>"Customer satisfaction ratings (Very Satisfied, Satisfied, Neutral, Dissatisfied)"</strong>
-                <br><em>→ Qualitative (Ordinal): Categories with natural order from best to worst</em>
-            </div>
-            <div class="example-item">
-                <strong>"Types of Canadian healthcare coverage (Public, Private, Mixed)"</strong>
-                <br><em>→ Qualitative (Nominal): Categories describing types of coverage</em>
-            </div>
-            <div class="example-item">
-                <strong>"Education levels (High School, College, Bachelor's, Master's, PhD)"</strong>
-                <br><em>→ Qualitative (Ordinal): Categories with natural progression order</em>
+                <strong>"Job satisfaction: Very Satisfied, Satisfied, Neutral, Dissatisfied"</strong>
+                <br><em>→ Qualitative: Ordered categories that describe feelings/opinions, not numerical measurements</em>
             </div>
 
-            <div class="category-header">🔢 Quantitative Data Examples</div>
+            <div class="category-header">🔢 Discrete Data Examples</div>
             <div class="example-item">
-                <strong>"Number of students enrolled in Canadian universities"</strong>
-                <br><em>→ Quantitative (Discrete): You can count students, math operations make sense</em>
+                <strong>"Number of children in Canadian families: 0, 1, 2, 3, 4"</strong>
+                <br><em>→ Discrete: You can count children in whole numbers, gaps between values</em>
             </div>
             <div class="example-item">
-                <strong>"Average annual temperature in Canadian cities (°C)"</strong>
-                <br><em>→ Quantitative (Continuous): Temperature is measurable, can have decimals</em>
+                <strong>"Goals scored by Toronto Maple Leafs: 2, 4, 1, 3 goals per game"</strong>
+                <br><em>→ Discrete: Goals are countable whole numbers, you can't score 2.5 goals</em>
             </div>
             <div class="example-item">
-                <strong>"Household income in Canadian dollars"</strong>
-                <br><em>→ Quantitative (Continuous): Money amounts are measurable, averaging makes sense</em>
+                <strong>"Number of students enrolled in Canadian universities: 45,678 students"</strong>
+                <br><em>→ Discrete: Students are countable individuals, enrollment is a count</em>
+            </div>
+
+            <div class="category-header">📏 Continuous Data Examples</div>
+            <div class="example-item">
+                <strong>"Height of Canadian adults: 165.7 cm, 180.2 cm, 172.9 cm"</strong>
+                <br><em>→ Continuous: Height can be any value within a range, measured precisely with decimals</em>
             </div>
             <div class="example-item">
-                <strong>"Number of goals scored by Canadian hockey teams"</strong>
-                <br><em>→ Quantitative (Discrete): Goals are countable whole numbers</em>
+                <strong>"Temperature in Canadian cities: -15.6°C, 23.8°C, 8.2°C"</strong>
+                <br><em>→ Continuous: Temperature can be any value, measured on a continuous scale</em>
+            </div>
+            <div class="example-item">
+                <strong>"Canadian household income: $67,834.50, $89,250.75 annually"</strong>
+                <br><em>→ Continuous: Income can be any value, measured precisely to cents</em>
             </div>
         </div>
     </div>
@@ -357,7 +366,7 @@
 <script>
 // Quiz data and state
 let currentQuestion = 0;
-let totalQuestions = 15;
+let totalQuestions = 18;
 let userAnswers = [];
 let quizQuestions = [];
 let quizStarted = false;
@@ -365,104 +374,120 @@ let quizStarted = false;
 // Canadian-themed qualitative data scenarios
 const qualitativeScenarios = [
     {
-        text: "The survey asked Canadians to select their preferred political party (Liberal, Conservative, NDP, Bloc Québécois, Green)",
-        context: "Federal election polling study",
-        explanation: "This is QUALITATIVE because political parties are categories that describe preferences. Even though we can count how many people chose each party, the party names themselves are categorical data."
+        text: "Statistics Canada classified survey respondents by their primary language spoken at home: English, French, Mandarin, Punjabi, Spanish",
+        context: "National language demographics study",
+        explanation: "This is QUALITATIVE data because languages are categories that describe characteristics. Language names are labels/categories, not numerical measurements."
     },
     {
-        text: "Statistics Canada recorded the primary language spoken at home (English, French, Mandarin, Punjabi, Spanish, Other)",
-        context: "Census language demographics",
-        explanation: "This is QUALITATIVE because languages are categories that describe characteristics. The languages themselves cannot be measured numerically - they are nominal categories."
+        text: "Health Canada categorized patient treatment outcomes: Complete Recovery, Partial Recovery, No Change, Deteriorated",
+        context: "Medical treatment effectiveness study",
+        explanation: "This is QUALITATIVE data because treatment outcomes are ordered categories that describe results. Even though ordered, these are descriptive labels, not measurements."
     },
     {
-        text: "University applications asked students to indicate their program of interest (Engineering, Medicine, Business, Arts, Science)",
-        context: "Post-secondary education survey",
-        explanation: "This is QUALITATIVE because academic programs are categories that describe areas of study. You cannot do mathematical operations on program names."
+        text: "Transport Canada classified vehicle accidents by severity: Fatal, Major Injury, Minor Injury, Property Damage Only",
+        context: "Traffic safety analysis",
+        explanation: "This is QUALITATIVE data because severity levels are categories that describe the seriousness of accidents. These are ordered descriptive categories."
     },
     {
-        text: "Canadian patients rated their hospital experience (Excellent, Good, Fair, Poor, Very Poor)",
-        context: "Healthcare quality assessment",
-        explanation: "This is QUALITATIVE (specifically ordinal) because these are categories with a natural order from best to worst, but they describe qualities, not measurable quantities."
+        text: "Elections Canada recorded voter preferences in the federal election: Liberal, Conservative, NDP, Bloc Québécois, Green Party",
+        context: "Electoral preference polling",
+        explanation: "This is QUALITATIVE data because political parties are categories. Party names are labels that classify voter preferences, not numerical values."
     },
     {
-        text: "The survey collected information about employees' work arrangement (Remote, Hybrid, In-Office, Contract, Part-time)",
-        context: "Canadian workplace flexibility study",
-        explanation: "This is QUALITATIVE because work arrangements are categories that describe employment types. These are nominal categories that cannot be meaningfully averaged or measured."
+        text: "A university survey asked students about their field of study: Engineering, Medicine, Business, Arts, Science",
+        context: "Academic program enrollment study",
+        explanation: "This is QUALITATIVE data because academic fields are categories that describe areas of study. Program names are descriptive classifications."
     },
     {
-        text: "Transport Canada classified accidents by severity level (Fatal, Major Injury, Minor Injury, Property Damage Only)",
-        context: "Transportation safety analysis",
-        explanation: "This is QUALITATIVE (ordinal) because severity levels are ordered categories from most to least serious, but they describe categorical characteristics, not measurable amounts."
-    },
-    {
-        text: "The study recorded the type of Canadian healthcare provider visited (Family Doctor, Walk-in Clinic, Emergency Room, Specialist)",
-        context: "Healthcare utilization research",
-        explanation: "This is QUALITATIVE because healthcare provider types are categories that describe where people received care. These are nominal categories with no numerical value."
-    },
-    {
-        text: "Environment Canada categorized weather conditions (Sunny, Cloudy, Rainy, Snowy, Stormy)",
+        text: "Environment Canada categorized weather conditions across the country: Sunny, Partly Cloudy, Overcast, Light Rain, Heavy Snow",
         context: "National weather monitoring",
-        explanation: "This is QUALITATIVE because weather conditions are categories that describe atmospheric states. You cannot perform mathematical operations on weather condition names."
+        explanation: "This is QUALITATIVE data because weather conditions are categories that describe atmospheric states. These are descriptive labels, not measurements."
     }
 ];
 
-// Canadian-themed quantitative data scenarios
-const quantitativeScenarios = [
+// Canadian-themed discrete data scenarios
+const discreteScenarios = [
     {
-        text: "Statistics Canada measured the average household income across Canadian provinces in dollars",
-        context: "National income survey analysis",
-        explanation: "This is QUANTITATIVE because income is measured in dollars, which are numbers that can be added, averaged, and compared mathematically. You can perform meaningful arithmetic operations."
+        text: "Statistics Canada counted the number of children living in each Canadian household: 0, 1, 2, 3, 4, 5 children",
+        context: "Family demographic census data",
+        explanation: "This is DISCRETE data because children are countable in whole numbers. You cannot have 2.5 children - there are clear gaps between possible values."
     },
     {
-        text: "The study counted the number of international students enrolled at Canadian universities",
-        context: "Post-secondary education statistics",
-        explanation: "This is QUANTITATIVE (discrete) because you can count students as whole numbers. Mathematical operations like adding and averaging student counts make sense."
+        text: "Health Canada tracked the number of COVID-19 cases reported daily: 1,247, 856, 2,103, 945 cases per day",
+        context: "Pandemic monitoring and response",
+        explanation: "This is DISCRETE data because cases are countable whole numbers. You count individual cases - you cannot have 1.5 cases."
     },
     {
-        text: "Health Canada recorded the dosage of medication prescribed to patients in milligrams",
-        context: "Pharmaceutical safety monitoring",
-        explanation: "This is QUANTITATIVE (continuous) because dosage is a measurable amount that can include decimals. You can calculate averages, totals, and differences meaningfully."
+        text: "The Toronto Raptors' scoring data: 28, 15, 32, 7 points scored per player per game",
+        context: "Professional basketball statistics",
+        explanation: "This is DISCRETE data because points in basketball are counted in whole numbers. Players score 2-point or 3-point baskets, creating countable totals."
     },
     {
-        text: "The Bank of Canada tracked interest rates as percentages over the past year",
-        context: "Monetary policy analysis",
-        explanation: "This is QUANTITATIVE (continuous) because interest rates are numerical values that can be measured, averaged, and compared mathematically."
+        text: "Transport Canada recorded the number of vehicles involved in highway accidents: 2, 1, 4, 3 vehicles per incident",
+        context: "Traffic safety incident analysis",
+        explanation: "This is DISCRETE data because vehicles are countable units. Each accident involves a specific whole number of vehicles."
     },
     {
-        text: "Transport Canada measured the length of highway construction projects in kilometers",
-        context: "Infrastructure development tracking",
-        explanation: "This is QUANTITATIVE (continuous) because distance is measurable in numerical units. You can add, subtract, and average distances meaningfully."
+        text: "Canadian universities recorded enrollment numbers by program: 2,340, 1,567, 892, 3,201 students enrolled",
+        context: "Post-secondary education capacity planning",
+        explanation: "This is DISCRETE data because students are countable individuals. You count the number of people enrolled - enrollment is always a whole number."
     },
     {
-        text: "The research team recorded the number of emergency room visits per month at Canadian hospitals",
-        context: "Healthcare utilization study",
-        explanation: "This is QUANTITATIVE (discrete) because visits can be counted as whole numbers. Mathematical operations like finding totals and averages make sense."
+        text: "The Bank of Canada tracked the number of mortgage applications received monthly: 15,678, 18,904, 12,456 applications",
+        context: "Housing market analysis",
+        explanation: "This is DISCRETE data because applications are countable documents. Each application is a distinct, countable unit."
+    }
+];
+
+// Canadian-themed continuous data scenarios
+const continuousScenarios = [
+    {
+        text: "Environment Canada measured daily temperatures across Canadian cities: 22.7°C, -8.3°C, 15.1°C, 31.9°C",
+        context: "National weather monitoring network",
+        explanation: "This is CONTINUOUS data because temperature can be any value within a range. Temperature is measured on a continuous scale and can include precise decimal values."
     },
     {
-        text: "Environment Canada measured daily temperature readings in degrees Celsius across Canadian weather stations",
-        context: "Climate monitoring program",
-        explanation: "This is QUANTITATIVE (continuous) because temperature is a measurable value that can include decimals. Mathematical operations like averaging temperatures are meaningful."
+        text: "Statistics Canada recorded average household income: $67,834.50, $89,205.75, $45,678.25 annually",
+        context: "Economic income distribution study",
+        explanation: "This is CONTINUOUS data because income can be any value and is measured to the cent. There are no gaps - income can be $67,834.50 or $67,834.51."
     },
     {
-        text: "The study measured the weight of packages processed by Canada Post in kilograms",
-        context: "Postal service efficiency analysis",
-        explanation: "This is QUANTITATIVE (continuous) because weight is a measurable quantity that can be precisely measured, averaged, and compared using mathematical operations."
+        text: "Health Canada measured patient weight during clinical trials: 68.7 kg, 82.1 kg, 75.3 kg, 94.8 kg",
+        context: "Medical research and health monitoring",
+        explanation: "This is CONTINUOUS data because weight can be measured to any precision. A person's weight can be 68.734 kg - it's measured on a continuous scale."
+    },
+    {
+        text: "Transport Canada recorded vehicle speeds on the Trans-Canada Highway: 108.5 km/h, 95.2 km/h, 112.8 km/h",
+        context: "Traffic safety and speed monitoring",
+        explanation: "This is CONTINUOUS data because speed can be any value within a range. Speed is measured continuously and can include precise decimal measurements."
+    },
+    {
+        text: "The Bank of Canada tracked interest rates over time: 3.25%, 2.75%, 4.50%, 1.85%",
+        context: "Monetary policy and economic analysis",
+        explanation: "This is CONTINUOUS data because interest rates can be any value within a range. Rates are measured as precise percentages that can include many decimal places."
+    },
+    {
+        text: "Canadian athletes' performance times: 9.84 seconds, 12.67 seconds, 8.92 seconds in track events",
+        context: "Olympic and athletic performance tracking",
+        explanation: "This is CONTINUOUS data because time can be measured to any precision. Athletic times are measured continuously - 9.84 seconds, 9.841 seconds, etc."
     }
 ];
 
 function generateQuiz() {
     quizQuestions = [];
     
-    // Mix qualitative and quantitative questions
+    // Mix all three types of questions
     const shuffledQualitative = [...qualitativeScenarios].sort(() => Math.random() - 0.5);
-    const shuffledQuantitative = [...quantitativeScenarios].sort(() => Math.random() - 0.5);
+    const shuffledDiscrete = [...discreteScenarios].sort(() => Math.random() - 0.5);
+    const shuffledContinuous = [...continuousScenarios].sort(() => Math.random() - 0.5);
     
-    // Take roughly half from each category
-    const qualitativeQuestions = shuffledQualitative.slice(0, 8).map(q => ({...q, correctAnswer: 'qualitative'}));
-    const quantitativeQuestions = shuffledQuantitative.slice(0, 7).map(q => ({...q, correctAnswer: 'quantitative'}));
+    // Take 6 from each category
+    const qualitativeQuestions = shuffledQualitative.slice(0, 6).map(q => ({...q, correctAnswer: 'qualitative'}));
+    const discreteQuestions = shuffledDiscrete.slice(0, 6).map(q => ({...q, correctAnswer: 'discrete'}));
+    const continuousQuestions = shuffledContinuous.slice(0, 6).map(q => ({...q, correctAnswer: 'continuous'}));
     
     // Combine and shuffle
-    quizQuestions = [...qualitativeQuestions, ...quantitativeQuestions].sort(() => Math.random() - 0.5);
+    quizQuestions = [...qualitativeQuestions, ...discreteQuestions, ...continuousQuestions].sort(() => Math.random() - 0.5);
     totalQuestions = quizQuestions.length;
     
     // Update display
@@ -556,9 +581,11 @@ function showResults() {
     // Calculate score
     let correctCount = 0;
     let qualitativeCorrect = 0;
-    let quantitativeCorrect = 0;
+    let discreteCorrect = 0;
+    let continuousCorrect = 0;
     let qualitativeTotal = 0;
-    let quantitativeTotal = 0;
+    let discreteTotal = 0;
+    let continuousTotal = 0;
     
     for (let i = 0; i < quizQuestions.length; i++) {
         const question = quizQuestions[i];
@@ -567,9 +594,12 @@ function showResults() {
         if (question.correctAnswer === 'qualitative') {
             qualitativeTotal++;
             if (userAnswer === 'qualitative') qualitativeCorrect++;
+        } else if (question.correctAnswer === 'discrete') {
+            discreteTotal++;
+            if (userAnswer === 'discrete') discreteCorrect++;
         } else {
-            quantitativeTotal++;
-            if (userAnswer === 'quantitative') quantitativeCorrect++;
+            continuousTotal++;
+            if (userAnswer === 'continuous') continuousCorrect++;
         }
         
         if (userAnswer === question.correctAnswer) {
@@ -594,7 +624,8 @@ function showResults() {
         <div class="explanation-box">
             <h4>📊 Performance Breakdown:</h4>
             <p><strong>Qualitative Data:</strong> ${qualitativeCorrect}/${qualitativeTotal} correct (${Math.round((qualitativeCorrect/qualitativeTotal)*100)}%)</p>
-            <p><strong>Quantitative Data:</strong> ${quantitativeCorrect}/${quantitativeTotal} correct (${Math.round((quantitativeCorrect/quantitativeTotal)*100)}%)</p>
+            <p><strong>Discrete Data:</strong> ${discreteCorrect}/${discreteTotal} correct (${Math.round((discreteCorrect/discreteTotal)*100)}%)</p>
+            <p><strong>Continuous Data:</strong> ${continuousCorrect}/${continuousTotal} correct (${Math.round((continuousCorrect/continuousTotal)*100)}%)</p>
         </div>
     `;
     
@@ -619,11 +650,11 @@ function showResults() {
 }
 
 function getScoreMessage(percentage) {
-    if (percentage >= 90) return "🏆 Excellent! You've mastered the distinction between qualitative and quantitative data!";
-    else if (percentage >= 80) return "👏 Great work! You have a solid understanding of data classification.";
-    else if (percentage >= 70) return "👍 Good progress! Review the key questions to ask when classifying data.";
-    else if (percentage >= 60) return "📚 Keep practicing! Focus on whether mathematical operations make sense with the data.";
-    else return "📖 More study needed. Remember: Can you do math with it? Review the examples and try again.";
+    if (percentage >= 90) return "🏆 Outstanding! You've mastered all three data type classifications!";
+    else if (percentage >= 80) return "👏 Excellent! You have a strong grasp of data type distinctions.";
+    else if (percentage >= 70) return "👍 Good work! Focus on the key characteristics of each data type.";
+    else if (percentage >= 60) return "📚 Keep practicing! Review when to count vs measure vs categorize.";
+    else return "📖 More study needed. Remember: categories, countable numbers, or measurable values?";
 }
 
 function resetQuiz() {
