@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descriptive vs Inferential Statistics Quiz - Canadian Statistics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .instruction-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .question-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+            display: none;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #2196f3;
+            font-size: 1.1em;
+        }
+        
+        .options {
+            margin: 20px 0;
+        }
+        
+        .option-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+        
+        .option-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .option-btn.selected {
+            background-color: #28a745;
+        }
+        
+        .feedback-section {
+            background: linear-gradient(135deg, #fff3e0, #ffcc80);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff9800;
+            display: none;
+        }
+        
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .results-section {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+            display: none;
+        }
+        
+        .control-panel {
+            background: #343a40;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .control-btn {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background-color: #5a32a3;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #4caf50;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .score-display {
+            font-size: 1.2em;
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #9c27b0;
+        }
+        
+        .explanation-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4169e1;
+        }
+        
+        .category-header {
+            background: #17a2b8;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .example-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .definition-box {
+            background: linear-gradient(135deg, #fff8e1, #ffcc02);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 2px solid #ff6f00;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; }
+            .option-btn { margin: 5px; padding: 10px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🇨🇦 Descriptive vs Inferential Statistics Quiz</h1>
+    
+    <div class="canada-header">
+        <h2>🍁 Canadian Statistical Analysis Mastery 🍁</h2>
+        <p><strong>Master the fundamental distinction between describing data and making inferences!</strong></p>
+    </div>
+
+    <!-- Instructions Section -->
+    <div class="instruction-section">
+        <h3>📚 Learning Objectives</h3>
+        
+        <div class="definition-box">
+            <h4>📊 Descriptive Statistics</h4>
+            <p><strong>Purpose:</strong> Summarize, organize, and describe data that has been collected</p>
+            <p><strong>Key Features:</strong> Present facts about the data, no generalizations beyond the data</p>
+            <p><strong>Examples:</strong> Calculating averages, creating graphs, finding percentages, measuring spread</p>
+        </div>
+        
+        <div class="definition-box">
+            <h4>🔍 Inferential Statistics</h4>
+            <p><strong>Purpose:</strong> Make predictions, generalizations, or conclusions about a population based on sample data</p>
+            <p><strong>Key Features:</strong> Draw conclusions beyond the immediate data, test hypotheses, make predictions</p>
+            <p><strong>Examples:</strong> Hypothesis testing, confidence intervals, regression analysis, predictions</p>
+        </div>
+        
+        <div class="explanation-box">
+            <h4>🎯 Key Distinctions:</h4>
+            <ul>
+                <li><strong>Descriptive:</strong> "What happened?" - Summarizing existing data</li>
+                <li><strong>Inferential:</strong> "What can we conclude?" - Making predictions or generalizations</li>
+                <li><strong>Descriptive:</strong> Uses words like "average," "percentage," "shows," "displays"</li>
+                <li><strong>Inferential:</strong> Uses words like "predict," "conclude," "estimate," "test," "significant"</li>
+                <li><strong>Descriptive:</strong> No uncertainty involved - describing what we observe</li>
+                <li><strong>Inferential:</strong> Involves uncertainty and probability - making educated guesses</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Question Section -->
+    <div id="question-section" class="question-section">
+        <div id="progress-display">
+            <p><strong>Question <span id="current-q">1</span> of <span id="total-q">15</span></strong></p>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div id="question-card" class="question-card">
+            <div id="question-text"></div>
+            <div id="question-context"></div>
+        </div>
+        
+        <div class="options">
+            <button class="option-btn" onclick="selectAnswer('descriptive')">📊 Descriptive</button>
+            <button class="option-btn" onclick="selectAnswer('inferential')">🔍 Inferential</button>
+        </div>
+        
+        <div id="feedback-section" class="feedback-section">
+            <div id="feedback-text"></div>
+            <div id="explanation-text"></div>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-section" class="results-section">
+        <h3>📊 Quiz Results</h3>
+        <div id="score-display" class="score-display"></div>
+        <div id="detailed-results"></div>
+        <div id="performance-analysis"></div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" onclick="startQuiz()">🎯 Start Quiz</button>
+        <button class="control-btn" onclick="nextQuestion()" id="next-btn" style="display:none;">➡️ Next Question</button>
+        <button class="control-btn" onclick="showResults()" id="results-btn" style="display:none;">📊 Show Results</button>
+        <button class="control-btn" onclick="resetQuiz()">🔄 Reset Quiz</button>
+        <button class="control-btn" onclick="showExamples()">📋 Examples</button>
+    </div>
+
+    <!-- Examples Section -->
+    <div id="examples-section" style="display:none;">
+        <div class="instruction-section">
+            <h3>📋 Canadian Examples</h3>
+            
+            <div class="category-header">📊 Descriptive Statistics Examples</div>
+            <div class="example-item">
+                <strong>"The average income of surveyed Canadians was $65,000"</strong>
+                <br><em>→ Descriptive: Simply calculating and reporting the mean of collected data</em>
+            </div>
+            <div class="example-item">
+                <strong>"Statistics Canada reports that 75% of surveyed households own their homes"</strong>
+                <br><em>→ Descriptive: Calculating and presenting a percentage from the data</em>
+            </div>
+            <div class="example-item">
+                <strong>"The unemployment rate in Ontario last month was 6.2%"</strong>
+                <br><em>→ Descriptive: Reporting a factual measurement from collected data</em>
+            </div>
+            <div class="example-item">
+                <strong>"A histogram shows the distribution of ages in the Canadian sample"</strong>
+                <br><em>→ Descriptive: Creating visual representations of data</em>
+            </div>
+
+            <div class="category-header">🔍 Inferential Statistics Examples</div>
+            <div class="example-item">
+                <strong>"Based on the sample, we conclude that Canadian income has increased significantly"</strong>
+                <br><em>→ Inferential: Making a conclusion about the population based on sample data</em>
+            </div>
+            <div class="example-item">
+                <strong>"The study predicts that unemployment will decrease next year"</strong>
+                <br><em>→ Inferential: Making predictions about future events using statistical methods</em>
+            </div>
+            <div class="example-item">
+                <strong>"There is a 95% confidence that the true Canadian average income is between $60,000-$70,000"</strong>
+                <br><em>→ Inferential: Creating confidence intervals to estimate population parameters</em>
+            </div>
+            <div class="example-item">
+                <strong>"The hypothesis test shows a significant relationship between education and income in Canada"</strong>
+                <br><em>→ Inferential: Testing hypotheses about population relationships</em>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Quiz data and state
+let currentQuestion = 0;
+let totalQuestions = 15;
+let userAnswers = [];
+let quizQuestions = [];
+let quizStarted = false;
+
+// Canadian-themed descriptive statistics scenarios
+const descriptiveScenarios = [
+    {
+        text: "Statistics Canada calculated that the average household income from their 2021 survey was $102,300",
+        context: "Canadian Income Survey analysis",
+        explanation: "This is DESCRIPTIVE because it's simply calculating and reporting the mean from collected survey data. No predictions or generalizations are being made beyond the data itself."
+    },
+    {
+        text: "The Bank of Canada reported that 23% of surveyed businesses increased their workforce last quarter",
+        context: "Business outlook survey results",
+        explanation: "This is DESCRIPTIVE because it's presenting a percentage calculated directly from the survey data. It's describing what the collected data shows."
+    },
+    {
+        text: "A bar chart displays the number of students enrolled in each program at the University of Toronto",
+        context: "University enrollment data visualization",
+        explanation: "This is DESCRIPTIVE because it's organizing and presenting data visually. Charts and graphs are tools for describing and summarizing existing data."
+    },
+    {
+        text: "Health Canada found that the median age of COVID-19 vaccine recipients was 45 years",
+        context: "Vaccination program data analysis",
+        explanation: "This is DESCRIPTIVE because it's calculating and reporting the median from collected vaccination data. It's describing a characteristic of the data."
+    },
+    {
+        text: "The 2021 Census shows that 73% of Canadians live in urban areas",
+        context: "Census demographic data",
+        explanation: "This is DESCRIPTIVE because it's presenting factual percentages calculated from census data. It's describing the composition of the Canadian population."
+    },
+    {
+        text: "Transport Canada calculated the standard deviation of flight delays across Canadian airports was 15 minutes",
+        context: "Aviation performance measurement",
+        explanation: "This is DESCRIPTIVE because it's measuring and reporting the variability in the collected flight delay data. Standard deviation describes data spread."
+    },
+    {
+        text: "The histogram shows the distribution of house prices in Vancouver from last year's sales data",
+        context: "Real estate market analysis",
+        explanation: "This is DESCRIPTIVE because it's organizing and displaying existing sales data visually. Histograms are descriptive tools that show data patterns."
+    },
+    {
+        text: "Environment Canada reported the highest temperature recorded in Alberta last summer was 38°C",
+        context: "Climate monitoring data",
+        explanation: "This is DESCRIPTIVE because it's identifying and reporting an extreme value from collected temperature data. It's describing what was observed."
+    }
+];
+
+// Canadian-themed inferential statistics scenarios
+const inferentialScenarios = [
+    {
+        text: "Based on polling data, researchers predict that 68% of Canadians will support the new healthcare policy",
+        context: "Political opinion research",
+        explanation: "This is INFERENTIAL because it's making a prediction about all Canadians based on sample data. The word 'predict' indicates going beyond the immediate data."
+    },
+    {
+        text: "The study concludes that there is a significant relationship between education level and income among Canadians",
+        context: "Socioeconomic research analysis",
+        explanation: "This is INFERENTIAL because it's drawing conclusions about relationships in the broader Canadian population based on sample data analysis."
+    },
+    {
+        text: "Economists estimate with 95% confidence that Canada's GDP will grow between 2.1% and 2.8% next year",
+        context: "Economic forecasting analysis",
+        explanation: "This is INFERENTIAL because it's creating confidence intervals to estimate future economic performance. This involves uncertainty and statistical inference."
+    },
+    {
+        text: "The hypothesis test determined that the difference in vaccination rates between provinces is statistically significant",
+        context: "Public health comparative study",
+        explanation: "This is INFERENTIAL because hypothesis testing is used to make conclusions about population parameters. It determines if observed differences are meaningful."
+    },
+    {
+        text: "Researchers conclude that the new teaching method significantly improves student performance in Canadian schools",
+        context: "Educational intervention study",
+        explanation: "This is INFERENTIAL because it's drawing conclusions about the effectiveness of a method for the broader population based on study results."
+    },
+    {
+        text: "The regression analysis predicts that housing prices will increase by 5% for every 1% decrease in interest rates",
+        context: "Real estate econometric modeling",
+        explanation: "This is INFERENTIAL because regression analysis is used to make predictions about relationships and future outcomes based on statistical models."
+    },
+    {
+        text: "Scientists estimate that climate change will increase average Canadian temperatures by 2-4°C by 2100",
+        context: "Climate change projection study",
+        explanation: "This is INFERENTIAL because it's making predictions about future climate conditions based on current data and statistical models."
+    },
+    {
+        text: "The study tests whether Canadian students' math scores have improved significantly compared to international averages",
+        context: "International education assessment",
+        explanation: "This is INFERENTIAL because it involves hypothesis testing to determine if differences in performance are statistically significant, not just descriptive comparisons."
+    }
+];
+
+function generateQuiz() {
+    quizQuestions = [];
+    
+    // Mix descriptive and inferential questions
+    const shuffledDescriptive = [...descriptiveScenarios].sort(() => Math.random() - 0.5);
+    const shuffledInferential = [...inferentialScenarios].sort(() => Math.random() - 0.5);
+    
+    // Take roughly half from each category
+    const descriptiveQuestions = shuffledDescriptive.slice(0, 8).map(q => ({...q, correctAnswer: 'descriptive'}));
+    const inferentialQuestions = shuffledInferential.slice(0, 7).map(q => ({...q, correctAnswer: 'inferential'}));
+    
+    // Combine and shuffle
+    quizQuestions = [...descriptiveQuestions, ...inferentialQuestions].sort(() => Math.random() - 0.5);
+    totalQuestions = quizQuestions.length;
+    
+    // Update display
+    document.getElementById('total-q').textContent = totalQuestions;
+}
+
+function startQuiz() {
+    generateQuiz();
+    currentQuestion = 0;
+    userAnswers = [];
+    quizStarted = true;
+    
+    document.getElementById('question-section').style.display = 'block';
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('examples-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('results-btn').style.display = 'none';
+    
+    displayQuestion();
+}
+
+function displayQuestion() {
+    if (currentQuestion >= totalQuestions) {
+        showResults();
+        return;
+    }
+    
+    const question = quizQuestions[currentQuestion];
+    
+    // Update progress
+    document.getElementById('current-q').textContent = currentQuestion + 1;
+    const progressPercent = ((currentQuestion + 1) / totalQuestions) * 100;
+    document.getElementById('progress-fill').style.width = progressPercent + '%';
+    
+    // Display question
+    document.getElementById('question-text').innerHTML = `<strong>${question.text}</strong>`;
+    document.getElementById('question-context').innerHTML = `<em>Context: ${question.context}</em>`;
+    
+    // Reset buttons
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    
+    // Hide feedback
+    document.getElementById('feedback-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    
+    if (currentQuestion === totalQuestions - 1) {
+        document.getElementById('results-btn').style.display = 'inline-block';
+    }
+}
+
+function selectAnswer(answer) {
+    if (currentQuestion >= totalQuestions) return;
+    
+    // Update user answers
+    userAnswers[currentQuestion] = answer;
+    
+    // Visual feedback on button
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    event.target.classList.add('selected');
+    
+    // Show immediate feedback
+    const question = quizQuestions[currentQuestion];
+    const isCorrect = answer === question.correctAnswer;
+    
+    const feedbackSection = document.getElementById('feedback-section');
+    const feedbackText = document.getElementById('feedback-text');
+    const explanationText = document.getElementById('explanation-text');
+    
+    feedbackText.innerHTML = isCorrect 
+        ? `<span class="correct">✅ Correct!</span> This is ${question.correctAnswer} statistics.`
+        : `<span class="incorrect">❌ Incorrect.</span> This is ${question.correctAnswer} statistics, not ${answer}.`;
+    
+    explanationText.innerHTML = `<strong>Explanation:</strong> ${question.explanation}`;
+    
+    feedbackSection.style.display = 'block';
+    
+    // Show next button
+    if (currentQuestion < totalQuestions - 1) {
+        document.getElementById('next-btn').style.display = 'inline-block';
+    } else {
+        document.getElementById('results-btn').style.display = 'inline-block';
+    }
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    displayQuestion();
+}
+
+function showResults() {
+    // Calculate score
+    let correctCount = 0;
+    let descriptiveCorrect = 0;
+    let inferentialCorrect = 0;
+    let descriptiveTotal = 0;
+    let inferentialTotal = 0;
+    
+    for (let i = 0; i < quizQuestions.length; i++) {
+        const question = quizQuestions[i];
+        const userAnswer = userAnswers[i];
+        
+        if (question.correctAnswer === 'descriptive') {
+            descriptiveTotal++;
+            if (userAnswer === 'descriptive') descriptiveCorrect++;
+        } else {
+            inferentialTotal++;
+            if (userAnswer === 'inferential') inferentialCorrect++;
+        }
+        
+        if (userAnswer === question.correctAnswer) {
+            correctCount++;
+        }
+    }
+    
+    const percentage = Math.round((correctCount / totalQuestions) * 100);
+    
+    // Show results section
+    document.getElementById('question-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'block';
+    
+    // Display score
+    document.getElementById('score-display').innerHTML = `
+        <h3>Your Score: ${correctCount}/${totalQuestions} (${percentage}%)</h3>
+        <p>${getScoreMessage(percentage)}</p>
+    `;
+    
+    // Performance analysis
+    document.getElementById('performance-analysis').innerHTML = `
+        <div class="explanation-box">
+            <h4>📊 Performance Breakdown:</h4>
+            <p><strong>Descriptive Statistics:</strong> ${descriptiveCorrect}/${descriptiveTotal} correct (${Math.round((descriptiveCorrect/descriptiveTotal)*100)}%)</p>
+            <p><strong>Inferential Statistics:</strong> ${inferentialCorrect}/${inferentialTotal} correct (${Math.round((inferentialCorrect/inferentialTotal)*100)}%)</p>
+        </div>
+    `;
+    
+    // Detailed results
+    let detailedHTML = '<h4>📋 Question-by-Question Review:</h4>';
+    for (let i = 0; i < quizQuestions.length; i++) {
+        const question = quizQuestions[i];
+        const userAnswer = userAnswers[i] || 'No answer';
+        const isCorrect = userAnswer === question.correctAnswer;
+        
+        detailedHTML += `
+            <div class="example-item">
+                <strong>Question ${i + 1}:</strong> ${question.text}<br>
+                <strong>Your Answer:</strong> <span class="${isCorrect ? 'correct' : 'incorrect'}">${userAnswer}</span><br>
+                <strong>Correct Answer:</strong> ${question.correctAnswer}<br>
+                <em>${question.explanation}</em>
+            </div>
+        `;
+    }
+    
+    document.getElementById('detailed-results').innerHTML = detailedHTML;
+}
+
+function getScoreMessage(percentage) {
+    if (percentage >= 90) return "🏆 Outstanding! You've mastered the distinction between descriptive and inferential statistics!";
+    else if (percentage >= 80) return "👏 Excellent work! You have a strong understanding of both statistical approaches.";
+    else if (percentage >= 70) return "👍 Good progress! Review the key indicator words to strengthen your understanding.";
+    else if (percentage >= 60) return "📚 Keep studying! Focus on the purpose and methods of each statistical approach.";
+    else return "📖 More practice needed. Review the definitions and examples, then try again.";
+}
+
+function resetQuiz() {
+    currentQuestion = 0;
+    userAnswers = [];
+    quizStarted = false;
+    
+    document.getElementById('question-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('examples-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('results-btn').style.display = 'none';
+}
+
+function showExamples() {
+    const examplesSection = document.getElementById('examples-section');
+    if (examplesSection.style.display === 'none') {
+        examplesSection.style.display = 'block';
+        document.getElementById('question-section').style.display = 'none';
+        document.getElementById('results-section').style.display = 'none';
+    } else {
+        examplesSection.style.display = 'none';
+    }
+}
+
+</script>
+
+</body>
+</html>
