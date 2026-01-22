@@ -1,324 +1,608 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sample vs. Population Quiz</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: "Trebuchet MS", sans-serif;
-      padding: 20px;
-      background: #fde3d9; /* peach background */
-      /* subtle notebook-style horizontal lines */
-      background-image: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.7) 1px,
-        transparent 1px
-      );
-      background-size: 100% 32px;
-      display: flex;
-      justify-content: center;
-      color: #143057; /* deep navy, not black */
-      box-sizing: border-box;
-    }
-
-    .container {
-      max-width: 900px;
-      width: 100%;
-    }
-
-    /* Coral Red Title Card (rounded) */
-    .header-box {
-      background: #ff4d6d;           /* coral red */
-      color: #ffffff;
-      padding: 18px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.35);
-      margin-bottom: 20px;
-      border: 3px solid #ffffff;
-    }
-    .header-box h1 {
-      margin: 0 0 10px 0;
-      color: #ffffff;
-    }
-    .header-box p {
-      margin: 0;
-    }
-
-    /* Aqua Question Card */
-    #question-card {
-      margin: 12px 0;
-      padding: 16px;
-      background: #a6f5e9;           /* aqua pastel */
-      border: 2px solid #46cbb0;     /* teal border */
-      border-radius: 16px;
-      box-shadow: 0 0 10px rgba(70, 203, 176, 0.45);
-      display: none;                 /* shown after questions are generated */
-      color: #143057;                /* navy text inside card */
-    }
-    #question-text {
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    #progress {
-      font-size: 0.9em;
-      margin-bottom: 10px;
-      opacity: 0.9;
-    }
-
-    .options {
-      margin-top: 6px;
-      margin-bottom: 8px;
-    }
-    .options label {
-      margin-right: 16px;
-      cursor: pointer;
-      color: #143057;
-    }
-    .options input {
-      margin-right: 4px;
-    }
-
-    #warning {
-      font-size: 0.9em;
-      color: #e8113b; /* cherry red */
-      min-height: 1.2em;
-    }
-
-    /* Feedback / results */
-    .feedback {
-      margin-top: 6px;
-      font-size: 0.95em;
-      font-weight: bold;
-    }
-    .correct {
-      color: #1ccb8f;                /* ocean green */
-      text-shadow: 0 0 6px rgba(28, 203, 143, 0.6);
-    }
-    .incorrect {
-      color: #e8113b;                /* cherry red */
-      text-shadow: 0 0 6px rgba(232, 17, 59, 0.5);
-    }
-
-    /* Result summary */
-    #results {
-      margin-top: 20px;
-    }
-    .result-item {
-      margin: 10px 0;
-      padding: 10px;
-      background: #f3f7ff;           /* very light bluish */
-      border-radius: 10px;
-      border: 1px solid #c2d4ff;
-      color: #143057;
-    }
-
-    /* Buttons */
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    button {
-      padding: 10px 16px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.95em;
-      background: #6dfc9b;           /* mint green */
-      color: #143057;                /* navy text */
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(109, 252, 155, 0.6);
-    }
-    button:hover {
-      background: #82ffd6;
-      box-shadow: 0 0 14px rgba(130, 255, 214, 0.8);
-    }
-
-    /* Mobile tweaks */
-    @media (max-width: 600px) {
-      body {
-        padding: 12px;
-      }
-      .buttons {
-        flex-direction: column;
-      }
-      button {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample vs Population Identification - Canadian Statistics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+        
+        .canada-header {
+            background: linear-gradient(135deg, #ff0000, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .instruction-section {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        .question-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2196f3;
+            display: none;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 3px solid #2196f3;
+            font-size: 1.1em;
+        }
+        
+        .options {
+            margin: 20px 0;
+        }
+        
+        .option-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .option-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        .option-btn.selected {
+            background-color: #28a745;
+        }
+        
+        .feedback-section {
+            background: linear-gradient(135deg, #fff3e0, #ffcc80);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #ff9800;
+            display: none;
+        }
+        
+        .correct {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .incorrect {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .results-section {
+            background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+            display: none;
+        }
+        
+        .control-panel {
+            background: #343a40;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .control-btn {
+            background-color: #6f42c1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            margin: 8px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background-color: #5a32a3;
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #4caf50;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .score-display {
+            font-size: 1.2em;
+            text-align: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #9c27b0;
+        }
+        
+        .explanation-box {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4169e1;
+        }
+        
+        .category-header {
+            background: #17a2b8;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .example-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 1.8em; }
+            .option-btn { margin: 5px; padding: 10px 20px; }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="container">
 
-    <div class="header-box">
-      <h1>📘 Sample vs. Population Quiz</h1>
-      <p>
-        You will answer <strong>10 questions</strong>, one at a time.<br>
-        Decide whether each statement describes a <strong>Sample</strong> or a <strong>Population</strong>.<br>
-        At the end, you’ll see your <strong>score</strong> and explanations.
-      </p>
+<div class="container">
+    <h1>🇨🇦 Sample vs Population Identification</h1>
+    
+    <div class="canada-header">
+        <h2>🍁 Canadian Statistical Concepts Mastery 🍁</h2>
+        <p><strong>Master the fundamental distinction between samples and populations using real Canadian examples!</strong></p>
     </div>
 
-    <div id="question-card">
-      <div id="progress"></div>
-      <div id="question-text"></div>
-      <div class="options">
-        <label>
-          <input type="radio" name="answer" value="sample"> Sample
-        </label>
-        <label>
-          <input type="radio" name="answer" value="population"> Population
-        </label>
-      </div>
-      <div id="warning"></div>
+    <!-- Instructions Section -->
+    <div class="instruction-section">
+        <h3>📚 Learning Objectives</h3>
+        <p><strong>Sample:</strong> A subset or portion of a population selected for study. It represents only part of the larger group.</p>
+        <p><strong>Population:</strong> The complete set of all individuals, objects, or measurements of interest in a study.</p>
+        
+        <div class="explanation-box">
+            <h4>🎯 Key Distinctions:</h4>
+            <ul>
+                <li><strong>Sample:</strong> Uses words like "selected," "surveyed," "chosen," "sampled" - indicates partial data collection</li>
+                <li><strong>Population:</strong> Uses words like "all," "every," "entire," "complete" - indicates comprehensive data collection</li>
+                <li><strong>Sample:</strong> Usually has specific numbers (e.g., "500 Canadians")</li>
+                <li><strong>Population:</strong> Refers to totality (e.g., "All Canadians")</li>
+            </ul>
+        </div>
     </div>
 
-    <div class="buttons">
-      <button id="start-btn" onclick="startBatch()">▶ Start New Batch</button>
-      <button id="next-btn" onclick="nextQuestion()" style="display:none;">Next ▶</button>
+    <!-- Question Section -->
+    <div id="question-section" class="question-section">
+        <div id="progress-display">
+            <p><strong>Question <span id="current-q">1</span> of <span id="total-q">15</span></strong></p>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div id="question-card" class="question-card">
+            <div id="question-text"></div>
+            <div id="question-context"></div>
+        </div>
+        
+        <div class="options">
+            <button class="option-btn" onclick="selectAnswer('sample')">📊 Sample</button>
+            <button class="option-btn" onclick="selectAnswer('population')">🎯 Population</button>
+        </div>
+        
+        <div id="feedback-section" class="feedback-section">
+            <div id="feedback-text"></div>
+            <div id="explanation-text"></div>
+        </div>
     </div>
 
-    <div id="results"></div>
+    <!-- Results Section -->
+    <div id="results-section" class="results-section">
+        <h3>📊 Quiz Results</h3>
+        <div id="score-display" class="score-display"></div>
+        <div id="detailed-results"></div>
+        <div id="performance-analysis"></div>
+    </div>
 
-  </div>
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" onclick="startQuiz()">🎯 Start Quiz</button>
+        <button class="control-btn" onclick="nextQuestion()" id="next-btn" style="display:none;">➡️ Next Question</button>
+        <button class="control-btn" onclick="showResults()" id="results-btn" style="display:none;">📊 Show Results</button>
+        <button class="control-btn" onclick="resetQuiz()">🔄 Reset Quiz</button>
+        <button class="control-btn" onclick="showExamples()">📋 Examples</button>
+    </div>
+
+    <!-- Examples Section -->
+    <div id="examples-section" style="display:none;">
+        <div class="instruction-section">
+            <h3>📋 Canadian Examples</h3>
+            
+            <div class="category-header">📊 Sample Examples</div>
+            <div class="example-item">
+                <strong>"500 randomly selected Canadian voters were surveyed about healthcare priorities"</strong>
+                <br><em>→ Sample: Only 500 out of millions of Canadian voters</em>
+            </div>
+            <div class="example-item">
+                <strong>"Statistics Canada interviewed 1,200 households about income levels"</strong>
+                <br><em>→ Sample: 1,200 households represent a subset of all Canadian households</em>
+            </div>
+            <div class="example-item">
+                <strong>"A study examined 300 Grade 12 students in Ontario"</strong>
+                <br><em>→ Sample: 300 students from the larger population of all Ontario Grade 12 students</em>
+            </div>
+
+            <div class="category-header">🎯 Population Examples</div>
+            <div class="example-item">
+                <strong>"All registered voters in British Columbia participated in the referendum"</strong>
+                <br><em>→ Population: Every single registered voter, not just a subset</em>
+            </div>
+            <div class="example-item">
+                <strong>"The census collected data from every household in Canada"</strong>
+                <br><em>→ Population: Complete enumeration of all households</em>
+            </div>
+            <div class="example-item">
+                <strong>"All employees of Shoppers Drug Mart were included in the benefits study"</strong>
+                <br><em>→ Population: Every employee, not a sample</em>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-  const NUM_QUESTIONS = 10;
+// Quiz data and state
+let currentQuestion = 0;
+let totalQuestions = 15;
+let userAnswers = [];
+let quizQuestions = [];
+let quizStarted = false;
 
-  const sampleStarters = [
-    "50 randomly selected","100 surveyed","25 participants chosen",
-    "A sample of","80 chosen","30 surveyed","20 selected",
-    "A chosen group of","75 surveyed","A randomly picked group of"
-  ];
-
-  const populationStarters = [
-    "All","Every","The entire group of","Each and every","100% of",
-    "All registered","All enrolled","All residents","All members of",
-    "All recorded"
-  ];
-
-  const subjects = [
-    "students in a school","patients in a hospital","citizens of a city",
-    "employees in a company","basketball players in a league","drivers in a state",
-    "voters in an election","teachers in a district","teenagers in a town",
-    "customers at a store","college students","workers in a factory",
-    "athletes at a tournament","residents in a village","passengers on a flight"
-  ];
-
-  let questionsData = [];
-  let userAnswers = [];
-  let currentIndex = 0;
-
-  function randomItem(list) {
-    return list[Math.floor(Math.random() * list.length)];
-  }
-
-  function buildSentence(type) {
-    return type === "sample"
-      ? `${randomItem(sampleStarters)} ${randomItem(subjects)}.`
-      : `${randomItem(populationStarters)} ${randomItem(subjects)}.`;
-  }
-
-  function explanation(type) {
-    return type === "sample"
-      ? "This is a sample because it includes only part of the group."
-      : "This is a population because it includes every member of the entire group.";
-  }
-
-  function startBatch() {
-    questionsData = [];
-    userAnswers = new Array(NUM_QUESTIONS).fill(null);
-    currentIndex = 0;
-    document.getElementById("results").innerHTML = "";
-
-    for (let i = 0; i < NUM_QUESTIONS; i++) {
-      const type = Math.random() < 0.5 ? "sample" : "population";
-      questionsData.push({ text: buildSentence(type), type });
+// Canadian-themed question banks
+const sampleScenarios = [
+    {
+        text: "Statistics Canada surveyed 2,500 Canadian households about their monthly spending habits",
+        context: "A national consumer expenditure study",
+        explanation: "This is a SAMPLE because only 2,500 households were selected from the millions of Canadian households. The word 'surveyed' indicates selective data collection."
+    },
+    {
+        text: "Researchers interviewed 800 university students across Canada about mental health services",
+        context: "Post-secondary mental health research",
+        explanation: "This is a SAMPLE because 800 students represent only a portion of all university students in Canada. The specific number indicates partial data collection."
+    },
+    {
+        text: "A polling company contacted 1,200 randomly selected Canadians about the federal election",
+        context: "Pre-election polling research",
+        explanation: "This is a SAMPLE because 1,200 people were specifically chosen from the entire Canadian voting population. 'Randomly selected' is a key indicator of sampling."
+    },
+    {
+        text: "Health Canada analyzed data from 500 patients who received the COVID-19 vaccine in Ontario",
+        context: "Vaccine effectiveness study",
+        explanation: "This is a SAMPLE because the study focused on 500 specific patients rather than all Ontarians who received the vaccine."
+    },
+    {
+        text: "The Bank of Canada studied economic indicators from 150 Canadian businesses",
+        context: "Economic performance analysis",
+        explanation: "This is a SAMPLE because 150 businesses represent only a small portion of all Canadian businesses. The specific count indicates sampling."
+    },
+    {
+        text: "Environment Canada measured air quality at 75 monitoring stations across the country",
+        context: "National environmental monitoring",
+        explanation: "This is a SAMPLE because 75 stations represent selected measurement points, not every possible location in Canada."
+    },
+    {
+        text: "A research team examined test scores from 600 Grade 10 students in Alberta",
+        context: "Educational assessment study",
+        explanation: "This is a SAMPLE because 600 students represent only a fraction of all Grade 10 students in Alberta. The specific number indicates sampling."
+    },
+    {
+        text: "Transport Canada analyzed safety records from 300 commercial flights",
+        context: "Aviation safety evaluation",
+        explanation: "This is a SAMPLE because 300 flights represent a selected portion of all commercial flights in Canada."
     }
+];
 
-    document.getElementById("start-btn").textContent = "🔁 Restart Batch";
-    document.getElementById("question-card").style.display = "block";
-    document.getElementById("next-btn").style.display = "inline-block";
-
-    renderQuestion();
-  }
-
-  function renderQuestion() {
-    const q = questionsData[currentIndex];
-    document.getElementById("question-text").textContent =
-      `${currentIndex + 1}. ${q.text}`;
-    document.getElementById("progress").textContent =
-      `Question ${currentIndex + 1} of ${NUM_QUESTIONS}`;
-    document.getElementById("warning").textContent = "";
-
-    // reset radios
-    document.querySelectorAll('input[name="answer"]').forEach(r => r.checked = false);
-    if (userAnswers[currentIndex]) {
-      const saved = userAnswers[currentIndex];
-      const radio = document.querySelector(
-        `input[name="answer"][value="${saved}"]`
-      );
-      if (radio) radio.checked = true;
+const populationScenarios = [
+    {
+        text: "The 2021 Canadian Census collected demographic information from every household in the country",
+        context: "National population enumeration",
+        explanation: "This is a POPULATION because the census aims to collect data from every single household in Canada, not just a subset. 'Every household' indicates complete coverage."
+    },
+    {
+        text: "All registered voters in Prince Edward Island participated in the provincial referendum",
+        context: "Provincial democratic process",
+        explanation: "This is a POPULATION because every registered voter in PEI was included, not just a sample. 'All registered voters' indicates complete participation."
+    },
+    {
+        text: "Every employee of Canadian Tire received the new benefits package information",
+        context: "Corporate benefits communication",
+        explanation: "This is a POPULATION because all employees were included, not a selected group. 'Every employee' indicates complete coverage."
+    },
+    {
+        text: "All Grade 12 students in Nova Scotia must complete the provincial graduation requirements",
+        context: "Educational policy implementation",
+        explanation: "This is a POPULATION because it applies to every single Grade 12 student in Nova Scotia, not a sample. 'All students' indicates complete coverage."
+    },
+    {
+        text: "The complete membership of the Canadian Medical Association received the policy update",
+        context: "Professional organization communication",
+        explanation: "This is a POPULATION because the entire membership was included. 'Complete membership' indicates total coverage."
+    },
+    {
+        text: "All citizens of Yukon Territory were eligible for the territorial climate action rebate",
+        context: "Territorial government program",
+        explanation: "This is a POPULATION because every single citizen of Yukon was eligible, not a selected group. 'All citizens' indicates complete inclusion."
+    },
+    {
+        text: "Every patient admitted to Vancouver General Hospital receives a satisfaction survey",
+        context: "Hospital quality assurance",
+        explanation: "This is a POPULATION because all patients (the complete group of admitted patients) receive surveys, not just some."
+    },
+    {
+        text: "All members of the Royal Canadian Mounted Police must complete annual fitness assessments",
+        context: "Federal law enforcement standards",
+        explanation: "This is a POPULATION because every single RCMP member must participate, not a selected subset. 'All members' indicates complete coverage."
     }
+];
 
-    document.getElementById("next-btn").textContent =
-      currentIndex === NUM_QUESTIONS - 1 ? "✅ Finish & Grade" : "Next ▶";
-  }
+function generateQuiz() {
+    quizQuestions = [];
+    
+    // Mix sample and population questions
+    const shuffledSamples = [...sampleScenarios].sort(() => Math.random() - 0.5);
+    const shuffledPopulations = [...populationScenarios].sort(() => Math.random() - 0.5);
+    
+    // Take roughly half from each category
+    const sampleQuestions = shuffledSamples.slice(0, 8).map(q => ({...q, correctAnswer: 'sample'}));
+    const populationQuestions = shuffledPopulations.slice(0, 7).map(q => ({...q, correctAnswer: 'population'}));
+    
+    // Combine and shuffle
+    quizQuestions = [...sampleQuestions, ...populationQuestions].sort(() => Math.random() - 0.5);
+    totalQuestions = quizQuestions.length;
+    
+    // Update display
+    document.getElementById('total-q').textContent = totalQuestions;
+}
 
-  function nextQuestion() {
-    const selected = document.querySelector('input[name="answer"]:checked');
-    if (!selected) {
-      document.getElementById("warning").textContent =
-        "Please choose Sample or Population before continuing.";
-      return;
+function startQuiz() {
+    generateQuiz();
+    currentQuestion = 0;
+    userAnswers = [];
+    quizStarted = true;
+    
+    document.getElementById('question-section').style.display = 'block';
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('examples-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('results-btn').style.display = 'none';
+    
+    displayQuestion();
+}
+
+function displayQuestion() {
+    if (currentQuestion >= totalQuestions) {
+        showResults();
+        return;
     }
-    userAnswers[currentIndex] = selected.value;
+    
+    const question = quizQuestions[currentQuestion];
+    
+    // Update progress
+    document.getElementById('current-q').textContent = currentQuestion + 1;
+    const progressPercent = ((currentQuestion + 1) / totalQuestions) * 100;
+    document.getElementById('progress-fill').style.width = progressPercent + '%';
+    
+    // Display question
+    document.getElementById('question-text').innerHTML = `<strong>${question.text}</strong>`;
+    document.getElementById('question-context').innerHTML = `<em>Context: ${question.context}</em>`;
+    
+    // Reset buttons
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    
+    // Hide feedback
+    document.getElementById('feedback-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    
+    if (currentQuestion === totalQuestions - 1) {
+        document.getElementById('results-btn').style.display = 'inline-block';
+    }
+}
 
-    if (currentIndex < NUM_QUESTIONS - 1) {
-      currentIndex++;
-      renderQuestion();
+function selectAnswer(answer) {
+    if (currentQuestion >= totalQuestions) return;
+    
+    // Update user answers
+    userAnswers[currentQuestion] = answer;
+    
+    // Visual feedback on button
+    document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+    event.target.classList.add('selected');
+    
+    // Show immediate feedback
+    const question = quizQuestions[currentQuestion];
+    const isCorrect = answer === question.correctAnswer;
+    
+    const feedbackSection = document.getElementById('feedback-section');
+    const feedbackText = document.getElementById('feedback-text');
+    const explanationText = document.getElementById('explanation-text');
+    
+    feedbackText.innerHTML = isCorrect 
+        ? `<span class="correct">✅ Correct!</span> This is a ${question.correctAnswer}.`
+        : `<span class="incorrect">❌ Incorrect.</span> This is a ${question.correctAnswer}, not a ${answer}.`;
+    
+    explanationText.innerHTML = `<strong>Explanation:</strong> ${question.explanation}`;
+    
+    feedbackSection.style.display = 'block';
+    
+    // Show next button
+    if (currentQuestion < totalQuestions - 1) {
+        document.getElementById('next-btn').style.display = 'inline-block';
     } else {
-      gradeQuiz();
+        document.getElementById('results-btn').style.display = 'inline-block';
     }
-  }
+}
 
-  function gradeQuiz() {
+function nextQuestion() {
+    currentQuestion++;
+    displayQuestion();
+}
+
+function showResults() {
+    // Calculate score
     let correctCount = 0;
-    const resultsDiv = document.getElementById("results");
-    resultsDiv.innerHTML = "";
+    let sampleCorrect = 0;
+    let populationCorrect = 0;
+    let sampleTotal = 0;
+    let populationTotal = 0;
+    
+    for (let i = 0; i < quizQuestions.length; i++) {
+        const question = quizQuestions[i];
+        const userAnswer = userAnswers[i];
+        
+        if (question.correctAnswer === 'sample') {
+            sampleTotal++;
+            if (userAnswer === 'sample') sampleCorrect++;
+        } else {
+            populationTotal++;
+            if (userAnswer === 'population') populationCorrect++;
+        }
+        
+        if (userAnswer === question.correctAnswer) {
+            correctCount++;
+        }
+    }
+    
+    const percentage = Math.round((correctCount / totalQuestions) * 100);
+    
+    // Show results section
+    document.getElementById('question-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'block';
+    
+    // Display score
+    document.getElementById('score-display').innerHTML = `
+        <h3>Your Score: ${correctCount}/${totalQuestions} (${percentage}%)</h3>
+        <p>${getScoreMessage(percentage)}</p>
+    `;
+    
+    // Performance analysis
+    document.getElementById('performance-analysis').innerHTML = `
+        <div class="explanation-box">
+            <h4>📊 Performance Breakdown:</h4>
+            <p><strong>Sample Questions:</strong> ${sampleCorrect}/${sampleTotal} correct (${Math.round((sampleCorrect/sampleTotal)*100)}%)</p>
+            <p><strong>Population Questions:</strong> ${populationCorrect}/${populationTotal} correct (${Math.round((populationCorrect/populationTotal)*100)}%)</p>
+        </div>
+    `;
+    
+    // Detailed results
+    let detailedHTML = '<h4>📋 Question-by-Question Review:</h4>';
+    for (let i = 0; i < quizQuestions.length; i++) {
+        const question = quizQuestions[i];
+        const userAnswer = userAnswers[i] || 'No answer';
+        const isCorrect = userAnswer === question.correctAnswer;
+        
+        detailedHTML += `
+            <div class="example-item">
+                <strong>Question ${i + 1}:</strong> ${question.text}<br>
+                <strong>Your Answer:</strong> <span class="${isCorrect ? 'correct' : 'incorrect'}">${userAnswer}</span><br>
+                <strong>Correct Answer:</strong> ${question.correctAnswer}<br>
+                <em>${question.explanation}</em>
+            </div>
+        `;
+    }
+    
+    document.getElementById('detailed-results').innerHTML = detailedHTML;
+}
 
-    questionsData.forEach((q, i) => {
-      const user = userAnswers[i];
-      const correct = q.type;
-      const isCorrect = user === correct;
-      if (isCorrect) correctCount++;
+function getScoreMessage(percentage) {
+    if (percentage >= 90) return "🏆 Excellent! You have mastered the sample vs population concept!";
+    else if (percentage >= 80) return "👏 Great job! You have a strong understanding of the concepts.";
+    else if (percentage >= 70) return "👍 Good work! Review the explanations to strengthen your understanding.";
+    else if (percentage >= 60) return "📚 Keep practicing! Focus on key indicator words in the questions.";
+    else return "📖 More study needed. Review the examples and try again.";
+}
 
-      const div = document.createElement("div");
-      div.className = "result-item";
-      div.innerHTML = `
-        <strong>Question ${i + 1}:</strong> ${q.text}<br>
-        Your answer: <strong>${user ? user : "(no answer)"}</strong><br>
-        Correct answer: <strong>${correct}</strong><br>
-        <span class="${isCorrect ? "correct" : "incorrect"}">
-          ${isCorrect ? "Correct!" : "Incorrect."} ${explanation(correct)}
-        </span>
-      `;
-      resultsDiv.appendChild(div);
-    });
+function resetQuiz() {
+    currentQuestion = 0;
+    userAnswers = [];
+    quizStarted = false;
+    
+    document.getElementById('question-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'none';
+    document.getElementById('examples-section').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('results-btn').style.display = 'none';
+}
 
-    const score = document.createElement("p");
-    score.className = "feedback";
-    score.innerHTML =
-      `You scored <span class="correct">${correctCount} / ${NUM_QUESTIONS}</span>.`;
-    resultsDiv.prepend(score);
+function showExamples() {
+    const examplesSection = document.getElementById('examples-section');
+    if (examplesSection.style.display === 'none') {
+        examplesSection.style.display = 'block';
+        document.getElementById('question-section').style.display = 'none';
+        document.getElementById('results-section').style.display = 'none';
+    } else {
+        examplesSection.style.display = 'none';
+    }
+}
 
-    document.getElementById("next-btn").style.display = "none";
-  }
 </script>
+
 </body>
 </html>
