@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Frequency Distribution Interactive Learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Trebuchet MS", sans-serif;
+      padding: 20px;
+      background: #fde3d9; /* peach background */
+      background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.7) 1px,
+        transparent 1px
+      );
+      background-size: 100% 32px;
+      display: flex;
+      justify-content: center;
+      color: #143057; /* deep navy text */
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    /* Coral Red Header Card */
+    .header-box {
+      background: #ff4d6d;           /* coral red */
+      color: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.35);
+      margin-bottom: 20px;
+      border: 3px solid #ffffff;
+    }
+    .header-box h1 {
+      margin: 0 0 10px 0;
+      color: #ffffff;
+      text-align: center;
+    }
+    .header-box p {
+      margin: 0;
+      text-align: center;
+    }
+
+    /* Light Blue Explanation Card */
+    .explanation-box {
+      background: #e8f4fd;           /* light blue */
+      color: #143057;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.2);
+      margin-bottom: 20px;
+      border: 2px solid #4a90e2;
+    }
+    
+    .explanation-box h2 {
+      margin: 0 0 20px 0;
+      color: #2c5282;
+      text-align: center;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 10px;
+    }
+
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .concept-item {
+      margin: 10px 0;
+      padding: 15px;
+      background: #ffffff;
+      border-radius: 10px;
+      border-left: 4px solid #4a90e2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .concept-item h3 {
+      margin: 0 0 10px 0;
+      color: #2c5282;
+      font-size: 1.1em;
+    }
+    
+    .concept-item .definition {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #143057;
+    }
+    
+    .concept-item .formula {
+      background: #f0f8ff;
+      padding: 8px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      margin: 8px 0;
+      text-align: center;
+      border: 1px solid #4a90e2;
+    }
+
+    .concept-item .example {
+      font-style: italic;
+      color: #666;
+      margin-top: 8px;
+      font-size: 0.9em;
+    }
+
+    /* Data Table Styling */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .data-table th {
+      background: #ff4d6d;           /* coral red header */
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .data-table td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .data-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    .data-table tr:hover {
+      background: #fde3d9;          /* light peach hover */
+    }
+
+    /* Aqua Question Card */
+    #question-card {
+      margin: 12px 0;
+      padding: 25px;
+      background: #a6f5e9;           /* aqua pastel */
+      border: 3px solid #46cbb0;     /* teal border */
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(70, 203, 176, 0.45);
+      display: none;
+      color: #143057;                /* navy text inside card */
+    }
+
+    #question-text {
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      line-height: 1.4;
+    }
+
+    #progress {
+      font-size: 1em;
+      margin-bottom: 15px;
+      text-align: center;
+      background: rgba(255,255,255,0.7);
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .options {
+      margin: 20px 0;
+    }
+    
+    .options label {
+      display: block;
+      margin: 12px 0;
+      cursor: pointer;
+      color: #143057;
+      padding: 15px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      font-size: 1.05em;
+    }
+    
+    .options label:hover {
+      background: rgba(255,255,255,0.8);
+      border-color: #46cbb0;
+      transform: translateY(-1px);
+    }
+    
+    .options input {
+      margin-right: 12px;
+      transform: scale(1.3);
+    }
+
+    .input-field {
+      width: 100px;
+      padding: 8px;
+      border: 2px solid #46cbb0;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1em;
+      margin: 0 5px;
+    }
+
+    #warning {
+      font-size: 0.95em;
+      color: #e8113b;                /* cherry red */
+      min-height: 1.2em;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
+      background: rgba(232, 17, 59, 0.1);
+      padding: 8px;
+      border-radius: 5px;
+    }
+
+    /* Feedback Section */
+    #feedback-section {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+      animation: slideIn 0.4s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .feedback-correct {
+      background: #d4edda;
+      border: 3px solid #1ccb8f;     /* ocean green */
+      color: #155724;
+    }
+    
+    .feedback-incorrect {
+      background: #f8d7da;
+      border: 3px solid #e8113b;     /* cherry red */
+      color: #721c24;
+    }
+    
+    .feedback-header {
+      font-weight: bold;
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .feedback-explanation {
+      margin-top: 15px;
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    .feedback-details {
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    /* Score Display */
+    #score-display {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      color: #856404;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+
+    /* Buttons with Original Color Scheme */
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    button {
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(109, 252, 155, 0.6);
+      min-width: 160px;
+    }
+    
+    .btn-primary {
+      background: #6dfc9b;           /* mint green */
+      color: #143057;                /* navy text */
+    }
+    .btn-primary:hover {
+      background: #82ffd6;
+      box-shadow: 0 0 14px rgba(130, 255, 214, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #a6f5e9;           /* aqua */
+      color: #143057;
+    }
+    .btn-secondary:hover {
+      background: #8eeee4;
+      box-shadow: 0 0 14px rgba(142, 238, 228, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-warning {
+      background: #ffc107;           /* yellow */
+      color: #143057;
+    }
+    .btn-warning:hover {
+      background: #ffcd39;
+      box-shadow: 0 0 14px rgba(255, 205, 57, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #ff4d6d;           /* coral red */
+      color: #ffffff;
+    }
+    .btn-danger:hover {
+      background: #ff6b85;
+      box-shadow: 0 0 14px rgba(255, 107, 133, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+      .buttons {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+        min-width: unset;
+      }
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+      .data-table {
+        font-size: 0.9em;
+      }
+      .data-table th, .data-table td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="header-box">
+      <h1>📊 Frequency Distribution Learning</h1>
+      <p>
+        Master class intervals, frequencies, and cumulative distributions<br>
+        with real Canadian economic and academic data examples!
+      </p>
+    </div>
+
+    <!-- Concepts Explanation -->
+    <div class="explanation-box">
+      <h2>📚 Frequency Distribution Concepts</h2>
+      
+      <div class="concepts-grid">
+        <div class="concept-item">
+          <h3>📏 Class Interval</h3>
+          <div class="definition">The vertical distance (gap) between two consecutive classes.</div>
+          <div class="formula">Class Interval = Lower limit of next class - Upper limit of current class</div>
+          <div class="example">Example: Between classes "50-59" and "60-69", interval = 60 - 59 = 1</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>🎯 Class Limit</h3>
+          <div class="definition">The difference between the upper value and lower value within a class.</div>
+          <div class="formula">Class Limit = Upper Limit - Lower Limit</div>
+          <div class="example">Example: For class "60-69", class limit = 69 - 60 = 9</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📈 Absolute Frequency</h3>
+          <div class="definition">The actual count of observations in each class.</div>
+          <div class="formula">f = count of values in class</div>
+          <div class="example">Example: 15 students scored between 80-89</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📊 Relative Frequency</h3>
+          <div class="definition">The proportion of observations in each class.</div>
+          <div class="formula">Relative Frequency = f / n × 100%</div>
+          <div class="example">Example: 15/100 = 0.15 or 15%</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📈 Cumulative Frequency (Less Than)</h3>
+          <div class="definition">Total count of values less than the upper limit.</div>
+          <div class="formula">CF< = sum of all frequencies up to current class</div>
+          <div class="example">Example: 35 students scored less than 70</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📉 Cumulative Frequency (Greater Than)</h3>
+          <div class="definition">Total count of values greater than or equal to lower limit.</div>
+          <div class="formula">CF≥ = sum of current class and all higher classes</div>
+          <div class="example">Example: 65 students scored 70 or higher</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📊 Cumulative Relative Frequency (Less Than)</h3>
+          <div class="definition">Proportion of values less than the upper limit.</div>
+          <div class="formula">CRF< = CF< / n × 100%</div>
+          <div class="example">Example: 35% of students scored less than 70</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📊 Cumulative Relative Frequency (Greater Than)</h3>
+          <div class="definition">Proportion of values greater than or equal to lower limit.</div>
+          <div class="formula">CRF≥ = CF≥ / n × 100%</div>
+          <div class="example">Example: 65% of students scored 70 or higher</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Score Display -->
+    <div id="score-display"></div>
+
+    <!-- Question Card -->
+    <div id="question-card">
+      <div id="progress"></div>
+      <div id="question-text"></div>
+      <div id="data-display"></div>
+      <div id="question-input-area"></div>
+      <div id="warning"></div>
+
+      <!-- Feedback Section -->
+      <div id="feedback-section">
+        <div class="feedback-header" id="feedback-header"></div>
+        <div class="feedback-explanation" id="feedback-explanation"></div>
+        <div class="feedback-details" id="feedback-details"></div>
+      </div>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="buttons">
+      <button id="start-btn" class="btn-primary" onclick="startLearning()">🚀 Start Learning</button>
+      <button id="show-explanation-btn" class="btn-secondary hidden" onclick="showExplanation()">💡 Show Explanation</button>
+      <button id="check-answer-btn" class="btn-warning hidden" onclick="checkAnswer()">✅ Check Answer</button>
+      <button id="next-btn" class="btn-primary hidden" onclick="nextQuestion()">➡️ Next Question</button>
+      <button id="reset-btn" class="btn-danger hidden" onclick="resetLearning()">🔄 Reset & New Data</button>
+    </div>
+
+  </div>
+
+<script>
+  // Sample datasets with Canadian themes
+  const datasets = [
+    {
+      title: "Statistics Course Final Grades",
+      description: "Final exam scores for 50 students in a Canadian university statistics course",
+      data: [45, 52, 58, 61, 67, 72, 75, 78, 82, 85, 88, 91, 94, 
+             48, 55, 60, 65, 69, 73, 76, 79, 83, 86, 89, 92, 95,
+             50, 56, 62, 66, 70, 74, 77, 80, 84, 87, 90, 93, 96,
+             53, 57, 63, 68, 71, 81, 97, 54, 59, 64, 98, 99],
+      classes: [[40, 49], [50, 59], [60, 69], [70, 79], [80, 89], [90, 99]],
+      classLabels: ["40-49", "50-59", "60-69", "70-79", "80-89", "90-99"]
+    },
+    {
+      title: "Annual Household Income in Ottawa",
+      description: "Household income (in $000s) from 40 families surveyed in Ottawa",
+      data: [35, 42, 48, 55, 62, 68, 75, 82, 89, 95, 105, 112, 125, 135,
+             38, 45, 52, 58, 65, 72, 78, 85, 92, 98, 108, 118, 128, 138,
+             40, 47, 54, 60, 67, 74, 80, 87, 94, 102, 115, 132],
+      classes: [[30, 49], [50, 69], [70, 89], [90, 109], [110, 129], [130, 149]],
+      classLabels: ["30-49", "50-69", "70-89", "90-109", "110-129", "130-149"]
+    },
+    {
+      title: "Age Distribution at Canadian Tech Company",
+      description: "Ages of 45 employees at a Toronto technology startup",
+      data: [22, 24, 26, 28, 30, 32, 35, 38, 41, 44, 47, 52, 55,
+             23, 25, 27, 29, 31, 34, 37, 40, 43, 46, 49, 53, 56,
+             24, 26, 28, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57,
+             25, 27, 29, 31, 34, 37, 50],
+      classes: [[20, 29], [30, 39], [40, 49], [50, 59]],
+      classLabels: ["20-29", "30-39", "40-49", "50-59"]
+    },
+    {
+      title: "Monthly Rent in Vancouver",
+      description: "Monthly rent ($) for 35 one-bedroom apartments in Vancouver",
+      data: [1200, 1350, 1450, 1580, 1650, 1750, 1850, 1950, 2100, 2250,
+             1250, 1380, 1480, 1600, 1680, 1780, 1880, 1980, 2150, 2300,
+             1300, 1420, 1520, 1620, 1700, 1800, 1900, 2000, 2200, 2350,
+             1320, 1440, 1550, 1640, 1720],
+      classes: [[1200, 1399], [1400, 1599], [1600, 1799], [1800, 1999], [2000, 2199], [2200, 2399]],
+      classLabels: ["1200-1399", "1400-1599", "1600-1799", "1800-1999", "2000-2199", "2200-2399"]
+    }
+  ];
+
+  let currentDataset = {};
+  let currentFrequencyTable = {};
+  let currentQuestion = {};
+  let totalCorrect = 0;
+  let totalQuestions = 0;
+  let hasAnswered = false;
+
+  function calculateFrequencyTable(dataset) {
+    const frequencies = {};
+    const table = {
+      classes: dataset.classLabels,
+      absolute: [],
+      relative: [],
+      cumulativeLess: [],
+      cumulativeGreater: [],
+      cumulativeRelLess: [],
+      cumulativeRelGreater: [],
+      total: dataset.data.length
+    };
+
+    // Calculate absolute frequencies
+    dataset.classes.forEach((range, index) => {
+      const count = dataset.data.filter(value => 
+        value >= range[0] && value <= range[1]
+      ).length;
+      table.absolute.push(count);
+      table.relative.push((count / table.total * 100).toFixed(1));
+    });
+
+    // Calculate cumulative frequencies (less than)
+    let cumSum = 0;
+    table.absolute.forEach(freq => {
+      cumSum += freq;
+      table.cumulativeLess.push(cumSum);
+      table.cumulativeRelLess.push((cumSum / table.total * 100).toFixed(1));
+    });
+
+    // Calculate cumulative frequencies (greater than or equal)
+    let cumSumGreater = table.total;
+    table.absolute.forEach(freq => {
+      table.cumulativeGreater.push(cumSumGreater);
+      table.cumulativeRelGreater.push((cumSumGreater / table.total * 100).toFixed(1));
+      cumSumGreater -= freq;
+    });
+
+    return table;
+  }
+
+  function generateFrequencyTableHTML(table) {
+    let html = `
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Absolute<br>Frequency (f)</th>
+            <th>Relative<br>Frequency (%)</th>
+            <th>Cumulative<br>Frequency (&lt;)</th>
+            <th>Cumulative<br>Frequency (≥)</th>
+            <th>Cumulative<br>Rel. Freq. (&lt;%)</th>
+            <th>Cumulative<br>Rel. Freq. (≥%)</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    table.classes.forEach((className, index) => {
+      html += `
+        <tr>
+          <td><strong>${className}</strong></td>
+          <td>${table.absolute[index]}</td>
+          <td>${table.relative[index]}%</td>
+          <td>${table.cumulativeLess[index]}</td>
+          <td>${table.cumulativeGreater[index]}</td>
+          <td>${table.cumulativeRelLess[index]}%</td>
+          <td>${table.cumulativeRelGreater[index]}%</td>
+        </tr>
+      `;
+    });
+
+    html += `
+        </tbody>
+        <tfoot>
+          <tr style="background: #4a7c59; color: white; font-weight: bold;">
+            <td>Total</td>
+            <td>${table.total}</td>
+            <td>100.0%</td>
+            <td>${table.total}</td>
+            <td>${table.total}</td>
+            <td>100.0%</td>
+            <td>100.0%</td>
+          </tr>
+        </tfoot>
+      </table>
+    `;
+
+    return html;
+  }
+
+  const questionTypes = [
+    {
+      id: "class_interval",
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * (dataset.classes.length - 1));
+        const currentClass = dataset.classes[classIndex];
+        const nextClass = dataset.classes[classIndex + 1];
+        const currentLabel = dataset.classLabels[classIndex];
+        const nextLabel = dataset.classLabels[classIndex + 1];
+        return {
+          type: "input",
+          question: `What is the class interval (vertical distance) between classes "${currentLabel}" and "${nextLabel}"?`,
+          correctAnswer: nextClass[0] - currentClass[1],
+          explanation: `The class interval is the vertical distance between consecutive classes: ${nextClass[0]} - ${currentClass[1]} = ${nextClass[0] - currentClass[1]}`,
+          hint: "Class interval = Lower limit of next class - Upper limit of current class"
+        };
+      }
+    },
+    {
+      id: "class_limit", 
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * dataset.classes.length);
+        const selectedClass = dataset.classes[classIndex];
+        const classLabel = dataset.classLabels[classIndex];
+        return {
+          type: "input",
+          question: `What is the class limit (difference between upper and lower values) for the class "${classLabel}"?`,
+          correctAnswer: selectedClass[1] - selectedClass[0],
+          explanation: `The class limit is the difference between upper and lower values within the class: ${selectedClass[1]} - ${selectedClass[0]} = ${selectedClass[1] - selectedClass[0]}`,
+          hint: "Class limit = Upper limit - Lower limit within the same class"
+        };
+      }
+    },
+    {
+      id: "absolute_frequency",
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * dataset.classes.length);
+        const classLabel = dataset.classLabels[classIndex];
+        return {
+          type: "input",
+          question: `What is the absolute frequency for the class "${classLabel}"?`,
+          correctAnswer: table.absolute[classIndex],
+          explanation: `The absolute frequency for class "${classLabel}" is ${table.absolute[classIndex]}, meaning ${table.absolute[classIndex]} observations fall within this range.`,
+          hint: "Look for the count of observations in this specific class range."
+        };
+      }
+    },
+    {
+      id: "absolute_frequency",
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * dataset.classes.length);
+        const classLabel = dataset.classLabels[classIndex];
+        return {
+          type: "input",
+          question: `What is the absolute frequency for the class "${classLabel}"?`,
+          correctAnswer: table.absolute[classIndex],
+          explanation: `The absolute frequency for class "${classLabel}" is ${table.absolute[classIndex]}, meaning ${table.absolute[classIndex]} observations fall within this range.`,
+          hint: "Look for the count of observations in this specific class range."
+        };
+      }
+    },
+    {
+      id: "relative_frequency",
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * dataset.classes.length);
+        const classLabel = dataset.classLabels[classIndex];
+        return {
+          type: "input",
+          question: `What is the relative frequency (as a percentage) for the class "${classLabel}"? (Round to 1 decimal place)`,
+          correctAnswer: parseFloat(table.relative[classIndex]),
+          explanation: `The relative frequency for class "${classLabel}" is ${table.relative[classIndex]}%, calculated as: (${table.absolute[classIndex]} ÷ ${table.total}) × 100% = ${table.relative[classIndex]}%`,
+          hint: "Relative frequency = (Absolute frequency ÷ Total observations) × 100%"
+        };
+      }
+    },
+    {
+      id: "cumulative_less",
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * dataset.classes.length);
+        const upperLimit = dataset.classes[classIndex][1];
+        return {
+          type: "input",
+          question: `What is the cumulative frequency for values LESS THAN OR EQUAL TO ${upperLimit}?`,
+          correctAnswer: table.cumulativeLess[classIndex],
+          explanation: `The cumulative frequency (≤ ${upperLimit}) is ${table.cumulativeLess[classIndex]}, which means ${table.cumulativeLess[classIndex]} observations have values less than or equal to ${upperLimit}.`,
+          hint: "Sum all frequencies from the lowest class up to and including the current class."
+        };
+      }
+    },
+    {
+      id: "cumulative_greater",
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * dataset.classes.length);
+        const lowerLimit = dataset.classes[classIndex][0];
+        return {
+          type: "input",
+          question: `What is the cumulative frequency for values GREATER THAN OR EQUAL TO ${lowerLimit}?`,
+          correctAnswer: table.cumulativeGreater[classIndex],
+          explanation: `The cumulative frequency (≥ ${lowerLimit}) is ${table.cumulativeGreater[classIndex]}, which means ${table.cumulativeGreater[classIndex]} observations have values greater than or equal to ${lowerLimit}.`,
+          hint: "Sum all frequencies from the current class to the highest class."
+        };
+      }
+    },
+    {
+      id: "cumulative_rel_less",
+      question: (dataset, table) => {
+        const classIndex = Math.floor(Math.random() * dataset.classes.length);
+        const upperLimit = dataset.classes[classIndex][1];
+        return {
+          type: "input",
+          question: `What is the cumulative relative frequency (as a percentage) for values LESS THAN OR EQUAL TO ${upperLimit}? (Round to 1 decimal place)`,
+          correctAnswer: parseFloat(table.cumulativeRelLess[classIndex]),
+          explanation: `The cumulative relative frequency (≤ ${upperLimit}) is ${table.cumulativeRelLess[classIndex]}%, meaning ${table.cumulativeRelLess[classIndex]}% of observations are less than or equal to ${upperLimit}.`,
+          hint: "Cumulative relative frequency = (Cumulative frequency ÷ Total observations) × 100%"
+        };
+      }
+    },
+    {
+      id: "identify_concept",
+      question: (dataset, table) => {
+        const concepts = [
+          {
+            value: table.absolute[2],
+            options: ["Absolute Frequency", "Relative Frequency", "Class Interval", "Cumulative Frequency"],
+            correct: "Absolute Frequency",
+            explanation: "This is the absolute frequency - the actual count of observations in a class."
+          },
+          {
+            value: table.relative[1] + "%",
+            options: ["Absolute Frequency", "Relative Frequency", "Class Interval", "Cumulative Frequency"],
+            correct: "Relative Frequency", 
+            explanation: "This is the relative frequency - the percentage of observations in a class."
+          },
+          {
+            value: table.cumulativeLess[3],
+            options: ["Absolute Frequency", "Relative Frequency", "Cumulative Frequency (Less Than)", "Cumulative Frequency (Greater Than)"],
+            correct: "Cumulative Frequency (Less Than)",
+            explanation: "This is cumulative frequency (less than) - total count up to a certain value."
+          }
+        ];
+        
+        const selected = concepts[Math.floor(Math.random() * concepts.length)];
+        return {
+          type: "multiple_choice",
+          question: `In the frequency table, the value "${selected.value}" represents which concept?`,
+          options: selected.options,
+          correctAnswer: selected.correct,
+          explanation: selected.explanation,
+          hint: "Look at the column headers and think about what each type of frequency represents."
+        };
+      }
+    }
+  ];
+
+  function generateQuestion() {
+    const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+    currentQuestion = questionType.question(currentDataset, currentFrequencyTable);
+    hasAnswered = false;
+  }
+
+  function startLearning() {
+    // Select random dataset
+    currentDataset = datasets[Math.floor(Math.random() * datasets.length)];
+    currentFrequencyTable = calculateFrequencyTable(currentDataset);
+    
+    generateQuestion();
+    displayQuestion();
+    
+    // Show question card and relevant buttons
+    document.getElementById("question-card").style.display = "block";
+    document.getElementById("start-btn").classList.add("hidden");
+    document.getElementById("show-explanation-btn").classList.remove("hidden");
+    document.getElementById("check-answer-btn").classList.remove("hidden");
+    document.getElementById("reset-btn").classList.remove("hidden");
+    
+    // Hide feedback initially
+    document.getElementById("feedback-section").style.display = "none";
+  }
+
+  function displayQuestion() {
+    // Update progress
+    document.getElementById("progress").textContent = 
+      `${currentDataset.title} • Question ${totalQuestions + 1} • Score: ${totalCorrect}/${totalQuestions} correct`;
+    
+    // Display question
+    document.getElementById("question-text").innerHTML = `
+      <strong>Dataset:</strong> ${currentDataset.description}<br><br>
+      <strong>Question:</strong> ${currentQuestion.question}
+    `;
+
+    // Display frequency table
+    document.getElementById("data-display").innerHTML = `
+      <h4 style="text-align: center; margin: 20px 0; color: #4a7c59;">📊 Frequency Distribution Table</h4>
+      ${generateFrequencyTableHTML(currentFrequencyTable)}
+    `;
+
+    // Create input area based on question type
+    createInputArea();
+    
+    document.getElementById("warning").textContent = "";
+    updateScoreDisplay();
+  }
+
+  function createInputArea() {
+    const inputArea = document.getElementById("question-input-area");
+    
+    if (currentQuestion.type === "input") {
+      inputArea.innerHTML = `
+        <div style="text-align: center; margin: 20px 0;">
+          <label for="answer-input" style="display: block; margin-bottom: 10px; font-weight: bold;">
+            Your Answer:
+          </label>
+          <input type="number" id="answer-input" class="input-field" step="0.1" 
+                 placeholder="Enter number" style="width: 150px; font-size: 1.1em;">
+        </div>
+      `;
+    } else if (currentQuestion.type === "multiple_choice") {
+      let optionsHTML = '<div class="options">';
+      currentQuestion.options.forEach((option, index) => {
+        optionsHTML += `
+          <label>
+            <input type="radio" name="answer" value="${option}"> ${option}
+          </label>
+        `;
+      });
+      optionsHTML += '</div>';
+      inputArea.innerHTML = optionsHTML;
+    }
+  }
+
+  function updateScoreDisplay() {
+    const scoreDiv = document.getElementById("score-display");
+    if (totalQuestions > 0) {
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+      scoreDiv.innerHTML = `📊 Your Progress: ${totalCorrect}/${totalQuestions} correct (${percentage}%)`;
+      scoreDiv.style.display = "block";
+    }
+  }
+
+  function showExplanation() {
+    const feedbackSection = document.getElementById("feedback-section");
+    
+    document.getElementById("feedback-header").textContent = "💡 Hint";
+    document.getElementById("feedback-explanation").innerHTML = `
+      <strong>How to solve this:</strong><br>
+      ${currentQuestion.hint}
+    `;
+    document.getElementById("feedback-details").innerHTML = `
+      <strong>Tip:</strong> Look carefully at the frequency table and identify the relevant column or calculation needed.
+    `;
+    
+    feedbackSection.className = "";
+    feedbackSection.style.display = "block";
+    feedbackSection.style.background = "#e3f2fd";
+    feedbackSection.style.border = "3px solid #2196f3";
+    feedbackSection.style.color = "#1565c0";
+  }
+
+  function checkAnswer() {
+    if (hasAnswered) {
+      document.getElementById("warning").textContent = 
+        "You've already answered this question. Click 'Next Question' to continue.";
+      return;
+    }
+
+    let userAnswer;
+    let isCorrect = false;
+
+    if (currentQuestion.type === "input") {
+      const input = document.getElementById("answer-input");
+      if (!input.value.trim()) {
+        document.getElementById("warning").textContent = 
+          "⚠️ Please enter your answer before checking.";
+        return;
+      }
+      userAnswer = parseFloat(input.value);
+      isCorrect = Math.abs(userAnswer - currentQuestion.correctAnswer) < 0.1;
+    } else if (currentQuestion.type === "multiple_choice") {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        document.getElementById("warning").textContent = 
+          "⚠️ Please select an option before checking your answer.";
+        return;
+      }
+      userAnswer = selected.value;
+      isCorrect = userAnswer === currentQuestion.correctAnswer;
+    }
+
+    // Update statistics
+    totalQuestions++;
+    if (isCorrect) totalCorrect++;
+    hasAnswered = true;
+
+    // Show feedback
+    showFeedback(isCorrect, userAnswer);
+    
+    // Update UI
+    document.getElementById("next-btn").classList.remove("hidden");
+    document.getElementById("check-answer-btn").classList.add("hidden");
+    updateScoreDisplay();
+    document.getElementById("warning").textContent = "";
+  }
+
+  function showFeedback(isCorrect, userAnswer) {
+    const feedbackSection = document.getElementById("feedback-section");
+    const feedbackHeader = document.getElementById("feedback-header");
+    const feedbackExplanation = document.getElementById("feedback-explanation");
+    const feedbackDetails = document.getElementById("feedback-details");
+
+    if (isCorrect) {
+      feedbackSection.className = "feedback-correct";
+      feedbackHeader.innerHTML = "🎉 Excellent!";
+      feedbackExplanation.innerHTML = `
+        <strong>Perfect!</strong> You correctly answered: <strong>${userAnswer}</strong><br><br>
+        ${currentQuestion.explanation}
+      `;
+      feedbackDetails.innerHTML = `
+        <strong>Great work!</strong> You understand this frequency distribution concept well.
+      `;
+    } else {
+      feedbackSection.className = "feedback-incorrect";
+      feedbackHeader.innerHTML = "📚 Let's Learn Together";
+      feedbackExplanation.innerHTML = `
+        You answered: <strong>${userAnswer}</strong><br>
+        The correct answer is: <strong>${currentQuestion.correctAnswer}</strong><br><br>
+        <strong>Explanation:</strong><br>
+        ${currentQuestion.explanation}
+      `;
+      feedbackDetails.innerHTML = `
+        <strong>Learning tip:</strong> Review the concept definition above and practice identifying the relevant values in frequency tables.
+      `;
+    }
+
+    feedbackSection.style.display = "block";
+  }
+
+  function nextQuestion() {
+    generateQuestion();
+    displayQuestion();
+    
+    // Reset UI state
+    document.getElementById("feedback-section").style.display = "none";
+    document.getElementById("check-answer-btn").classList.remove("hidden");
+    document.getElementById("next-btn").classList.add("hidden");
+    document.getElementById("warning").textContent = "";
+  }
+
+  function resetLearning() {
+    // Reset statistics
+    totalCorrect = 0;
+    totalQuestions = 0;
+    hasAnswered = false;
+
+    // Reset UI
+    document.getElementById("question-card").style.display = "none";
+    document.getElementById("feedback-section").style.display = "none";
+    document.getElementById("score-display").style.display = "none";
+    
+    // Reset buttons
+    document.getElementById("start-btn").classList.remove("hidden");
+    document.getElementById("show-explanation-btn").classList.add("hidden");
+    document.getElementById("check-answer-btn").classList.add("hidden");
+    document.getElementById("next-btn").classList.add("hidden");
+    document.getElementById("reset-btn").classList.add("hidden");
+    
+    document.getElementById("warning").textContent = "";
+  }
+</script>
+</body>
+</html>
