@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Distribution Shapes Interactive Learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: "Trebuchet MS", sans-serif;
+      padding: 20px;
+      background: #fde3d9; /* peach background */
+      background-image: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.7) 1px,
+        transparent 1px
+      );
+      background-size: 100% 32px;
+      display: flex;
+      justify-content: center;
+      color: #143057; /* deep navy text */
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    /* Coral Red Header Card */
+    .header-box {
+      background: #ff4d6d;           /* coral red */
+      color: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.35);
+      margin-bottom: 20px;
+      border: 3px solid #ffffff;
+    }
+    .header-box h1 {
+      margin: 0 0 10px 0;
+      color: #ffffff;
+      text-align: center;
+    }
+    .header-box p {
+      margin: 0;
+      text-align: center;
+    }
+
+    /* Light Blue Explanation Card */
+    .explanation-box {
+      background: #e8f4fd;           /* light blue */
+      color: #143057;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(20, 48, 87, 0.2);
+      margin-bottom: 20px;
+      border: 2px solid #4a90e2;
+    }
+    
+    .explanation-box h2 {
+      margin: 0 0 20px 0;
+      color: #2c5282;
+      text-align: center;
+      border-bottom: 2px solid #4a90e2;
+      padding-bottom: 10px;
+    }
+
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .concept-item {
+      margin: 10px 0;
+      padding: 15px;
+      background: #ffffff;
+      border-radius: 10px;
+      border-left: 4px solid #4a90e2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .concept-item h3 {
+      margin: 0 0 10px 0;
+      color: #2c5282;
+      font-size: 1.1em;
+    }
+    
+    .concept-item .definition {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #143057;
+    }
+    
+    .concept-item .formula {
+      background: #f0f8ff;
+      padding: 8px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      margin: 8px 0;
+      text-align: center;
+      border: 1px solid #4a90e2;
+    }
+
+    .concept-item .example {
+      font-style: italic;
+      color: #666;
+      margin-top: 8px;
+      font-size: 0.9em;
+    }
+
+    /* Distribution visualization boxes */
+    .distribution-visual {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px 0;
+      border: 2px solid #4a90e2;
+      text-align: center;
+    }
+
+    .shape-normal { border-color: #28a745; }
+    .shape-positive { border-color: #ffc107; }
+    .shape-negative { border-color: #dc3545; }
+
+    .distribution-text {
+      font-weight: bold;
+      margin: 10px 0;
+      text-align: center;
+      font-size: 1.1em;
+    }
+
+    /* Aqua Question Card */
+    #question-card {
+      margin: 12px 0;
+      padding: 25px;
+      background: #a6f5e9;           /* aqua pastel */
+      border: 3px solid #46cbb0;     /* teal border */
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(70, 203, 176, 0.45);
+      display: none;
+      color: #143057;                /* navy text inside card */
+    }
+
+    #question-text {
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      line-height: 1.4;
+    }
+
+    #progress {
+      font-size: 1em;
+      margin-bottom: 15px;
+      text-align: center;
+      background: rgba(255,255,255,0.7);
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .options {
+      margin: 20px 0;
+    }
+    
+    .options label {
+      display: block;
+      margin: 12px 0;
+      cursor: pointer;
+      color: #143057;
+      padding: 15px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      font-size: 1.05em;
+    }
+    
+    .options label:hover {
+      background: rgba(255,255,255,0.8);
+      border-color: #46cbb0;
+      transform: translateY(-1px);
+    }
+    
+    .options input {
+      margin-right: 12px;
+      transform: scale(1.3);
+    }
+
+    .input-field {
+      padding: 8px;
+      border: 2px solid #46cbb0;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 1em;
+      margin: 5px;
+      width: 120px;
+    }
+
+    .scenario-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+
+    .data-display {
+      background: rgba(255,255,255,0.8);
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border: 1px solid #46cbb0;
+    }
+
+    .measures-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .measures-table th {
+      background: #ff4d6d;           /* coral red header */
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .measures-table td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .measures-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+
+    #warning {
+      font-size: 0.95em;
+      color: #e8113b;                /* cherry red */
+      min-height: 1.2em;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
+      background: rgba(232, 17, 59, 0.1);
+      padding: 8px;
+      border-radius: 5px;
+    }
+
+    /* Feedback Section */
+    #feedback-section {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+      animation: slideIn 0.4s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .feedback-correct {
+      background: #d4edda;
+      border: 3px solid #1ccb8f;     /* ocean green */
+      color: #155724;
+    }
+    
+    .feedback-incorrect {
+      background: #f8d7da;
+      border: 3px solid #e8113b;     /* cherry red */
+      color: #721c24;
+    }
+    
+    .feedback-header {
+      font-weight: bold;
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .feedback-explanation {
+      margin-top: 15px;
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    .feedback-details {
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    /* Score Display */
+    #score-display {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      color: #856404;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+
+    /* Buttons */
+    .buttons {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    button {
+      padding: 14px 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 0 10px rgba(109, 252, 155, 0.6);
+      min-width: 160px;
+    }
+    
+    .btn-primary {
+      background: #6dfc9b;           /* mint green */
+      color: #143057;                /* navy text */
+    }
+    .btn-primary:hover {
+      background: #82ffd6;
+      box-shadow: 0 0 14px rgba(130, 255, 214, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #a6f5e9;           /* aqua */
+      color: #143057;
+    }
+    .btn-secondary:hover {
+      background: #8eeee4;
+      box-shadow: 0 0 14px rgba(142, 238, 228, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-warning {
+      background: #ffc107;           /* yellow */
+      color: #143057;
+    }
+    .btn-warning:hover {
+      background: #ffcd39;
+      box-shadow: 0 0 14px rgba(255, 205, 57, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #ff4d6d;           /* coral red */
+      color: #ffffff;
+    }
+    .btn-danger:hover {
+      background: #ff6b85;
+      box-shadow: 0 0 14px rgba(255, 107, 133, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
+      .buttons {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+        min-width: unset;
+      }
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="header-box">
+      <h1>📊 Distribution Shapes Learning</h1>
+      <p>
+        Master normal, positively skewed, and negatively skewed distributions<br>
+        with interactive Canadian statistical scenarios!
+      </p>
+    </div>
+
+    <!-- Concepts Explanation -->
+    <div class="explanation-box">
+      <h2>📚 Distribution Shape Concepts</h2>
+      
+      <div class="concepts-grid">
+        <div class="concept-item">
+          <h3>📈 Normal Distribution</h3>
+          <div class="definition">Bell-shaped, symmetric distribution where mean = median = mode.</div>
+          <div class="formula">Mean = Median = Mode</div>
+          <div class="example">Example: Heights of Canadian adults, IQ scores, measurement errors</div>
+          <div class="distribution-visual shape-normal">
+            <div style="font-weight: bold; font-size: 1.2em; color: #28a745;">NORMAL DISTRIBUTION</div>
+            <div>Symmetric Bell Shape</div>
+            <div style="font-size: 0.9em; margin-top: 5px;">Peak in center, equal tails</div>
+          </div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📈 Positively Skewed (Right-Skewed)</h3>
+          <div class="definition">Distribution with a long tail extending to the right (higher values).</div>
+          <div class="formula">Mode < Median < Mean</div>
+          <div class="example">Example: Canadian household incomes, housing prices, age at retirement</div>
+          <div class="distribution-visual shape-positive">
+            <div style="font-weight: bold; font-size: 1.2em; color: #ffc107;">POSITIVELY SKEWED</div>
+            <div>Right-Skewed Distribution</div>
+            <div style="font-size: 0.9em; margin-top: 5px;">Tail extends right → (higher values)</div>
+          </div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📈 Negatively Skewed (Left-Skewed)</h3>
+          <div class="definition">Distribution with a long tail extending to the left (lower values).</div>
+          <div class="formula">Mean < Median < Mode</div>
+          <div class="example">Example: Test scores on easy exams, age at death in developed countries</div>
+          <div class="distribution-visual shape-negative">
+            <div style="font-weight: bold; font-size: 1.2em; color: #dc3545;">NEGATIVELY SKEWED</div>
+            <div>Left-Skewed Distribution</div>
+            <div style="font-size: 0.9em; margin-top: 5px;">← Tail extends left (lower values)</div>
+          </div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📊 Mean-Median-Mode Relationships</h3>
+          <div class="definition">The relative positions of central tendency measures reveal distribution shape.</div>
+          <div class="formula">
+            Normal: Mean = Median = Mode<br>
+            Right-Skewed: Mode < Median < Mean<br>
+            Left-Skewed: Mean < Median < Mode
+          </div>
+          <div class="example">Example: If mean > median, expect positive skewness</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>🎯 Identifying Skewness</h3>
+          <div class="definition">Look at tail direction and measure relationships to identify shape.</div>
+          <div class="formula">Tail Direction = Skewness Direction</div>
+          <div class="example">Example: Long right tail = positively (right) skewed</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📈 Real-World Implications</h3>
+          <div class="definition">Distribution shape affects data interpretation and statistical analysis.</div>
+          <div class="formula">Shape → Analysis Method</div>
+          <div class="example">Example: Skewed income data requires median over mean for typical income</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>⚡ Outliers and Skewness</h3>
+          <div class="definition">Extreme values pull the mean toward the tail, creating skewness.</div>
+          <div class="formula">Extreme Values → Mean Shifts</div>
+          <div class="example">Example: Few very high incomes pull mean above median</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>📏 Symmetry vs. Asymmetry</h3>
+          <div class="definition">Normal distributions are symmetric; skewed distributions are asymmetric.</div>
+          <div class="formula">Symmetric ↔ Normal | Asymmetric ↔ Skewed</div>
+          <div class="example">Example: Perfectly balanced vs. unbalanced data patterns</div>
+        </div>
+
+        <div class="concept-item">
+          <h3>🔍 Statistical Analysis Impact</h3>
+          <div class="definition">Distribution shape determines appropriate statistical tests and measures.</div>
+          <div class="formula">Normal → Parametric | Skewed → Non-parametric</div>
+          <div class="example">Example: t-tests for normal data, rank tests for skewed data</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Score Display -->
+    <div id="score-display"></div>
+
+    <!-- Question Card -->
+    <div id="question-card">
+      <div id="progress"></div>
+      <div id="question-text"></div>
+      <div id="scenario-display"></div>
+      <div id="question-input-area"></div>
+      <div id="warning"></div>
+
+      <!-- Feedback Section -->
+      <div id="feedback-section">
+        <div class="feedback-header" id="feedback-header"></div>
+        <div class="feedback-explanation" id="feedback-explanation"></div>
+        <div class="feedback-details" id="feedback-details"></div>
+      </div>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="buttons">
+      <button id="start-btn" class="btn-primary" onclick="startLearning()">🚀 Start Learning</button>
+      <button id="show-explanation-btn" class="btn-secondary hidden" onclick="showExplanation()">💡 Show Explanation</button>
+      <button id="check-answer-btn" class="btn-warning hidden" onclick="checkAnswer()">✅ Check Answer</button>
+      <button id="next-btn" class="btn-primary hidden" onclick="nextQuestion()">➡️ Next Question</button>
+      <button id="reset-btn" class="btn-danger hidden" onclick="resetLearning()">🔄 Reset & New Scenario</button>
+    </div>
+
+  </div>
+
+<script>
+  // Canadian Statistical Scenarios
+  const distributionScenarios = [
+    // NORMAL DISTRIBUTION SCENARIOS
+    {
+      title: "Heights of Canadian Adults",
+      description: "Distribution of heights among 10,000 Canadian adults aged 25-54",
+      type: "normal",
+      context: "Physical measurements typically follow normal distributions",
+      mean: 170,
+      median: 170,
+      mode: 170,
+      unit: "cm",
+      realWorld: "Used for clothing sizes, ergonomic design, health assessments"
+    },
+    {
+      title: "University Entrance Exam Scores",
+      description: "SAT equivalent scores for Canadian university applicants",
+      type: "normal", 
+      context: "Standardized test scores are designed to be normally distributed",
+      mean: 520,
+      median: 520,
+      mode: 520,
+      unit: "points",
+      realWorld: "Used for university admissions, scholarship decisions"
+    },
+    {
+      title: "Daily Temperature in Toronto (Summer)",
+      description: "Daily high temperatures in Toronto during July over 30 years",
+      type: "normal",
+      context: "Weather measurements often approximate normal distributions",
+      mean: 26.5,
+      median: 26.5,
+      mode: 26.5,
+      unit: "°C",
+      realWorld: "Used for climate planning, energy demand forecasting"
+    },
+
+    // POSITIVELY SKEWED SCENARIOS
+    {
+      title: "Canadian Household Incomes",
+      description: "Annual household incomes across Canada (Statistics Canada data)",
+      type: "positive",
+      context: "Most households earn moderate amounts, few earn extremely high amounts",
+      mean: 92000,
+      median: 68400,
+      mode: 52000,
+      unit: "CAD",
+      realWorld: "Used for tax policy, social program design, economic planning"
+    },
+    {
+      title: "Toronto Housing Prices", 
+      description: "Single-family home prices in Greater Toronto Area",
+      type: "positive",
+      context: "Most homes are moderately priced, few are extremely expensive",
+      mean: 1180000,
+      median: 950000,
+      mode: 750000,
+      unit: "CAD",
+      realWorld: "Used for mortgage lending, urban planning, affordability studies"
+    },
+    {
+      title: "Time to Complete Tax Returns",
+      description: "Hours spent by Canadians completing their annual tax returns",
+      type: "positive",
+      context: "Most people complete quickly, some take much longer",
+      mean: 8.5,
+      median: 6.2,
+      mode: 4.5,
+      unit: "hours",
+      realWorld: "Used for CRA service planning, tax software design"
+    },
+    {
+      title: "Canadian Company Revenues",
+      description: "Annual revenues of Canadian businesses (all sectors)",
+      type: "positive",
+      context: "Many small businesses, fewer large corporations",
+      mean: 2800000,
+      median: 450000,
+      mode: 125000,
+      unit: "CAD",
+      realWorld: "Used for business taxation, economic policy, industry analysis"
+    },
+    {
+      title: "Hospital Stay Duration",
+      description: "Length of hospital stays at Canadian hospitals",
+      type: "positive",
+      context: "Most stays are short, some are extended for complex cases",
+      mean: 7.2,
+      median: 4.5,
+      mode: 2.0,
+      unit: "days",
+      realWorld: "Used for healthcare planning, resource allocation, insurance"
+    },
+
+    // NEGATIVELY SKEWED SCENARIOS
+    {
+      title: "Final Exam Scores (Easy Test)",
+      description: "Scores on a well-designed final exam where students were well-prepared",
+      type: "negative",
+      context: "Most students perform well, few score poorly",
+      mean: 78.5,
+      median: 82.0,
+      mode: 87.0,
+      unit: "%",
+      realWorld: "Used for course evaluation, grading policies, curriculum assessment"
+    },
+    {
+      title: "Age at Retirement in Canada",
+      description: "Age when Canadians retire from full-time employment",
+      type: "negative",
+      context: "Most retire around standard age, some retire early",
+      mean: 61.8,
+      median: 63.5,
+      mode: 65.0,
+      unit: "years",
+      realWorld: "Used for pension planning, workforce forecasting, policy development"
+    },
+    {
+      title: "Customer Satisfaction Ratings",
+      description: "5-point satisfaction ratings for Canadian telecom services",
+      type: "negative",
+      context: "Most customers somewhat satisfied, few very dissatisfied",
+      mean: 3.4,
+      median: 3.7,
+      mode: 4.0,
+      unit: "/5 scale",
+      realWorld: "Used for service improvement, marketing, regulatory compliance"
+    },
+    {
+      title: "Product Quality Ratings",
+      description: "Ratings for Canadian-made products on quality (1-10 scale)",
+      type: "negative",
+      context: "Most products rate highly, few rate poorly",
+      mean: 7.2,
+      median: 7.8,
+      mode: 8.5,
+      unit: "/10 scale",
+      realWorld: "Used for quality control, brand management, consumer choice"
+    }
+  ];
+
+  // Tracking for balanced distribution selection
+  let lastSelectedTypes = [];
+  
+  // Core application state
+  let currentScenario = {};
+  let currentQuestion = {};
+  let totalCorrect = 0;
+  let totalQuestions = 0;
+  let hasAnswered = false;
+  
+  function getBalancedScenario() {
+    const normalScenarios = distributionScenarios.filter(s => s.type === "normal");
+    const positiveScenarios = distributionScenarios.filter(s => s.type === "positive");  
+    const negativeScenarios = distributionScenarios.filter(s => s.type === "negative");
+    
+    // Count recent selections
+    const recentNormal = lastSelectedTypes.filter(t => t === "normal").length;
+    const recentPositive = lastSelectedTypes.filter(t => t === "positive").length;
+    const recentNegative = lastSelectedTypes.filter(t => t === "negative").length;
+    
+    // Prefer underrepresented types
+    let candidateScenarios;
+    if (recentNormal <= recentPositive && recentNormal <= recentNegative) {
+      candidateScenarios = normalScenarios;
+    } else if (recentPositive <= recentNormal && recentPositive <= recentNegative) {
+      candidateScenarios = positiveScenarios;
+    } else {
+      candidateScenarios = negativeScenarios;
+    }
+    
+    // Fallback to random if preference doesn't work
+    if (candidateScenarios.length === 0) {
+      candidateScenarios = distributionScenarios;
+    }
+    
+    // Select random from candidates
+    const selected = candidateScenarios[Math.floor(Math.random() * candidateScenarios.length)];
+    
+    // Track selection (keep last 6)
+    lastSelectedTypes.push(selected.type);
+    if (lastSelectedTypes.length > 6) {
+      lastSelectedTypes.shift();
+    }
+    
+    return selected;
+  }
+
+  const questionTypes = [
+    // NORMAL DISTRIBUTION QUESTIONS (10 types)
+    {
+      id: "normal_identification_by_measures",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `The mean, median, and mode for ${scenario.title.toLowerCase()} are all approximately ${scenario.mean} ${scenario.unit}. What does this tell us about the distribution shape?`,
+          options: [
+            "The distribution is normally distributed (bell-shaped)",
+            "The distribution is positively skewed",
+            "The distribution is negatively skewed",
+            "The distribution is uniform"
+          ],
+          correctAnswer: "The distribution is normally distributed (bell-shaped)",
+          explanation: `When mean = median = mode, the distribution is symmetric and normal (bell-shaped). This is a key characteristic of normal distributions.`,
+          hint: "In normal distributions, all three measures of central tendency are equal"
+        };
+      }
+    },
+    {
+      id: "normal_symmetry",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In the normal distribution of ${scenario.title.toLowerCase()}, what percentage of values fall within one standard deviation of the mean?`,
+          options: [
+            "50%",
+            "68%", 
+            "95%",
+            "99.7%"
+          ],
+          correctAnswer: "68%",
+          explanation: "In any normal distribution, approximately 68% of values fall within one standard deviation of the mean. This is part of the 68-95-99.7 rule.",
+          hint: "Remember the empirical rule for normal distributions"
+        };
+      }
+    },
+    {
+      id: "normal_real_world",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        const applications = [
+          "Quality control in manufacturing",
+          "Medical diagnostic ranges", 
+          "Educational assessment and grading",
+          "All of the above"
+        ];
+        
+        return {
+          type: "multiple_choice",
+          question: `Normal distributions like ${scenario.title.toLowerCase()} are useful for:`,
+          options: applications,
+          correctAnswer: "All of the above",
+          explanation: `Normal distributions are fundamental in statistics and used across many fields including quality control, medicine, and education because of their predictable properties.`,
+          hint: "Normal distributions have wide applications due to their predictable properties"
+        };
+      }
+    },
+    {
+      id: "normal_central_limit",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `Why do many real-world measurements like ${scenario.title.toLowerCase()} follow a normal distribution?`,
+          options: [
+            "Government regulations require normal distributions",
+            "Random errors and variations tend to cancel out",
+            "Computers generate data this way",
+            "All data naturally becomes normal over time"
+          ],
+          correctAnswer: "Random errors and variations tend to cancel out",
+          explanation: "Many natural phenomena follow normal distributions because multiple random factors influence the outcome, and these factors tend to cancel each other out, creating the bell-shaped pattern.",
+          hint: "Think about why random variations create bell-shaped patterns"
+        };
+      }
+    },
+    {
+      id: "normal_prediction",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `If ${scenario.title.toLowerCase()} follows a normal distribution with mean = ${scenario.mean} ${scenario.unit}, which value is most likely to occur?`,
+          options: [
+            `${scenario.mean - 20} ${scenario.unit}`,
+            `${scenario.mean} ${scenario.unit}`,
+            `${scenario.mean + 20} ${scenario.unit}`,
+            "All values are equally likely"
+          ],
+          correctAnswer: `${scenario.mean} ${scenario.unit}`,
+          explanation: `In a normal distribution, the mean (${scenario.mean} ${scenario.unit}) is also the mode - the most frequently occurring value.`,
+          hint: "In normal distributions, the mean is also the mode (most frequent value)"
+        };
+      }
+    },
+    {
+      id: "normal_characteristics",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `Which statement about the normal distribution of ${scenario.title.toLowerCase()} is FALSE?`,
+          options: [
+            "It is symmetric around the mean",
+            "It has a single peak at the mode",
+            "Values far from the mean are impossible",
+            "Most values cluster near the center"
+          ],
+          correctAnswer: "Values far from the mean are impossible",
+          explanation: "Normal distributions extend infinitely in both directions - extreme values are very unlikely but not impossible. The distribution just gets very close to zero at the extremes.",
+          hint: "Normal distributions extend infinitely, though extreme values are very rare"
+        };
+      }
+    },
+    {
+      id: "normal_standard_deviation",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In the normal distribution of ${scenario.title.toLowerCase()}, if you move from the mean toward either tail, what happens to the frequency of values?`,
+          options: [
+            "Frequency increases steadily",
+            "Frequency decreases steadily", 
+            "Frequency remains constant",
+            "Frequency increases then decreases"
+          ],
+          correctAnswer: "Frequency decreases steadily",
+          explanation: "In a normal distribution, values become less frequent as you move away from the mean in either direction, creating the characteristic bell shape.",
+          hint: "Think about the bell shape - what happens to height as you move away from the center?"
+        };
+      }
+    },
+    {
+      id: "normal_comparison",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `Compared to skewed distributions, normal distributions like ${scenario.title.toLowerCase()} are better described by which measure of central tendency?`,
+          options: [
+            "Mode only",
+            "Median only",
+            "Mean only", 
+            "Mean, median, and mode are all equally good"
+          ],
+          correctAnswer: "Mean, median, and mode are all equally good",
+          explanation: "In normal distributions, mean, median, and mode are all equal and equally representative of the center. This is unique to symmetric distributions.",
+          hint: "In normal distributions, all measures of central tendency give the same value"
+        };
+      }
+    },
+    {
+      id: "normal_standardization",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `Any normal distribution like ${scenario.title.toLowerCase()} can be transformed into which standard form?`,
+          options: [
+            "Standard normal distribution (z-distribution)",
+            "Chi-square distribution",
+            "t-distribution", 
+            "F-distribution"
+          ],
+          correctAnswer: "Standard normal distribution (z-distribution)",
+          explanation: "Any normal distribution can be standardized to have mean = 0 and standard deviation = 1, creating a standard normal (z) distribution.",
+          hint: "Think about the standardization process that creates z-scores"
+        };
+      }
+    },
+    {
+      id: "normal_tail_behavior",
+      question: (scenario) => {
+        if (scenario.type !== "normal") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In the normal distribution of ${scenario.title.toLowerCase()}, the tails:`,
+          options: [
+            "Extend equally in both directions",
+            "Extend farther to the right",
+            "Extend farther to the left",
+            "End at specific boundary values"
+          ],
+          correctAnswer: "Extend equally in both directions",
+          explanation: "Normal distributions are perfectly symmetric, so the tails extend equally in both directions, approaching but never reaching zero.",
+          hint: "Normal distributions are perfectly symmetric"
+        };
+      }
+    },
+
+    // POSITIVELY SKEWED QUESTIONS (10 types)
+    {
+      id: "positive_skew_identification",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `The ${scenario.title.toLowerCase()} has mean = ${scenario.mean}, median = ${scenario.median}, mode = ${scenario.mode}. This indicates:`,
+          options: [
+            "Normal distribution",
+            "Positively skewed (right-skewed) distribution",
+            "Negatively skewed (left-skewed) distribution",
+            "Uniform distribution"
+          ],
+          correctAnswer: "Positively skewed (right-skewed) distribution",
+          explanation: `Since mode (${scenario.mode}) < median (${scenario.median}) < mean (${scenario.mean}), this indicates positive skewness with the tail extending to higher values.`,
+          hint: "When mean > median > mode, the distribution is positively skewed"
+        };
+      }
+    },
+    {
+      id: "positive_skew_tail_direction",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In the positively skewed distribution of ${scenario.title.toLowerCase()}, where is the long tail?`,
+          options: [
+            "Extending toward lower values (left)",
+            "Extending toward higher values (right)",
+            "Equal on both sides",
+            "There is no tail"
+          ],
+          correctAnswer: "Extending toward higher values (right)",
+          explanation: "Positively skewed (right-skewed) distributions have a long tail extending toward higher values on the right side of the distribution.",
+          hint: "Positive skew = right skew = tail extends to the right (higher values)"
+        };
+      }
+    },
+    {
+      id: "positive_skew_outliers",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `What creates the positive skewness in ${scenario.title.toLowerCase()}?`,
+          options: [
+            "A few extremely low values",
+            "A few extremely high values", 
+            "Many values clustered at the center",
+            "Equal distribution of all values"
+          ],
+          correctAnswer: "A few extremely high values",
+          explanation: `The positive skew in ${scenario.title.toLowerCase()} is created by a small number of extremely high values that pull the mean upward while most values cluster at lower levels.`,
+          hint: "Positive skew is caused by extreme values on the high end"
+        };
+      }
+    },
+    {
+      id: "positive_skew_best_measure",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `For the positively skewed distribution of ${scenario.title.toLowerCase()}, which measure best represents the "typical" value?`,
+          options: [
+            "Mean",
+            "Median",
+            "Mode", 
+            "Range"
+          ],
+          correctAnswer: "Median",
+          explanation: `In positively skewed distributions, the median (${scenario.median} ${scenario.unit}) best represents the typical value because it's not affected by extreme high values that pull the mean upward.`,
+          hint: "In skewed distributions, the median is less affected by extreme values than the mean"
+        };
+      }
+    },
+    {
+      id: "positive_skew_mean_median",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "input",
+          question: `In ${scenario.title.toLowerCase()}, the mean is ${scenario.mean} ${scenario.unit} and the median is ${scenario.median} ${scenario.unit}. What is the difference (mean - median)?`,
+          correctAnswer: scenario.mean - scenario.median,
+          explanation: `The difference is ${scenario.mean - scenario.median} ${scenario.unit}. This positive difference confirms the positive skewness, as the mean is pulled higher than the median by extreme values.`,
+          hint: "Calculate mean minus median to see how much the mean is pulled upward"
+        };
+      }
+    },
+    {
+      id: "positive_skew_real_world_cause",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        const causes = {
+          "Canadian Household Incomes": "A small number of very wealthy households",
+          "Toronto Housing Prices": "A few extremely expensive luxury properties",
+          "Time to Complete Tax Returns": "Some people with very complex tax situations",
+          "Canadian Company Revenues": "A few very large corporations",
+          "Hospital Stay Duration": "Complex medical cases requiring extended treatment"
+        };
+        
+        const correctCause = causes[scenario.title] || "A few extremely high values";
+        
+        return {
+          type: "multiple_choice",
+          question: `What likely causes the positive skewness in ${scenario.title.toLowerCase()}?`,
+          options: [
+            correctCause,
+            "Government regulations",
+            "Random measurement error",
+            "Data collection bias"
+          ],
+          correctAnswer: correctCause,
+          explanation: `The positive skew in ${scenario.title.toLowerCase()} is primarily caused by ${correctCause.toLowerCase()}, which creates the long tail toward higher values.`,
+          hint: "Think about what real-world factors create extreme high values in this context"
+        };
+      }
+    },
+    {
+      id: "positive_skew_implications",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `Due to positive skewness in ${scenario.title.toLowerCase()}, what should analysts be careful about?`,
+          options: [
+            "The mean may overstate what's typical",
+            "The median is always wrong",
+            "The mode is meaningless", 
+            "Standard deviation cannot be calculated"
+          ],
+          correctAnswer: "The mean may overstate what's typical",
+          explanation: `In positively skewed distributions, the mean is pulled upward by extreme values and may be higher than what most people actually experience, making it misleading as a measure of "typical."`,
+          hint: "In positively skewed distributions, extreme values pull the mean above the typical experience"
+        };
+      }
+    },
+    {
+      id: "positive_skew_transformation",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `To make the positively skewed distribution of ${scenario.title.toLowerCase()} more normal, analysts might:`,
+          options: [
+            "Take the logarithm of the values",
+            "Square all the values",
+            "Add a constant to all values",
+            "Remove the median"
+          ],
+          correctAnswer: "Take the logarithm of the values",
+          explanation: "Taking the logarithm of positively skewed data compresses the high values more than low values, often making the distribution more normal and easier to analyze.",
+          hint: "Log transformation compresses extreme high values, reducing positive skew"
+        };
+      }
+    },
+    {
+      id: "positive_skew_percentiles",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In the positively skewed distribution of ${scenario.title.toLowerCase()}, where would you expect the 75th percentile to be relative to the mean?`,
+          options: [
+            "Much higher than the mean",
+            "Slightly higher than the mean", 
+            "Equal to the mean",
+            "Lower than the mean"
+          ],
+          correctAnswer: "Lower than the mean",
+          explanation: `In positively skewed distributions, even the 75th percentile is often below the mean because extreme high values pull the mean upward while most values (including the 75th percentile) cluster at lower levels.`,
+          hint: "In positive skew, extreme values pull the mean above most of the data, including high percentiles"
+        };
+      }
+    },
+    {
+      id: "positive_skew_frequency",
+      question: (scenario) => {
+        if (scenario.type !== "positive") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In ${scenario.title.toLowerCase()}, which range contains the most frequent values?`,
+          options: [
+            "The highest values (toward the tail)",
+            "The lowest values (toward the mode)",
+            "Values around the mean",
+            "Values are equally distributed"
+          ],
+          correctAnswer: "The lowest values (toward the mode)",
+          explanation: `In positively skewed distributions, the most frequent values cluster at the lower end (near the mode at ${scenario.mode} ${scenario.unit}), with fewer observations at higher values.`,
+          hint: "In positively skewed distributions, most values cluster at the lower end near the mode"
+        };
+      }
+    },
+
+    // NEGATIVELY SKEWED QUESTIONS (10 types)
+    {
+      id: "negative_skew_identification",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `The ${scenario.title.toLowerCase()} has mean = ${scenario.mean}, median = ${scenario.median}, mode = ${scenario.mode}. This indicates:`,
+          options: [
+            "Normal distribution",
+            "Positively skewed (right-skewed) distribution",
+            "Negatively skewed (left-skewed) distribution",
+            "Uniform distribution"
+          ],
+          correctAnswer: "Negatively skewed (left-skewed) distribution",
+          explanation: `Since mean (${scenario.mean}) < median (${scenario.median}) < mode (${scenario.mode}), this indicates negative skewness with the tail extending to lower values.`,
+          hint: "When mean < median < mode, the distribution is negatively skewed"
+        };
+      }
+    },
+    {
+      id: "negative_skew_tail_direction",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In the negatively skewed distribution of ${scenario.title.toLowerCase()}, where is the long tail?`,
+          options: [
+            "Extending toward lower values (left)",
+            "Extending toward higher values (right)",
+            "Equal on both sides",
+            "There is no tail"
+          ],
+          correctAnswer: "Extending toward lower values (left)",
+          explanation: "Negatively skewed (left-skewed) distributions have a long tail extending toward lower values on the left side of the distribution.",
+          hint: "Negative skew = left skew = tail extends to the left (lower values)"
+        };
+      }
+    },
+    {
+      id: "negative_skew_outliers",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `What creates the negative skewness in ${scenario.title.toLowerCase()}?`,
+          options: [
+            "A few extremely low values",
+            "A few extremely high values",
+            "Many values clustered at the center", 
+            "Equal distribution of all values"
+          ],
+          correctAnswer: "A few extremely low values",
+          explanation: `The negative skew in ${scenario.title.toLowerCase()} is created by a small number of extremely low values that pull the mean downward while most values cluster at higher levels.`,
+          hint: "Negative skew is caused by extreme values on the low end"
+        };
+      }
+    },
+    {
+      id: "negative_skew_ceiling_effect",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `The negative skewness in ${scenario.title.toLowerCase()} often occurs because:`,
+          options: [
+            "There's a natural lower limit but no upper limit",
+            "There's a natural upper limit but lower values are possible",
+            "Values are randomly distributed",
+            "The data is incorrectly measured"
+          ],
+          correctAnswer: "There's a natural upper limit but lower values are possible",
+          explanation: `Negative skew often occurs when there's a ceiling (like 100% on a test or maximum satisfaction rating) but some individuals can score much lower, creating the left tail.`,
+          hint: "Think about natural boundaries - can values go above the mode/median as easily as below?"
+        };
+      }
+    },
+    {
+      id: "negative_skew_best_measure",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `For the negatively skewed distribution of ${scenario.title.toLowerCase()}, which measure best represents the "typical" value?`,
+          options: [
+            "Mean",
+            "Median", 
+            "Mode",
+            "Range"
+          ],
+          correctAnswer: "Median",
+          explanation: `In negatively skewed distributions, the median (${scenario.median} ${scenario.unit}) best represents the typical value because it's not affected by extreme low values that pull the mean downward.`,
+          hint: "In skewed distributions, the median is less affected by extreme values than the mean"
+        };
+      }
+    },
+    {
+      id: "negative_skew_mean_median_diff",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "input",
+          question: `In ${scenario.title.toLowerCase()}, the median is ${scenario.median} ${scenario.unit} and the mean is ${scenario.mean} ${scenario.unit}. What is the difference (median - mean)?`,
+          correctAnswer: parseFloat((scenario.median - scenario.mean).toFixed(1)),
+          explanation: `The difference is ${(scenario.median - scenario.mean).toFixed(1)} ${scenario.unit}. This positive difference confirms negative skewness, as the mean is pulled below the median by extreme low values.`,
+          hint: "Calculate median minus mean to see how much the mean is pulled downward"
+        };
+      }
+    },
+    {
+      id: "negative_skew_real_world_cause",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        const causes = {
+          "Final Exam Scores (Easy Test)": "A few students who didn't study or had difficulties",
+          "Age at Retirement in Canada": "Some people who retire very early due to health or wealth",
+          "Customer Satisfaction Ratings": "A few customers with very poor experiences",
+          "Product Quality Ratings": "Occasional defective products or poor experiences"
+        };
+        
+        const correctCause = causes[scenario.title] || "A few extremely low values";
+        
+        return {
+          type: "multiple_choice",
+          question: `What likely causes the negative skewness in ${scenario.title.toLowerCase()}?`,
+          options: [
+            correctCause,
+            "Government regulations", 
+            "Random measurement error",
+            "Data collection bias"
+          ],
+          correctAnswer: correctCause,
+          explanation: `The negative skew in ${scenario.title.toLowerCase()} is primarily caused by ${correctCause.toLowerCase()}, which creates the long tail toward lower values.`,
+          hint: "Think about what real-world factors create extreme low values in this context"
+        };
+      }
+    },
+    {
+      id: "negative_skew_mode_position",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `In the negatively skewed distribution of ${scenario.title.toLowerCase()}, where is the mode (${scenario.mode} ${scenario.unit}) located?`,
+          options: [
+            "At the left end of the distribution",
+            "At the right end of the distribution",
+            "Exactly in the center", 
+            "It varies randomly"
+          ],
+          correctAnswer: "At the right end of the distribution",
+          explanation: `In negatively skewed distributions, the mode is at the right end (higher values) where most observations cluster, while the tail extends left toward lower values.`,
+          hint: "The mode is where most values cluster - away from the tail direction"
+        };
+      }
+    },
+    {
+      id: "negative_skew_performance_interpretation",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `If ${scenario.title.toLowerCase()} shows negative skewness, what does this suggest about performance?`,
+          options: [
+            "Most people perform poorly",
+            "Most people perform well", 
+            "Performance is completely random",
+            "The measurement is invalid"
+          ],
+          correctAnswer: "Most people perform well",
+          explanation: `Negative skewness indicates that most values cluster at the high end (good performance), with only a few individuals at the low end creating the left tail.`,
+          hint: "In negative skew, most values are at the high end (toward the mode)"
+        };
+      }
+    },
+    {
+      id: "negative_skew_implications",
+      question: (scenario) => {
+        if (scenario.type !== "negative") return null;
+        
+        return {
+          type: "multiple_choice",
+          question: `Due to negative skewness in ${scenario.title.toLowerCase()}, what should analysts be careful about?`,
+          options: [
+            "The mean may understate typical performance",
+            "The median is always wrong",
+            "The mode is meaningless",
+            "Standard deviation cannot be calculated"
+          ],
+          correctAnswer: "The mean may understate typical performance",
+          explanation: `In negatively skewed distributions, the mean is pulled downward by extreme low values and may be lower than what most people actually achieve, potentially understating typical performance.`,
+          hint: "In negatively skewed distributions, extreme values pull the mean below the typical experience"
+        };
+      }
+    }
+  ];
+
+  function generateQuestion() {
+    // Get all questions that apply to current scenario type
+    const scenarioType = currentScenario.type;
+    
+    // Filter questions by scenario type
+    let applicableQuestions = [];
+    
+    if (scenarioType === "normal") {
+      applicableQuestions = questionTypes.filter(qt => qt.id.startsWith("normal_"));
+    } else if (scenarioType === "positive") {
+      applicableQuestions = questionTypes.filter(qt => qt.id.startsWith("positive_"));
+    } else if (scenarioType === "negative") {
+      applicableQuestions = questionTypes.filter(qt => qt.id.startsWith("negative_"));
+    }
+    
+    // Fallback to all questions if no type-specific ones found
+    if (applicableQuestions.length === 0) {
+      applicableQuestions = questionTypes.filter(qt => {
+        const result = qt.question(currentScenario);
+        return result !== null;
+      });
+    }
+    
+    // Select random applicable question
+    if (applicableQuestions.length > 0) {
+      const questionType = applicableQuestions[Math.floor(Math.random() * applicableQuestions.length)];
+      currentQuestion = questionType.question(currentScenario);
+      hasAnswered = false;
+    } else {
+      console.error("No applicable questions found for scenario type:", scenarioType);
+    }
+  }
+
+  function startLearning() {
+    // Select balanced scenario across all types
+    currentScenario = getBalancedScenario();
+    
+    // Debug: Log the selected scenario type
+    console.log(`Selected scenario: ${currentScenario.title} (Type: ${currentScenario.type})`);
+    
+    generateQuestion();
+    displayQuestion();
+    
+    // Show question card and relevant buttons
+    document.getElementById("question-card").style.display = "block";
+    document.getElementById("start-btn").classList.add("hidden");
+    document.getElementById("show-explanation-btn").classList.remove("hidden");
+    document.getElementById("check-answer-btn").classList.remove("hidden");
+    document.getElementById("reset-btn").classList.remove("hidden");
+    
+    // Hide feedback initially
+    document.getElementById("feedback-section").style.display = "none";
+  }
+
+  function displayQuestion() {
+    // Update progress with clear distribution type
+    const distributionTypeName = getDistributionName(currentScenario.type);
+    document.getElementById("progress").textContent = 
+      `${distributionTypeName} • ${currentScenario.title} • Question ${totalQuestions + 1} • Score: ${totalCorrect}/${totalQuestions} correct`;
+    
+    // Display question
+    document.getElementById("question-text").innerHTML = `
+      <strong>Distribution Type:</strong> ${distributionTypeName}<br>
+      <strong>Scenario:</strong> ${currentScenario.description}<br><br>
+      <strong>Question:</strong> ${currentQuestion.question}
+    `;
+
+    // Display scenario data
+    displayScenarioData();
+    
+    // Create input area based on question type
+    createInputArea();
+    
+    document.getElementById("warning").textContent = "";
+    updateScoreDisplay();
+  }
+
+  function displayScenarioData() {
+    const scenarioDiv = document.getElementById("scenario-display");
+    
+    let dataHTML = `
+      <div class="scenario-box">
+        <h4 style="text-align: center; color: #2c5282; margin-bottom: 15px;">📊 Distribution Analysis</h4>
+        <p><strong>Context:</strong> ${currentScenario.context}</p>
+        <p><strong>Real-World Application:</strong> ${currentScenario.realWorld}</p>
+        
+        <div class="data-display">
+          <table class="measures-table">
+            <thead>
+              <tr>
+                <th>Measure</th>
+                <th>Value</th>
+                <th>Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Mean</strong></td>
+                <td>${currentScenario.mean} ${currentScenario.unit}</td>
+                <td>Average value (affected by extreme values)</td>
+              </tr>
+              <tr>
+                <td><strong>Median</strong></td>
+                <td>${currentScenario.median} ${currentScenario.unit}</td>
+                <td>Middle value (50th percentile)</td>
+              </tr>
+              <tr>
+                <td><strong>Mode</strong></td>
+                <td>${currentScenario.mode} ${currentScenario.unit}</td>
+                <td>Most frequent value</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div style="text-align: center; margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.9); border-radius: 8px; border: 2px solid ${getDistributionColor(currentScenario.type)};">
+          <div style="font-size: 1.5em; color: ${getDistributionColor(currentScenario.type)}; line-height: 1.3; font-weight: bold; text-align: center;">
+            ${getDistributionSymbol(currentScenario.type)}
+          </div>
+          <p style="margin: 10px 0; font-weight: bold; color: ${getDistributionColor(currentScenario.type)};">
+            ${getDistributionName(currentScenario.type)} Distribution
+          </p>
+          <p style="margin: 5px 0; font-size: 0.9em; color: #666;">
+            ${getDistributionDescription(currentScenario.type)}
+          </p>
+        </div>
+      </div>
+    `;
+    
+    scenarioDiv.innerHTML = dataHTML;
+  }
+
+  function getDistributionColor(type) {
+    switch(type) {
+      case 'normal': return '#28a745';
+      case 'positive': return '#ffc107';
+      case 'negative': return '#dc3545';
+      default: return '#6c757d';
+    }
+  }
+
+  function getDistributionSymbol(type) {
+    switch(type) {
+      case 'normal': 
+        return `BELL CURVE<br>Symmetric Shape`;
+      case 'positive': 
+        return `RIGHT SKEWED<br>Tail → Higher Values`;
+      case 'negative': 
+        return `LEFT SKEWED<br>Tail ← Lower Values`;
+      default: return '?';
+    }
+  }
+
+  function getDistributionName(type) {
+    switch(type) {
+      case 'normal': return 'Normal (Bell-Shaped)';
+      case 'positive': return 'Positively Skewed (Right-Skewed)';
+      case 'negative': return 'Negatively Skewed (Left-Skewed)';
+      default: return 'Unknown';
+    }
+  }
+
+  function getDistributionDescription(type) {
+    switch(type) {
+      case 'normal': return 'Mean = Median = Mode | Symmetric | Equal tails both sides';
+      case 'positive': return 'Mode < Median < Mean | Tail extends to higher values (right)';
+      case 'negative': return 'Mean < Median < Mode | Tail extends to lower values (left)';
+      default: return '';
+    }
+  }
+
+  function createInputArea() {
+    const inputArea = document.getElementById("question-input-area");
+    
+    if (currentQuestion.type === "input") {
+      inputArea.innerHTML = `
+        <div style="text-align: center; margin: 20px 0;">
+          <label for="answer-input" style="display: block; margin-bottom: 10px; font-weight: bold;">
+            Your Answer:
+          </label>
+          <input type="number" id="answer-input" class="input-field" step="0.1" 
+                 placeholder="Enter number" style="width: 150px; font-size: 1.1em;">
+        </div>
+      `;
+    } else if (currentQuestion.type === "multiple_choice") {
+      let optionsHTML = '<div class="options">';
+      currentQuestion.options.forEach((option, index) => {
+        optionsHTML += `
+          <label>
+            <input type="radio" name="answer" value="${option}"> ${option}
+          </label>
+        `;
+      });
+      optionsHTML += '</div>';
+      inputArea.innerHTML = optionsHTML;
+    }
+  }
+
+  function updateScoreDisplay() {
+    const scoreDiv = document.getElementById("score-display");
+    if (totalQuestions > 0) {
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+      scoreDiv.innerHTML = `📊 Your Progress: ${totalCorrect}/${totalQuestions} correct (${percentage}%)`;
+      scoreDiv.style.display = "block";
+    }
+  }
+
+  function showExplanation() {
+    const feedbackSection = document.getElementById("feedback-section");
+    
+    document.getElementById("feedback-header").textContent = "💡 Hint";
+    document.getElementById("feedback-explanation").innerHTML = `
+      <strong>How to approach this question:</strong><br>
+      ${currentQuestion.hint}
+    `;
+    document.getElementById("feedback-details").innerHTML = `
+      <strong>Remember:</strong> Look at the relationship between mean, median, and mode to identify distribution shape. Also consider the real-world context of the data.
+    `;
+    
+    feedbackSection.className = "";
+    feedbackSection.style.display = "block";
+    feedbackSection.style.background = "#e3f2fd";
+    feedbackSection.style.border = "3px solid #2196f3";
+    feedbackSection.style.color = "#1565c0";
+  }
+
+  function checkAnswer() {
+    if (hasAnswered) {
+      document.getElementById("warning").textContent = 
+        "You've already answered this question. Click 'Next Question' to continue.";
+      return;
+    }
+
+    let userAnswer;
+    let isCorrect = false;
+
+    if (currentQuestion.type === "input") {
+      const input = document.getElementById("answer-input");
+      if (!input.value.trim()) {
+        document.getElementById("warning").textContent = 
+          "⚠️ Please enter your answer before checking.";
+        return;
+      }
+      userAnswer = parseFloat(input.value);
+      isCorrect = Math.abs(userAnswer - currentQuestion.correctAnswer) < 0.1;
+    } else if (currentQuestion.type === "multiple_choice") {
+      const selected = document.querySelector('input[name="answer"]:checked');
+      if (!selected) {
+        document.getElementById("warning").textContent = 
+          "⚠️ Please select an option before checking your answer.";
+        return;
+      }
+      userAnswer = selected.value;
+      isCorrect = userAnswer === currentQuestion.correctAnswer;
+    }
+
+    // Update statistics
+    totalQuestions++;
+    if (isCorrect) totalCorrect++;
+    hasAnswered = true;
+
+    // Show feedback
+    showFeedback(isCorrect, userAnswer);
+    
+    // Update UI
+    document.getElementById("next-btn").classList.remove("hidden");
+    document.getElementById("check-answer-btn").classList.add("hidden");
+    updateScoreDisplay();
+    document.getElementById("warning").textContent = "";
+  }
+
+  function showFeedback(isCorrect, userAnswer) {
+    const feedbackSection = document.getElementById("feedback-section");
+    const feedbackHeader = document.getElementById("feedback-header");
+    const feedbackExplanation = document.getElementById("feedback-explanation");
+    const feedbackDetails = document.getElementById("feedback-details");
+
+    if (isCorrect) {
+      feedbackSection.className = "feedback-correct";
+      feedbackHeader.innerHTML = "🎉 Excellent!";
+      feedbackExplanation.innerHTML = `
+        <strong>Perfect!</strong> You correctly answered: <strong>${userAnswer}</strong><br><br>
+        ${currentQuestion.explanation}
+      `;
+      feedbackDetails.innerHTML = `
+        <strong>Great statistical thinking!</strong> You understand distribution shapes well.
+      `;
+    } else {
+      feedbackSection.className = "feedback-incorrect";
+      feedbackHeader.innerHTML = "📚 Let's Learn Together";
+      feedbackExplanation.innerHTML = `
+        You answered: <strong>${userAnswer}</strong><br>
+        The correct answer is: <strong>${currentQuestion.correctAnswer}</strong><br><br>
+        <strong>Explanation:</strong><br>
+        ${currentQuestion.explanation}
+      `;
+      feedbackDetails.innerHTML = `
+        <strong>Learning tip:</strong> Focus on the relationships between mean, median, and mode. In normal distributions they're equal, in skewed distributions they follow predictable patterns.
+      `;
+    }
+
+    feedbackSection.style.display = "block";
+  }
+
+  function nextQuestion() {
+    // Use balanced scenario selection for variety
+    currentScenario = getBalancedScenario();
+    console.log(`New scenario selected: ${currentScenario.title} (Type: ${currentScenario.type})`);
+    
+    generateQuestion();
+    displayQuestion();
+    
+    // Reset UI state
+    document.getElementById("feedback-section").style.display = "none";
+    document.getElementById("check-answer-btn").classList.remove("hidden");
+    document.getElementById("next-btn").classList.add("hidden");
+    document.getElementById("warning").textContent = "";
+  }
+
+  function resetLearning() {
+    // Reset statistics and tracking
+    totalCorrect = 0;
+    totalQuestions = 0;
+    hasAnswered = false;
+    lastSelectedTypes = []; // Clear distribution tracking
+
+    // Reset UI
+    document.getElementById("question-card").style.display = "none";
+    document.getElementById("feedback-section").style.display = "none";
+    document.getElementById("score-display").style.display = "none";
+    
+    // Reset buttons
+    document.getElementById("start-btn").classList.remove("hidden");
+    document.getElementById("show-explanation-btn").classList.add("hidden");
+    document.getElementById("check-answer-btn").classList.add("hidden");
+    document.getElementById("next-btn").classList.add("hidden");
+    document.getElementById("reset-btn").classList.add("hidden");
+    
+    document.getElementById("warning").textContent = "";
+  }
+</script>
+</body>
+</html>
